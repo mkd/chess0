@@ -1,0 +1,44 @@
+From v0.7 to v1.0
+=================
+- New C++ code based on Winglet Chess (by Stef Luijten)
+
+
+From v0.6 to v0.7
+=================
+- New: transposition tables (quasi-Zobrist hash keys)
+- Optimization: code efficiency improved, resulting in overall 15% faster search
+- Optimization: Knights' and Kings' move generation is now fully based on Bitboards
+- Improved positional evaluation, including king safety, pawn structures, etc
+- Improved board position saving and loading (.c0b)
+
+
+From v0.5.1 to v0.6
+===================
+- New: built-in openings book
+- New: basic time controls (thinking time and fixed time)
+- Optimization: simplify search code which results in 30% speedup
+- Improved XBoard support
+- Improved positional evaluation (specially for bishops, rooks and knights)
+- Better search analysis screening (including number of nodes searched)
+- Lots of fixes, specially for input reading
+
+
+From v0.5 to v0.5.1
+===================
+- Fix: make it compile on GNU/Linux 64-bit and Windows 64-bit platforms
+- Remove classic chess engine (only Adaptive AI available now)
+
+
+From v0.4 to v0.5
+=================
+- New: implement 'flip' command to flip the ASCII board
+- New: implement new material + light positional evaluation
+- New: improved way of showing the current analysis line
+- Optimization: improve search efficiency by using more advanced move sorting
+- Optimization: if found winning checkmate in alphabeta, stop search immediately
+- Fix: no more giving pieces away, by disabling cache code (need new implement.)
+- Fix: randomization algorithm for choosing moves
+- Fix: add '+' and '#' to check and mate moves
+- Proper thinking by leveraging deep search
+- Set default depth to 5 (with deviation 2)
+- Set thinking time limit to 30s (ideal for 30min matches)

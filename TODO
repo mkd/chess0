@@ -1,0 +1,50 @@
+TODO
+====
+
+
+WORK IN PROGRESS
+================
+- Support SAN input
+
+- Book support
+
+
+
+BEFORE NEXT RELEASE
+===================
+- Interface (input & output) should behave exactly the same as Chess0x
+
+- Refactor all code (e.g., sprintf() to cout()) and rename libraries, files,
+  etc.
+
+- Edit board
+
+- Save/load board
+
+- Implement benchmarks (nodes, moves, iterations, perft)
+
+
+
+IMPORTANT
+=========
+- Cache support (using existing Zobrist hash tables)
+
+- Ponder support (test that works once Cache is enabled)
+
+- LMR support
+
+- Lazy SMP
+
+- 'cc' command never ends after a game is ended
+
+
+
+WISH LIST
+=========
+- Read/write PGN files.
+
+- Full BitBoard-based move generation and search.
+
+- Multi-thread engine (i.e., top N moves, each goes to one thread)
+
+- Think during opponent's time (dependency: transposition tables)
