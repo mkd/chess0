@@ -4,10 +4,8 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Change input from char[] and strcmp() to string --> use code from
-  chess0x/app.cpp
-
-- Support SAN input (i.e., use list of valid 'moves' to check against input)
+- Fix "time 3" and other commands with more than one word --> related to recent
+  input changes
 
 - Book support
 

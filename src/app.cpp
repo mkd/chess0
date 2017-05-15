@@ -20,12 +20,21 @@
 
 
 
-/*!
- * @file command.cpp
- *
- * This file contains the functions to handle user input and execute the
- * appropriate command inside the application.
- */
+// @file app.cpp
+//
+// This file contains the code for creating and starting the actual program
+// (Application). The application interacts with the user to accept input
+// (commands and moves) and perform an action based on the given input.
+//
+// The application can run in two different modes: XBOARD and CLI. The XBOARD
+// mode makes the app to work quietly and interact with a graphical user
+// interface (GUI) using the Winboard/Xboard protocol. The CLI mode makes the
+// program run on the system command line and interact with the user by
+// accepting text-based commands and moves.
+//
+// In summary, the application (or app) is responsible for taking the input and
+// performing different actions, based on user (or GUI) commands. Once the app
+// terminates, it returns a symbolic value and the whole program is terminated.
 #if defined(_WIN32) || defined(_WIN64)
 #include <conio.h>
 #else
@@ -68,6 +77,7 @@ return 0;
 #include "extglobals.h"
 #include "board.h"
 #include "timer.h"
+#include "app.h"
 
 
 
@@ -84,7 +94,7 @@ map<string, string> validMoves;
 /*
  * Read console input and execute the commands (also provide XBoard protocol).
  */
-void commands()
+int startApp(int mode)
 {
 	int i, j, number;
 	int fenhalfmoveclock;
@@ -199,6 +209,7 @@ noPonder:
 		// display the command prompt
 		if (!XB_MODE)
 		{
+            cout << endl;
             int curMoveNumber = (board.endOfGame / 2) + 1;
 			if (board.nextMove == WHITE_MOVE) cout << "White (" << curMoveNumber << "): ";
 			else cout << "Black (" << curMoveNumber << "): ";

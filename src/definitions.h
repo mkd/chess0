@@ -25,8 +25,8 @@
  *
  * TODO: document
  */
-#ifndef DEFINES_H
-#define DEFINES_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 #include <stdint.h>
  
@@ -37,6 +37,19 @@
 #define MAX_MOV_BUFF    4096   // Max number of moves that we can store (all plies)
 #define MAX_PLY           64   // Max search depth
 #define MAX_GAME_LINE   1024   // Max number of moves in the (game + search) line that we can store
+
+
+/*!
+ * Different execution modes of Chess0x:
+ * - XBOARD: the program will be quiet and interact with a graphical user
+ *           interface (GUI), by using the Winboard/Xboard protocol.
+ *
+ * - CLI:    the program will be verbose and interact with the user through the
+ *           command line of the system, using text-based input and commands.
+ */
+#define APP_MODE_XBOARD 1
+#define APP_MODE_CLI    2
+
 
 typedef uint64_t U64;
 typedef uint64_t BitMap;

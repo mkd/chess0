@@ -59,6 +59,7 @@
 #include "definitions.h"
 #include "functions.h"
 #include "globals.h"
+#include "app.h"
 
 
 
@@ -69,44 +70,41 @@ using namespace std;
 /*!
  * Main function that is executed when Chess0x is launched.
  */
-int CDECL main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	int i;
-
-	/* don't quit when xboard sends SIGINT */
+	// don't quit when xboard sends SIGINT */
     if(!isatty(STDIN_FILENO))
         signal(SIGINT, SIG_IGN);
 
-    /* force line buffering on stdin and stdout */
-    //setbuf(stdout, NULL);
-    //setbuf(stdin, NULL);
-    //setvbuf(stdout, NULL, _IONBF, 0);
-    //setvbuf(stdin, NULL, _IONBF, 0);   
 
-
-	dataInit();
-	board.init();
-
+    // XXX
     unsigned cores = thread::hardware_concurrency();
-  
     cout << "Welcome to " << PROG_NAME << "!" << endl; 
     cout << endl;
     cout << cores << " CPUs (1 CPU in use)" << endl;
 
-	// read the initialization file:
-	strcpy(PATHNAME, argv[0]);
-	strcpy(INIFILE, "chess0.ini");  // default name
-	// check command-line to see if we need to use another ini-file:
-	// usage: "chess0.exe i=somefile.ini"
-	for (i = 1; i < argc; i++) 
-	{
-		if (!strncmp(argv[i], "i=", 2)) sscanf(argv[i]+2,"%s", INIFILE);
-	}
-	readIniFile();
 
-    cout << endl;
+    // XXX
+	dataInit();
+	board.init();
 
-	commands();
 
-	return 0;
+    /*!
+     * Check if the program is called in XBoard/Winboard mode (protocol
+     * version 1). In version 2 of the protocol, the "xboard" parameter is
+     * entered once the program is up and running. However, in order to support
+     * version 1 of the XBoard protocol, we need to read the calling arguments
+     * of the program and detect whether 'xboard' is one of them.
+     */
+    if ((argc >= 2) && (strcmp(argv[1], "xboard") == 0))
+    {
+        return startApp(APP_MODE_XBOARD);
+    }
+    else
+    {
+        return startApp(APP_MODE_CLI);
+    }
+
+
+    return 0;
 }
