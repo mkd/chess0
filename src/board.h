@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file board.h
- *
- * XXX
- */
-#ifndef BOARD_H_
-#define BOARD_H_
+// @file board.h
+//
+// XXX
+#ifndef _BOARD_H_
+#define _BOARD_H_
 
  
 #include "definitions.h"
@@ -108,4 +106,4 @@ struct Board
 
 };
  
-#endif
+#endif // _BOARD_H_

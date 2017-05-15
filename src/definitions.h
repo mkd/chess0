@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file definitions.h
- *
- * TODO: document
- */
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+// @file definitions.h
+//
+// XXX
+#ifndef _DEFINITIONS_H_
+#define _DEFINITIONS_H_
 
 #include <stdint.h>
  
@@ -40,7 +38,7 @@
 
 
 /*!
- * Different execution modes of Chess0x:
+ * Different execution modes of Chess0:
  * - XBOARD: the program will be quiet and interact with a graphical user
  *           interface (GUI), by using the Winboard/Xboard protocol.
  *
@@ -57,4 +55,4 @@ typedef short SHORTINT;
 typedef unsigned short USHORTINT;
 typedef int BOOLTYPE;
  
-#endif
+#endif // _DEFINITIONS_H_

@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file move.h
- *
- * This file contains the Move structure.
- */
-#ifndef MOVE_H_
-#define MOVE_H_
+// @file move.h
+//
+// This file contains the Move structure.
+#ifndef _MOVE_H_
+#define _MOVE_H_
 
  
 #include "definitions.h"
@@ -74,4 +72,4 @@ struct Move
 	BOOLTYPE isCastleOOO();
 };
  
-#endif
+#endif // _MOVE_H_

@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file timer.h
- *
- * TODO: replace this by C++11 timers (using clock_t).
- */
-#ifndef TIMER_H
-#define TIMER_H
+// @file timer.h
+//
+// TODO: replace this by C++11 timers (using clock_t).
+#ifndef _TIMER_H
+#define _TIMER_H
  
 #include <sys/timeb.h>
 #include "definitions.h"
@@ -53,4 +51,4 @@ struct Timer
 };
  
  
-#endif
+#endif // _TIMER_H_

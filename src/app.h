@@ -4,12 +4,12 @@
     
     Copyright (C) 2017 Claudio M. Camacho
                                                                            
-    Chess0x is free software: you can redistribute it and/or modify
+    Chess0 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Chess0x is distributed in the hope that it will be useful,
+    Chess0 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -24,8 +24,8 @@
 //
 // This file contains all the variables and method definitions that can
 // be used across the whole application.
-#ifndef APP_H
-#define APP_H
+#ifndef _APP_H_
+#define _APP_H_
 
 #include <vector>
 #include "definitions.h"
@@ -103,4 +103,4 @@ inline bool isRank(char r) { return ((r >= '1' ) && (r <= '8')); }
 
 
 
-#endif // APP_H
+#endif // _APP_H_

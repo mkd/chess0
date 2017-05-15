@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file globals.h
- *
- * XXX
- */
-#ifndef GLOBALS_H
-#define GLOBALS_H
+// @file globals.h
+//
+// XXX
+#ifndef _GLOBALS_H_
+#define _GLOBALS_H_
  
 #include <iostream>
 #include "definitions.h"
@@ -472,4 +470,4 @@ int XB_OTIM;
 int XB_CTIM;
 
 
-#endif
+#endif // _GLOBALS_H_

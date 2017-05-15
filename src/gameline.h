@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file gameline.h
- *
- * XXX
- */
-#ifndef GAMELINE_H_
-#define GAMELINE_H_
+// @file gameline.h
+//
+// XXX
+#ifndef _GAMELINE_H_
+#define _GAMELINE_H_
  
 #include "move.h"
  
@@ -40,4 +38,4 @@ struct GameLineRecord
 	U64 key;					   // hash key of the position
 };
  
-#endif
+#endif // _GAMELINE_H_

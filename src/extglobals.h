@@ -20,13 +20,11 @@
 
 
 
-/*!
- * @file extglobals.h
- *
- * XXX
- */
-#ifndef EXTGLOBALS_H
-#define EXTGLOBALS_H
+// @file extglobals.h
+//
+// XXX
+#ifndef _EXTGLOBALS_H_
+#define _EXTGLOBALS_H_
  
 #include <iostream>
 #include "definitions.h"
@@ -237,4 +235,4 @@ extern int XB_INC;
 extern int XB_OTIM;
 extern int XB_CTIM;
 
-#endif
+#endif // _EXTGLOBALS_H_

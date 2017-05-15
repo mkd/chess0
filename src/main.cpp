@@ -68,7 +68,7 @@ using namespace std;
 
 
 /*!
- * Main function that is executed when Chess0x is launched.
+ * Main function that is executed when Chess0 is launched.
  */
 int main(int argc, char *argv[])
 {

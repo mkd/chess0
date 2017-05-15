@@ -20,14 +20,12 @@
 
 
 
-/*!
- * @file hash.h
- *
- * This file contains the definition of Hash table for caching different
- * positions during move searches.
- */
-#ifndef HASH_H_
-#define HASH_H_
+// @file hash.h
+//
+// This file contains the definition of Hash table for caching different
+// positions during move searches.
+#ifndef _HASH_H_
+#define _HASH_H_
 
 
 
@@ -51,4 +49,4 @@ struct HashKeys
 	U64 rand64();      // 64-bit random number generator
 };
 
-#endif
+#endif // _HASH_H_

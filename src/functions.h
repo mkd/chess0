@@ -20,14 +20,12 @@
 
 
 
-/*!
- * @file functions.h
- *
- * This file contains a list of all functions that will be visible across
- * multiple files.
- */
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+// @file functions.h
+//
+// This file contains a list of all functions that will be visible across
+// multiple files.
+#ifndef _FUNCTIONS_H_
+#define _FUNCTIONS_H_
 
 
 
@@ -79,4 +77,4 @@ string        bunmap(int);
 BOOLTYPE      isValidTextMove(char *, Move &);
 
 
-#endif 
+#endif // _FUNCTIONS_H_
