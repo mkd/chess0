@@ -25,10 +25,6 @@
  *
  * XXX
  */
-#ifndef _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
-
 #if defined(_WIN32) || defined(_WIN64)
 #include <conio.h>
 #else
@@ -42,7 +38,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <iomanip>
-#include "defines.h" 
+#include "definitions.h" 
 #include "extglobals.h" 
 #include "functions.h" 
 #include "board.h" 

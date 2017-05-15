@@ -21,7 +21,7 @@
 
 
 /*!
- * @file defines.h
+ * @file definitions.h
  *
  * TODO: document
  */
@@ -32,12 +32,6 @@
  
 #define PROG_NAME "Chess0"
 #define PROG_VERSION "Chess0 1.0dev"
-//#define DEBUG_PERFT
-//#define DEBUG_MOVES
-//#define VERBOSE_EVAL
-//#define DEBUG_EVAL
-//#define VERBOSE_SEE
-//#define DEBUG_WINBOARD
 
 #define MAX_CMD_BUFF     256   // Console command input buffer
 #define MAX_MOV_BUFF    4096   // Max number of moves that we can store (all plies)

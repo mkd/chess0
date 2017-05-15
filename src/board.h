@@ -29,7 +29,7 @@
 #define BOARD_H_
 
  
-#include "defines.h"
+#include "definitions.h"
 #include "move.h"
 #include "gameline.h"
 #include "timer.h"

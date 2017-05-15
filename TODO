@@ -4,7 +4,10 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Support SAN input
+- Change input from char[] and strcmp() to string --> use code from
+  chess0x/app.cpp
+
+- Support SAN input (i.e., use list of valid 'moves' to check against input)
 
 - Book support
 
@@ -13,6 +16,9 @@ WORK IN PROGRESS
 BEFORE NEXT RELEASE
 ===================
 - Interface (input & output) should behave exactly the same as Chess0x
+
+- Implement auto-reply (right now need to use 'go' every time a move is
+  inputted)
 
 - Refactor all code (e.g., sprintf() to cout()) and rename libraries, files,
   etc.

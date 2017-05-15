@@ -37,7 +37,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 #include "move.h"

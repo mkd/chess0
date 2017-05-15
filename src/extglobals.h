@@ -29,7 +29,7 @@
 #define EXTGLOBALS_H
  
 #include <iostream>
-#include "defines.h"
+#include "definitions.h"
 #include "board.h"
 #include "hash.h"
  

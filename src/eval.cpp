@@ -26,7 +26,7 @@
  * XXX
  */
 #include <iostream>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 #include "board.h"

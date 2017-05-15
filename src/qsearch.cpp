@@ -1,4 +1,4 @@
-#include "defines.h" 
+#include "definitions.h" 
 #include "extglobals.h" 
 #include "functions.h" 
 #include "board.h" 

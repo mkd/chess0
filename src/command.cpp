@@ -60,7 +60,7 @@ return 0;
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 #include "board.h"
@@ -92,6 +92,7 @@ void commands()
 	char sanMove[12];
 	char command[80];
 	char userinput[80];
+    string input = "";
 	U64 msStart,msStop, perftcount;
 	Timer timer;
 	Move move, dummy;
@@ -108,7 +109,10 @@ void commands()
     // which call terminateApp().
 	while (1) 
 	{ 
-		cout << flush;
+        // Clear both the input and output buffer, to make sure the new input
+        // isn't altered from something entered during the program's output.
+        cout.flush();
+        input = "";
 
 
 		// think & move
@@ -189,10 +193,7 @@ void commands()
 
 noPonder:
 
-		// =================================================================
 		// display the command prompt
-		// =================================================================
-
 		if (!XB_MODE)
 		{
             int curMoveNumber = (board.endOfGame / 2) + 1;
@@ -201,11 +202,8 @@ noPonder:
 			cout << flush;
 		}
 
-		// =================================================================
 		// read input, but only after attending a pending command received during 
 		// search/ponder/analyze:
-		// =================================================================
-
 		if (!XB_DO_PENDING)
 		{
 			for (CMD_BUFF_COUNT = 0; (CMD_BUFF[CMD_BUFF_COUNT] = getchar()) != '\n'; CMD_BUFF_COUNT++);
@@ -213,21 +211,18 @@ noPonder:
 		}
 		XB_DO_PENDING = false;
 	
-		// =================================================================
 		// ignore empty lines
-		// =================================================================
-
 		if (!CMD_BUFF_COUNT) continue; 
 
-		// =================================================================
-		// extract the first word
-		// =================================================================
 
+		// extract the first word
+        //input = getInput();
+        //cout << "input = '" << input << "'" << endl;
+        //cout.flush();
 		sscanf(CMD_BUFF, "%s", command);
 
-		// =================================================================
+
 		// help, h or ?: show this help - list of CONSOLE-ONLY COMMANDS
-		// =================================================================
 		if ((!XB_MODE) && ((!strcmp(command, "help")) || (!strcmp(command, "h")) || (!strcmp(command, "?"))))
 		{ 
 			cout << endl << "help:" << endl;
@@ -525,20 +520,18 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// ini: read the initialization file
-		// =================================================================
 
+
+		// ini: read the initialization file
 		if (!XB_MODE && !strcmp(command, "ini"))    
 		{ 
 			readIniFile();
 			continue; 
 		}
 
-		// =================================================================
-		// level mps base inc: set time controls
-		// =================================================================
 
+
+		// level mps base inc: set time controls
 		if (XB_MODE && !strcmp(command, "level"))   
 		{
 			sscanf(CMD_BUFF, "level %d %d %d", &XB_MPS, &XB_MIN, &XB_INC) == 3 ||  
@@ -547,16 +540,14 @@ noPonder:
 			continue;
 		}
 
-		// =================================================================
-		// memory n: informs the engine on how much memory it is allowed to use maximally, in MB
-		// =================================================================
 
+
+		// memory n: informs the engine on how much memory it is allowed to use maximally, in MB
 		if (XB_MODE && !strcmp(command, "memory")) continue; 
 
-		// =================================================================
-		// moves: show all legal moves
-		// =================================================================
 
+
+		// moves: show all legal moves
 		if (!XB_MODE && !strcmp(command, "moves"))    
 		{ 
 			board.moveBufLen[0] = 0;
@@ -580,10 +571,9 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// move: enter a move (use this format: move e2e4, or h7h8q)
-		// =================================================================
 
+
+		// move: enter a move (use this format: move e2e4, or h7h8q)
 		if (!XB_MODE && !strcmp(command, "move"))    
 		{
 			sscanf(CMD_BUFF,"move %s",userinput);
@@ -997,4 +987,43 @@ noPonder:
 
 		printf("Error: unknown command: %s\n", command);
 	}
+}
+
+
+
+/*!
+ * Retrieve an input line from the user.
+ *
+ * @return a string object containig the user input.
+ */
+string getInput()
+{
+    char input[MAX_CMD_BUFF];
+
+
+    /*!
+     * Get a line from the input until we reach the maximum input size.
+     */
+    cin.getline(input, MAX_CMD_BUFF);
+    string input_str(input);
+
+
+    /*!
+     * If Ctrl+D is entered, then terminate the program.
+     */
+    if (cin.eof())
+        terminateApp();
+
+    return input_str;
+}
+
+
+
+/*!
+ * Terminate the app in a safe way.
+ */
+void terminateApp()
+{
+    cout << endl << "Goodbye!" << endl;
+    exit(0);
 }

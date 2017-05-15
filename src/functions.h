@@ -1,5 +1,35 @@
-#ifndef PROTOS_H
-#define PROTOS_H
+/* 
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
+    
+    Copyright (C) 2017 Claudio M. Camacho
+                                                                           
+    Chess0 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Chess0 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+/*!
+ * @file functions.h
+ *
+ * This file contains a list of all functions that will be visible across
+ * multiple files.
+ */
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
+
 
 #include <iostream>
 #include "board.h"
@@ -44,5 +74,7 @@ void          unmakeBlackPromotion(unsigned int, unsigned int &);
 void          unmakeCapture(unsigned int &, unsigned int &);
 void          unmakeMove(Move &);
 void          unmakeWhitePromotion(unsigned int, unsigned int &);
+string        getInput();
+void          terminateApp();
 
 #endif 

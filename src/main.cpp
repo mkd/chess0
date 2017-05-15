@@ -26,10 +26,6 @@
  * This file contains the main routine to get the application started and
  * accepting input from the user.
  */
-#ifndef _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
-// windows only:
 #if defined(_wn32) || defined(_WIN64)
 #include <Windows.h>
 #include <io.h>
@@ -60,7 +56,7 @@
 #include <sys/timeb.h>
 
 
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "globals.h"
 

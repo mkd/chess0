@@ -25,15 +25,12 @@
  *
  * XXX
  */
-#ifndef _CRT_SECURE_NO_DEPRECATE  // suppress MS security warnings
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
  

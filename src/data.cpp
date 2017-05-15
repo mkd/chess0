@@ -25,16 +25,12 @@
  *
  * XXX
  */
-#ifndef _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
 #include <iomanip>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 

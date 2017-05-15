@@ -27,7 +27,7 @@
  */
 #include <iostream>
 #include <iomanip>
-#include "defines.h"
+#include "definitions.h"
 #include "extglobals.h"
  
 unsigned int bitCnt(U64 bitmap)

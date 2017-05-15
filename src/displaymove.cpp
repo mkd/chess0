@@ -1,18 +1,43 @@
-#ifndef _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
+/* 
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
+    
+    Copyright (C) 2017 Claudio M. Camacho
+                                                                           
+    Chess0 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Chess0 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+/*!
+ * @file displaymove.cpp
+ *
+ * XXX
+ */
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "defines.h"
+#include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 
+
+
+// displays a single move on the console, no disambiguation
 void displayMove(Move &move)
 {
-       // displays a single move on the console, no disambiguation
- 
        if (((move.getPiec() == WHITE_KING) && (move.isCastleOO())) || ((move.getPiec() == BLACK_KING) && (move.isCastleOO())))
        {
               std::cout << "O-O";
