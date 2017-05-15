@@ -47,10 +47,6 @@ using namespace std;
 
 
  
-#ifdef DEBUG_MOVES
-       void debugMoves(char *, Move &);
-#endif
- 
 void makeMove(Move &move)
 {
        unsigned int from = move.getFrom();
@@ -374,11 +370,6 @@ void makeMove(Move &move)
        board.nextMove = !board.nextMove;
 	   board.hashkey ^= KEY.side; 
        board.endOfSearch++;
-
-#ifdef CHESS0_DEBUG_MOVES
-       debugMoves("makemove", move);
-#endif
-
 }
  
 void unmakeMove(Move &move)
@@ -633,11 +624,6 @@ void unmakeMove(Move &move)
        board.epSquare            = board.gameLine[board.endOfSearch].epSquare;
        board.fiftyMove           = board.gameLine[board.endOfSearch].fiftyMove;
 	   board.hashkey			 = board.gameLine[board.endOfSearch].key; 
- 
-#ifdef CHESS0_DEBUG_MOVES
-       debugMoves("unmakemove", move);
-#endif
-	   return;
 }
  
 void makeCapture(unsigned int &captured, unsigned int &to)
@@ -1022,7 +1008,8 @@ BOOLTYPE isOtherKingAttacked()
            return isAttacked(board.blackKing, board.nextMove);
        }
 }
-  
+
+
 BOOLTYPE isValidTextMove(char *userMove, Move &move)
 {
        // Checks if userMove is valid by comparing it with moves from the move generator
@@ -1087,14 +1074,11 @@ BOOLTYPE isValidTextMove(char *userMove, Move &move)
        move.moveInt = 0;
        return false;
 }
- 
-#ifdef CHESS0_DEBUG_MOVES
- 
+
+  
+// check if board.square, piece bitmaps and whitepieces and blackpiese and occupied square are all consistent after (un)makmove
 void debugMoves(char *caller, Move &move)
 {
-
-       // check if board.square, piece bitmaps and whitepieces and blackpiese and occupied square are all consistent after (un)makmove
- 
        char input[80];
        int mat, i, j;
 	   int totwpawn, totbpawn, totwpiec, totbpiec;
@@ -1392,4 +1376,3 @@ void debugMoves(char *caller, Move &move)
 	}
 	return;
 }
-#endif

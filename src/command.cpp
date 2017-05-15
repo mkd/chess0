@@ -57,10 +57,13 @@ return 0;
 #endif
 
 #include <iostream>
-#include <string.h>
+#include <list>
+#include <map>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "definitions.h"
+#include "move.h"
 #include "functions.h"
 #include "extglobals.h"
 #include "board.h"
@@ -74,6 +77,7 @@ using namespace std;
 
 // Global variables
 unsigned char movingSide = WHITE_MOVE;
+map<string, string> validMoves;
 
 
 
@@ -92,6 +96,7 @@ void commands()
 	char sanMove[12];
 	char command[80];
 	char userinput[80];
+    string userMove = "";
     string input = "";
 	U64 msStart,msStop, perftcount;
 	Timer timer;
@@ -108,7 +113,7 @@ void commands()
     // This loop is exited by entering Ctrl+D or the commands "quit" or "exit",
     // which call terminateApp().
 	while (1) 
-	{ 
+	{
         // Clear both the input and output buffer, to make sure the new input
         // isn't altered from something entered during the program's output.
         cout.flush();
@@ -145,8 +150,6 @@ void commands()
 					board.endOfSearch = board.endOfGame;
 				}
 			}
-
-			cout << flush;
 
 
 			// ponder
@@ -202,24 +205,68 @@ noPonder:
 			cout << flush;
 		}
 
+
 		// read input, but only after attending a pending command received during 
 		// search/ponder/analyze:
-		if (!XB_DO_PENDING)
+		/*if (!XB_DO_PENDING)
 		{
 			for (CMD_BUFF_COUNT = 0; (CMD_BUFF[CMD_BUFF_COUNT] = getchar()) != '\n'; CMD_BUFF_COUNT++);
 			CMD_BUFF[CMD_BUFF_COUNT+1] = '\0';
 		}
 		XB_DO_PENDING = false;
+
 	
 		// ignore empty lines
-		if (!CMD_BUFF_COUNT) continue; 
+		//if (!CMD_BUFF_COUNT) continue; 
+        */
 
 
-		// extract the first word
-        //input = getInput();
-        //cout << "input = '" << input << "'" << endl;
-        //cout.flush();
-		sscanf(CMD_BUFF, "%s", command);
+        // make a list of current valid moves
+        string tmpStr = "";
+		board.moveBufLen[0] = 0;
+		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+		for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
+		{
+			makeMove(board.moveBuffer[i]);
+			if (isOtherKingAttacked())
+			{
+				unmakeMove(board.moveBuffer[i]);
+			}
+			else
+			{
+				unmakeMove(board.moveBuffer[i]);
+				toSan(board.moveBuffer[i], sanMove);
+                string moveStr(sanMove);
+                tmpStr = bunmap((board.moveBuffer[i]).getFrom()) + bunmap((board.moveBuffer[i]).getTosq());
+                validMoves[moveStr] = tmpStr;
+			}
+		}
+
+		// DEBUG: print all valid moves, both in SAN and algebraic notation
+        /*
+ 		for(map <string, string>::iterator it = validMoves.begin(); it != validMoves.end(); it++)
+         	cout << it->first << "|" << it->second << endl;
+        */
+
+
+		// read command or move from the user
+        cin >> input;
+
+
+        // if SAN move, make the move
+        auto t = validMoves.find(input);
+        if (t != validMoves.end())
+        {
+            strcpy(command, "move");
+            userMove = t->second;
+        }
+
+        // if input is not a move, it must be a command
+        else
+        {
+		    sscanf(input.c_str(), "%s", command);
+        }
+
 
 
 		// help, h or ?: show this help - list of CONSOLE-ONLY COMMANDS
@@ -485,35 +532,27 @@ noPonder:
 			continue;
 		}
 
-		// =================================================================
-		// hard: turn on pondering
-		// =================================================================
 
+		// hard: turn on pondering
 		if (XB_MODE && !strcmp(command, "hard"))    
 		{ 
 			XB_PONDER = true;  
 			continue; 
 		}
 
-		// =================================================================
-		// hint: respond with "Hint: xxx", where xxx is a suggested move
-		// =================================================================
 
+		// hint: respond with "Hint: xxx", where xxx is a suggested move
 		if (XB_MODE && !strcmp(command, "hint")) 
 		{
 				continue; 
 		}
 
-		// =================================================================
-		// ics hostname: the engine is playing on an Internet Chess Server (ICS) with the given hostname
-		// =================================================================
 
+		// ics hostname: the engine is playing on an Internet Chess Server (ICS) with the given hostname
 		if (XB_MODE && !strcmp(command, "ics"))     { continue; }
 
-		// =================================================================
-		// info: display variables (for testing purposes)
-		// =================================================================
 
+		// info: display variables (for testing purposes)
 		if (!XB_MODE && !strcmp(command, "info"))    
 		{ 
 			info();
@@ -534,8 +573,8 @@ noPonder:
 		// level mps base inc: set time controls
 		if (XB_MODE && !strcmp(command, "level"))   
 		{
-			sscanf(CMD_BUFF, "level %d %d %d", &XB_MPS, &XB_MIN, &XB_INC) == 3 ||  
-			sscanf(CMD_BUFF, "level %d %d:%d %d", &XB_MPS, &XB_MIN, &XB_SEC, &XB_INC);
+			sscanf(input.c_str(), "level %d %d %d", &XB_MPS, &XB_MIN, &XB_INC) == 3 ||  
+			sscanf(input.c_str(), "level %d %d:%d %d", &XB_MPS, &XB_MIN, &XB_SEC, &XB_INC);
 			XB_INC *= 1000;
 			continue;
 		}
@@ -576,16 +615,19 @@ noPonder:
 		// move: enter a move (use this format: move e2e4, or h7h8q)
 		if (!XB_MODE && !strcmp(command, "move"))    
 		{
-			sscanf(CMD_BUFF,"move %s",userinput);
+			sscanf(userMove.c_str(), "%s", userinput);
+
 			// generate the pseudo-legal move list
 			board.moveBufLen[0] = 0;
 			board.moveBufLen[1] = movegen(board.moveBufLen[0]);
- 
-			if (isValidTextMove(userinput, move))        // check to see if the user move is also found in the pseudo-legal move list
+
+            // check to see if the user move is also found in the pseudo-legal move list
+			if (isValidTextMove(userinput, move))
 			{
 				makeMove(move);
- 
-				if (isOtherKingAttacked())              // post-move check to see if we are leaving our king in check
+
+                // post-move check to see if we are leaving our king in check
+				if (isOtherKingAttacked())
 				{
 					unmakeMove(move);
 					cout << "    invalid move, leaving king in check: " << userinput << endl;
@@ -604,16 +646,12 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// name <something>: informs the engine of its opponent's name
-		// =================================================================
 
+		// name <something>: informs the engine of its opponent's name
 		if (XB_MODE && !strcmp(command, "name")) continue; 
 
-		// =================================================================
-		// new: reset the board to the standard chess starting position
-		// =================================================================
 
+		// new: reset the board to the standard chess starting position
 		if (!strcmp(command, "new"))     
 		{
 			board.init(); 
@@ -625,38 +663,30 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// nopost: turn off thinking/pondering output
-		// =================================================================
 
+		// nopost: turn off thinking/pondering output
 		if (XB_MODE && !strcmp(command, "nopost"))  
 		{ 
 			XB_POST = false;
 			continue; 
 		}
 
-		// =================================================================
 		// otim n: set a clock that belongs to the opponent, in centiseconds
-		// =================================================================
 		if (XB_MODE && !strcmp(command, "otim"))    
 		{ 
 			// do not start pondering after receiving time commands, as a move will follow immediately
-			sscanf(CMD_BUFF, "otim %d", &XB_OTIM);
+			sscanf(input.c_str(), "otim %d", &XB_OTIM);
 			XB_OTIM *= 10;  // convert to miliseconds;
 			goto noPonder; 
 		} 
 
-		// =================================================================
 		// option name[=value]: setting of an engine-define option
-		// =================================================================
 		if (XB_MODE && !strcmp(command, "option"))  continue;
 
-		// =================================================================
 		// perft: calculate raw number of nodes from here, depth n 
-		// =================================================================
 		if (!XB_MODE && !strcmp(command, "perft"))  
 		{ 
-			sscanf(CMD_BUFF,"perft %d", &number);
+			sscanf(input.c_str(),"perft %d", &number);
 			cout << "    starting perft " << number << "..." << endl;
 			timer.init();
 			board.moveBufLen[0] = 0;
@@ -674,31 +704,27 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// ping n: reply by sending the string pong n
-		// =================================================================
 
+
+		// ping n: reply by sending the string pong n
 		if (XB_MODE && !strcmp(command, "ping"))    
 		{ 
-			sscanf(CMD_BUFF,"ping %d", &number);
+			sscanf(input.c_str(),"ping %d", &number);
 			cout << "pong " << number << endl; 
 			continue; 
 		}
 
-		// =================================================================
-		// post: turn on thinking/pondering output
-		// =================================================================
 
+		// post: turn on thinking/pondering output
 		if (XB_MODE && !strcmp(command, "post"))    
 		{ 
 			XB_POST = true; 
 			continue; 
 		}
 
-		// =================================================================
-		// protover n: protocol version
-		// =================================================================
 
+
+		// protover n: protocol version
 		if (XB_MODE && !strcmp(command, "protover")) 
 		{
 			cout << "feature ping=1" << endl;
@@ -712,49 +738,18 @@ noPonder:
 			continue;
 		}
 
-		#ifdef VERBOSE_SEE
-		// =================================================================
-		// qsearch: shows sorted capture movelist
-		// =================================================================
-				if (!XB_MODE && !strcmp(command, "qsearch"))  
-				{ 
-					board.moveBufLen[0] = 0;
-					board.moveBufLen[1] = captgen(board.moveBufLen[0]);
-					cout << endl << "sorted capturing moves from this position:" << endl;
-					cout << endl << "        score:" << endl;
-					number = 0;
-					for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
-					{
-						makeMove(board.moveBuffer[i]);
-						if (isOtherKingAttacked())
-						{
-							unmakeMove(board.moveBuffer[i]);
-						}
-						else
-						{
-							unmakeMove(board.moveBuffer[i]);
-							cout << ++number << ". "; 
-							displayMove(board.moveBuffer[i]);
-							cout << "   " << board.moveBuffer[i + OFFSET].moveInt << endl;
-						}
-					}
-					continue; 
-				}
-		#endif
 
-		// =================================================================
+
 		// quit: exit program
-		// =================================================================
-
 		if ((!strcmp(command, "quit")) || (!strcmp(command, "q")))
         {
             cout << endl << "Goodbye!" << endl;
             break;
         }
 
-		// =================================================================
+
+
 		// r: rotate board
-		// =================================================================
 		if (!XB_MODE && !strcmp(command, "r"))  
 		{ 
 			board.flipBoard = !board.flipBoard;
@@ -763,9 +758,7 @@ noPonder:
 		}
 
 
-		// =================================================================
 		// flip: flip board
-		// =================================================================
 		if (!XB_MODE && !strcmp(command, "flip"))  
 		{ 
 			board.flipBoard = !board.flipBoard;
@@ -773,35 +766,27 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// random: ignored
-		// =================================================================
 
+		// random: ignored
 		if (XB_MODE && !strcmp(command, "random")) continue;
 
-		// =================================================================
-		// rating: ICS opponent's rating
-		// =================================================================
 
+		// rating: ICS opponent's rating
 		if (XB_MODE && !strcmp(command, "rating")) continue;
 
-		// =================================================================
-		// readfen filename n: reads #-th FEN position from filename
-		// =================================================================
 
+		// readfen filename n: reads #-th FEN position from filename
 		if (!XB_MODE && !strcmp(command, "readfen"))  
 		{ 
-			sscanf(CMD_BUFF,"readfen %s %d", userinput, &number);
+			sscanf(input.c_str(),"readfen %s %d", userinput, &number);
 			board.init();
 			readFen(userinput, number);
 			board.display();
 			continue; 
 		}
 
-		// =================================================================
-		// rejected: feature is rejected
-		// =================================================================
 
+		// rejected: feature is rejected
 		if (XB_MODE && !strcmp(command, "rejected")) continue;
 
 
@@ -831,18 +816,19 @@ noPonder:
 		// sd n: set the search depth to n
 		if (!strcmp(command, "sd"))      
 		{ 
-			sscanf(CMD_BUFF,"sd %d", &board.searchDepth);
+			sscanf(input.c_str(),"sd %d", &board.searchDepth);
 			if (board.searchDepth < 1) board.searchDepth = 1;
 			if (board.searchDepth > MAX_PLY) board.searchDepth = MAX_PLY;
 			cout << "Search depth: " << board.searchDepth << endl;
 			continue; 
 		}
 
+
 		// setboard fen: set up the board/position 
 		if (XB_MODE && !strcmp(command, "setboard"))
 		{ 
 			XB_COMPUTER_SIDE = XB_NONE;
-			sscanf(CMD_BUFF, "setboard %s %s %s %s %d %d", fen, fencolor, fencastling, fenenpassant, &fenhalfmoveclock, &fenfullmovenumber);
+			sscanf(input.c_str(), "setboard %s %s %s %s %d %d", fen, fencolor, fencastling, fenenpassant, &fenhalfmoveclock, &fenfullmovenumber);
 			setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
 			continue; 
 		}
@@ -861,7 +847,7 @@ noPonder:
 		if (!XB_MODE && !strcmp(command, "stopfrac"))      
 		{ 
 			number = (int)(STOPFRAC * 100);
-			sscanf(CMD_BUFF, "stopfrac %d", &number);
+			sscanf(input.c_str(), "stopfrac %d", &number);
 			if (number < 1) number = 1;
 			if (number > 100) number = 100;
 			STOPFRAC = (float)(number/100.0);
@@ -872,7 +858,7 @@ noPonder:
 		// st time: set time controls
 		if (XB_MODE && !strcmp(command, "st"))      
 		{ 
-			sscanf(CMD_BUFF, "st %d", &board.maxTime);
+			sscanf(input.c_str(), "st %d", &board.maxTime);
 			board.maxTime *= board.maxTime;  // convert to ms
 			continue; 
 		}
@@ -880,7 +866,7 @@ noPonder:
 		// test filename: starts search on all FEN position in 'filename
 		if (!XB_MODE && !strcmp(command, "test"))      
 		{ 
-			sscanf(CMD_BUFF,"test %s", userinput);
+			sscanf(input.c_str(), "test %s", userinput);
 			board.init();
 			continue; 
 		}
@@ -889,7 +875,7 @@ noPonder:
 		if (!strcmp(command, "time"))    
 		{ 
 			number = (int)board.maxTime / 1000;
-			sscanf(CMD_BUFF,"time %d", &number);
+			sscanf(input.c_str(),"time %d", &number);
 			if (number < 1) number = 1;
 			if (!XB_MODE) cout << "Max. time per move: " << number << " seconds" << endl;
 			if (XB_MODE)
@@ -917,13 +903,11 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
-		// usermove move: do a move
-		// =================================================================
 
+		// usermove move: do a move
 		if (XB_MODE && !strcmp(command, "usermove"))
 		{
-			sscanf(CMD_BUFF,"usermove %s",userinput);
+			sscanf(userMove.c_str(), "%s", userinput);
 
 			// generate the pseudo-legal move list
 			board.moveBufLen[0] = 0;
@@ -981,40 +965,9 @@ noPonder:
 			continue; 
 		}
 
-		// =================================================================
 		// unknown command: 
-		// =================================================================
-
-		printf("Error: unknown command: %s\n", command);
+		cerr << "Wrong move or unknown command: " << input << endl;
 	}
-}
-
-
-
-/*!
- * Retrieve an input line from the user.
- *
- * @return a string object containig the user input.
- */
-string getInput()
-{
-    char input[MAX_CMD_BUFF];
-
-
-    /*!
-     * Get a line from the input until we reach the maximum input size.
-     */
-    cin.getline(input, MAX_CMD_BUFF);
-    string input_str(input);
-
-
-    /*!
-     * If Ctrl+D is entered, then terminate the program.
-     */
-    if (cin.eof())
-        terminateApp();
-
-    return input_str;
 }
 
 

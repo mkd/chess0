@@ -1,4 +1,38 @@
+/* 
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
+    
+    Copyright (C) 2017 Claudio M. Camacho
+                                                                           
+    Chess0 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Chess0 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+/*!
+ * @file move.cpp
+ *
+ * This file contains operations to work set and get information from Move
+ * objects.
+ */
+#include <sstream>
 #include "move.h"
+
+
+using namespace std;
+
+
  
 void Move::clear()
 {
@@ -134,4 +168,23 @@ BOOLTYPE Move::isCastleOO()
 BOOLTYPE Move::isCastleOOO()  
 {   // prom is a king and tosq is on the c-file
        return ( moveInt & 0x007001c0) == 0x00200080;
-} 
+}
+
+
+ 
+/*!
+ * Generate an algebraic row+column square from a given internal integer value.
+ *
+ * @param pos Integer representing the square in the internal format.
+ *
+ * @return a string (column+row).
+ */
+string bunmap(int pos)
+{
+    ostringstream square(ostringstream::out);
+
+    square << static_cast<char>((pos % 8) + 'a');
+    square << static_cast<char>((pos / 8) + '1');
+    
+    return square.str();
+}

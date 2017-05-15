@@ -54,7 +54,6 @@ void          info();
 BOOLTYPE      isAttacked(BitMap &, const unsigned char &);
 BOOLTYPE      isOtherKingAttacked();
 BOOLTYPE      isOwnKingAttacked();
-BOOLTYPE      isValidTextMove(char *, Move &);
 unsigned int  lastOne(BitMap);
 void          makeBlackPromotion(unsigned int, unsigned int &);
 void          makeCapture(unsigned int &, unsigned int &);
@@ -76,5 +75,8 @@ void          unmakeMove(Move &);
 void          unmakeWhitePromotion(unsigned int, unsigned int &);
 string        getInput();
 void          terminateApp();
+string        bunmap(int);
+BOOLTYPE      isValidTextMove(char *, Move &);
+
 
 #endif 

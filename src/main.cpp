@@ -78,11 +78,10 @@ int CDECL main(int argc, char *argv[])
         signal(SIGINT, SIG_IGN);
 
     /* force line buffering on stdin and stdout */
-    
-    setbuf(stdout, NULL);
-    setbuf(stdin, NULL);
-    setvbuf(stdout, NULL, _IONBF, 0);
-    setvbuf(stdin, NULL, _IONBF, 0);   
+    //setbuf(stdout, NULL);
+    //setbuf(stdin, NULL);
+    //setvbuf(stdout, NULL, _IONBF, 0);
+    //setvbuf(stdin, NULL, _IONBF, 0);   
 
 
 	dataInit();
