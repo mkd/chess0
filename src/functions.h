@@ -77,4 +77,22 @@ string        bunmap(int);
 BOOLTYPE      isValidTextMove(char *, Move &);
 
 
+
+/*!
+ * Check if the given character represents a piece (N for Knight, B for
+ * Bishop, R for Rook, Q for Queen and K for King).
+ *
+ * @param p Char holding a piece letter.
+ *
+ * @return true of p is N, B, R, Q, or K, false otherwise.
+ */
+inline bool isPiece(char p)
+{
+    return ((p == 'N') || (p == 'B') || (p == 'R') || (p == 'Q') ||
+            (p == 'K'));
+}
+
+
+
+
 #endif // _FUNCTIONS_H_

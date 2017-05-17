@@ -1,15 +1,15 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
+    This file is part of Chess0x, a computer chess program derived from
+    Chess0 0.6.
     
-    Copyright (C) 2017 Claudio M. Camacho
+    Copyright (C) 2016 Claudio M. Camacho
                                                                            
-    Chess0 is free software: you can redistribute it and/or modify
+    Chess0x is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Chess0 is distributed in the hope that it will be useful,
+    Chess0x is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -20,10 +20,12 @@
 
 
 
-// @file app.h
-//
-// This file contains all the variables and method definitions that can
-// be used across the whole application.
+/*!
+ * @file app.h
+ *
+ * This file contains all the variables and method definitions that can
+ * be used across the whole application.
+ */
 #ifndef _APP_H_
 #define _APP_H_
 
@@ -62,20 +64,19 @@ extern int             appMode;
 extern vector<string>  listOfCommands;
 extern string          lastErrorMessage;
 extern vector<string>  history;
+extern bool            useCache;
+extern EndType         gameEnd;
 
 int startApp(int);
-/*void prompt(ColorType, unsigned);
+void prompt(ColorType, unsigned);
 std::string getInput();
 void terminateApp();
 void changeSide();
 uint64_t perft(unsigned, ColorType);
 void dealEnd();
 InputType getInputType(string);
-void addToHistory(Move);
-void removeFromHistory(int);
 void displayHistory();
 string getHistorySequence();
-*/
 
 
 
@@ -86,11 +87,10 @@ extern int playMode;
 extern int wPlayer;
 extern int bPlayer;
 extern int curPlayerType;
-//extern ColorType sideToMove;
+extern ColorType sideToMove;
 extern unsigned numberOfMove;
 extern unsigned cursor;
-//extern EndType gameEnd;
-//extern ColorType gameMate;
+extern ColorType gameMate;
 extern bool useBook;
 
 

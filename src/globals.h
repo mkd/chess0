@@ -27,6 +27,7 @@
 #define _GLOBALS_H_
  
 #include <iostream>
+#include <unordered_map>
 #include "definitions.h"
 #include "board.h"
 #include "hash.h"

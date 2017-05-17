@@ -26,18 +26,8 @@
  * This file contains the main routine to get the application started and
  * accepting input from the user.
  */
-#if defined(_wn32) || defined(_WIN64)
-#include <Windows.h>
-#include <io.h>
-
-#else
-#include <unistd.h>
-#include <stdio.h>
-#define CDECL
-
-#endif
-
 #include <signal.h>
+#include <unistd.h>
 #include <iostream>
 #include <thread>
 
@@ -58,7 +48,6 @@
 
 #include "definitions.h"
 #include "functions.h"
-#include "globals.h"
 #include "app.h"
 
 
@@ -76,17 +65,6 @@ int main(int argc, char *argv[])
     if(!isatty(STDIN_FILENO))
         signal(SIGINT, SIG_IGN);
 
-
-    // XXX
-    unsigned cores = thread::hardware_concurrency();
-    cout << "Welcome to " << PROG_NAME << "!" << endl; 
-    cout << endl;
-    cout << cores << " CPUs (1 CPU in use)" << endl;
-
-
-    // XXX
-	dataInit();
-	board.init();
 
 
     /*!

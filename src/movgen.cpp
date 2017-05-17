@@ -1,3 +1,29 @@
+/* 
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
+    
+    Copyright (C) 2017 Claudio M. Camacho
+                                                                           
+    Chess0 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Chess0 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+// @file movgen.cpp
+//
+// This file contains the code for generating all the pseudo-legal and legal
+// (valid) moves for all pieces existing on the board.
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -5,6 +31,8 @@
 #include "functions.h"
 #include "extglobals.h"
 #include "move.h"
+
+
  
 // Macro's to define sliding attacks:
 #define RANKMOVES(a)       (RANK_ATTACKS[(a)][((board.occupiedSquares & RANKMASK[(a)]) >> RANKSHIFT[(a)])] & targetBitmap)
@@ -14,18 +42,16 @@
 #define ROOKMOVES(a)       (RANKMOVES(a) | FILEMOVES(a))
 #define BISHOPMOVES(a)     (SLIDEA8H1MOVES(a) | SLIDEA1H8MOVES(a))
 #define QUEENMOVES(a)      (BISHOPMOVES(a) | ROOKMOVES(a))
+
+
  
+// This is winglet's pseudo-legal bitmap move generator,
+// using magic multiplication instead of rotated bitboards.
+// There is no check if a move leaves the king in check
+// The first free location in moveBuffer[] is supplied in index,
+// and the new first free location is returned
 int movegen(int index)
 {
- 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// This is winglet's pseudo-legal bitmap move generator,
-	// using magic multiplication instead of rotated bitboards.
-	// There is no check if a move leaves the king in check
-	// The first free location in moveBuffer[] is supplied in index,
-	// and the new first free location is returned
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
 	unsigned char opponentSide;
 	unsigned int from, to;
 	BitMap tempPiece, tempMove;

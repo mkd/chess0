@@ -28,7 +28,7 @@ PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
 
 ### Object files
-OBJS = app.o bit.o board.o data.o displaymove.o hash.o make.o move.o movegen.o peek.o perft.o main.o search.o qsearch.o readfen.o eval.o book.o see.o setup.o sort.o timer.o
+OBJS = app.o bit.o board.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o qsearch.o readfen.o eval.o book.o see.o setup.o sort.o timer.o
 
 ### Compilation flags
 CXXFLAGS += -O3 -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++11

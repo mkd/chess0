@@ -38,6 +38,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <iomanip>
+#include <unordered_map>
 #include "definitions.h" 
 #include "extglobals.h" 
 #include "functions.h" 
@@ -45,6 +46,9 @@
 #include "timer.h" 
 
 using namespace std;
+
+
+unordered_map<string, int> cache;
 
 
 
