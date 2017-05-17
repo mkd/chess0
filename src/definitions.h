@@ -35,7 +35,7 @@
 /*!
  * Application settings and definitions.
  */
-#define PROGRAM_NAME    "Chess0x"    
+#define PROGRAM_NAME    "Chess0"
 #define PROGRAM_VERSION "1.0"
 #define PROGRAM_AUTHOR  "Claudio M. Camacho <claudiomkd@gmail.com>"
 #define PROGRAM_WEB     "http://github.com/mkd/chess0"

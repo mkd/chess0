@@ -47,7 +47,7 @@ unordered_map<string, string> book;
 void initBook()
 {
         // different openings for White
-        book["%"] = "e4 | d4 | Nf3 | c4";
+        book["%"] = "e4 | e4 | e4 | d4 | d4 | d4 | Nf3 | c4";
 
         // first-move replies for Black
         book["1. e4"] = "c5 | e5 | e6 | c6";

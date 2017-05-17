@@ -4,19 +4,15 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix changing side
+- Fix 1. e4 f6 2. d4 g5 3. Qh5
+
+- Implement gameEnd and proper game end detection
 
 
 
 BEFORE NEXT RELEASE
 ===================
 - Interface (input & output) should behave exactly the same as Chess0x
-
-- Implement auto-reply (right now need to use 'go' every time a move is
-  inputted)
-
-- Refactor all code (e.g., sprintf() to cout()) and rename libraries, files,
-  etc.
 
 - Edit board
 

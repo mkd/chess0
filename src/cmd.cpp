@@ -1,15 +1,15 @@
 /* 
-    This file is part of Chess0x, a simple computer chess program developed in
-    C++ for learning purposes.
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
     
-    Copyright (C) 2016 Claudio M. Camacho
+    Copyright (C) 2017 Claudio M. Camacho
                                                                            
-    Chess0x is free software: you can redistribute it and/or modify
+    Chess0 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Chess0x is distributed in the hope that it will be useful,
+    Chess0 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -70,6 +70,7 @@ void initListOfCommands()
     listOfCommands.push_back("new");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
+    listOfCommands.push_back("remove");
     listOfCommands.push_back("resign");
     listOfCommands.push_back("restart");
     listOfCommands.push_back("save");
@@ -325,20 +326,18 @@ void exec(string input)
      */
     else if (cmd == "go")
     {
-        if (sideToMove == COLOR_TYPE_WHITE)
-        {
-            wPlayer = PLAYER_TYPE_COMPUTER;
-            bPlayer = PLAYER_TYPE_HUMAN;
-            curPlayerType = wPlayer;
-            sideToMove = COLOR_TYPE_WHITE;
-            playMode = HUMAN_CPU;
-        }
-        else
+        if (board.nextMove)
         {
             wPlayer = PLAYER_TYPE_HUMAN;
             bPlayer = PLAYER_TYPE_COMPUTER;
             curPlayerType = bPlayer;
-            sideToMove = COLOR_TYPE_BLACK;
+            playMode = HUMAN_CPU;
+        }
+        else
+        {
+            wPlayer = PLAYER_TYPE_COMPUTER;
+            bPlayer = PLAYER_TYPE_HUMAN;
+            curPlayerType = wPlayer;
             playMode = HUMAN_CPU;
         }
     }
@@ -394,7 +393,6 @@ void exec(string input)
         wPlayer = PLAYER_TYPE_HUMAN;
         bPlayer = PLAYER_TYPE_COMPUTER;
         curPlayerType = wPlayer;
-        sideToMove = COLOR_TYPE_WHITE;
         playMode = HUMAN_CPU;
         cursor = 0;
         numberOfMove = 1;
@@ -585,6 +583,9 @@ void exec(string input)
             wPlayer = PLAYER_TYPE_HUMAN;
             bPlayer = PLAYER_TYPE_HUMAN;
             playMode = HUMAN_HUMAN;
+
+            cursor--;
+            numberOfMove = (cursor / 2) + 1;
 		}
 		else if (!XB_MODE) cout << "already at start of game" << endl;
 
@@ -601,6 +602,8 @@ void exec(string input)
 		{
 			unmakeMove(board.gameLine[--board.endOfGame].move);
 			board.endOfSearch = board.endOfGame;
+            cursor--;
+            numberOfMove = (cursor / 2) + 1;
         }
 		else if (!XB_MODE) cout << "already at start of game" << endl;
 
@@ -608,6 +611,8 @@ void exec(string input)
 		{
 			unmakeMove(board.gameLine[--board.endOfGame].move);
 			board.endOfSearch = board.endOfGame;
+            cursor--;
+            numberOfMove = (cursor / 2) + 1;
 		}
 		else if (!XB_MODE) cout << "already at start of game" << endl;
 
@@ -1070,5 +1075,6 @@ void displayEval()
     else
         evaluationValue = board.eval() / 100.00f;
 
-    cout << "Evaluation: " << setw(4) << fixed << setprecision(2) << evaluationValue << endl;
+    cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl;
+    cout << noshowpos;
 }

@@ -20,12 +20,10 @@
 
 
 
-/*!
- * @file main.cpp
- *
- * This file contains the main routine to get the application started and
- * accepting input from the user.
- */
+// @file main.cpp
+//
+// This file contains the main routine to get the application started and
+// accepting input from the user.
 #include <signal.h>
 #include <unistd.h>
 #include <iostream>

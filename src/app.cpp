@@ -1,15 +1,15 @@
 /* 
-    This file is part of Chess0x, a simple computer chess program developed in
-    C++ for learning purposes.
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
     
-    Copyright (C) 2016 Claudio M. Camacho
+    Copyright (C) 2017 Claudio M. Camacho
                                                                            
-    Chess0x is free software: you can redistribute it and/or modify
+    Chess0 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Chess0x is distributed in the hope that it will be useful,
+    Chess0 is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -55,7 +55,6 @@ using namespace std;
 
 // Initialize the application, game and board status.
 unsigned numberOfMove = 1;
-ColorType sideToMove = COLOR_TYPE_WHITE;
 unsigned cursor = 0;
 string lastErrorMessage = "";
 ColorType gameMate = COLOR_TYPE_NONE;
@@ -92,7 +91,6 @@ int startApp(int mode)
     InputType itype;
     string input = "";
     curPlayerType = wPlayer;
-    sideToMove   = COLOR_TYPE_WHITE;
     Move myMove;
     string moveIsFromBook = "";
     clock_t start, end;
@@ -128,7 +126,7 @@ int startApp(int mode)
 
 
         // Show the prompt and ask the user for an input (move or command).
-        prompt(sideToMove, numberOfMove);
+        prompt(numberOfMove);
 
 
         // Current player is Human, ask for input
@@ -272,10 +270,10 @@ int startApp(int mode)
 
                 // display the move chosen by the computer and other info
                 cout << endl << endl << "\aMy move: ";
-                if (sideToMove == COLOR_TYPE_WHITE)
-                    cout << to_string(numberOfMove) << "... ";
-                else
+                if (board.nextMove)
                     cout << to_string(numberOfMove) << ". ";
+                else
+                    cout << to_string(numberOfMove) << "... ";
                 cout << input;
 
 
@@ -335,20 +333,19 @@ int startApp(int mode)
 /*!
  * Show the prompt to the user, waiting for an input.
  *
- * @param color ColorType indicating the current player.
  * @param nmove Number of the move for an ongoing game.
  */
-void prompt(ColorType color, unsigned nmove)
+void prompt(unsigned nmove)
 {
     ostringstream line(ostringstream::out);
 
-    if (color == COLOR_TYPE_WHITE)
-    {
-        line << "White (" << nmove << "): ";
-    }
-    else if (color == COLOR_TYPE_BLACK)
+    if (board.nextMove)
     {
         line << "Black (" << nmove << "): ";
+    }
+    else
+    {
+        line << "White (" << nmove << "): ";
     }
     
     cout << endl << line.str();
