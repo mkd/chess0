@@ -75,8 +75,8 @@ void changeSide();
 uint64_t perft(unsigned, ColorType);
 void dealEnd();
 InputType getInputType(string);
-void displayHistory();
-string getHistorySequence();
+void displayGame();
+string getGameSequence();
 
 
 

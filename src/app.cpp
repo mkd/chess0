@@ -145,7 +145,7 @@ int startApp(int mode)
             {
                 // try to get a move from the opening book
                 // Note: the sequence is assumed to be consistent with the game
-                string bookSequence = getHistorySequence();
+                string bookSequence = getGameSequence();
                 if (bookSequence == "")
                     bookSequence = "%";
                 input = getReplyTo(bookSequence);
@@ -158,7 +158,7 @@ int startApp(int mode)
             if (input.empty())
             {
                 start = clock();
-                cout << endl << "Thinking..." << endl;
+                cout << endl << "Thinking..." << endl << endl;
 
                 // store who's moving right now for netScore in search
                 // statistics
@@ -222,12 +222,39 @@ int startApp(int mode)
             }
 
 
-            // valid move
+            // if valid move, make the move
             auto t = validMoves.find(input);
             if (t != validMoves.end())
             {
-                strcpy(command, "move");
                 userMove = t->second;
+			    sscanf(userMove.c_str(), "%s", userinput);
+
+			    // generate the pseudo-legal move list
+			    board.moveBufLen[0] = 0;
+			    board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+
+                // check to see if the user move is also found in the pseudo-legal move list
+			    if (isValidTextMove(userinput, myMove))
+		    	{
+				    makeMove(myMove);
+
+                    // post-move check to see if we are leaving our king in check
+				    if (isOtherKingAttacked())
+				    {
+					    unmakeMove(myMove);
+					    cout << "    invalid move, leaving king in check: " << userinput << endl;
+				    }
+				    else
+				    {
+					    board.endOfGame++;
+					    board.endOfSearch = board.endOfGame;
+					    board.display();
+				    }
+			    }
+			    else
+			    {
+				    cout << "    move is invalid or not recognized: " << userinput << endl;
+			    }
             }
 
             // not a valid move
@@ -236,7 +263,7 @@ int startApp(int mode)
                 cout << "Invalid move '" << input << "'" << endl;
                 continue;
             }
-    
+
 
             if (curPlayerType == PLAYER_TYPE_COMPUTER)
             {
@@ -260,32 +287,7 @@ int startApp(int mode)
                 cout << " (time: ";
                 cout << setprecision(2) << timeUsed / 1000.00f << "s)";
 
-			    // generate the pseudo-legal move list
-			    board.moveBufLen[0] = 0;
-			    board.moveBufLen[1] = movegen(board.moveBufLen[0]);
-
-                // check to see if the user move is also found in the pseudo-legal move list
-			    sscanf(userMove.c_str(), "%s", userinput);
-                if (isValidTextMove(userinput, myMove))
-                {
-                    makeMove(myMove);
-
-                    // post-move check to see if we are leaving our king in check
-                    if (isOtherKingAttacked())
-                    {
-                        unmakeMove(myMove);
-                        cout << "    invalid move, leaving king in check: " << userinput << endl;
-                    }
-                    else
-                    {
-                        board.endOfGame++;
-                        board.endOfSearch = board.endOfGame;
-                    }
-                }
-                else
-                {
-                    cout << "    move is invalid or not recognized: " << userinput << endl;
-                }
+                cout.fill(' ');
             }
 
 
@@ -633,7 +635,7 @@ void changeSide()
  * 
  * @return an Error if the history is empty.
  */
-void displayHistory()
+void displayGame()
 {
     if (board.endOfGame)
     {
@@ -663,7 +665,7 @@ void displayHistory()
 
             // output CRLF, or space:
             if (!((i+j+1)%2)) cout << endl;
-            else cout << " ";
+            else cout << ", ";
 
             // make the move:
             makeMove(tmp[i].move);
@@ -687,27 +689,53 @@ void displayHistory()
  *
  * @return a string containing the game history (e.g., 1. e4 e5 2. Nf3).
  */
-string getHistorySequence()
+string getGameSequence()
 {
     int count = 1;
     string sequence = "";
 
-    for (unsigned int i = 0; i < history.size(); i++)
+    if (board.endOfGame)
     {
-        if (i % 2)
-        {
-            sequence += " " + history[i];
-            count++;
-        }
-        else
-        {
-            // don't add a blank before the first move
-            if (count == 1)
-                sequence += to_string(count) + ". " + history[i];
-            else
-                sequence += " " + to_string(count) + ". " + history[i];
-        }
-    }
+        // make a temporary copy of board.gameLine[];
+        number = board.endOfGame;
+        GameLineRecord *tmp = new GameLineRecord[number];
+        memcpy(tmp, board.gameLine, number * sizeof(GameLineRecord));
 
-    return sequence;
+        // unmake all moves
+        for (i = number-1 ; i >= 0 ; i--) 
+        { 
+            unmakeMove(tmp[i].move);
+            board.endOfSearch = --board.endOfGame;
+        }
+
+        for (i = 0; i < number; i++)
+        {
+            toSan(tmp[i].move, sanMove);
+            string ts(sanMove);
+
+            if (i % 2)
+            {
+                sequence += " " + ts;
+                count++;
+            }
+            else
+            {
+                // don't add a blank before the first move
+                if (count == 1)
+                    sequence += to_string(count) + ". " + ts;
+                else
+                    sequence += " " + to_string(count) + ". " + ts;
+            }
+
+            // make the move:
+            makeMove(tmp[i].move);
+            board.endOfSearch = ++board.endOfGame;
+        }
+
+
+        // delete the temporary copy
+        delete[] tmp;
+    }
+    
+    return sequence; 
 }

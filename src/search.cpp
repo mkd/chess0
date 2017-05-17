@@ -291,7 +291,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 	switch (mode)
 	{
 		case 1: 
-				if (!XB_MODE) cout << "Depth  Score   Nodes     Time  Knps PV" << endl;
+				if (!XB_MODE) cout << "  Ply  Score   Nodes     Time  Knps PV" << endl;
 				break;
 
 		case 2:

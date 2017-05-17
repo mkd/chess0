@@ -60,6 +60,7 @@ void initListOfCommands()
     listOfCommands.push_back("eval");
     listOfCommands.push_back("exit");
     listOfCommands.push_back("flip");
+    listOfCommands.push_back("game");
     listOfCommands.push_back("go");
     listOfCommands.push_back("help");
     listOfCommands.push_back("history");
@@ -76,6 +77,7 @@ void initListOfCommands()
     listOfCommands.push_back("solve");
     listOfCommands.push_back("test");
     listOfCommands.push_back("think");
+    listOfCommands.push_back("time");
     listOfCommands.push_back("undo");
     listOfCommands.push_back("v");
     listOfCommands.push_back("ver");
@@ -358,9 +360,9 @@ void exec(string input)
      *
      * display game history
      */
-    else if (cmd == "history")
+    else if ((cmd == "history") || (cmd == "game"))
     {
-        displayHistory();
+        displayGame();
     }
 
     
@@ -457,18 +459,12 @@ void exec(string input)
     }
 
 
-    // Set game timers (and therefore thinking time for the computer)
-    else if (cmd == "time")
-    {
-    }
-
-
     /*
      * think
      *
      * change AI thinking time limit
      */
-    else if (cmd == "think")
+    else if ((cmd == "think") || (cmd == "time"))
     {
         int t;
 
@@ -479,20 +475,18 @@ void exec(string input)
             if (t < 0)
                 t = 0;
 
+            board.maxTime = t * 1000;
+
             // XXX
             if (XB_MODE)
             {
                 XB_CTIM = t * 10;
                 board.maxTime = t * 10;
             }
-            else
-            {
-                board.maxTime = t * 1000;
-            }
         }
 
         if (!XB_MODE)
-            cout << "Max. time per move: " << board.maxTime << "s" << endl;
+            cout << "Max. time per move: " << (board.maxTime / 1000) << "s" << endl;
     }
 
     
@@ -688,9 +682,9 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "auto  book  cache  depth  draw  edit  eval  flip  go" << endl;
-        cout << "help  history  lmr  load  manual  new  null  pass" << endl;
-        cout << "remove  resign  save  show  solve  test  think  undo" << endl;
+        cout << "auto  book  cache  depth  draw  edit  eval  flip  game" << endl;
+        cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
+        cout << "pass  remove  resign  save  show  solve  test  think  undo" << endl;
         cout << "verbose  version  quit" << endl;
         return;
     }

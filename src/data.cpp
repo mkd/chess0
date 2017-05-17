@@ -47,7 +47,7 @@ void dataInit()
        Move move;
 
 	   board.searchDepth = 16; // default for startup
-	   board.maxTime = 2000; // default for startup, milliseconds
+	   board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
 
 //     BITSET has only one bit set:
        BITSET[0] = 0x1;
