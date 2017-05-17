@@ -4,8 +4,12 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement proper gameEnd detection, including reminingPieces, 50rule,
-  3repetition and resign
+- Figure out how hashkeys are generated for board
+
+- Implement cache
+
+- Implement LMR
+
 
 
 

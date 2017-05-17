@@ -39,6 +39,9 @@
 #include <iomanip>
 #include <sstream>
 #include <map>
+#include <algorithm>
+#include <string>
+#include <cctype>
 #include "app.h"
 #include "board.h"
 #include "move.h"
@@ -115,8 +118,8 @@ int startApp(int mode)
     while (1)
     {
         // Check for game end (e.g., resign).
-        //if (gameEnd)
-        //    dealEnd();
+        if (gameEnd)
+            dealEnd();
 
 
         // Clear both the input and output buffer, to make sure the new input
@@ -219,6 +222,14 @@ int startApp(int mode)
                     moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '+'), moveStr.end());
                     moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '#'), moveStr.end());
 
+                    // if promo, append promo piece
+                    if ((board.moveBuffer[i]).isPromotion())
+                    {
+                        string tc(PIECECHARS[(board.moveBuffer[i]).getProm()]);
+                        tmpStr += tc;
+                        transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
+                    }
+
                     validMoves[moveStr] = tmpStr;
                 }
             }
@@ -301,15 +312,6 @@ int startApp(int mode)
             Move tmpMove;
 	        if (board.isEndOfgame(number, tmpMove))
                 dealEnd();
-
-
-            //if ((remainingPieces < 3) || ((getAllValidMoves()).size() == 0))
-            //    dealEnd();
-
-
-            // check for 50-fold repetition (game ends in draw)
-            //else if ((gameEnd == END_TYPE_DRAW_50RULE) || (gameEnd == END_TYPE_DRAW_3RULE))
-            //    dealEnd();
         }
 
 
@@ -587,23 +589,18 @@ void dealEnd()
 
 
     // Resign.
-    //else if (gameEnd == END_TYPE_RESIGN)
-    //{
-    //    if (sideToMove == COLOR_TYPE_WHITE)
-    //        cout << "0-1 {White resigns}" << endl;
-    //    else
-    //        cout << "1-0 {Black resigns}" << endl;
-    //}
+    if (gameEnd == END_TYPE_RESIGN)
+    {
+        if (board.nextMove)
+            cout << "1-0 {Black resigns}" << endl;
+        else
+            cout << "0-1 {White resigns}" << endl;
+    }
 
 
     // Show result for stale mate.
     //else if (check == COLOR_TYPE_NONE)
     //    cout << "1/2-1/2 {Stale mate}" << endl;
-
-
-    // TODO:
-    // accepted draw
-    // draw by repetition
 
 
     // don't let the computer control the program after a game

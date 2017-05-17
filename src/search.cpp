@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file search.cpp
- *
- * XXX
- */
+// @file search.cpp
+//
+// XXX
 #if defined(_WIN32) || defined(_WIN64)
 #include <conio.h>
 #else
@@ -44,11 +42,16 @@
 #include "functions.h" 
 #include "board.h" 
 #include "timer.h" 
+#include "app.h"
+
+
 
 using namespace std;
 
 
+
 unordered_map<string, int> cache;
+float cacheHit;
 
 
 
@@ -65,6 +68,7 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
 	Move singlemove;
+    cacheHit = 0;
 
 
     //	Check if the game has ended, or if there is only one legal move,
@@ -148,11 +152,16 @@ Move Board::think()
     return (lastPV[0]);
 }
 
+
+
+// PV search
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
-	// PV search
 	int i, j, movesfound, pvmovesfound, val;
+    bool cached = false;
 
+
+    // prepare structure to store the principal variation (PV)
 	triangularLength[ply] = ply;
 	if (depth <= 0) 
 	{
@@ -160,8 +169,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 		return qsearch(ply, alpha, beta);
 	}
 
+
 	// repetition check:
 	if (repetitionCount() >= 3) return DRAWSCORE;
+
 	
 	// now try a null move to get an early beta cut-off:
 	if (!followpv && allownull)
@@ -197,9 +208,39 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 			if (!isOtherKingAttacked()) 
 			{
 				inodes++;
-				if (--countdown <=0) readClockAndInput();
+
+				if (--countdown <=0)
+                    readClockAndInput();
+
 				movesfound++;
-				if (!ply && (depth > 1)) displaySearchStats(3, ply, i); 
+
+				if (!ply && (depth > 1))
+                    displaySearchStats(3, ply, i); 
+
+                // if the score is in the cache, then pick it up
+                // XXX
+                //if (useCache)
+                //{
+				//    hashkey = KEY.side; 
+                //    hashkey = getBoardSerial(icolor, alpha, beta, d);
+//
+ //                   auto t = cache.find(boardSerial);
+  //                  if (t == cache.end())
+   //                     cached = false;
+    //                else
+     //               {
+      //                  cacheHit++;
+       //                 score = t->second;
+        //                cached = true;
+         //           }
+          //      }
+
+                // 
+           //     if (cached)
+            //    {
+             //   }
+
+				//else if (pvmovesfound)
 				if (pvmovesfound)
 				{
 					val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
@@ -208,9 +249,12 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 						 // in case of failure, proceed with normal alphabeta
 						val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);  		        
 					}
-				} 
+				}
+
 				// normal alphabeta
-	 			else val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+	 			else
+                    val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+
 				unmakeMove(moveBuffer[i]);
 				if (timedout) return 0;
 				if (val >= beta)

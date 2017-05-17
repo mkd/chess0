@@ -879,6 +879,8 @@ void initBook()
         book["1. d4 d5 2. Bf4 e6 3. e3"] = "Bd6 | Nf6 | c5";
         book["1. d4 d5 2. Bf4 e6 3. Nf3"] = "Nf6 | c5 | Bd6";
 
+        book["1. d4 d5 2. Bf4 e6 3. e3 Nf6"] = "Nf3 | Nd2 | Bd3";
+
         book["1. d4 d5 2. Bf4 Nc6 3. e3"] = "Nf6 | Bf5";
         book["1. d4 d5 2. Bf4 Nc6 3. Nf3"] = "Bg4 | Nf6";
         book["1. d4 d5 2. Bf4 Nc6 3. Nc3"] = "Nf6";
