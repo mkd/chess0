@@ -67,6 +67,7 @@ void initListOfCommands()
     listOfCommands.push_back("lmr");
     listOfCommands.push_back("load");
     listOfCommands.push_back("manual");
+    listOfCommands.push_back("moves");
     listOfCommands.push_back("new");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
@@ -376,6 +377,32 @@ void exec(string input)
         bPlayer = PLAYER_TYPE_HUMAN;
         playMode = HUMAN_HUMAN;
         cout << "Both sides are now played by the user." << endl;
+    }
+
+
+    // moves
+    else if (cmd == "moves")
+    {
+        int i = 0;
+        int number = 0;
+        char sanMove[12];
+        board.moveBufLen[0] = 0;
+        board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+        cout << endl << "moves from this position:" << endl;
+        for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
+		{
+			makeMove(board.moveBuffer[i]);
+			if (isOtherKingAttacked())
+			{
+				unmakeMove(board.moveBuffer[i]);
+			}
+			else
+			{
+				unmakeMove(board.moveBuffer[i]);
+				toSan(board.moveBuffer[i], sanMove);
+				cout << ++number << ". " << sanMove << endl;
+			}
+		}
     }
 
 

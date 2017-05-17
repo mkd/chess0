@@ -28,6 +28,7 @@
 #define _APP_H_
 
 #include <vector>
+#include <unordered_map>
 #include "definitions.h"
 
 using namespace std;
@@ -98,6 +99,25 @@ extern bool useBook;
 inline bool isFile(char c) { return ((c >= 'a' ) && (c <= 'h')); }
 inline bool isRank(char r) { return ((r >= '1' ) && (r <= '8')); }
 
+
+
+/*!
+ * Cache implementation is rather rudimentary in chess0x. Instead of
+ * using Least Recent Use (LRU) or similar, Chess0 simply keeps adding
+ * new positions to the cache without any limit. This is due to the fact
+ * that LRU introduces some delay when looking at the cache size and
+ * doing the replacement itself. Since chess0x can use a few megabytes
+ * even after a very long thinking, it should not go beyond the 1GByte
+ * for 1h+ games. If someone complains about not having a limit for the
+ * cache, then I'll implement some cache cleaning up functionality.
+ *
+ * Why unordered_map? Well, using std::map has the same behavior (plus
+ * it allows LRU-like deletion of oldest items, due to its ordered
+ * nature), however it is 3-8x times slower in most situations. Using
+ * unordered_map the performance is greatly improved, brining around 20%
+ * overall performance to the whole AI engine.
+ */
+extern unordered_map<string, int> cache;
 
 
 #endif // _APP_H_

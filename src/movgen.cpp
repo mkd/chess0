@@ -62,17 +62,12 @@ int movegen(int index)
 	opponentSide = !board.nextMove;
 	freeSquares = ~board.occupiedSquares;
  
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Black to move
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
-	if (board.nextMove) // black to move
+	if (board.nextMove)
 	{
 		targetBitmap = ~board.blackPieces; // we cannot capture one of our own pieces!
  
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Black Pawns
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		move.setPiec(BLACK_PAWN);
 		tempPiece = board.blackPawns;
 		while (tempPiece)   
@@ -120,9 +115,7 @@ int movegen(int index)
 			move.setProm(EMPTY);
 		}                         
  
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Black Knights
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		move.setPiec(BLACK_KNIGHT);
 		tempPiece = board.blackKnights;
 		while (tempPiece)
@@ -141,9 +134,7 @@ int movegen(int index)
 			tempPiece ^= BITSET[from];
 		}
  
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Black Bishops
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		move.setPiec(BLACK_BISHOP);
 		tempPiece = board.blackBishops;
 		while (tempPiece)
@@ -162,9 +153,7 @@ int movegen(int index)
 			tempPiece ^= BITSET[from];
 		}
  
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Black Rooks
-		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		move.setPiec(BLACK_ROOK);
 		tempPiece = board.blackRooks;
 		while (tempPiece)
@@ -441,10 +430,8 @@ int movegen(int index)
 	return index;
 }
 
-int captgen(int index)
-{
- 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 // generate pseudo-legal captures and promotions generator,
 // using magic multiplication instead of rotated bitboards.
 // The first free location in moveBuffer[] is supplied in index,
@@ -452,8 +439,8 @@ int captgen(int index)
 //  
 // this function keeps the move list sorted (using SEE) and shortens 
 // the list by discarding 'bad' moves. 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
+int captgen(int index)
+{
        unsigned char opponentSide;
        unsigned int from, to;
 	   int ifirst;

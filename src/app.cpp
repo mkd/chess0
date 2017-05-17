@@ -213,8 +213,12 @@ int startApp(int mode)
                 {
                     unmakeMove(board.moveBuffer[i]);
                     toSan(board.moveBuffer[i], sanMove);
+
                     string moveStr(sanMove);
                     tmpStr = bunmap((board.moveBuffer[i]).getFrom()) + bunmap((board.moveBuffer[i]).getTosq());
+                    moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '+'), moveStr.end());
+                    moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '#'), moveStr.end());
+
                     validMoves[moveStr] = tmpStr;
                 }
             }
@@ -246,7 +250,6 @@ int startApp(int mode)
 				    {
 					    board.endOfGame++;
 					    board.endOfSearch = board.endOfGame;
-					    board.display();
 				    }
 			    }
 			    else
@@ -295,6 +298,11 @@ int startApp(int mode)
 
 
             // check for the end of the game
+            Move tmpMove;
+	        if (board.isEndOfgame(number, tmpMove))
+                dealEnd();
+
+
             //if ((remainingPieces < 3) || ((getAllValidMoves()).size() == 0))
             //    dealEnd();
 
@@ -555,55 +563,43 @@ void changeSide()
 /*!
  * Deal with the end of the current match.
  */
-//void dealEnd()
-//{
-//    cout << endl;
-//
-//
-//    /*
-//     * Show result for draw due to insufficient material.
-//     */
-//    if (remainingPieces < 3)
-//        cout << "1/2-1/2 {Insufficient material}" << endl;
-//
-//
-//    /*
-//     * Deal with 50-fold repetition which ends the game.
-//     */
-//    else if (gameEnd == END_TYPE_DRAW_50RULE)
-//    {
-//        cout << "1/2-1/2 {Draw by 50-move repetition}" << endl;
-//    }
-//
-//
-//    /*
-//     * Show results for mate.
-//     */
-//    else if (check == COLOR_TYPE_BLACK)
-//        cout << "1-0 {White mates}" << endl;
-//
-//    else if (check == COLOR_TYPE_WHITE)
-//        cout << "0-1 {Black mates}" << endl;
-//
-//
-//    /*!
-//     * Deal resign.
-//     */
-//    else if (gameEnd == END_TYPE_RESIGN)
-//    {
-//        if (sideToMove == COLOR_TYPE_WHITE)
-//            cout << "0-1 {White resigns}" << endl;
-//        else
-//            cout << "1-0 {Black resigns}" << endl;
-//    }
-//
-//
-//    /*
-//     * Show result for stale mate.
-//     */
-//    else if (check == COLOR_TYPE_NONE)
-//        cout << "1/2-1/2 {Stale mate}" << endl;
-//
+void dealEnd()
+{
+    cout << endl;
+
+
+    // show result for draw due to insufficient material.
+    //if (remainingPieces < 3)
+    //    cout << "1/2-1/2 {Insufficient material}" << endl;
+
+
+    // deal with 50-fold repetition which ends the game.
+    //else if (fiftyMove >= 50)
+    //    cout << "1/2-1/2 {Draw by 50-move repetition}" << endl;
+
+
+    // show results for mate.
+    //else if (check == COLOR_TYPE_BLACK)
+    //    cout << "1-0 {White mates}" << endl;
+
+    //else if (check == COLOR_TYPE_WHITE)
+    //    cout << "0-1 {Black mates}" << endl;
+
+
+    // Resign.
+    //else if (gameEnd == END_TYPE_RESIGN)
+    //{
+    //    if (sideToMove == COLOR_TYPE_WHITE)
+    //        cout << "0-1 {White resigns}" << endl;
+    //    else
+    //        cout << "1-0 {Black resigns}" << endl;
+    //}
+
+
+    // Show result for stale mate.
+    //else if (check == COLOR_TYPE_NONE)
+    //    cout << "1/2-1/2 {Stale mate}" << endl;
+
 
     // TODO:
     // accepted draw
@@ -611,19 +607,21 @@ void changeSide()
 
 
     // don't let the computer control the program after a game
- //   wPlayer = PLAYER_TYPE_HUMAN;
- //   bPlayer = PLAYER_TYPE_HUMAN;
- //   playMode = HUMAN_HUMAN;
+    wPlayer = PLAYER_TYPE_HUMAN;
+    bPlayer = PLAYER_TYPE_COMPUTER;
+    curPlayerType = wPlayer;
+    playMode = HUMAN_CPU;
+    cursor = 0;
+    numberOfMove = 1;
+    gameEnd = END_TYPE_NOEND;
 
-    // tell how to play another match
-  //  cout << "Want to play another one? Enter the command 'restart'." << endl;
+	dataInit();
+	board.init();
+    cache.clear();
 
-   // cout << endl << "Your command: ";
-
-    // clean the input, if necessary
-   // if (cin.peek() == '\n')
-   //     cin.ignore(1, '\n');
-//}
+    // enable book by default
+    useBook = true;
+}
 
 
 
