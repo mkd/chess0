@@ -789,6 +789,10 @@ void initBook()
 
         // Queen's gambit declined (D30)
         book["1. d4 d5 2. c4 e6"] = "Nc3 | Nf3";
+        book["1. d4 d5 2. c4 e6 3. Nf3 a6"] = "cxd5";
+        book["1. d4 d5 2. c4 e6 3. Nf3 a6 4. cxd5 exd5"] = "Nc3";
+        book["1. d4 d5 2. c4 e6 3. Nf3 a6 4. cxd5 Qxd5"] = "Nc3";
+
 
         // Queen's gambit declined, Albin's counter-gambit (D08)
         book["1. d4 d5 2. c4 e5"] = "dxe5 | e3 | cxd5 | Nc3";
@@ -1044,6 +1048,11 @@ void initBook()
         book["1. Nf3 d5 2. d4 Nf6 3. Bg5"] = "e6 | Ne4";
         book["1. Nf3 d5 2. d4 Nf6 3. g3"] = "e6 | c6 | Bf5 | g6";
         book["1. Nf3 d5 2. d4 Nf6 3. g3 Bg4"] = "Bg2";
+
+        book["1. Nf3 d5 2. d4 Nf6 3. g3 e6"] = "Bg2";
+
+        book["1. Nf3 d5 2. d4 Nf6 3. g3 e6 4. Bg2 Be7"] = "0-0";
+        book["1. Nf3 d5 2. d4 Nf6 3. g3 e6 4. Bg2 c5"] = "0-0";
 
 
         // Queen's bishop game (D02)

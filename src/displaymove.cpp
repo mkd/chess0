@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file displaymove.cpp
- *
- * XXX
- */
+// @file displaymove.cpp
+//
+// XXX
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -34,32 +32,35 @@
 #include "extglobals.h"
 
 
+using namespace std;
+
+
 
 // displays a single move on the console, no disambiguation
 void displayMove(Move &move)
 {
        if (((move.getPiec() == WHITE_KING) && (move.isCastleOO())) || ((move.getPiec() == BLACK_KING) && (move.isCastleOO())))
        {
-              std::cout << "O-O";
+              cout << "0-0";
               return;      
        };
        if (((move.getPiec() == WHITE_KING) && (move.isCastleOOO())) || ((move.getPiec() == BLACK_KING) && (move.isCastleOOO())))
        {
-              std::cout << "O-O-O";
+              cout << "0-0-0";
               return;      
        };
 
-	   if (!move.isPawnmove()) std::cout << PIECECHARS[move.getPiec()];
-       if (move.isPawnmove() && move.isCapture()) std::cout << char('a' + FILES[move.getFrom()]-1);
-       if (move.isCapture()) std::cout << "x" ; 
-       std::cout << char('a' + FILES[move.getTosq()]-1);
-       std::cout << RANKS[move.getTosq()]; 
+	   if (!move.isPawnmove()) cout << PIECECHARS[move.getPiec()];
+       if (move.isPawnmove() && move.isCapture()) cout << char('a' + FILES[move.getFrom()]-1);
+       if (move.isCapture()) cout << "x" ; 
+       cout << char('a' + FILES[move.getTosq()]-1);
+       cout << RANKS[move.getTosq()]; 
        if (move.isPromotion()) 
 	   {
-		   std::cout << "=";
-		   std::cout << PIECECHARS[move.getProm()];
+		   cout << "=";
+		   cout << PIECECHARS[move.getProm()];
 	   }
-       std::cout.flush();
+       cout.flush();
        return;
 }
 
@@ -71,16 +72,16 @@ void displayPV()
 	for (i = 0; i < board.triangularLength[0]; i++) 
 	{
 		toSan(board.triangularArray[0][i], sanMove);
-		std::cout << sanMove << " ";
+		cout << sanMove << " ";
 		makeMove(board.triangularArray[0][i]);
 	}
 	for (i = board.triangularLength[0]-1; i >= 0; i--) 
 	{
 		unmakeMove(board.triangularArray[0][i]);
 	}
-	if ((!XB_MODE) && (i < 3)) std::cout << "     ";   // make sure to overwrite any remaining output of mode 3
-	std::cout << std::endl;
-	std::cout.flush();
+	if ((!XB_MODE) && (i < 3)) cout << "     ";   // make sure to overwrite any remaining output of mode 3
+	cout << endl;
+	cout.flush();
 }
 
 BOOLTYPE toSan(Move &move, char *sanMove)
@@ -173,12 +174,12 @@ BOOLTYPE toSan(Move &move, char *sanMove)
 	{
 		if (move.isCastleOO())
 		{
-			strcpy(sanMove, "O-O");
+			strcpy(sanMove, "0-0");
 			return true;
 		}	
 		if (move.isCastleOOO())
 		{
-			strcpy(sanMove, "O-O-O");
+			strcpy(sanMove, "0-0-0");
 			return true;
 		}	
 		// start building the string
@@ -207,7 +208,7 @@ BOOLTYPE toSan(Move &move, char *sanMove)
 		}
 		if (move.isCapture()) sprintf(sanMove, "%sx", sanMove);
 		sprintf(sanMove, "%s%c%d", sanMove, FILES[to] + asciiShift - 1, RANKS[to]);
-		if (move.isEnpassant()) sprintf(sanMove, "%s e.p.", sanMove);
+		if (move.isEnpassant()) sprintf(sanMove, "%s", sanMove);
 		if (move.isPromotion()) sprintf(sanMove, "%s=%s", sanMove, PIECECHARS[prom]);
 		if (check)
 		{
