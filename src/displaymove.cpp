@@ -160,6 +160,7 @@ BOOLTYPE toSan(Move &move, char *sanMove)
 		}
 		unmakeMove(board.moveBuffer[i]);
 	}
+
 //  cleanup:
 	board.moveBufLen[ibuf+1] = 0;
 	board.moveBufLen[ibuf+2] = 0;

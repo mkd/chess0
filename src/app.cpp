@@ -187,6 +187,13 @@ int startApp(int mode)
 
 
         // clean-up the input from '+' symbols
+        string addSymbol = "";
+        size_t pos = input.rfind("#");
+        if (pos != std::string::npos)
+            addSymbol = "#";
+        pos = input.rfind("+");
+        if (pos != std::string::npos)
+            addSymbol = "+";
         input.erase(std::remove(input.begin(), input.end(), '+'), input.end());
         input.erase(std::remove(input.begin(), input.end(), '#'), input.end());
 
@@ -288,6 +295,7 @@ int startApp(int mode)
                     cout << to_string(numberOfMove) << ". ";
                 else
                     cout << to_string(numberOfMove) << "... ";
+                input += addSymbol;
                 cout << input;
 
 

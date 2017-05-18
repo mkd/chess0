@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file readfen.cpp
- *
- * XXX
- */
+// @file readfen.cpp
+//
+// XXX
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
