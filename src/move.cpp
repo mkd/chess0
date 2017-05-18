@@ -20,12 +20,10 @@
 
 
 
-/*!
- * @file move.cpp
- *
- * This file contains operations to work set and get information from Move
- * objects.
- */
+// @file move.cpp
+//
+// This file contains operations to work set and get information from Move
+// objects.
 #include <sstream>
 #include "move.h"
 

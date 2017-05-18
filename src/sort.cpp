@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file sort.cpp
- *
- * XXX
- */
+// @file sort.cpp
+//
+// XXX
 #include <iostream>
 #include "definitions.h"
 #include "extglobals.h"

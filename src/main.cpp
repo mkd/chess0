@@ -59,7 +59,7 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-	// don't quit when xboard sends SIGINT */
+    // don't quit when xboard sends SIGINT */
     if(!isatty(STDIN_FILENO))
         signal(SIGINT, SIG_IGN);
 

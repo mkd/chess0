@@ -20,14 +20,14 @@
 
 
 
-/*!
- * @file timer.cpp
- *
- * XXX
- */
+// @file timer.cpp
+//
+// XXX
 #include <sys/timeb.h>
 #include <stdio.h>
 #include "timer.h"
+
+
  
 Timer::Timer()
 {

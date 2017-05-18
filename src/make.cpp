@@ -20,20 +20,18 @@
 
 
 
-/*!
- * @file make.cpp
- *
- * This file contains the code for making (and unmaking) a move. By making a
- * move, the following things are updated:
- *
- * 1) update the board structure by moving the piece and removing any captured
- *    piece. This involves the vector representation as well as all the
- *    bitboards involved in the move.
- *
- * 2) update piece and material counts
- *
- * 3) update castling status, fifty-fold rule, 3-fold rule
- */
+// @file make.cpp
+//
+// This file contains the code for making (and unmaking) a move. By making a
+// move, the following things are updated:
+//
+// 1) update the board structure by moving the piece and removing any captured
+//    piece. This involves the vector representation as well as all the
+//    bitboards involved in the move.
+//
+// 2) update piece and material counts
+//
+// 3) update castling status, fifty-fold rule, 3-fold rule
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
@@ -59,12 +57,12 @@ void makeMove(Move &move)
        board.gameLine[board.endOfSearch].castleBlack  = board.castleBlack;
        board.gameLine[board.endOfSearch].fiftyMove    = board.fiftyMove;
        board.gameLine[board.endOfSearch].epSquare     = board.epSquare;
-       board.gameLine[board.endOfSearch].key		  = board.hashkey;
+       board.gameLine[board.endOfSearch].key          = board.hashkey;
 
        BitMap fromBitMap  = BITSET[from];
        BitMap fromToBitMap = fromBitMap  | BITSET[to];
-	   board.hashkey ^= (KEY.keys[from][piece] ^ KEY.keys[to][piece]);
-	   if (board.epSquare) board.hashkey ^= KEY.ep[board.epSquare];
+       board.hashkey ^= (KEY.keys[from][piece] ^ KEY.keys[to][piece]);
+       if (board.epSquare) board.hashkey ^= KEY.ep[board.epSquare];
 
        switch (piece)
        {
@@ -76,10 +74,10 @@ void makeMove(Move &move)
                      board.epSquare            = 0;
                      board.fiftyMove           = 0;
                      if ((RANKS[from] == 2) && (RANKS[to] == 4)) 
-					 { 
-						board.epSquare = from + 8;
-						board.hashkey ^= KEY.ep[from + 8];
-					 }
+                     { 
+                        board.epSquare = from + 8;
+                        board.hashkey ^= KEY.ep[from + 8];
+                     }
                      if (captured)
                      {
                            if (move.isEnpassant())
@@ -88,9 +86,9 @@ void makeMove(Move &move)
                                   board.blackPieces          ^= BITSET[to-8];
                                   board.occupiedSquares    ^= fromToBitMap | BITSET[to-8];
                                   board.square[to-8]       = EMPTY;
-								  board.totalBlackPawns		-= PAWN_VALUE;
+                                  board.totalBlackPawns     -= PAWN_VALUE;
                                   board.Material           += PAWN_VALUE;
-								  board.hashkey             ^= KEY.keys[to-8][BLACK_PAWN];   
+                                  board.hashkey             ^= KEY.keys[to-8][BLACK_PAWN];   
                            }
                            else
                            {
@@ -114,8 +112,8 @@ void makeMove(Move &move)
                      board.square[to]          = WHITE_KING;
                      board.epSquare            = 0;    
                      board.fiftyMove++;
-					 if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
-					 if (board.castleWhite & CANCASTLEOOO) board.hashkey ^= KEY.wq;
+                     if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
+                     if (board.castleWhite & CANCASTLEOOO) board.hashkey ^= KEY.wq;
                      board.castleWhite = 0;
                      if (captured)
                      {
@@ -133,7 +131,7 @@ void makeMove(Move &move)
                                   board.occupiedSquares    ^= BITSET[H1] | BITSET[F1];
                                   board.square[H1]          = EMPTY;
                                   board.square[F1]          = WHITE_ROOK;
-             					  board.hashkey ^= (KEY.keys[H1][WHITE_ROOK] ^ KEY.keys[F1][WHITE_ROOK]);
+                                  board.hashkey ^= (KEY.keys[H1][WHITE_ROOK] ^ KEY.keys[F1][WHITE_ROOK]);
                            }
                            else
                            {
@@ -142,7 +140,7 @@ void makeMove(Move &move)
                                   board.occupiedSquares    ^= BITSET[A1] | BITSET[D1];
                                   board.square[A1]          = EMPTY;
                                   board.square[D1]          = WHITE_ROOK;
-             					  board.hashkey ^= (KEY.keys[A1][WHITE_ROOK] ^ KEY.keys[D1][WHITE_ROOK]);
+                                  board.hashkey ^= (KEY.keys[A1][WHITE_ROOK] ^ KEY.keys[D1][WHITE_ROOK]);
                            }
                      }
                      break;
@@ -185,15 +183,15 @@ void makeMove(Move &move)
                      board.epSquare            = 0;    
                      board.fiftyMove++;
                      if (from == A1) 
-					 {
-					     if (board.castleWhite & CANCASTLEOOO)  board.hashkey ^= KEY.wq;
-						 board.castleWhite &= ~CANCASTLEOOO;
-					 }
+                     {
+                         if (board.castleWhite & CANCASTLEOOO)  board.hashkey ^= KEY.wq;
+                         board.castleWhite &= ~CANCASTLEOOO;
+                     }
                      if (from == H1) 
- 					 {
-					    if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
-						board.castleWhite &= ~CANCASTLEOO;
-					 }
+                     {
+                        if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
+                        board.castleWhite &= ~CANCASTLEOO;
+                     }
                      if (captured)
                      {
                            makeCapture(captured, to);
@@ -225,10 +223,10 @@ void makeMove(Move &move)
                      board.epSquare            = 0;
                      board.fiftyMove = 0;
                      if ((RANKS[from] == 7) && (RANKS[to] == 5))
-					 {
-							board.epSquare = from - 8;					 					  
-							board.hashkey ^= KEY.ep[from - 8];
-					 }
+                     {
+                            board.epSquare = from - 8;                                        
+                            board.hashkey ^= KEY.ep[from - 8];
+                     }
                      if (captured)
                      {
                            if (move.isEnpassant())
@@ -237,10 +235,10 @@ void makeMove(Move &move)
                                   board.whitePieces          ^= BITSET[to+8];
                                   board.occupiedSquares    ^= fromToBitMap | BITSET[to+8];
                                   board.square[to+8]       = EMPTY;
-                                  board.totalWhitePawns		-= PAWN_VALUE;
+                                  board.totalWhitePawns     -= PAWN_VALUE;
                                   board.Material           -= PAWN_VALUE;
-								  board.hashkey             ^= KEY.keys[to+8][WHITE_PAWN]; 
-						   }
+                                  board.hashkey             ^= KEY.keys[to+8][WHITE_PAWN]; 
+                           }
                            else
                            {
                                   makeCapture(captured, to);
@@ -263,18 +261,18 @@ void makeMove(Move &move)
                      board.square[to]          = BLACK_KING;
                      board.epSquare            = 0;    
                      board.fiftyMove++;
-					 if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
-					 if (board.castleBlack & CANCASTLEOOO) board.hashkey ^= KEY.bq;
+                     if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
+                     if (board.castleBlack & CANCASTLEOOO) board.hashkey ^= KEY.bq;
                      board.castleBlack = 0;
                      if (captured)
                      {
                            makeCapture(captured, to);
                            board.occupiedSquares ^= fromBitMap;
-					 }
+                     }
                      else board.occupiedSquares ^= fromToBitMap;
  
                      if (move.isCastle())
-					 {
+                     {
                            if (move.isCastleOO())
                            {
                                   board.blackRooks         ^= BITSET[H8] | BITSET[F8];
@@ -282,8 +280,8 @@ void makeMove(Move &move)
                                   board.occupiedSquares    ^= BITSET[H8] | BITSET[F8];
                                   board.square[H8]          = EMPTY;
                                   board.square[F8]          = BLACK_ROOK;
-             					  board.hashkey ^= (KEY.keys[H8][BLACK_ROOK] ^ KEY.keys[F8][BLACK_ROOK]);                            
-						   }
+                                  board.hashkey ^= (KEY.keys[H8][BLACK_ROOK] ^ KEY.keys[F8][BLACK_ROOK]);                            
+                           }
                            else
                            {
                                   board.blackRooks         ^= BITSET[A8] | BITSET[D8];
@@ -291,9 +289,9 @@ void makeMove(Move &move)
                                   board.occupiedSquares    ^= BITSET[A8] | BITSET[D8];
                                   board.square[A8]          = EMPTY;
                                   board.square[D8]          = BLACK_ROOK;
-             					  board.hashkey ^= (KEY.keys[A8][BLACK_ROOK] ^ KEY.keys[D8][BLACK_ROOK]);                            
-						   }
-					 }
+                                  board.hashkey ^= (KEY.keys[A8][BLACK_ROOK] ^ KEY.keys[D8][BLACK_ROOK]);                            
+                           }
+                     }
                      break;
  
               case 11: // black knight:
@@ -334,15 +332,15 @@ void makeMove(Move &move)
                      board.epSquare            = 0;    
                      board.fiftyMove++;
                      if (from == A8)
-				     {
-					     if (board.castleBlack & CANCASTLEOOO)  board.hashkey ^= KEY.bq;
-						 board.castleBlack &= ~CANCASTLEOOO;
-					 }
+                     {
+                         if (board.castleBlack & CANCASTLEOOO)  board.hashkey ^= KEY.bq;
+                         board.castleBlack &= ~CANCASTLEOOO;
+                     }
                      if (from == H8) 
-				     {
-					     if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
-						 board.castleBlack &= ~CANCASTLEOO;
-					 }
+                     {
+                         if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
+                         board.castleBlack &= ~CANCASTLEOO;
+                     }
                      if (captured)
                      {
                            makeCapture(captured, to);
@@ -368,7 +366,7 @@ void makeMove(Move &move)
        }
 
        board.nextMove = !board.nextMove;
-	   board.hashkey ^= KEY.side; 
+       board.hashkey ^= KEY.side; 
        board.endOfSearch++;
 }
  
@@ -397,7 +395,7 @@ void unmakeMove(Move &move)
                                   board.blackPieces          ^= BITSET[to-8];
                                   board.occupiedSquares    ^= fromToBitMap | BITSET[to-8];
                                   board.square[to-8]        = BLACK_PAWN;
-                                  board.totalBlackPawns		+= PAWN_VALUE;
+                                  board.totalBlackPawns     += PAWN_VALUE;
                                   board.Material           -= PAWN_VALUE;
                            }
                            else
@@ -513,7 +511,7 @@ void unmakeMove(Move &move)
                                   board.whitePieces          ^= BITSET[to+8];
                                   board.occupiedSquares    ^= fromToBitMap | BITSET[to+8];
                                   board.square[to+8]        = WHITE_PAWN;
-								  board.totalWhitePawns		+= PAWN_VALUE;
+                                  board.totalWhitePawns     += PAWN_VALUE;
                                   board.Material           += PAWN_VALUE;
                            }
                            else
@@ -623,7 +621,7 @@ void unmakeMove(Move &move)
        board.castleBlack         = board.gameLine[board.endOfSearch].castleBlack;
        board.epSquare            = board.gameLine[board.endOfSearch].epSquare;
        board.fiftyMove           = board.gameLine[board.endOfSearch].fiftyMove;
-	   board.hashkey			 = board.gameLine[board.endOfSearch].key; 
+       board.hashkey             = board.gameLine[board.endOfSearch].key; 
 }
  
 void makeCapture(unsigned int &captured, unsigned int &to)
@@ -631,7 +629,7 @@ void makeCapture(unsigned int &captured, unsigned int &to)
        // deals with all captures, except en-passant
        BitMap toBitMap;
        toBitMap = BITSET[to];
-	   board.hashkey ^= KEY.keys[to][captured];
+       board.hashkey ^= KEY.keys[to][captured];
  
        switch (captured)
        {
@@ -667,15 +665,15 @@ void makeCapture(unsigned int &captured, unsigned int &to)
                      board.totalWhitePieces     -= ROOK_VALUE;
                      board.Material           -= ROOK_VALUE;
                      if (to == A1) 
-					 {
-					     if (board.castleWhite & CANCASTLEOOO)  board.hashkey ^= KEY.wq;
-						 board.castleWhite &= ~CANCASTLEOOO;
-					 }
+                     {
+                         if (board.castleWhite & CANCASTLEOOO)  board.hashkey ^= KEY.wq;
+                         board.castleWhite &= ~CANCASTLEOOO;
+                     }
                      if (to == H1) 
-					 {
-					     if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
-						 board.castleWhite &= ~CANCASTLEOO;
-					 }
+                     {
+                         if (board.castleWhite & CANCASTLEOO)  board.hashkey ^= KEY.wk;
+                         board.castleWhite &= ~CANCASTLEOO;
+                     }
                      break;
  
               case 7: // white queen:
@@ -717,15 +715,15 @@ void makeCapture(unsigned int &captured, unsigned int &to)
                      board.totalBlackPieces     -= ROOK_VALUE;
                      board.Material           += ROOK_VALUE;
                      if (to == A8) 
-					 {
-					     if (board.castleBlack & CANCASTLEOOO)  board.hashkey ^= KEY.bq;
-					     board.castleBlack &= ~CANCASTLEOOO;
-					 }
+                     {
+                         if (board.castleBlack & CANCASTLEOOO)  board.hashkey ^= KEY.bq;
+                         board.castleBlack &= ~CANCASTLEOOO;
+                     }
                      if (to == H8) 
-					 { 
-					     if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
-						 board.castleBlack &= ~CANCASTLEOO;
-					 }
+                     { 
+                         if (board.castleBlack & CANCASTLEOO)  board.hashkey ^= KEY.bk;
+                         board.castleBlack &= ~CANCASTLEOO;
+                     }
                      break;
  
               case 15: // black queen:
@@ -750,7 +748,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.whitePawns           ^= toBitMap;
                      board.whitePieces          ^= toBitMap;
                      board.square[to]             = WHITE_PAWN;
-					 board.totalWhitePawns	  += PAWN_VALUE;
+                     board.totalWhitePawns    += PAWN_VALUE;
                      board.Material           += PAWN_VALUE;
                      break;
  
@@ -764,7 +762,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.whiteKnights         ^= toBitMap;
                      board.whitePieces          ^= toBitMap;
                      board.square[to]             = WHITE_KNIGHT;
-					 board.totalWhitePieces	  += KNIGHT_VALUE;
+                     board.totalWhitePieces   += KNIGHT_VALUE;
                      board.Material           += KNIGHT_VALUE;
                      break;
  
@@ -772,15 +770,15 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.whiteBishops         ^= toBitMap;
                      board.whitePieces          ^= toBitMap;
                      board.square[to]             = WHITE_BISHOP;
-					 board.totalWhitePieces	  += BISHOP_VALUE;
-					 board.Material           += BISHOP_VALUE;
+                     board.totalWhitePieces   += BISHOP_VALUE;
+                     board.Material           += BISHOP_VALUE;
                      break;
  
               case 6: // white rook:
                      board.whiteRooks         ^= toBitMap;
                      board.whitePieces          ^= toBitMap;
                      board.square[to]             = WHITE_ROOK;
-					 board.totalWhitePieces	  += ROOK_VALUE;
+                     board.totalWhitePieces   += ROOK_VALUE;
                      board.Material           += ROOK_VALUE;
                      break;
  
@@ -788,7 +786,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.whiteQueens          ^= toBitMap;
                      board.whitePieces          ^= toBitMap;
                      board.square[to]             = WHITE_QUEEN;
-					 board.totalWhitePieces	  += QUEEN_VALUE;
+                     board.totalWhitePieces   += QUEEN_VALUE;
                      board.Material           += QUEEN_VALUE;
                      break;
  
@@ -796,7 +794,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.blackPawns           ^= toBitMap;
                      board.blackPieces          ^= toBitMap;
                      board.square[to]             = BLACK_PAWN;
-					 board.totalBlackPawns	   += PAWN_VALUE;
+                     board.totalBlackPawns     += PAWN_VALUE;
                      board.Material           -= PAWN_VALUE;
                      break;
  
@@ -810,7 +808,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.blackKnights         ^= toBitMap;
                      board.blackPieces          ^= toBitMap;
                      board.square[to]             = BLACK_KNIGHT;
-					 board.totalBlackPieces    += KNIGHT_VALUE;
+                     board.totalBlackPieces    += KNIGHT_VALUE;
                      board.Material           -= KNIGHT_VALUE;
                      break;
  
@@ -818,7 +816,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.blackBishops         ^= toBitMap;
                      board.blackPieces          ^= toBitMap;
                      board.square[to]             = BLACK_BISHOP;
-					 board.totalBlackPieces    += BISHOP_VALUE;
+                     board.totalBlackPieces    += BISHOP_VALUE;
                      board.Material           -= BISHOP_VALUE;
                      break;
  
@@ -826,7 +824,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.blackRooks         ^= toBitMap;
                      board.blackPieces          ^= toBitMap;
                      board.square[to]             = BLACK_ROOK;
-					 board.totalBlackPieces    += ROOK_VALUE;
+                     board.totalBlackPieces    += ROOK_VALUE;
                      board.Material           -= ROOK_VALUE;
                      break;
  
@@ -834,7 +832,7 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
                      board.blackQueens          ^= toBitMap;
                      board.blackPieces          ^= toBitMap;
                      board.square[to]             = BLACK_QUEEN;
-					 board.totalBlackPieces    += QUEEN_VALUE;
+                     board.totalBlackPieces    += QUEEN_VALUE;
                      board.Material           -= QUEEN_VALUE;
                      break;
        }
@@ -846,32 +844,32 @@ void makeWhitePromotion(unsigned int prom, unsigned int &to)
        toBitMap = BITSET[to];
  
        board.whitePawns ^= toBitMap;
-	   board.totalWhitePawns -= PAWN_VALUE;
+       board.totalWhitePawns -= PAWN_VALUE;
        board.Material -= PAWN_VALUE;
-	   board.hashkey ^= (KEY.keys[to][WHITE_PAWN] ^ KEY.keys[to][prom]);
+       board.hashkey ^= (KEY.keys[to][WHITE_PAWN] ^ KEY.keys[to][prom]);
  
        if (prom == 7)
        {
               board.whiteQueens          ^= toBitMap;
-			  board.totalWhitePieces    += QUEEN_VALUE;
+              board.totalWhitePieces    += QUEEN_VALUE;
               board.Material           += QUEEN_VALUE;
        }
        else if (prom == 6)
        {
               board.whiteRooks         ^= toBitMap;
-			  board.totalWhitePieces    += ROOK_VALUE;
+              board.totalWhitePieces    += ROOK_VALUE;
               board.Material           += ROOK_VALUE;
        }
        else if (prom == 5)
        {
               board.whiteBishops       ^= toBitMap;
-			  board.totalWhitePieces    += BISHOP_VALUE;
+              board.totalWhitePieces    += BISHOP_VALUE;
               board.Material           += BISHOP_VALUE;
        }
        else if (prom == 3)
        {
               board.whiteKnights       ^= toBitMap;
-			  board.totalWhitePieces    += KNIGHT_VALUE;
+              board.totalWhitePieces    += KNIGHT_VALUE;
               board.Material           += KNIGHT_VALUE;
        }
 }
@@ -882,31 +880,31 @@ void unmakeWhitePromotion(unsigned int prom, unsigned int &to)
        toBitMap = BITSET[to];
  
        board.whitePawns ^= toBitMap;
-	   board.totalWhitePawns += PAWN_VALUE;
+       board.totalWhitePawns += PAWN_VALUE;
        board.Material += PAWN_VALUE;
  
        if (prom == 7)
        {
               board.whiteQueens          ^= toBitMap;
-			  board.totalWhitePieces    -= QUEEN_VALUE;
+              board.totalWhitePieces    -= QUEEN_VALUE;
               board.Material           -= QUEEN_VALUE;
        }
        else if (prom == 6)
        {
               board.whiteRooks         ^= toBitMap;
-			  board.totalWhitePieces    -= ROOK_VALUE;
+              board.totalWhitePieces    -= ROOK_VALUE;
               board.Material           -= ROOK_VALUE;
        }
        else if (prom == 5)
        {
               board.whiteBishops       ^= toBitMap;
-			  board.totalWhitePieces    -= BISHOP_VALUE;
+              board.totalWhitePieces    -= BISHOP_VALUE;
               board.Material           -= BISHOP_VALUE;
        }
        else if (prom == 3)
        {
               board.whiteKnights       ^= toBitMap;
-			  board.totalWhitePieces    -= KNIGHT_VALUE;
+              board.totalWhitePieces    -= KNIGHT_VALUE;
               board.Material           -= KNIGHT_VALUE;
        }
 }
@@ -918,32 +916,32 @@ void makeBlackPromotion(unsigned int prom, unsigned int &to)
        toBitMap = BITSET[to];
  
        board.blackPawns ^= toBitMap;
-	   board.totalBlackPawns -= PAWN_VALUE;
+       board.totalBlackPawns -= PAWN_VALUE;
        board.Material += PAWN_VALUE;
-	   board.hashkey ^= (KEY.keys[to][BLACK_PAWN] ^ KEY.keys[to][prom]);
+       board.hashkey ^= (KEY.keys[to][BLACK_PAWN] ^ KEY.keys[to][prom]);
  
        if (prom == 15)
        {
               board.blackQueens          ^= toBitMap;
-			  board.totalBlackPieces    += QUEEN_VALUE;
+              board.totalBlackPieces    += QUEEN_VALUE;
               board.Material           -= QUEEN_VALUE;
        }
        else if (prom == 14)
        {
               board.blackRooks         ^= toBitMap;
-			  board.totalBlackPieces    += ROOK_VALUE;
+              board.totalBlackPieces    += ROOK_VALUE;
               board.Material           -= ROOK_VALUE;
        }
        else if (prom == 13)
        {
               board.blackBishops       ^= toBitMap;
-			  board.totalBlackPieces    += BISHOP_VALUE;
+              board.totalBlackPieces    += BISHOP_VALUE;
               board.Material           -= BISHOP_VALUE;
        }
        else if (prom == 11)
        {
               board.blackKnights       ^= toBitMap;
-			  board.totalBlackPieces    += KNIGHT_VALUE;
+              board.totalBlackPieces    += KNIGHT_VALUE;
               board.Material           -= KNIGHT_VALUE;
        }
 }
@@ -954,31 +952,31 @@ void unmakeBlackPromotion(unsigned int prom, unsigned int &to)
        toBitMap = BITSET[to];
  
        board.blackPawns ^= toBitMap;
-	   board.totalBlackPawns += PAWN_VALUE;
+       board.totalBlackPawns += PAWN_VALUE;
        board.Material -= PAWN_VALUE;
  
        if (prom == 15)
        {
               board.blackQueens          ^= toBitMap;
-			  board.totalBlackPieces    -= QUEEN_VALUE;
+              board.totalBlackPieces    -= QUEEN_VALUE;
               board.Material           += QUEEN_VALUE;
        }
        else if (prom == 14)
        {
               board.blackRooks         ^= toBitMap;
-			  board.totalBlackPieces    -= ROOK_VALUE;
+              board.totalBlackPieces    -= ROOK_VALUE;
               board.Material           += ROOK_VALUE;
        }
        else if (prom == 13)
        {
               board.blackBishops       ^= toBitMap;
-			  board.totalBlackPieces    -= BISHOP_VALUE;
+              board.totalBlackPieces    -= BISHOP_VALUE;
               board.Material           += BISHOP_VALUE;
        }
        else if (prom == 11)
        {
               board.blackKnights       ^= toBitMap;
-			  board.totalBlackPieces    -= KNIGHT_VALUE;
+              board.totalBlackPieces    -= KNIGHT_VALUE;
               board.Material           += KNIGHT_VALUE;
        }
 }
@@ -1081,9 +1079,9 @@ void debugMoves(char *caller, Move &move)
 {
        char input[80];
        int mat, i, j;
-	   int totwpawn, totbpawn, totwpiec, totbpiec;
+       int totwpawn, totbpawn, totwpiec, totbpiec;
 
-	 	U64 key;
+        U64 key;
  
        // check if both kings are present
        if ((bitCnt(board.whiteKing) != 1) || (bitCnt(board.blackKing) != 1))
@@ -1311,13 +1309,13 @@ void debugMoves(char *caller, Move &move)
               cin >> input;
        }
  
-		totwpawn = bitCnt(board.whitePawns) * PAWN_VALUE;
-		totbpawn = bitCnt(board.blackPawns) * PAWN_VALUE;
-		totwpiec = 	bitCnt(board.whiteKnights) * KNIGHT_VALUE + bitCnt(board.whiteBishops) * BISHOP_VALUE +
-							bitCnt(board.whiteRooks) * ROOK_VALUE + bitCnt(board.whiteQueens) * QUEEN_VALUE;
-		totbpiec = 	bitCnt(board.blackKnights) * KNIGHT_VALUE + bitCnt(board.blackBishops) * BISHOP_VALUE +
-							bitCnt(board.blackRooks) * ROOK_VALUE + bitCnt(board.blackQueens) * QUEEN_VALUE;
-		mat = totwpawn + totwpiec - totbpawn - totbpiec;
+        totwpawn = bitCnt(board.whitePawns) * PAWN_VALUE;
+        totbpawn = bitCnt(board.blackPawns) * PAWN_VALUE;
+        totwpiec =  bitCnt(board.whiteKnights) * KNIGHT_VALUE + bitCnt(board.whiteBishops) * BISHOP_VALUE +
+                            bitCnt(board.whiteRooks) * ROOK_VALUE + bitCnt(board.whiteQueens) * QUEEN_VALUE;
+        totbpiec =  bitCnt(board.blackKnights) * KNIGHT_VALUE + bitCnt(board.blackBishops) * BISHOP_VALUE +
+                            bitCnt(board.blackRooks) * ROOK_VALUE + bitCnt(board.blackQueens) * QUEEN_VALUE;
+        mat = totwpawn + totwpiec - totbpawn - totbpiec;
 
        if (board.totalWhitePawns != totwpawn)
        {
@@ -1356,23 +1354,23 @@ void debugMoves(char *caller, Move &move)
               cin >> input;
        }
 
-	key = 0;
-	for (i = 0; i < 64; i++)
-	{
-		if (board.square[i] != EMPTY) key ^= KEY.keys[i][board.square[i]];  
-	}
-	if (board.castleWhite & CANCASTLEOO)  key ^= KEY.wk;
-	if (board.castleWhite & CANCASTLEOOO) key ^= KEY.wq;
-	if (board.castleBlack & CANCASTLEOO)  key ^= KEY.bk;
-	if (board.castleBlack & CANCASTLEOOO) key ^= KEY.bq;
-	if (board.nextMove) key ^= KEY.side;
-	if (board.epSquare) key ^= KEY.ep[board.epSquare];
+    key = 0;
+    for (i = 0; i < 64; i++)
+    {
+        if (board.square[i] != EMPTY) key ^= KEY.keys[i][board.square[i]];  
+    }
+    if (board.castleWhite & CANCASTLEOO)  key ^= KEY.wk;
+    if (board.castleWhite & CANCASTLEOOO) key ^= KEY.wq;
+    if (board.castleBlack & CANCASTLEOO)  key ^= KEY.bk;
+    if (board.castleBlack & CANCASTLEOOO) key ^= KEY.bq;
+    if (board.nextMove) key ^= KEY.side;
+    if (board.epSquare) key ^= KEY.ep[board.epSquare];
     if (board.hashkey != key)
     {
-		cout << "inconsistency in hashkey after " << caller << endl;
+        cout << "inconsistency in hashkey after " << caller << endl;
         displayMove(move);
         board.display();
         cin >> input;
-	}
-	return;
+    }
+    return;
 }
