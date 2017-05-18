@@ -27,6 +27,7 @@
 #include "app.h"
 #include "functions.h"
 #include "board.h"
+#include "timer.h"
 #include "move.h"
 #include "search.h"
 #include "cmd.h"
@@ -41,6 +42,8 @@ using namespace std;
  * Global variables used in this part of the program.
  */
 int curPlayerType;
+U64 msStart,msStop, moves;
+Timer timer;
 
 
 
@@ -390,19 +393,19 @@ void exec(string input)
         board.moveBufLen[1] = movegen(board.moveBufLen[0]);
         cout << endl << "moves from this position:" << endl;
         for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
-		{
-			makeMove(board.moveBuffer[i]);
-			if (isOtherKingAttacked())
-			{
-				unmakeMove(board.moveBuffer[i]);
-			}
-			else
-			{
-				unmakeMove(board.moveBuffer[i]);
-				toSan(board.moveBuffer[i], sanMove);
-				cout << ++number << ". " << sanMove << endl;
-			}
-		}
+        {
+            makeMove(board.moveBuffer[i]);
+            if (isOtherKingAttacked())
+            {
+                unmakeMove(board.moveBuffer[i]);
+            }
+            else
+            {
+                unmakeMove(board.moveBuffer[i]);
+                toSan(board.moveBuffer[i], sanMove);
+                cout << ++number << ". " << sanMove << endl;
+            }
+        }
     }
 
 
@@ -425,8 +428,8 @@ void exec(string input)
         numberOfMove = 1;
         gameEnd = END_TYPE_NOEND;
 
-	    dataInit();
-	    board.init();
+        dataInit();
+        board.init();
         cache.clear();
 
         // enable book by default
@@ -466,8 +469,35 @@ void exec(string input)
 
         else if (arg == "perft")
         {
-            cout << "testPerft()" << endl;
-            //testPerft();
+            clock_t start, end;
+            uint64_t moves;
+
+            cout << "Testing Perft() function:" << endl;
+            cout << "Ply\t  Moves\t     Time\t Moves/s" << endl;
+            cout << flush;
+
+            for (int z = 0; z < PERFT_DEPTH_LIMIT; z++)
+            {
+                board.moveBufLen[0] = 0;
+
+                start = clock();
+                moves = perft(z, z);
+                end = clock();
+
+                float sec = (end - start) / (CLOCKS_PER_SEC / 1000);
+                float speed = moves / sec;
+ 
+                // PRINT: Depth, Moves, Time, Moves/s
+                cout.fill(' ');
+                cout << setw(3) << z << "\t" << setw(7) << moves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
+                if (isinf(speed))
+                    cout << "  -" << endl;
+                else
+                    cout << fixed << setw(4) << setprecision(0) << moves/sec << "K" << endl;
+                cout << flush;
+            }
+
+            cout << endl;
         }
 
         else
@@ -602,10 +632,10 @@ void exec(string input)
      */
     else if ((cmd == "back") || (cmd == "undo"))
     {
-		if (board.endOfGame)
-		{
-			unmakeMove(board.gameLine[--board.endOfGame].move);
-			board.endOfSearch = board.endOfGame;
+        if (board.endOfGame)
+        {
+            unmakeMove(board.gameLine[--board.endOfGame].move);
+            board.endOfSearch = board.endOfGame;
 
             wPlayer = PLAYER_TYPE_HUMAN;
             bPlayer = PLAYER_TYPE_HUMAN;
@@ -613,10 +643,10 @@ void exec(string input)
 
             cursor--;
             numberOfMove = (cursor / 2) + 1;
-		}
-		else if (!XB_MODE) cout << "already at start of game" << endl;
+        }
+        else if (!XB_MODE) cout << "already at start of game" << endl;
 
-		if (!XB_MODE) board.display();
+        if (!XB_MODE) board.display();
     }
 
 
@@ -625,25 +655,25 @@ void exec(string input)
     // go back two moves (XBoard --> "remove" feature)
     else if (cmd == "remove")
     {
-		if (board.endOfGame)
-		{
-			unmakeMove(board.gameLine[--board.endOfGame].move);
-			board.endOfSearch = board.endOfGame;
+        if (board.endOfGame)
+        {
+            unmakeMove(board.gameLine[--board.endOfGame].move);
+            board.endOfSearch = board.endOfGame;
             cursor--;
             numberOfMove = (cursor / 2) + 1;
         }
-		else if (!XB_MODE) cout << "already at start of game" << endl;
+        else if (!XB_MODE) cout << "already at start of game" << endl;
 
-		if (board.endOfGame)
-		{
-			unmakeMove(board.gameLine[--board.endOfGame].move);
-			board.endOfSearch = board.endOfGame;
+        if (board.endOfGame)
+        {
+            unmakeMove(board.gameLine[--board.endOfGame].move);
+            board.endOfSearch = board.endOfGame;
             cursor--;
             numberOfMove = (cursor / 2) + 1;
-		}
-		else if (!XB_MODE) cout << "already at start of game" << endl;
+        }
+        else if (!XB_MODE) cout << "already at start of game" << endl;
 
-		if (!XB_MODE) board.display();
+        if (!XB_MODE) board.display();
     }
 
 

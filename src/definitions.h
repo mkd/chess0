@@ -69,7 +69,7 @@
 #define NODES_TEST_TIME            2
 #define MOVES_TEST_TIMES      250000
 #define MOVES_TEST_ITER      1000000
-#define PERFT_DEPTH_LIMIT          4
+#define PERFT_DEPTH_LIMIT          6
 
 #define CACHE_HIT_LEVEL          0.3
 #define BOARD_SERIAL_SIZE         84
