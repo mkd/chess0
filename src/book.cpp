@@ -170,9 +170,13 @@ void initBook()
         book["1. e4 e5 2. d4 exd4 3. Qxd4"] = "Nc6";
         book["1. e4 e5 2. d4 exd4 3. Qxd4 Nc6"] = "Qe3";
         book["1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4.Qe3"] = "Nf6 | d6";
+
+        // Danish gambit (C21)
         book["1. e4 e5 2. d4 exd4 3. c3"] = "dxc3 | d5";
         book["1. e4 e5 2. d4 exd4 3. Nf3"] = "Nc6";
         book["1. e4 e5 2. d4 exd4 3. Nf3 Nc6"] = "Nxd4 | Bc4";
+        book["1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4"] = "cxb2";
+        book["1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2"] = "Nf6";
 
         book["1. e4 e5 2. g3"] = "Nf6 | Nc6";
 
@@ -1294,6 +1298,12 @@ void initBook()
         book["1. c4 Nf6 2. d4 c5 3. d5"] = "b5 | e6";
         book["1. c4 Nf6 2. d4 d6"] = "Nf3 | Nc3";
 
+
+        // King's Indian (E60)
+        book["1. c4 Nf6 2. d4 g6 Nf3"] = "Nc3";
+
+
+
         book["1. c4 Nf6 2. g3 e5"] = "Bg2 | Nc3";
         book["1. c4 Nf6 2. g3 e5 3. Bg2"] = "d5 | c6 | Nc6";
         book["1. c4 Nf6 2. g3 e5 3. Nc3"] = "d5 | Bb4 | c6";
@@ -1515,6 +1525,15 @@ void initBook()
 
         book["1. e4 e5 2. Ne2"] = "Nf6";
         book["1. e4 e5 2. Ne2 Nf6 3. Ng3"] = "Nc6";
+
+
+        // Old Benoni Defense (A43)
+        book["1. d4 c5"] = "d5";
+        book["1. d4 c5 2. d5 e5"] = "e4";
+        book["1. d4 c5 2. d5 Nf6"] = "c4 | Nc3";
+        book["1. d4 c5 2. d5 d6"] = "c4";
+        book["1. d4 c5 2. d5 e6"] = "c4";
+        book["1. d4 c5 2. d5 g6"] = "e4";
 }
 
 

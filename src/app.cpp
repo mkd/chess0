@@ -100,8 +100,8 @@ int startApp(int mode)
 
 
     // Initialize the board, the list of commands and the openings book.
-	dataInit();
-	board.init();
+    dataInit();
+    board.init();
     initListOfCommands();
     initBook();
 
@@ -170,10 +170,10 @@ int startApp(int mode)
 
 
                 // search the move
-				myMove = board.think();
+                myMove = board.think();
 
                 // set the input from computer to the SAN move
-				toSan(myMove, sanMove);
+                toSan(myMove, sanMove);
                 input = string(sanMove);
                 
                 end   = clock();
@@ -240,33 +240,33 @@ int startApp(int mode)
             if (t != validMoves.end())
             {
                 userMove = t->second;
-			    sscanf(userMove.c_str(), "%s", userinput);
+                sscanf(userMove.c_str(), "%s", userinput);
 
-			    // generate the pseudo-legal move list
-			    board.moveBufLen[0] = 0;
-			    board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+                // generate the pseudo-legal move list
+                board.moveBufLen[0] = 0;
+                board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 
                 // check to see if the user move is also found in the pseudo-legal move list
-			    if (isValidTextMove(userinput, myMove))
-		    	{
-				    makeMove(myMove);
+                if (isValidTextMove(userinput, myMove))
+                {
+                    makeMove(myMove);
 
                     // post-move check to see if we are leaving our king in check
-				    if (isOtherKingAttacked())
-				    {
-					    unmakeMove(myMove);
-					    cout << "    invalid move, leaving king in check: " << userinput << endl;
-				    }
-				    else
-				    {
-					    board.endOfGame++;
-					    board.endOfSearch = board.endOfGame;
-				    }
-			    }
-			    else
-			    {
-				    cout << "    move is invalid or not recognized: " << userinput << endl;
-			    }
+                    if (isOtherKingAttacked())
+                    {
+                        unmakeMove(myMove);
+                        cout << "    invalid move, leaving king in check: " << userinput << endl;
+                    }
+                    else
+                    {
+                        board.endOfGame++;
+                        board.endOfSearch = board.endOfGame;
+                    }
+                }
+                else
+                {
+                    cout << "    move is invalid or not recognized: " << userinput << endl;
+                }
             }
 
             // not a valid move
@@ -310,7 +310,7 @@ int startApp(int mode)
 
             // check for the end of the game
             Move tmpMove;
-	        if (board.isEndOfgame(number, tmpMove))
+            if (board.isEndOfgame(number, tmpMove))
                 dealEnd();
         }
 
@@ -612,8 +612,8 @@ void dealEnd()
     numberOfMove = 1;
     gameEnd = END_TYPE_NOEND;
 
-	dataInit();
-	board.init();
+    dataInit();
+    board.init();
     cache.clear();
 
     // enable book by default

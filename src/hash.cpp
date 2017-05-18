@@ -1,3 +1,28 @@
+/* 
+    This file is part of Chess0, a computer chess program based on Winglet chess
+    by Stef Luijten.
+    
+    Copyright (C) 2017 Claudio M. Camacho
+                                                                           
+    Chess0 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Chess0 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+// @file hash.cpp
+//
+// XXX
 #include <ctime>
 #include <iostream>
 #include <stdlib.h>
@@ -7,29 +32,29 @@
 
 void HashKeys::init()
 {
-	// initialize all random 64-bit numbers
+    // initialize all random 64-bit numbers
 
-	int i,j;
-	time_t now;
+    int i,j;
+    time_t now;
 
-	// use current time (in seconds) as random seed:
-	srand((unsigned int)time(&now));
+    // use current time (in seconds) as random seed:
+    srand((unsigned int)time(&now));
 
-	for (i = 0; i < 64; i++)
-	{
-		ep[i] = rand64();
-		for (j=0; j < 16; j++) keys[i][j] = rand64();
-	}
-	side = rand64();
-	wk = rand64();
-	wq = rand64();
-	bk = rand64();
-	bq = rand64();
+    for (i = 0; i < 64; i++)
+    {
+        ep[i] = rand64();
+        for (j=0; j < 16; j++) keys[i][j] = rand64();
+    }
+    side = rand64();
+    wk = rand64();
+    wq = rand64();
+    bk = rand64();
+    bq = rand64();
 
-	return;
+    return;
 }
 
 U64 HashKeys::rand64()
 {
-	return rand()^((U64)rand()<<15)^((U64)rand()<<30)^((U64)rand()<<45)^((U64)rand()<<60);
+    return rand()^((U64)rand()<<15)^((U64)rand()<<30)^((U64)rand()<<45)^((U64)rand()<<60);
 }

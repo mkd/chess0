@@ -4,18 +4,15 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Figure out how hashkeys are generated for board
-
-- Implement cache
+- Show '+' in "My move:" when in check
 
 - Implement LMR
 
 
 
-
 BEFORE NEXT RELEASE
 ===================
-- Interface (input & output) should behave exactly the same as Chess0x
+- Implement cache (ttEntry = hashkey + depth)
 
 - Edit board
 
@@ -27,15 +24,13 @@ BEFORE NEXT RELEASE
 
 IMPORTANT
 =========
-- Cache support (using existing Zobrist hash tables)
+- Fix weird moves (eval.cpp??), e.g., Rb1 or h3--Rh2 in the opening ??
+
+- Improve evaluation function (opening, middle, end)
 
 - Ponder support (test that works once Cache is enabled)
 
-- LMR support
-
 - Lazy SMP
-
-- 'cc' command never ends after a game is ended
 
 
 

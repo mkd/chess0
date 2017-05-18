@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file eval.cpp
- *
- * XXX
- */
+// @file eval.cpp
+//
+// XXX
 #include <iostream>
 #include "definitions.h"
 #include "functions.h"
@@ -104,38 +102,38 @@ int Board::eval()
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate for draws due to insufficient material:
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	if (!whitepawns && !blackpawns)
-	{
-		// king versus king:
-		if ((whitetotalmat == 0) && (blacktotalmat == 0)) 
-		{
-			if (board.nextMove) return -DRAWSCORE;
-			else return DRAWSCORE;
-		}
+    if (!whitepawns && !blackpawns)
+    {
+        // king versus king:
+        if ((whitetotalmat == 0) && (blacktotalmat == 0)) 
+        {
+            if (board.nextMove) return -DRAWSCORE;
+            else return DRAWSCORE;
+        }
  
-		// king and knight versus king:
-		if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
-			((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
-		{
-			if (board.nextMove) return -DRAWSCORE;
-			else return DRAWSCORE;
-		}
+        // king and knight versus king:
+        if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
+            ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
+        {
+            if (board.nextMove) return -DRAWSCORE;
+            else return DRAWSCORE;
+        }
  
-		// 2 kings with one or more bishops, and all bishops on the same colour:
-		if ((whitebishops + blackbishops) > 0)
-		{
-				if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
-				(blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
-			{
-				if (!((board.whiteBishops | board.blackBishops) & WHITE_SQUARES) ||
-					!((board.whiteBishops | board.blackBishops) & BLACK_SQUARES))
-				{
-					if (board.nextMove) return -DRAWSCORE;
-					else return DRAWSCORE;
-				}
-			}
-		}
-	}
+        // 2 kings with one or more bishops, and all bishops on the same colour:
+        if ((whitebishops + blackbishops) > 0)
+        {
+                if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
+                (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
+            {
+                if (!((board.whiteBishops | board.blackBishops) & WHITE_SQUARES) ||
+                    !((board.whiteBishops | board.blackBishops) & BLACK_SQUARES))
+                {
+                    if (board.nextMove) return -DRAWSCORE;
+                    else return DRAWSCORE;
+                }
+            }
+        }
+    }
  
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate MATERIAL
@@ -316,7 +314,7 @@ int Board::eval()
  
        if (board.whiteBishops)
        {
-		      if ((board.whiteBishops & WHITE_SQUARES) && (board.whiteBishops & BLACK_SQUARES))
+              if ((board.whiteBishops & WHITE_SQUARES) && (board.whiteBishops & BLACK_SQUARES))
               {
                      score += BONUS_BISHOP_PAIR;
                      #ifdef VERBOSE_EVAL
@@ -579,26 +577,14 @@ int Board::eval()
 // - position on the board
 // - distance from opponent king
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
        temp = board.blackKnights;
        while (temp)
        {
               square = firstOne(temp);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK KNIGHT ON                 " << SQUARENAME[square] << std::endl;
-              #endif
  
               score -= KNIGHTPOS_B[square];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << KNIGHTPOS_B[square] << std::endl;
-                     iblackpos -= KNIGHTPOS_B[square];
-              #endif
  
               score -= KNIGHT_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  DISTANCE TO OPPONNT KING SCORE " << KNIGHT_DISTANCE[DISTANCE[square][whitekingsquare]] << std::endl;
-                     iblackpos -= KNIGHT_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #endif
  
               temp ^= BITSET[square];
        }
@@ -609,38 +595,18 @@ int Board::eval()
 // - position on the board
 // - distance from opponent king
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
        if (board.blackBishops)
-       {
-		      if ((board.blackBishops & WHITE_SQUARES) && (board.blackBishops & BLACK_SQUARES))
-              {
+              if ((board.blackBishops & WHITE_SQUARES) && (board.blackBishops & BLACK_SQUARES))
                      score -= BONUS_BISHOP_PAIR;
-                     #ifdef VERBOSE_EVAL
-                           std::cout << "EVAL> BLACK BISHOP PAIR BONUS         " << BONUS_BISHOP_PAIR << std::endl;
-                           iblackpos -= BONUS_BISHOP_PAIR;
-                     #endif              
-              }
-       }
  
        temp = board.blackBishops;
        while (temp)
        {
               square = firstOne(temp);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK BISHOP ON                 " << SQUARENAME[square] << std::endl;
-              #endif
  
               score -= BISHOPPOS_B[square];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << BISHOPPOS_B[square] << std::endl;
-                     iblackpos -= BISHOPPOS_B[square];
-              #endif
  
               score -= BISHOP_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  DISTANCE TO OPPONNT KING SCORE " << BISHOP_DISTANCE[DISTANCE[square][whitekingsquare]] << std::endl;
-                     iblackpos -= BISHOP_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #endif
  
               temp ^= BITSET[square];
        }
@@ -651,69 +617,40 @@ int Board::eval()
 // - distance from opponent king
 // - on the same file as a passed pawn
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
        temp = board.blackRooks;
        while (temp)
        {
               square = firstOne(temp);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK ROOK ON                   " << SQUARENAME[square] << std::endl;
-              #endif
  
               score -= ROOKPOS_B[square];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << ROOKPOS_B[square] << std::endl;
-                     iblackpos -= ROOKPOS_B[square];
-              #endif
  
               score -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  DISTANCE TO OPPONNT KING SCORE " << ROOK_DISTANCE[DISTANCE[square][whitekingsquare]] << std::endl;
-                     iblackpos -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #endif
  
               if (FILEMASK[square] & blackpassedpawns)
-              {
                      if ((unsigned int) square > firstOne(FILEMASK[square] & blackpassedpawns))
-                     {
                            score -= BONUS_ROOK_BEHIND_PASSED_PAWN;
-                           #ifdef VERBOSE_EVAL
-                                  std::cout << "EVAL>  BEHIND PASSED PAWN BONUS       " << BONUS_ROOK_BEHIND_PASSED_PAWN << std::endl;
-                                  iblackpos -= BONUS_ROOK_BEHIND_PASSED_PAWN;
-                           #endif
-                     }
-              }
+
               temp ^= BITSET[square];
        }
+
  
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate black queens
 // - position on the board
 // - distance from opponent king
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
        temp = board.blackQueens;
        while (temp)
        {
               square = firstOne(temp);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK QUEEN ON                  " << SQUARENAME[square] << std::endl;
-              #endif
  
               score -= QUEENPOS_B[square];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << QUEENPOS_B[square] << std::endl;
-                     iblackpos -= QUEENPOS_B[square];
-              #endif
  
               score -= QUEEN_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  DISTANCE TO OPPONNT KING SCORE " << QUEEN_DISTANCE[DISTANCE[square][whitekingsquare]] << std::endl;
-                     iblackpos -= QUEEN_DISTANCE[DISTANCE[square][whitekingsquare]];
-              #endif
  
               temp ^= BITSET[square];
        }
+
  
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate the black king
@@ -721,68 +658,23 @@ int Board::eval()
 // - proximity to the pawns
 // - pawn shield (not in the endgame)
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
        if (endgame)
        {
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK KING ON (endgame)         " << SQUARENAME[blackkingsquare] << std::endl;
-              #endif
- 
               score -= KINGPOS_ENDGAME_B[blackkingsquare];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << KINGPOS_ENDGAME_B[blackkingsquare] << std::endl;
-                     iblackpos -= KINGPOS_ENDGAME_B[blackkingsquare];
-                     iblackking -= KINGPOS_ENDGAME_B[blackkingsquare];
-              #endif
        }
        else
        {
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> BLACK KING ON (no endgame)      " << SQUARENAME[blackkingsquare] << std::endl;
-              #endif
- 
               score -= KINGPOS_B[blackkingsquare];
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  POSITION SCORE IS              " << KINGPOS_B[blackkingsquare] << std::endl;
-                     iblackpos -= KINGPOS_B[blackkingsquare];
-                     iblackking -= KINGPOS_B[blackkingsquare];
-              #endif
  
               // add pawn shield bonus if we're not in the endgame:
               // strong pawn shield bonus if the pawns are near the king:
               score -= BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  STRONG PAWN SHIELD SCORE IS    " << BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns) << std::endl;
-                     iblackpos -= BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns);
-                     iblackking -= BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns);
-              #endif
  
               // weaker pawn shield bonus if the pawns are not so near the king:
               score -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
-              #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL>  WEAK PAWN SHIELD SCORE IS      " << BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns) << std::endl;
-                     iblackpos -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
-                     iblackking -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
-              #endif
- 
        }
  
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Return the score
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 
-       #ifdef VERBOSE_EVAL
-                     std::cout << "EVAL> SUMMARY:" << std::endl;
-                     std::cout << "EVAL>  MATERIAL                :" << board.Material << std::endl;
-                     std::cout << "EVAL>  UNEVEN MATERIAL BONUS   :" << iexch << std::endl;
-                     std::cout << "EVAL>  WHITE POSITIONAL BONUS  :" << iwhitepos << std::endl;
-                     std::cout << "EVAL>     WHITE PAWNS BONUS    :" << iwhitepawns << std::endl;
-                     std::cout << "EVAL>     WHITE KING POS/SAF   :" << iwhiteking << std::endl;
-                     std::cout << "EVAL>  BLACK POSITIONAL BONUS  :" << iblackpos << std::endl;
-                     std::cout << "EVAL>     BLACK PAWNS BONUS    :" << iblackpawns << std::endl;
-                     std::cout << "EVAL>     BLACK KING POS/SAF   :" << iblackking << std::endl;
-       #endif
- 
+       // Return the score
        if (board.nextMove) return -score;
        else return score;
 }

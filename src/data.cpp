@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file data.cpp
- *
- * XXX
- */
+// @file data.cpp
+//
+// XXX
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -36,9 +34,9 @@
 
 
  
-//	   Initialization of global data at program startup.
-//	   This function should be called only once (or else the mirrored data will be 
-//	   mirrored back again!!)
+//     Initialization of global data at program startup.
+//     This function should be called only once (or else the mirrored data will be 
+//     mirrored back again!!)
 void dataInit()
 {
        unsigned char CHARBITSET[8];
@@ -46,14 +44,14 @@ void dataInit()
        unsigned char state6Bit, state8Bit, attack8Bit;
        Move move;
 
-	   board.searchDepth = 16; // default for startup
-	   board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
+       board.searchDepth = 16; // default for startup
+       board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
 
 //     BITSET has only one bit set:
        BITSET[0] = 0x1;
        for (i = 1; i < 64 ; i++)
        {
-			BITSET[i] = BITSET[i-1] << 1;
+            BITSET[i] = BITSET[i-1] << 1;
        }
  
 //     BOARDINDEX is used to translate [file][rank] to [square],
@@ -66,7 +64,7 @@ void dataInit()
               }
        }
  
-//     PIECEVALUES are used in quiesence move ordering only:
+       // PIECEVALUES are used in quiesence move ordering only:
        for (i = 0; i < 16 ; i++) PIECEVALUES[i] = 0;
        PIECEVALUES[WHITE_PAWN] = PAWN_VALUE;
        PIECEVALUES[WHITE_KNIGHT] = KNIGHT_VALUE;
@@ -81,9 +79,7 @@ void dataInit()
        PIECEVALUES[BLACK_QUEEN] = QUEEN_VALUE;
        PIECEVALUES[BLACK_KING] = KING_VALUE;
 
-//     ===========================================================================
-//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
-//     ===========================================================================
+    // Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
     for (i = 0; i < 256; i++)
     {
         MS1BTABLE[i] = (
@@ -95,12 +91,10 @@ void dataInit()
             (i >   3) ? 2 :
             (i >   1) ? 1 : 0 );
     }
+
  
-//     ===========================================================================
 //     Initialize rank, file and diagonal 6-bit masking bitmaps, to get the
 //     occupancy state, used in the movegenerator (see movegen.ccp)
-//     ===========================================================================
- 
        for (square = 0; square < 64; square++)
        {
               RANKMASK[square] = 0x0;
@@ -116,28 +110,19 @@ void dataInit()
        {
               for (rank = 1; rank < 9; rank++)
               {
-//             ===========================================================================
-//             initialize 6-bit rank mask, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
- 
+                // initialize 6-bit rank mask, used in the movegenerator (see movegen.ccp)
                      RANKMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[2][rank]] | BITSET[BOARDINDEX[3][rank]] | BITSET[BOARDINDEX[4][rank]] ;
                      RANKMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[5][rank]] | BITSET[BOARDINDEX[6][rank]] | BITSET[BOARDINDEX[7][rank]] ;
  
-//             ===========================================================================
-//             initialize 6-bit file mask, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
+                    // initialize 6-bit file mask, used in the movegenerator (see movegen.ccp)
                      FILEMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[file][2]] | BITSET[BOARDINDEX[file][3]] | BITSET[BOARDINDEX[file][4]] ;
                      FILEMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][5]] | BITSET[BOARDINDEX[file][6]] | BITSET[BOARDINDEX[file][7]] ;
  
-//             ===========================================================================
-//             Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
+                    // Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
                      diaga8h1 = file + rank; // from 2 to 16, longest diagonal = 9
                      DIAGA8H1MAGIC[BOARDINDEX[file][rank]] = _DIAGA8H1MAGICS[diaga8h1 - 2];
  
-//             ===========================================================================
 //             Initialize 6-bit diagonal mask, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
                      DIAGA8H1MASK[BOARDINDEX[file][rank]] = 0x0;
                      if (diaga8h1 < 10)  // lower half, diagonals 2 to 9
                      {
@@ -154,15 +139,11 @@ void dataInit()
                            }
                      }
       
-//             ===========================================================================
 //             Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
                      diaga1h8 = file - rank; // from -7 to +7, longest diagonal = 0
                      DIAGA1H8MAGIC[BOARDINDEX[file][rank]] = _DIAGA1H8MAGICS[diaga1h8+7];
  
-//             ===========================================================================
 //             Initialize 6-bit diagonal mask, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
                      DIAGA1H8MASK[BOARDINDEX[file][rank]] = 0x0;
                      if (diaga1h8 > -1)  // lower half, diagonals 0 to 7
                      {
@@ -179,9 +160,7 @@ void dataInit()
                            }
                      }
  
-//             ===========================================================================
 //             Initialize file magic multiplication numbers, used in the movegenerator (see movegen.ccp)
-//             ===========================================================================
                      FILEMAGIC[BOARDINDEX[file][rank]] = _FILEMAGICS[file-1];
  
               }
@@ -697,94 +676,94 @@ void dataInit()
               }
        }
 
-	NOMOVE.moveInt = 0;
-	KEY.init();
+    NOMOVE.moveInt = 0;
+    KEY.init();
 
-//	===========================================================================
-//	HEADINGS and RAYS, used in SEE:
-//	===========================================================================
-	for (i = 0 ; i < 64; i++)
-	{
-		RAY_W[i]  = 0;
-		RAY_NW[i] = 0;
-		RAY_N[i]  = 0;
-		RAY_NE[i] = 0;
-		RAY_E[i]  = 0;
-		RAY_SE[i] = 0;
-		RAY_S[i]  = 0;
-		RAY_SW[i] = 0;
-		for (square = 0 ; square < 64; square ++)
-		{
-			HEADINGS[i][square] = 0;
-		}
-	}
-	
-	for (rank = 1 ; rank < 9; rank++)
-		for (file = 1 ; file < 9; file++)
-		{
-			i = BOARDINDEX[file][rank];			
-			// WEST:
-			for (afile = file - 1 ; afile > 0; afile--)
-			{
-				HEADINGS[i][BOARDINDEX[afile][rank]] = WEST;
-				RAY_W[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][rank]];
-			}
-			// NORTHWEST:
-			for (afile = file - 1, arank = rank + 1 ; (afile > 0) && (arank < 9); afile--,  arank++) 
-			{
-				HEADINGS[i][BOARDINDEX[afile][arank]] = NORTHWEST;
-				RAY_NW[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
-			}
-			// NORTH:
-			for (arank = rank + 1 ; arank < 9; arank++) 
-			{
-				HEADINGS[i][BOARDINDEX[file][arank]] = NORTH;
-				RAY_N[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][arank]];
-			}
-			// NORTHEAST:
-			for (afile = file + 1, arank = rank + 1 ; (afile < 9) && (arank < 9); afile++,  arank++) 
-			{
-				HEADINGS[i][BOARDINDEX[afile][arank]] = NORTHEAST;
-				RAY_NE[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
-			}
-			// EAST:
-			for (afile = file + 1 ; afile < 9; afile++) 
-			{
-				HEADINGS[i][BOARDINDEX[afile][rank]] = EAST;
-				RAY_E[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][rank]];
-			}
-			// SOUTHEAST:
-			for (afile = file + 1, arank = rank - 1 ; (afile < 9) && (arank > 0); afile++,  arank--) 
-			{
-				HEADINGS[i][BOARDINDEX[afile][arank]] = SOUTHEAST;
-				RAY_SE[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
-			}
-			// SOUTH:
-			for (arank = rank - 1 ; arank > 0; arank--) 
-			{
-				HEADINGS[i][BOARDINDEX[file][arank]] = SOUTH;
-				RAY_S[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][arank]];
-			}
-			// SOUTHWEST:
-			for (afile = file - 1, arank = rank - 1 ; (afile > 0) && (arank > 0); afile--,  arank--) 
-			{
-				HEADINGS[i][BOARDINDEX[afile][arank]] = SOUTHWEST;
-				RAY_SW[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
-			}
-		}
+//  ===========================================================================
+//  HEADINGS and RAYS, used in SEE:
+//  ===========================================================================
+    for (i = 0 ; i < 64; i++)
+    {
+        RAY_W[i]  = 0;
+        RAY_NW[i] = 0;
+        RAY_N[i]  = 0;
+        RAY_NE[i] = 0;
+        RAY_E[i]  = 0;
+        RAY_SE[i] = 0;
+        RAY_S[i]  = 0;
+        RAY_SW[i] = 0;
+        for (square = 0 ; square < 64; square ++)
+        {
+            HEADINGS[i][square] = 0;
+        }
+    }
+    
+    for (rank = 1 ; rank < 9; rank++)
+        for (file = 1 ; file < 9; file++)
+        {
+            i = BOARDINDEX[file][rank];         
+            // WEST:
+            for (afile = file - 1 ; afile > 0; afile--)
+            {
+                HEADINGS[i][BOARDINDEX[afile][rank]] = WEST;
+                RAY_W[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][rank]];
+            }
+            // NORTHWEST:
+            for (afile = file - 1, arank = rank + 1 ; (afile > 0) && (arank < 9); afile--,  arank++) 
+            {
+                HEADINGS[i][BOARDINDEX[afile][arank]] = NORTHWEST;
+                RAY_NW[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
+            }
+            // NORTH:
+            for (arank = rank + 1 ; arank < 9; arank++) 
+            {
+                HEADINGS[i][BOARDINDEX[file][arank]] = NORTH;
+                RAY_N[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][arank]];
+            }
+            // NORTHEAST:
+            for (afile = file + 1, arank = rank + 1 ; (afile < 9) && (arank < 9); afile++,  arank++) 
+            {
+                HEADINGS[i][BOARDINDEX[afile][arank]] = NORTHEAST;
+                RAY_NE[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
+            }
+            // EAST:
+            for (afile = file + 1 ; afile < 9; afile++) 
+            {
+                HEADINGS[i][BOARDINDEX[afile][rank]] = EAST;
+                RAY_E[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][rank]];
+            }
+            // SOUTHEAST:
+            for (afile = file + 1, arank = rank - 1 ; (afile < 9) && (arank > 0); afile++,  arank--) 
+            {
+                HEADINGS[i][BOARDINDEX[afile][arank]] = SOUTHEAST;
+                RAY_SE[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
+            }
+            // SOUTH:
+            for (arank = rank - 1 ; arank > 0; arank--) 
+            {
+                HEADINGS[i][BOARDINDEX[file][arank]] = SOUTH;
+                RAY_S[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][arank]];
+            }
+            // SOUTHWEST:
+            for (afile = file - 1, arank = rank - 1 ; (afile > 0) && (arank > 0); afile--,  arank--) 
+            {
+                HEADINGS[i][BOARDINDEX[afile][arank]] = SOUTHWEST;
+                RAY_SW[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[afile][arank]];
+            }
+        }
 
-	// required for running test suites, to prevent 
-	// writing escape characters to a file
-	TO_CONSOLE = 1;
+    // required for running test suites, to prevent 
+    // writing escape characters to a file
+    TO_CONSOLE = 1;
 
-	// Winboard parameters:
-	XB_NONE = 2;  // not 0 or 1
-	XB_ANALYZE = 3;   // not 0, 1, or 2
-	XB_MODE = false;
-	XB_POST = true;
-	XB_PONDER = false;
-	XB_DO_PENDING = false;
-	XB_NO_TIME_LIMIT = false;
+    // Winboard parameters:
+    XB_NONE = 2;  // not 0 or 1
+    XB_ANALYZE = 3;   // not 0, 1, or 2
+    XB_MODE = false;
+    XB_POST = true;
+    XB_PONDER = false;
+    XB_DO_PENDING = false;
+    XB_NO_TIME_LIMIT = false;
     return;
 }
  
@@ -810,89 +789,89 @@ void info()
 
 void readIniFile()
 {
-	int nextc;
-	FILE* inifile;
+    int nextc;
+    FILE* inifile;
 
-//	===========================================================================
-//	Open the ini file:
-//	===========================================================================
-	inifile = fopen(INIFILE, "r");
-	if (!inifile) 
-	{
-		std::cout << "warning: no ini file " << INIFILE << std::endl;
-		std::cout << "path: " << PATHNAME << std::endl;
-		return;
-	}
-	else
-	{
-		std::cout << "Initialization file: " << INIFILE << std::endl;
-	}
+//  ===========================================================================
+//  Open the ini file:
+//  ===========================================================================
+    inifile = fopen(INIFILE, "r");
+    if (!inifile) 
+    {
+        std::cout << "warning: no ini file " << INIFILE << std::endl;
+        std::cout << "path: " << PATHNAME << std::endl;
+        return;
+    }
+    else
+    {
+        std::cout << "Initialization file: " << INIFILE << std::endl;
+    }
 
-	while ((nextc = getc(inifile)) != EOF)
-	{
-		if (nextc == '\n')
-		{
-			CMD_BUFF[CMD_BUFF_COUNT] = '\0';
-			CMD_BUFF_COUNT = '\0';
-			if (!doIniCommand(CMD_BUFF)) break;
-		}
-		else
-		{
-			if (CMD_BUFF_COUNT >= MAX_CMD_BUFF-1)
-			{
-				std::cout << "Warning: command buffer full !! " << std::endl;
-				CMD_BUFF_COUNT = 0;
-			}
-			CMD_BUFF[CMD_BUFF_COUNT++] = nextc;
-		}
-	}
-	fclose(inifile);
-	return;
+    while ((nextc = getc(inifile)) != EOF)
+    {
+        if (nextc == '\n')
+        {
+            CMD_BUFF[CMD_BUFF_COUNT] = '\0';
+            CMD_BUFF_COUNT = '\0';
+            if (!doIniCommand(CMD_BUFF)) break;
+        }
+        else
+        {
+            if (CMD_BUFF_COUNT >= MAX_CMD_BUFF-1)
+            {
+                std::cout << "Warning: command buffer full !! " << std::endl;
+                CMD_BUFF_COUNT = 0;
+            }
+            CMD_BUFF[CMD_BUFF_COUNT++] = nextc;
+        }
+    }
+    fclose(inifile);
+    return;
 }
  
 BOOLTYPE doIniCommand(const char *buf)
 {
-	int number;
+    int number;
 
-	if (!strncmp(buf, "depth", 5))
-	{
-		sscanf(buf+5, "%d", &board.searchDepth);
-		if (board.searchDepth < 1) board.searchDepth = 1;
-		if (board.searchDepth > MAX_PLY) board.searchDepth = MAX_PLY;
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
+    if (!strncmp(buf, "depth", 5))
+    {
+        sscanf(buf+5, "%d", &board.searchDepth);
+        if (board.searchDepth < 1) board.searchDepth = 1;
+        if (board.searchDepth > MAX_PLY) board.searchDepth = MAX_PLY;
+        CMD_BUFF_COUNT = '\0';
+        return true;
+    }
 
-	if (!strncmp(buf, "time", 4))
-	{
-		sscanf(buf+4,"%d",&board.maxTime);
-		board.maxTime *= 1000;  // convert to milliseconds
-		if (board.maxTime <= 0) board.maxTime = 1;
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
+    if (!strncmp(buf, "time", 4))
+    {
+        sscanf(buf+4,"%d",&board.maxTime);
+        board.maxTime *= 1000;  // convert to milliseconds
+        if (board.maxTime <= 0) board.maxTime = 1;
+        CMD_BUFF_COUNT = '\0';
+        return true;
+    }
 
-	if (!strncmp(buf, "NULLMOVE_REDUCTION", 18))
-	{
-		sscanf(buf+18, "%d", &NULLMOVE_REDUCTION);
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
+    if (!strncmp(buf, "NULLMOVE_REDUCTION", 18))
+    {
+        sscanf(buf+18, "%d", &NULLMOVE_REDUCTION);
+        CMD_BUFF_COUNT = '\0';
+        return true;
+    }
 
-	if (!strncmp(buf, "NULLMOVE_LIMIT", 14))
-	{
-		sscanf(buf+14, "%d", &NULLMOVE_LIMIT);
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
+    if (!strncmp(buf, "NULLMOVE_LIMIT", 14))
+    {
+        sscanf(buf+14, "%d", &NULLMOVE_LIMIT);
+        CMD_BUFF_COUNT = '\0';
+        return true;
+    }
 
-	if (!strncmp(buf, "STOP_FRAC", 9))
-	{
-		sscanf(buf+9, "%d", &number);
-		STOPFRAC = (float)(number/100.0);
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
+    if (!strncmp(buf, "STOP_FRAC", 9))
+    {
+        sscanf(buf+9, "%d", &number);
+        STOPFRAC = (float)(number/100.0);
+        CMD_BUFF_COUNT = '\0';
+        return true;
+    }
 
-	return true;
+    return true;
 }

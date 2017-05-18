@@ -50,8 +50,8 @@ using namespace std;
 
 
 
-unordered_map<string, int> cache;
-float cacheHit;
+unordered_map<U64, int> cache;
+//float cacheHit;
 
 
 
@@ -68,7 +68,7 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
 	Move singlemove;
-    cacheHit = 0;
+    //cacheHit = 0;
 
 
     //	Check if the game has ended, or if there is only one legal move,
@@ -158,7 +158,7 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
 	int i, j, movesfound, pvmovesfound, val;
-    bool cached = false;
+    //bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -217,43 +217,39 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 				if (!ply && (depth > 1))
                     displaySearchStats(3, ply, i); 
 
-                // if the score is in the cache, then pick it up
-                // XXX
-                //if (useCache)
-                //{
-				//    hashkey = KEY.side; 
-                //    hashkey = getBoardSerial(icolor, alpha, beta, d);
-//
- //                   auto t = cache.find(boardSerial);
-  //                  if (t == cache.end())
-   //                     cached = false;
-    //                else
-     //               {
-      //                  cacheHit++;
-       //                 score = t->second;
-        //                cached = true;
-         //           }
-          //      }
+                // TODO: cache
+                /*if (useCache)
+                {
+                    auto t = cache.find(hashkey);
+                    if (t == cache.end())
+                        cached = false;
+                    else
+                    {
+                        cacheHit++;
+                        val = t->second;
+                        cached = true;
+                    }
+                }
+                */
 
-                // 
-           //     if (cached)
-            //    {
-             //   }
+              
+                // alphabeta search 
+                if (pvmovesfound)
+                {
+                    val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+                    if ((val > alpha) && (val < beta))
+                    {
+                         // in case of failure, proceed with normal alphabeta
+                        val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);  		        
+                    }
+                }
 
-				//else if (pvmovesfound)
-				if (pvmovesfound)
-				{
-					val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
-		            if ((val > alpha) && (val < beta))
-					{
-						 // in case of failure, proceed with normal alphabeta
-						val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);  		        
-					}
-				}
-
-				// normal alphabeta
-	 			else
+                // normal alphabeta
+                else
+                {
                     val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+                }
+
 
 				unmakeMove(moveBuffer[i]);
 				if (timedout) return 0;
@@ -277,9 +273,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 					}
 					triangularLength[ply] = triangularLength[ply+1];
 					if (!ply && (depth > 1)) displaySearchStats(2, depth, val);
-				}
-			}
-			else unmakeMove(moveBuffer[i]);
+                        }
+                    }
+                    else unmakeMove(moveBuffer[i]);
 		}
 	}
 

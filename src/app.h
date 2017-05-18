@@ -117,7 +117,7 @@ inline bool isRank(char r) { return ((r >= '1' ) && (r <= '8')); }
  * unordered_map the performance is greatly improved, brining around 20%
  * overall performance to the whole AI engine.
  */
-extern unordered_map<string, int> cache;
+extern unordered_map<U64, int> cache;
 
 
 #endif // _APP_H_
