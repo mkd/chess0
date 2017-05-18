@@ -66,9 +66,9 @@
 
 #define SOLVE_MAX_DEPTH           64
 #define NODES_TEST_DEPTH          64
-#define NODES_TEST_TIME            2
+#define NODES_TEST_TIME            4
 #define MOVES_TEST_TIMES      250000
-#define MOVES_TEST_ITER      1000000
+#define MOVES_TEST_ITER     50000000
 #define PERFT_DEPTH_LIMIT          6
 
 #define CACHE_HIT_LEVEL          0.3

@@ -463,8 +463,28 @@ void exec(string input)
         // test raw moves (make / unmake)
         if (arg == "moves")
         {
-            cout << "testMoves()" << endl;
-            //testMoves();
+            cout << "Testing move performance: " << flush;
+
+            board.moveBufLen[0] = 0;
+            board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+
+            // prepare the clock to measure the time of the test
+            clock_t start, end;
+            float delta;
+            long iterations = MOVES_TEST_ITER;
+            start = clock();
+            for (long i = 0; i < iterations; i++)
+            {
+                makeMove(board.moveBuffer[0]);
+                unmakeMove(board.moveBuffer[0]);
+            }
+            end = clock();
+            delta = (end - start) / (CLOCKS_PER_SEC / 1000);
+
+            cout << iterations/1000000 << " million moves in ";
+            cout << fixed << setprecision(2) << delta/1000 << " seconds; speed = ";
+            cout << fixed << setprecision(2) << (iterations/1000000)/(delta/1000);
+            cout << " Mmps." << endl;
         }
 
         else if (arg == "perft")
@@ -502,8 +522,35 @@ void exec(string input)
 
         else
         {
-            cout << "testNodes()" << endl;
-            //testNodes();
+            cout << "Testing node search speed: " << endl << endl << flush;
+
+            // store current AI settings to restore them after the test
+            int cur_depth = board.searchDepth;
+            U64 prevTPM = board.maxTime;
+
+
+            // change the depth to make sure the test runs in a controlled environment
+            board.searchDepth = NODES_TEST_DEPTH;
+            board.maxTime = NODES_TEST_TIME * 1000;
+
+
+            // perform the test and measure the time
+            clock_t start;
+            clock_t end;
+            start = clock();
+            board.think();
+            end = clock();
+
+
+            // estimate nodes per second
+            double ms = (end - start) / (CLOCKS_PER_SEC / 1000);
+            cout << endl << board.inodes << " nodes evaluated in " << fixed << setprecision(2) <<  (ms / 1000) << "s ";
+            cout << "(" << fixed << setprecision(2) << (board.inodes / ms);
+            cout << " kN/s)." << endl << flush;
+
+            // restore the depth and time settings after the test
+            board.maxTime = prevTPM;
+            board.searchDepth = cur_depth;
         }
 
 
