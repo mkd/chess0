@@ -75,6 +75,7 @@ string        getInput();
 void          terminateApp();
 string        bunmap(int);
 BOOLTYPE      isValidTextMove(char *, Move &);
+string        hashToStr(U64, int, int, int);
 
 
 

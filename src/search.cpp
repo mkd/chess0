@@ -50,8 +50,8 @@ using namespace std;
 
 
 
-unordered_map<U64, int> cache;
-//float cacheHit;
+unordered_map<string, int> cache;
+float cacheHit;
 unsigned short nextDepth = 0;
 
 
@@ -69,7 +69,7 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
     Move singlemove;
-    //cacheHit = 0;
+    cacheHit = 0;
 
 
     //  Check if the game has ended, or if there is only one legal move,
@@ -164,7 +164,7 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
-    //bool cached = false;
+    bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -232,7 +232,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // TODO: cache
                 /*if (useCache)
                 {
-                    auto t = cache.find(hashkey);
+                    auto t = cache.find(hashToStr(board.hashkey, alpha, beta, depth));
                     if (t == cache.end())
                         cached = false;
                     else
@@ -241,48 +241,57 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         val = t->second;
                         cached = true;
                     }
-                }
-                */
+                }*/
 
 
-                // Configure late-move reductions (LMR): assuming that the moves in the
-                // list are ordered from potential best to potential worst, analyzing 
-                // the first moves is more critical than the last ones. Therefore, 
-                // using LMR we analyze the first 2 moves in full-depth, but cut down
-                // the analysis depth for the rest of moves.
-                //
-                // LMR works like this:
-                // 1) If there are more than 9+ moves, try to reduce depth = ply - 9
-                // 2) If there are between 7-8 moves, try to reduce dpeth = ply - 7
-                // 3) If there are between 5-6 moves, try to reduce depth = ply - 5
-                // 4) If there are less than 5 moves, try to reduce depth = ply - 3
-                // 5) ALWAYS: First 2 moves are searched at full depth
-                nextDepth = depth - 1;
-                if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
-                    for (unsigned short j = 0; j < AI_SEARCH_DEPTH; j++)
-                        if ((moveNo > (j + 2)) && (depth > (j + 2)))
-                            nextDepth = depth - j - 2;
+                //if (!cached)
+                //{
+
+                    // Configure late-move reductions (LMR): assuming that the moves in the
+                    // list are ordered from potential best to potential worst, analyzing 
+                    // the first moves is more critical than the last ones. Therefore, 
+                    // using LMR we analyze the first 2 moves in full-depth, but cut down
+                    // the analysis depth for the rest of moves.
+                    //
+                    // LMR works like this:
+                    // 1) If there are more than 9+ moves, try to reduce depth = ply - 9
+                    // 2) If there are between 7-8 moves, try to reduce dpeth = ply - 7
+                    // 3) If there are between 5-6 moves, try to reduce depth = ply - 5
+                    // 4) If there are less than 5 moves, try to reduce depth = ply - 3
+                    // 5) ALWAYS: First 2 moves are searched at full depth
+                    nextDepth = depth - 1;
+                    if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
+                        for (unsigned short j = 0; j < AI_SEARCH_DEPTH; j++)
+                            if ((moveNo > (j + 2)) && (depth > (j + 2)))
+                                nextDepth = depth - j - 2;
 
 
-                // alphabeta search 
-                if (pvmovesfound)
-                {
-                    //val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
-                    val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
-                    if ((val > alpha) && (val < beta))
+                    // alphabeta search 
+                    if (pvmovesfound)
                     {
-                        // in case of failure, proceed with normal alphabeta
-                        //val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);               
-                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
+                        //val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+                        val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
+                        if ((val > alpha) && (val < beta))
+                        {
+                            // in case of failure, proceed with normal alphabeta
+                            //val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);               
+                            val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
+                        }
                     }
-                }
 
-                // normal alphabeta
-                else
-                {
-                    //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);     
-                    val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
-                }
+                    // normal alphabeta
+                    else
+                    {
+                        //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);     
+                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
+                    }
+
+
+                //    // store the move in the cache, if cache enabled
+                //    if (useCache)
+                //        if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
+                //            cache[hashToStr(board.hashkey, alpha, beta, depth)] = val;
+                //}
 
 
                 unmakeMove(moveBuffer[i]);
@@ -383,13 +392,22 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     // score
                     printf("%+6.2f ", float(netScore/100.0));
 
-                    // nodes searched
-                    if      (inodes > 100000000) printf("%6.0f%c ", float(inodes/1000000.0), 'M');
-                    else if (inodes > 10000000)  printf("%6.2f%c ", float(inodes/1000000.0), 'M');
-                    else if (inodes > 1000000)   printf("%6.0f%c ", float(inodes/1000.0),    'K');
-                    else if (inodes > 100000)    printf("%6.1f%c ", float(inodes/1000.0),    'K');
-                    else if (inodes > 10000)     printf("%6.2f%c ", float(inodes/1000.0),    'K');
-                    else                         printf("%7llu ", inodes);
+                    // display the amount of nodes searched
+                    float cacheHitRatio = cacheHit / inodes;
+                    cout.fill(' ');
+                    if (cacheHitRatio > CACHE_HIT_LEVEL)
+                    {
+                        cout << "Cached" << " ";
+                    }
+                    else
+                    {
+                        if      (inodes > 100000000) printf("%6.0f%c ", float(inodes/1000000.0), 'M');
+                        else if (inodes > 10000000)  printf("%6.2f%c ", float(inodes/1000000.0), 'M');
+                        else if (inodes > 1000000)   printf("%6.0f%c ", float(inodes/1000.0),    'K');
+                        else if (inodes > 100000)    printf("%6.1f%c ", float(inodes/1000.0),    'K');
+                        else if (inodes > 10000)     printf("%6.2f%c ", float(inodes/1000.0),    'K');
+                        else                         printf("%7llu ", inodes);
+                    }
 
                     // search time
                     cout << setw(7) << fixed << setprecision(2) << dt << "s ";
@@ -686,4 +704,10 @@ int Board::qsearch(int ply, int alpha, int beta)
     }
 
     return alpha;
+}
+
+
+string hashToStr(U64 hk, int a, int b, int d)
+{
+    return to_string(hk) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
 }

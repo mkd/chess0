@@ -4,7 +4,9 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement cache (ttEntry = hashkey + depth)
+- Implement cache (ttEntry = hashkey + depth) --> cache doesn't save PV moves
+  and therefore search starts anew from deeper depth (no iterative deepening
+  data from previous cached moves, no sorting, etc, becomes slower)
 
 
 
