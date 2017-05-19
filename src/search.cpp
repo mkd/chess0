@@ -209,6 +209,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     movesfound = 0;
     pvmovesfound = 0;
     moveBufLen[ply+1] = movegen(moveBufLen[ply]);
+    unsigned moveNo = 0;
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         selectmove(ply, i, depth, followpv); 
@@ -217,6 +218,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             if (!isOtherKingAttacked()) 
             {
                 inodes++;
+                moveNo++;
 
                 if (--countdown <=0)
                     readClockAndInput();
@@ -242,21 +244,36 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 */
 
 
+                // Configure late-move reductions (LMR): assuming that the moves in the
+                // list are ordered from potential best to potential worst, analyzing 
+                // the first moves is more critical than the last ones. Therefore, 
+                // using LMR we analyze the first 2 moves in full-depth, but cut down
+                // the analysis depth for the rest of moves.
+                nextDepth = depth - 1;
+                if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3))
+                {
+                    nextDepth = depth - 2;
+                }
+
+
                 // alphabeta search 
                 if (pvmovesfound)
                 {
-                    val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+                    //val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+                    val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
                     if ((val > alpha) && (val < beta))
                     {
                         // in case of failure, proceed with normal alphabeta
-                        val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);               
+                        //val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);               
+                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
                     }
                 }
 
                 // normal alphabeta
                 else
                 {
-                    val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);     
+                    //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);     
+                    val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
                 }
 
 
