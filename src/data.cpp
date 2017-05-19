@@ -44,7 +44,7 @@ void dataInit()
        unsigned char state6Bit, state8Bit, attack8Bit;
        Move move;
 
-       board.searchDepth = 16; // default for startup
+       board.searchDepth = AI_SEARCH_DEPTH; // default for startup
        board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
 
 //     BITSET has only one bit set:

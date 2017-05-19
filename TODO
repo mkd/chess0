@@ -4,13 +4,13 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement LMR
+- Implement cache (ttEntry = hashkey + depth)
 
 
 
 BEFORE NEXT RELEASE
 ===================
-- Implement cache (ttEntry = hashkey + depth)
+- Implement LMR
 
 - Edit board
 

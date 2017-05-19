@@ -60,7 +60,7 @@
 #define APP_MODE_XBOARD 1
 #define APP_MODE_CLI    2
 
-#define AI_SEARCH_DEPTH           32
+#define AI_SEARCH_DEPTH           64
 #define AI_DEPTH_QUIESCE_LIMIT     6
 #define TIME_PER_MOVE              5
 
