@@ -163,7 +163,7 @@ Move Board::think()
 // PV search
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
-    int i, j, movesfound, pvmovesfound, val;
+    int i, j, movesfound, pvmovesfound, val, qval;
     //bool cached = false;
 
 
@@ -172,7 +172,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     if (depth <= 0) 
     {
         followpv = false;
-        return qsearch(ply, alpha, beta);
+        qval = qsearch(ply, alpha, beta);
+        return qval;
     }
 
 
@@ -629,4 +630,60 @@ void timeControl()
     if (board.maxTime < 1) board.maxTime = 1;
 
     return;
+}
+
+
+
+// Quiescence search.
+//
+// Perform a search indefinitely until all the following conditions happen:
+// a) no more possible captures
+// b) no more checks possible
+// c) no more pawn promotions
+int Board::qsearch(int ply, int alpha, int beta)
+{
+    int i, j, val;
+
+    if (timedout)
+        return 0;
+
+
+    triangularLength[ply] = ply;
+    if (isOwnKingAttacked()) return alphabetapvs(ply, 1, alpha, beta);
+    val = board.eval();
+    if (val >= beta) return val;
+    if (val > alpha) alpha = val;
+
+
+    // generate captures & promotions:
+    // captgen returns a sorted move list
+    moveBufLen[ply+1] = captgen(moveBufLen[ply]);
+    for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
+    {
+        makeMove(moveBuffer[i]);
+        {
+            if (!isOtherKingAttacked()) 
+            {
+                inodes++;
+
+                if (--countdown <=0) readClockAndInput();
+                val = -qsearch(ply+1, -beta, -alpha);
+                unmakeMove(moveBuffer[i]);
+                if (val >= beta) return val;
+                if (val > alpha)
+                {
+                    alpha = val;
+                    triangularArray[ply][ply] = moveBuffer[i];
+                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                    {
+                        triangularArray[ply][j] = triangularArray[ply+1][j];
+                    }
+                    triangularLength[ply] = triangularLength[ply+1];
+                }
+            }
+            else unmakeMove(moveBuffer[i]);
+        }
+    }
+
+    return alpha;
 }
