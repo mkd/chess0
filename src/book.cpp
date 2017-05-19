@@ -484,6 +484,10 @@ void initBook()
         book["1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 cxd4 5. Bd3 Nc6 6. 0-0 f6"] = "Bb5";
         book["1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 cxd4 5. Bd3 Nc6 6. 0-0 Bd7"] = "Re1";
 
+        book["1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 cxd4 5. Nxd4"] = "Nc6";
+        book["1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 cxd4 5. Nxd4 Nc6 6. Bb5"] = "Bd7";
+        book["1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 cxd4 5. Nxd4 Nc6 6. Nxc6"] = "bxc6";
+
         book["1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Be3"] = "Qb6";
         book["1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Be3 Qb6 6. Qd2"] = "Bd7";
         book["1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Be3 Qb6 6. Qb3"] = "Qxb3";
