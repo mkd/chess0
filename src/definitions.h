@@ -61,7 +61,7 @@
 #define APP_MODE_CLI    2
 
 #define AI_SEARCH_DEPTH           64
-#define AI_DEPTH_QUIESCE_LIMIT     6
+#define AI_DEPTH_QUIESCE_LIMIT    10
 #define TIME_PER_MOVE              5
 
 #define SOLVE_MAX_DEPTH           64

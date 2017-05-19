@@ -3,7 +3,7 @@ Chess0 is a computer chess program developed in C++ and based on Winglet chess
 by Stef Luijten.
 
 Chess0 approximate ELO:
-- Blitz (fast games, <30min) = 1458
+- Blitz (fast games, <30min) = 1465
 - Standard (>30min) = 1590
 
 

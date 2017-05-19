@@ -249,11 +249,18 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // the first moves is more critical than the last ones. Therefore, 
                 // using LMR we analyze the first 2 moves in full-depth, but cut down
                 // the analysis depth for the rest of moves.
+                //
+                // LMR works like this:
+                // 1) If there are more than 9+ moves, try to reduce depth = ply - 9
+                // 2) If there are between 7-8 moves, try to reduce dpeth = ply - 7
+                // 3) If there are between 5-6 moves, try to reduce depth = ply - 5
+                // 4) If there are less than 5 moves, try to reduce depth = ply - 3
+                // 5) ALWAYS: First 2 moves are searched at full depth
                 nextDepth = depth - 1;
-                if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3))
-                {
-                    nextDepth = depth - 2;
-                }
+                if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
+                    for (unsigned short j = 0; j < AI_SEARCH_DEPTH; j++)
+                        if ((moveNo > (j + 2)) && (depth > (j + 2)))
+                            nextDepth = depth - j - 2;
 
 
                 // alphabeta search 

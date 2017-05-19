@@ -378,6 +378,9 @@ void initBook()
 
         book["1. e4 e6 2. f4"] = "d5";
 
+        book["1. e4 e6 2. f4 d5 3. exd5"] = "exd5";
+        book["1. e4 e6 2. f4 d5 3. exd5 exd5 4. Nf3"] = "Nf6";
+
         book["1. e4 e6 2. e5"] = "d5";
         book["1. e4 e6 2. Bc4"] = "d5";
         book["1. e4 e6 2. Bc4 d5 3. exd5"] = "exd5";
