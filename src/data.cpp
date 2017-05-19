@@ -844,7 +844,7 @@ BOOLTYPE doIniCommand(const char *buf)
 
     if (!strncmp(buf, "time", 4))
     {
-        sscanf(buf+4,"%d",&board.maxTime);
+        sscanf(buf+4,"%lld", &board.maxTime);
         board.maxTime *= 1000;  // convert to milliseconds
         if (board.maxTime <= 0) board.maxTime = 1;
         CMD_BUFF_COUNT = '\0';

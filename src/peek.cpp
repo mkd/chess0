@@ -36,12 +36,15 @@
 
 #define DWORD int32_t
 
+
+
 static int Bioskey(void) {
   fd_set readfds;
   struct timeval timeout;
    
   FD_ZERO(&readfds);
   FD_SET(fileno(stdin), &readfds);
+
    /* Set to timeout immediately */
   timeout.tv_sec = 0;
   timeout.tv_usec = 0;
@@ -90,7 +93,7 @@ void Board::readClockAndInput()
     // For example, if the search speed is 1000 knods per second, then a value of UPDATEINTERVAL = 100000 
     // will result in 10 checks per second (or 0.1s time intervals)
 
-    DWORD nchar;
+    DWORD nchar = 0;
     char command[80];
 
     // reset countdown
@@ -117,14 +120,12 @@ noPonder:
             CMD_BUFF[CMD_BUFF_COUNT] = getc(stdin);
             // sometimes we do not receive a newline character 
             if (((CMD_BUFF_COUNT+1)==(int)nchar) || CMD_BUFF[CMD_BUFF_COUNT] == '\n')
-//          if (CMD_BUFF[CMD_BUFF_COUNT] == '\n')
 
             {
                 if (CMD_BUFF[CMD_BUFF_COUNT] == '\n') CMD_BUFF[CMD_BUFF_COUNT] = '\0';
                 else CMD_BUFF[CMD_BUFF_COUNT+1] = '\0';
-//              CMD_BUFF[CMD_BUFF_COUNT] = '\0';
 
-                if (CMD_BUFF=="" || !CMD_BUFF_COUNT) return;
+                if ((strlen(CMD_BUFF) == 0) || !CMD_BUFF_COUNT) return;
 
                 sscanf(CMD_BUFF, "%s", command);
 

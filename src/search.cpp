@@ -76,10 +76,11 @@ Move Board::think()
 	if (isEndOfgame(legalmoves, singlemove))
         return NOMOVE;
 
+
 	if (legalmoves == 1) 
 	{
-	    cout << "forced move: ";
-        displayMove(singlemove);
+	    //cout << "forced move: ";
+        //displayMove(singlemove);
         cout << endl; 
 
 	    if (XB_MODE && XB_POST) 
@@ -145,11 +146,15 @@ Move Board::think()
             displaySearchStats(2, currentdepth, score);
 
         // stop searching if the current depth leads to a forced mate:
-        if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
-            currentdepth = searchDepth;
+        // FIXME: need to stop if found mate, however the move returned is NOMOVE = 0, so app.cpp crashes
+        /*if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
+        {
+            currentdepth = searchDepth + 1;
+        }
+        */
     }
 
-    return (lastPV[0]);
+    return lastPV[0];
 }
 
 
@@ -171,7 +176,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
 	// repetition check:
-	if (repetitionCount() >= 3) return DRAWSCORE;
+	if (repetitionCount() >= 3)
+    {
+        return DRAWSCORE;
+    }
 
 	
 	// now try a null move to get an early beta cut-off:
@@ -337,7 +345,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 		case 2:
 				if (XB_MODE && XB_POST)
 				{
-					printf("%5d %6d %8d %9d ", depth, netScore, dt/10, inodes);
+					printf("%5d %6d %8f %9llu ", depth, netScore, dt/10, inodes);
 					rememberPV();
 					displayPV();
 				}
@@ -355,7 +363,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 					else if (inodes > 1000000)	 printf("%6.0f%c ", float(inodes/1000.0),    'K');
 					else if (inodes > 100000)	 printf("%6.1f%c ", float(inodes/1000.0),    'K');
 					else if (inodes > 10000)	 printf("%6.2f%c ", float(inodes/1000.0),    'K');
-					else						 printf("%7d ", inodes);
+					else						 printf("%7llu ", inodes);
 
 					// search time
 					cout << setw(7) << fixed << setprecision(2) << dt << "s ";
@@ -544,17 +552,17 @@ void mstostring(U64 dt, char *timestring)
 		hh = dt/3600000;
 		mm = (dt - 3600000*hh)/60000;
 		ss = (dt - 3600000*hh - 60000*mm)/1000;
-		sprintf(timestring, "%02d:%02d:%02d", hh, mm, ss);
+		sprintf(timestring, "%02llu:%01llu:%02llu", hh, mm, ss);
 	}
 	else if (dt > 60000) 
 	{      
 		mm = dt/60000;
 		ss = (dt - 60000*mm)/1000;
-		sprintf(timestring, "%02d:%02d", mm, ss);
+		sprintf(timestring, "%02llu:%02llu", mm, ss);
 	}
 	else if (dt > 10000)		sprintf(timestring, "%6.1f%s", float(dt/1000.0), "s");
 	else if (dt > 1000)			sprintf(timestring, "%6.2f%s", float(dt/1000.0), "s");
-	else if (dt > 0)			sprintf(timestring, "%5dms", dt);
+	else if (dt > 0)			sprintf(timestring, "%5llums", dt);
 	else						sprintf(timestring, "0ms");
 
 	return;

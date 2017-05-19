@@ -4,8 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix check-mate from computer (1. e4 f6  2. d4 g5  3. Qh5#)
-
 - Implement LMR
 
 
@@ -23,6 +21,8 @@ BEFORE NEXT RELEASE
 IMPORTANT
 =========
 - Fix weird moves (eval.cpp??), e.g., Rb1 or h3--Rh2 in the opening ??
+
+- Replace BOOLTYPE with bool
 
 - Improve evaluation function (opening, middle, end)
 
