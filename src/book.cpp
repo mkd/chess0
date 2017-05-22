@@ -75,6 +75,13 @@ void initBook()
         book["1. e4 c5 2. Nf3 e6"] = "d4 | Nc3 | c3 | d3 | b3";
         book["1. e4 c5 2. Nf3 g6"] = "d4 | c3 | c4";
 
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4"] = "Nxd4";
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 cxd4"] = "0-0";
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 cxd4 5. 0-0 g6"] = "c3";
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 cxd4 5. 0-0 a6"] = "Bc4";
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 cxd4 5. 0-0 e6"] = "c3";
+        book["1. e4 c5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 cxd4 5. 0-0 e5"] = "d3";
+
         book["1. e4 c5 2. Nf3 d6 3. c3"] = "Nf6 | Nc6 | g6";
         book["1. e4 c5 2. Nf3 d6 3. c3 Nf6"] = "Be2";
         book["1. e4 c5 2. Nf3 d6 3. c3 Nf6 4. Be2"] = "g6 | Nc6";
@@ -402,6 +409,10 @@ void initBook()
         book["1. e4 e6 2. Nf3 d5"] = "Nc3 | e5 | exd5";
 
         book["1. e4 e6 2. d3"] = "d5 | c5";
+
+        book["1. e4 e6 2. Nc3"] = "d5";
+        book["1. e4 e6 2. Nc3 d5 3. exd5"] = "exd5";
+        book["1. e4 e6 2. Nc3 d5 3. exd5 exd5 4. d4"] = "Nf6";
 
         book["1. e4 e6 2. f4"] = "d5";
 
@@ -1556,6 +1567,8 @@ void initBook()
 
 
         // Rare openings
+        book["1. d4 g6"] = "c4 | e4";
+        
         book["1. Nf3 Nc6"] = "d4";
         book["1. Nf3 Nc6 2. d4 e5"] = "dxe5";
         book["1. Nf3 Nc6 2. d4 e5 3. dxe5 Bc5"] = "Nc3";

@@ -71,7 +71,7 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
     Move singlemove;
-    //cacheHit = 0;
+    cacheHit = 0;
     //razorHit = 0;
 
 
@@ -167,7 +167,7 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
-    //bool cached = false;
+    bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -236,7 +236,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // TODO: cache
                 /*if (useCache)
                 {
-                    auto t = cache.find(hashToStr(board.hashkey, alpha, beta, depth));
+                    auto t = cache.find(hashToStr(board.hashkey, ply+1, alpha, beta, depth));
                     if (t == cache.end())
                         cached = false;
                     else
@@ -245,11 +245,11 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         val = t->second;
                         cached = true;
                     }
-                }*/
+                }
 
 
-                //if (!cached)
-                //{
+                if (!cached)
+                {*/
 
                     // Configure late-move reductions (LMR): assuming that the moves in the
                     // list are ordered from potential best to potential worst, analyzing 
@@ -258,39 +258,40 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     // the analysis depth for the rest of moves.
                     nextDepth = depth - 1;
                     if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
-                         nextDepth = depth - 2;
+                        nextDepth = depth - 2;
 
 
                     // alphabeta search 
                     if (pvmovesfound)
                     {
-                        //val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
                         val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
+
+                        // in case of failure, proceed with normal alphabeta
                         if ((val > alpha) && (val < beta))
-                        {
-                            // in case of failure, proceed with normal alphabeta
-                            //val = -alphabetapvs(ply+1, depth - 1, -beta, -alpha);               
                             val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
-                        }
                     }
 
                     // normal alphabeta
                     else
                     {
-                        //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);     
                         val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
                     }
 
 
-                //    // store the move in the cache, if cache enabled
-                //    if (useCache)
-                //        if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
-                //            cache[hashToStr(board.hashkey, alpha, beta, depth)] = val;
+                    // store the move in the cache, if cache enabled
+                    /*
+                    if (useCache)
+                        if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
+                            cache[hashToStr(board.hashkey, ply+1, alpha, beta, depth)] = val;
+                     */
                 //}
 
 
                 unmakeMove(moveBuffer[i]);
-                if (timedout) return 0;
+
+                if (timedout)
+                    return 0;
+
                 if (val >= beta)
                 {
                     // update the history heuristic
@@ -711,7 +712,7 @@ int Board::qsearch(int ply, int alpha, int beta)
 }
 
 
-string hashToStr(U64 hk, int a, int b, int d)
+string hashToStr(U64 hk, int ply, int a, int b, int d)
 {
-    return to_string(hk) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
+    return to_string(hk) + "|" + to_string(ply) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
 }
