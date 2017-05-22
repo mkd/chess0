@@ -90,6 +90,7 @@ extern unsigned numberOfMove;
 extern unsigned cursor;
 extern ColorType gameMate;
 extern bool useBook;
+extern bool usePersonalBook;
 
 
 

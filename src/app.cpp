@@ -67,6 +67,7 @@ int bPlayer = PLAYER_TYPE_COMPUTER;
 vector<string> listOfCommands;
 vector<string> history;
 bool useBook = true;
+bool usePersonalBook = false;
 char sanMove[12];
 unsigned char movingSide = WHITE_MOVE;
 map<string, string> validMoves;
@@ -78,6 +79,7 @@ string userMove = "";
 bool useCache = true;
 bool verbose = true;
 bool LMR = true;
+bool RAZOR = true;
 EndType gameEnd = END_TYPE_NOEND;
 
 

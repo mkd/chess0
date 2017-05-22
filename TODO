@@ -26,9 +26,11 @@ IMPORTANT
 
 - Improve evaluation function (opening, middle, end)
 
-- Ponder support (test that works once Cache is enabled)
+- Razoring
 
-- Lazy SMP
+- Ending tables (syzygy)
+
+- Fine-tune LMR
 
 
 
@@ -36,8 +38,6 @@ WISH LIST
 =========
 - Read/write PGN files.
 
-- Full BitBoard-based move generation and search.
+- Lazy SMP
 
-- Multi-thread engine (i.e., top N moves, each goes to one thread)
-
-- Think during opponent's time (dependency: transposition tables)
+- Ponder support (test that works once Cache is enabled)

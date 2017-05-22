@@ -74,6 +74,7 @@ void initListOfCommands()
     listOfCommands.push_back("new");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
+    listOfCommands.push_back("razor");
     listOfCommands.push_back("remove");
     listOfCommands.push_back("resign");
     listOfCommands.push_back("restart");
@@ -222,14 +223,29 @@ void exec(string input)
     {
         // turn default book on
         if (arg == "on")
+        {
             useBook = true;
+            usePersonalBook = false;
+        }
+
+        // use personal openings
+        else if (arg == "personal")
+        {
+            useBook = true;
+            usePersonalBook = true;
+        }
 
         // turn book off
         else if (arg == "off")
+        {
             useBook = false;
+            usePersonalBook = false;
+        }
 
         // show current use of book
-        if (useBook)
+        if (usePersonalBook)
+            cout << "Using personal openings book." << endl;
+        else if (useBook)
             cout << "Opening book is enabled." << endl;
         else
             cout << "Opening book is disabled." << endl;
@@ -626,6 +642,23 @@ void exec(string input)
     }
 
 
+    // razor
+    //
+    // Enable/disable search razoring
+    else if (cmd == "razor")
+    {
+        if ((arg == "on") || (arg == "true"))
+            RAZOR = true;
+        else if ((arg == "off") || (arg == "false"))
+            RAZOR = false;
+
+        if (RAZOR)
+            cout << "Razoring is enabled." << endl;
+        else
+            cout << "Razoring is disabled." << endl;
+    }
+
+
     /*
      * resign
      *
@@ -793,8 +826,8 @@ void displayHelp(string which)
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  cache  depth  draw  edit  eval  flip  game" << endl;
         cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
-        cout << "pass  remove  resign  save  show  solve  test  think  undo" << endl;
-        cout << "verbose  version  quit" << endl;
+        cout << "pass  razor  remove  resign  save  show  solve  test  think" << endl;
+        cout << "undo  verbose  version  quit" << endl;
         return;
     }
 

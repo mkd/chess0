@@ -33,11 +33,13 @@
 #include <time.h>
 #include <vector>
 #include "book.h"
+#include "app.h"
 
 using namespace std;
 
 
 unordered_map<string, string> book;
+unordered_map<string, string> po;
 
 
 
@@ -64,6 +66,9 @@ void initBook()
         book["1. e4 c5 2. c3"] = "d5 | Nf6 | e6 | d6 | Nc6";
         book["1. e4 c5 2. d4"] = "cxd4";
         book["1. e4 c5 2. d4 cxd4"] = "c3 | Nf3";
+
+        book["1. e4 c5 2. g3"] = "Nc6";
+        book["1. e4 c5 2. g3 Nc6 3. Bg2"] = "g6";
 
         book["1. e4 c5 2. Nf3 d6"] = "d4 | Bb5+ | c3";
         book["1. e4 c5 2. Nf3 Nc6"] = "d4 | Bb5 | Nc3 | c3";
@@ -136,6 +141,11 @@ void initBook()
         book["1. e4 c5 2. Nc3 d6 3. f4"] = "Nc6 | g6";
         book["1. e4 c5 2. Nc3 d6 3. Nf3"] = "Nf6 | Nc6";
 
+        book["1. e4 c5 2. Nc3 d6 3. Nf3 Nc6 4. Bc4"] = "Nf6";
+        book["1. e4 c5 2. Nc3 d6 3. Nf3 Nc6 4. Bc4 Nf6 5. d3"] = "g6";
+        book["1. e4 c5 2. Nc3 d6 3. Nf3 Nc6 4. Bc4 Nf6 5. d4"] = "cxd4";
+        book["1. e4 c5 2. Nc3 d6 3. Nf3 Nc6 4. Bc4 Nf6 5. 0-0"] = "g6";
+
         book["1. e4 c5 2. Nc3 e6"] = "g3 | Nf3";
         book["1. e4 c5 2. Nc3 e6 3. g3"] = "d5 | Nc6";
         book["1. e4 c5 2. Nc3 e6 3. Nf3"] = "a6 | Nc6 | d6";
@@ -200,6 +210,17 @@ void initBook()
         book["1. e4 e5 2. Nc3 Nf6 3. f4 d5 4. fxe5"] = "Nxe4";
         book["1. e4 e5 2. Nc3 Nf6 3. f4 d5 4. exd5"] = "exf4 | e4";
 
+        book["1. e4 e5 2. Nc3 Be7"] = "Bc4";
+        book["1. e4 e5 2. Nc3 Be7 3. Bc4 d6"] = "d3";
+
+
+        // Vienna game (C26)
+        book["1. e4 e5 2. Nc3 Nf6 3. Bc4 c6"] = "Nf3";
+        book["1. e4 e5 2. Nc3 Nf6 3. Bc4 c6 4. Nf3 b5"] = "Bb3";
+        book["1. e4 e5 2. Nc3 Nf6 3. Bc4 c6 4. Nf3 b5 5. Bb3 Bb4"] = "Nxe5";
+        book["1. e4 e5 2. Nc3 Nf6 3. Bc4 c6 4. Nf3 b5 5. Bb3 Bb4 6. Nxe5 0-0"] = "0-0";
+
+
         book["1. e4 e5 2. Nc3 Bc5 3. Nf3"] = "d6";
         book["1. e4 e5 2. Nc3 Bc5 3. Nf3 d6"] = "d4 | Na4 | Bc4";
         book["1. e4 e5 2. Nc3 Bc5 3. Nf3 Nc6"] = "Bc4 | Nxe5";
@@ -242,6 +263,12 @@ void initBook()
 
         // King's pawn game (C44)
         book["1. e4 e5 2. Nf3 Nc6"] = "Bb5 | Bc4 | d4 | Nc3";
+
+
+        // Scotch opening (C44)
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4"] = "Nxd4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5"] = "Be3";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6"] = "Nxc6";
 
         book["1. e4 e5 2. Nf3 Nc6 3. Nc3 d6"] = "d4 | Bb5";
         book["1. e4 e5 2. Nf3 Nc6 3. Nc3 d6 4. Bb5 Bd7"] = "d4";
@@ -528,6 +555,8 @@ void initBook()
 
         book["1. e4 e6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Nd7 5. Nf3"] = "Ngf6";
 
+        book["1. e4 e6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Bd7 5. Nf3"] = "Bc6";
+
         book["1. e4 e6 2. d4 d5 3. Nd2 Be7"] = "Ngf3 | Bd3 | e5";
         book["1. e4 e6 2. d4 d5 3. Nd2 Be7 4. Ngf3"] = "Nf6";
         book["1. e4 e6 2. d4 d5 3. Nd2 Be7 4. Ngf3 Nf6"] = "e5";
@@ -602,6 +631,8 @@ void initBook()
         book["1. e4 c6 2. d4 d6 3. Nf3"] = "Bg4 | Nf6";
         book["1. e4 c6 2. d4 d6 3. f4"] = "g6 | Nf6";
         book["1. e4 c6 2. d4 d6 3. c4"] = "Nf6 | g6 | e5 | Nd7";
+
+        book["1. e4 c6 2. d4 d6 3. Nf3 Nf6 4.Bd3"] = "Bg4";
 
 
 
@@ -754,6 +785,8 @@ void initBook()
         book["1. d4 Nf6 2. Bg5 e6"] = "e4 | Nd2 | e3 | Nf3 | Nc3";
         book["1. d4 Nf6 2. Bg5 d5"] = "Bxf6 | e3 | Nd2 | Nf3 | Nc3";
 
+        book["1. d4 Nf6 2. Bg5 d5 3. Nf3 Ne4"] = "Bf4";
+
         book["1. d4 Nf6 2. Bg5 Ne4 3. Bf4 d5"] = "e3";
         book["1. d4 Nf6 2. Bg5 Ne4 3. Bf4 d5 4. e3"] = "Nc6";
         book["1. d4 Nf6 2. Bg5 Ne4 3. Bf4 d5 4. e3 Nc6"] = "Bd3 | Bb5";
@@ -799,6 +832,9 @@ void initBook()
         book["1. d4 d5 2. c4 c5 3. dxc5 d4 4. Nf3 Nc6 5. e3 e5"] = "exd4";
         book["1. d4 d5 2. c4 c5 3. dxc5 d4 4. Nf3 Nc6 5. e3 e5 6. exd4"] = "exd4";
         book["1. d4 d5 2. c4 c5 3. dxc5 d4 4. Nf3 Nc6 5. e3 e5 6. exd4 exd4"] = "Bd3";
+
+        book["1. d4 d5 2. c4 dxc4 3. Nf3"] = "Nf6";
+
 
         // Queen's gambit declined (D07)
         book["1. d4 d5 2. c4 Nc6"] = "Nf3 | Nc3 | cxd5 | e3";
@@ -905,6 +941,12 @@ void initBook()
 
         book["1. d4 d5 2. Bf4 e6 3. e3 Nf6"] = "Nf3 | Nd2 | Bd3";
 
+        book["1. d4 d5 2. Bf4 e6 3. e3 Ne7"] = "c4";
+
+        book["1. d4 d5 2. Bf4 e6 3. Nf3 Bb4"] = "c3";
+        book["1. d4 d5 2. Bf4 e6 3. Nf3 Bb4 4. c3 Bd6"] = "Bg3";
+        book["1. d4 d5 2. Bf4 e6 3. Nf3 Bb4 4. c3 Ba5"] = "e3";
+
         book["1. d4 d5 2. Bf4 Nc6 3. e3"] = "Nf6 | Bf5";
         book["1. d4 d5 2. Bf4 Nc6 3. Nf3"] = "Bg4 | Nf6";
         book["1. d4 d5 2. Bf4 Nc6 3. Nc3"] = "Nf6";
@@ -942,6 +984,8 @@ void initBook()
         book["1. d4 d5 2. Nf3 Nf6"] = "c4 | e3 | Bf4";
 
         book["1. d4 d5 2. Nf3 c6 3. e3"] = "Nf6 | Bf5 | Bg4";
+
+        book["1. d4 d5 2. Nf3 c6 3. Nc3"] = "Nf6";
 
 
         // Queen's pawn (A40)
@@ -991,6 +1035,11 @@ void initBook()
 
         book["1. d4 e6 2. c4 d5 3. e3"] = "Nf6";
 
+
+        // Queen's gambit declined (D31)
+        book["1. d4 e6 2. c4 d5 3. Nc3"] = "Nf6 | c6";
+
+
         // Reti opening (A05)
         book["1. Nf3 Nf6"] = "c4 | g3 | d4";
         book["1. Nf3 Nf6 2. c4"] = "g6 | e6 | c5";
@@ -1032,6 +1081,10 @@ void initBook()
         book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4"] = "Nxd4";
         book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4 5. Nxd4 Bb4"] = "Bg5";
         book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4 5. Nxd4 Bc5"] = "Nxc6";
+
+        book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4 5. Nxd4 Nxd4"] = "Qxd4";
+        book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4 5. Nxd4 Nxd4 6. Qxd4 Be7"] = "e4";
+        book["1. Nf3 Nf6 2. c4 Nc6 3. Nc3 e5 4. d4 exd4 5. Nxd4 Nxd4 6. Qxd4 d6"] = "Bg5";
 
         book["1. Nf3 Nf6 2. g3 g6"] = "Bg2";
         book["1. Nf3 Nf6 2. g3 g6 3. Bg2"] = "Bg7 | d5";
@@ -1266,10 +1319,14 @@ void initBook()
         book["1. c4 c5 2. Nc3"] = "Nc6 | Nf6 | g6";
         book["1. c4 c5 2. g3"] = "g6 | Nc6";
 
+        book["1. c4 c5 2. g3 Nf6"] = "Bg2";
+
 
         book["1. c4 c5 2. Nc3 Nc6"] = "g3 | Nf3";
         book["1. c4 c5 2. Nc3 Nf6"] = "g3 | Nf3 | e4";
         book["1. c4 c5 2. Nc3 g6"] = "g3 | Nf3 | e3";
+
+        book["1. c4 c5 2. Nc3 g6 3. Nf3"] = "Bg7";
 
         book["1. c4 c5 2. Nc3 Nc6 3. g3"] = "g6 | Nf6 | d6";
         book["1. c4 c5 2. Nc3 Nc6 3. Nf3"] = "g6 | Nf6 | e5";
@@ -1407,6 +1464,11 @@ void initBook()
 
         book["1. c4 e5 2. g3 d5"] = "cxd5";
         book["1. c4 e5 2. g3 d5 3. cxd5 Nf6"] = "Bg2";
+
+        book["1. c4 e5 2. g3 d6"] = "Bg2";
+        book["1. c4 e5 2. g3 d6 3. Bg2 f5"] = "Nc3";
+        book["1. c4 e5 2. g3 d6 3. Bg2 g6"] = "Nc3";
+        book["1. c4 e5 2. g3 d6 3. Bg2 Nc6"] = "Nc3";
 
 
         // English opening (A21)
@@ -1559,6 +1621,45 @@ void initBook()
         book["1. d4 c5 2. d5 d6"] = "c4";
         book["1. d4 c5 2. d5 e6"] = "c4";
         book["1. d4 c5 2. d5 g6"] = "e4";
+
+
+
+
+
+
+
+        /*!
+         * PERSONAL OPENINGS
+         */
+
+        // different openings for White
+        po["%"] = "e4";
+
+        // first-move replies for Black
+        po["1. e4"] = "e5";
+        po["1. d4"] = "Nf6";
+        po["1. Nf3"] = "d5";
+        po["1. c4"] = "e5";
+        po["1. f4"] = "Nf3";
+
+        // Open openings
+        po["1. e4 e5"] = "Nf3";
+        po["1. e4 e5 2. Nf3 Nc6"] = "Bb5";
+        po["1. e4 e5 2. Nf3 Nf6"] = "Nxe5";
+        po["1. e4 e5 2. Nf3 d6"] = "d4";
+        po["1. e4 e5 2. Nf3 f5"] = "Nxe5";
+        po["1. e4 e5 2. Nf3 d5"] = "exd5";
+        po["1. e4 e5 2. Nf3 Qe7"] = "Bc4";
+        po["1. e4 e5 2. Nf3 Bc5"] = "Nxe5";
+
+        // French Defence
+        po["1. e4 e6"] = "d4";
+        po["1. e4 e6 2. d4 d5"] = "Nc3";
+
+        // Sicilian Defense
+        po["1. e4 c5"] = "Nf3";
+
+        // 
 }
 
 
@@ -1580,7 +1681,10 @@ string getReplyTo(string sequence)
     string tok;
 
     // get the list of replies for a given sequence
-    replies_buf = book[sequence];
+    if (usePersonalBook)
+        replies_buf = po[sequence];
+    else
+        replies_buf = book[sequence];
 
     // if no replies, return
     if (replies_buf == "")

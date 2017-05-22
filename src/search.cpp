@@ -53,6 +53,8 @@ using namespace std;
 unordered_map<string, int> cache;
 float cacheHit;
 unsigned short nextDepth = 0;
+unsigned short quiesceDepth = 0;
+//unsigned long long razorHit = 0;
 
 
 
@@ -69,7 +71,8 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
     Move singlemove;
-    cacheHit = 0;
+    //cacheHit = 0;
+    //razorHit = 0;
 
 
     //  Check if the game has ended, or if there is only one legal move,
@@ -164,7 +167,7 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
-    bool cached = false;
+    //bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -173,6 +176,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     {
         followpv = false;
         qval = qsearch(ply, alpha, beta);
+        quiesceDepth = 0;
         return qval;
     }
 
@@ -252,18 +256,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     // the first moves is more critical than the last ones. Therefore, 
                     // using LMR we analyze the first 2 moves in full-depth, but cut down
                     // the analysis depth for the rest of moves.
-                    //
-                    // LMR works like this:
-                    // 1) If there are more than 9+ moves, try to reduce depth = ply - 9
-                    // 2) If there are between 7-8 moves, try to reduce dpeth = ply - 7
-                    // 3) If there are between 5-6 moves, try to reduce depth = ply - 5
-                    // 4) If there are less than 5 moves, try to reduce depth = ply - 3
-                    // 5) ALWAYS: First 2 moves are searched at full depth
                     nextDepth = depth - 1;
                     if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
-                        for (unsigned short j = 0; j < AI_SEARCH_DEPTH; j++)
-                            if ((moveNo > (j + 2)) && (depth > (j + 2)))
-                                nextDepth = depth - j - 2;
+                         nextDepth = depth - 2;
 
 
                     // alphabeta search 
@@ -305,9 +300,11 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
                     return beta;
                 }
+
+                // both sides want to maximize from *their* perspective
                 if (val > alpha)
                 {
-                    alpha = val;                                    // both sides want to maximize from *their* perspective
+                    alpha = val;
                     pvmovesfound++;
                     triangularArray[ply][ply] = moveBuffer[i];                  // save this move
                     for (j = ply + 1; j < triangularLength[ply+1]; j++) 
@@ -316,9 +313,15 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     }
                     triangularLength[ply] = triangularLength[ply+1];
                     if (!ply && (depth > 1)) displaySearchStats(2, depth, val);
-                        }
-                    }
-                    else unmakeMove(moveBuffer[i]);
+                }
+                // if alpha doesn't improve: razor the rest of moves
+                //else if (RAZOR && (ply > 4) && (moveNo > 4))
+                //{
+                //    razorHit++;
+                //    return alpha;
+                //}
+            }
+            else unmakeMove(moveBuffer[i]);
         }
     }
 
@@ -683,6 +686,7 @@ int Board::qsearch(int ply, int alpha, int beta)
             if (!isOtherKingAttacked()) 
             {
                 inodes++;
+                quiesceDepth++;
 
                 if (--countdown <=0) readClockAndInput();
                 val = -qsearch(ply+1, -beta, -alpha);
