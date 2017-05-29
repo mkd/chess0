@@ -79,6 +79,7 @@ void initListOfCommands()
     listOfCommands.push_back("resign");
     listOfCommands.push_back("restart");
     listOfCommands.push_back("save");
+    listOfCommands.push_back("sd");
     listOfCommands.push_back("show");
     listOfCommands.push_back("solve");
     listOfCommands.push_back("test");
@@ -252,12 +253,10 @@ void exec(string input)
     }
 
 
-    /*
-     * depth
-     *
-     * change AI depth
-     */
-    else if (cmd == "depth")
+    // depth
+    //
+    // change AI depth
+    else if ((cmd == "depth") || (cmd == "sd"))
     {
         int d;
         d = atoi(arg.c_str());
@@ -363,33 +362,27 @@ void exec(string input)
     }
 
 
-    /*
-     * help
-     *
-     * print help
-     */
+    // help
+    //
+    // print help
     else if (cmd == "help")
     {
         displayHelp(arg);
     }
 
 
-    /*
-     * history
-     *
-     * display game history
-     */
+    // history
+    //
+    // display game history
     else if ((cmd == "history") || (cmd == "game"))
     {
         displayGame();
     }
 
     
-    /* 
-     * manual
-     *
-     * human vs human
-     */
+    // manual
+    //
+    // human vs human
     else if (cmd == "manual")
     {
         wPlayer = PLAYER_TYPE_HUMAN;
@@ -826,8 +819,8 @@ void displayHelp(string which)
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  cache  depth  draw  edit  eval  flip  game" << endl;
         cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
-        cout << "pass  razor  remove  resign  save  show  solve  test  think" << endl;
-        cout << "undo  verbose  version  quit" << endl;
+        cout << "pass  razor  remove  resign  save  sd  show  solve  test" << endl;
+        cout << "think undo  verbose  version  quit" << endl;
         return;
     }
 
@@ -864,6 +857,7 @@ void displayHelp(string which)
         cout << " a few hundreds of Megabytes for a ~1h game." << endl;
     }
 
+
     // help depth
     else if (which == "depth")
     {
@@ -876,6 +870,7 @@ void displayHelp(string which)
         cout << " If no depth is given, then the application tells" << endl;
         cout << " what is the current search depth." << endl;
     }
+
 
     // help flip
     else if (which == "flip")
@@ -1079,6 +1074,20 @@ void displayHelp(string which)
         cout << endl;
         cout << " and edit your own board position using the 'edit' command.";
         cout << endl;
+    }
+
+
+    // help sd
+    else if (which == "sd")
+    {
+        cout << "sd [N]" << endl;
+        cout << " Set the search depth of the computer to N-plies" << endl;
+        cout << " (half-moves). The depth must be a minimum of 1," << endl;
+        cout << " and there is no maximum limit. However, consider" << endl;
+        cout << " that a depth higher than 7 will result in a very" << endl;
+        cout << " long time for obtaining a move from the computer." << endl;
+        cout << " If no depth is given, then the application tells" << endl;
+        cout << " what is the current search depth." << endl;
     }
 
 
