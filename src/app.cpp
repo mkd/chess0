@@ -380,6 +380,10 @@ void prompt(unsigned nmove)
  */
 string getInput()
 {
+    // clean the input, if necessary
+    if (cin.peek() == '\n')
+        cin.ignore(1, '\n');
+
     char input[MAX_INPUT_SIZE];
 
 

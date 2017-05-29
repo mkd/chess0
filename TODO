@@ -4,6 +4,14 @@ TODO
 
 WORK IN PROGRESS
 ================
+- Knps --> Speed
+
+- Fix mating move --> When found mating move, don't search any more (and don't
+  crash)
+
+- Move ordering: check how moves are sorted, because sometimes it prefers not to
+  pin the queen, even at depth 6, but instead takes a pawn
+
 - Fix cache: no PV moves stored, so start from scratch at high depth
 
 
@@ -18,8 +26,6 @@ BEFORE NEXT RELEASE
 
 IMPORTANT
 =========
-- Fix weird moves (eval.cpp??), e.g., Rb1 or h3--Rh2 in the opening ??
-
 - Replace BOOLTYPE with bool
 
 - Improve evaluation function (opening, middle, end)
