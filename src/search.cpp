@@ -54,7 +54,6 @@ unordered_map<string, int> cache;
 float cacheHit;
 unsigned short nextDepth = 0;
 unsigned short quiesceDepth = 0;
-//unsigned long long razorHit = 0;
 
 
 
@@ -72,7 +71,6 @@ Move Board::think()
     int score, legalmoves, currentdepth;
     Move singlemove;
     cacheHit = 0;
-    //razorHit = 0;
 
 
     //  Check if the game has ended, or if there is only one legal move,
@@ -315,10 +313,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     triangularLength[ply] = triangularLength[ply+1];
                     if (!ply && (depth > 1)) displaySearchStats(2, depth, val);
                 }
+
                 // if alpha doesn't improve: razor the rest of moves
-                //else if (RAZOR && (ply > 4) && (moveNo > 4))
+                //else if (RAZOR && (ply > 4) && (moveNo > 4) && (!isOwnKingAttacked()) && (!isOtherKingAttacked()))
                 //{
-                //    razorHit++;
                 //    return alpha;
                 //}
             }

@@ -121,12 +121,13 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
  
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
-extern const int KNIGHT_VALUE = 300;
-extern const int BISHOP_VALUE = 300;
-extern const int ROOK_VALUE = 500;
-extern const int QUEEN_VALUE = 900;
+extern const int KNIGHT_VALUE = 320;
+extern const int BISHOP_VALUE = 340;
+extern const int ROOK_VALUE = 550;
+extern const int QUEEN_VALUE = 920;
 extern const int KING_VALUE = 9999;
 extern const int CHECK_MATE = KING_VALUE;
+
 // used for MVV/LVA and SEE:
 int PIECEVALUES[16];
  
@@ -241,6 +242,7 @@ int ICASTLOO;
 int ICASTLOOO;
 int ICHECK;
 
+
 // Evaluation scores start here, all scores are in centipawns.
 // If there are scoring data that is supposed to be symmetrical (i.e. same for BLACK & WHITE),
 // then only the data for WHITE is supplied, and data for BLACK is calculated in dataInit().
@@ -251,15 +253,16 @@ int ICHECK;
 // They are mirrored back in the right order in dataInit().
 // This is only done to make data entry easier, because you can enter the scoring data as if you're
 // looking at the chess board from White's point of perspective.
- 
-int PENALTY_DOUBLED_PAWN          = 10;
+int PENALTY_DOUBLED_PAWN          = 15;
 int PENALTY_ISOLATED_PAWN         = 20;
 int PENALTY_BACKWARD_PAWN         =  8;
-int BONUS_PASSED_PAWN             = 20;
+int BONUS_PASSED_PAWN             = 25;
 int BONUS_BISHOP_PAIR             = 10;
 int BONUS_ROOK_BEHIND_PASSED_PAWN = 20;
 int BONUS_ROOK_ON_OPEN_FILE       = 20;
 int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 20;
+int BONUS_TEMPO_MIDGAME           = 10;
+int BONUS_TEMPO_ENDGAME           = 20;
  
 int BONUS_PAWN_SHIELD_STRONG = 9;
 int BONUS_PAWN_SHIELD_WEAK = 4;
@@ -270,7 +273,9 @@ int KNIGHT_DISTANCE[8] =             { 0,   4,  4,  0,  0,  0,  0,  0 };
 int BISHOP_DISTANCE[8] =             { 0,   5,  4,  3,  2,  1,  0,  0 };
 int ROOK_DISTANCE[8] =               { 0,   7,  5,  4,  3,  0,  0,  0 };
 int QUEEN_DISTANCE[8] =              { 0,  10,  8,  5,  4,  0,  0,  0 };
- 
+
+
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
@@ -285,6 +290,9 @@ int PAWNPOS_W[64] = {
          0,   0,   0, -40, -40,   0,   0,   0,
          0,   0,   0,   0,   0,   0,   0,   0
 };
+
+
+
  
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
@@ -300,6 +308,8 @@ int KNIGHTPOS_W[64] = {
        -10,   0,   0,   0,   0,   0,   0, -10,
        -10, -30, -10, -10, -10, -10, -30, -10
 };
+
+
  
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
@@ -313,8 +323,10 @@ int BISHOPPOS_W[64] = {
        -10,   0,   5,  10,  10,   5,   0, -10,
        -10,   0,   5,   5,   5,   5,   0, -10,
        -10,   0,   0,   0,   0,   0,   0, -10,
-       -10, -10, -20, -10, -10, -20, -10, -10
+       -10, -10, -10, -10, -10, -10, -10, -10
 };
+
+
  
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
@@ -330,6 +342,8 @@ int ROOKPOS_W[64] = {
       0,  0,  0,  0,   0,  0,  0,   0,
     -10,  0,  0, 10,  10,  0,  0, -10
 };
+
+
  
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
@@ -345,6 +359,7 @@ int QUEENPOS_W[64] = {
        -10,   0,   0,   0,   0,   0,   0, -10,
        -10, -10, -20, -10, -10, -20, -10, -10
 };
+
  
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
@@ -408,6 +423,7 @@ BitMap KINGSHIELD_WEAK_B[64];
 BitMap WHITE_SQUARES;
 BitMap BLACK_SQUARES;
 
+
 //
 // Search parameters start here:
 //
@@ -417,6 +433,7 @@ int STALEMATESCORE = 0;
 int DRAWSCORE = 0;
 Move NOMOVE;
 HashKeys KEY;
+
 
 // variables for quiescence and SEE:
 int OFFSET = 128;
@@ -438,6 +455,7 @@ BitMap RAY_SE[64];
 BitMap RAY_S[64];
 BitMap RAY_SW[64];
 int HEADINGS[64][64];
+
 
 // Nullmove parameters:
 int NULLMOVE_REDUCTION = 4;  // equivalent to R=3

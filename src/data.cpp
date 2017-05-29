@@ -617,9 +617,7 @@ void dataInit()
               }
        }
  
-//     ===========================================================================
-//     DISTANCE array, distance is measured as max of (rank,file)-difference
-//     ===========================================================================
+        //     DISTANCE array, distance is measured as max of (rank,file)-difference
        for (i = 0 ; i < 64; i++)
        {
               for (square = 0 ; square < 64; square++)

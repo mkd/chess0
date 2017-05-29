@@ -216,7 +216,8 @@ int Board::eval()
     {
         square = firstOne(temp);
         score += ROOKPOS_W[square];
-        score += ROOK_DISTANCE[DISTANCE[square][blackkingsquare]];
+        if (!board.castleWhite)
+            score += ROOK_DISTANCE[DISTANCE[square][blackkingsquare]];
  
         if (FILEMASK[square] & whitepassedpawns)
             if ((unsigned int) square < lastOne(FILEMASK[square] & whitepassedpawns))
@@ -350,7 +351,8 @@ int Board::eval()
     {
        square = firstOne(temp);
        score -= ROOKPOS_B[square];
-       score -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
+        if (!board.castleBlack)
+            score -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
 
        if (FILEMASK[square] & blackpassedpawns)
               if ((unsigned int) square > firstOne(FILEMASK[square] & blackpassedpawns))
@@ -392,6 +394,18 @@ int Board::eval()
        // weaker pawn shield bonus if the pawns are not so near the king:
        score -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
     }
+
+    // Bonus for tempo
+    int tempoBonus = 0;
+    if (endgame)
+        tempoBonus = BONUS_TEMPO_ENDGAME;
+    else
+        tempoBonus = BONUS_TEMPO_MIDGAME;
+    if (board.nextMove)
+        score -= tempoBonus;
+    else
+        score += tempoBonus;
+
  
     // Return the score
     if (board.nextMove)

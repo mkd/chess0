@@ -20,11 +20,9 @@
 
 
 
-/*!
- * @file board.cpp
- *
- * XXX
- */
+// @file board.cpp
+//
+// XXX
 #include <iostream>
 #include <iomanip>
 #include "definitions.h"
@@ -38,7 +36,8 @@ using namespace std;
 
 
 /*!
- *
+ * Initialize the board and reset all data structures (i.e., used when starting
+ * an ew game).
  */ 
 void Board::init()
 {
@@ -302,16 +301,4 @@ void Board::display()
         }
         cout << "      h    g    f    e    d    c    b    a" << endl << endl;
     }
-
-    // DEBUG
-    //cout << "next=" << (int)board.nextMove << endl;
-    //cout << "ep=" << board.epSquare << endl;
-    //cout << "fifty=" << board.fiftyMove << endl;
-    //cout << "white castle=" << (int)board.castleWhite << endl;
-    //cout << "black castle=" << (int)board.castleWhite << endl;
-    //cout << "key=" << board.hashkey << endl;
-    //cout << "endOfGame=" << board.endOfGame << endl;
-    //cout << "endOfSearch=" << board.endOfSearch << endl;
-    //cout << "repetitionCount=" << repetitionCount() << endl;
-    //cout << "sign=..." << (board.hashkey & 0x00000fff) << endl;
 }
