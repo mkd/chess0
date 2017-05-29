@@ -4,8 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Knps --> Speed
-
 - Fix mating move --> When found mating move, don't search any more (and don't
   crash)
 

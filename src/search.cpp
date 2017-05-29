@@ -376,7 +376,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
     switch (mode)
     {
         case 1: 
-                if (!XB_MODE) cout << "  Ply  Score   Nodes     Time  Knps PV" << endl;
+                if (!XB_MODE) cout << "  Ply  Score    Nodes     Time\t Speed kN/s  PV" << endl;
                 break;
 
         case 2:
@@ -389,10 +389,11 @@ void Board::displaySearchStats(int mode, int depth, int score)
                 else
                 {
                     // depth
-                    printf("%5d ", depth);
+                    cout << setw(5) << depth;
 
                     // score
-                    printf("%+6.2f ", float(netScore/100.0));
+                    cout << showpos << setw(7) << setprecision(2) << float(netScore/100.0);
+                    cout << noshowpos;
 
                     // display the amount of nodes searched
                     float cacheHitRatio = cacheHit / inodes;
@@ -403,22 +404,24 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     }
                     else
                     {
-                        if      (inodes > 100000000) printf("%6.0f%c ", float(inodes/1000000.0), 'M');
-                        else if (inodes > 10000000)  printf("%6.2f%c ", float(inodes/1000000.0), 'M');
-                        else if (inodes > 1000000)   printf("%6.0f%c ", float(inodes/1000.0),    'K');
-                        else if (inodes > 100000)    printf("%6.1f%c ", float(inodes/1000.0),    'K');
-                        else if (inodes > 10000)     printf("%6.2f%c ", float(inodes/1000.0),    'K');
-                        else                         printf("%7llu ", inodes);
+                        cout << " ";
+                        if (inodes > 1000000)
+                            cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
+                        else if (inodes > 1000)
+                            cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
+                        else
+                            cout << setw(8) << setprecision(0) << inodes;
                     }
 
                     // search time
-                    cout << setw(7) << fixed << setprecision(2) << dt << "s ";
+                    cout << setw(8) << fixed << setprecision(2) << dt << "s ";
 
                     // search speed
+                    float knps = (inodes / (dt * 1000)) / 1.0;
                     if (dt > 0)
-                        cout << fixed << setprecision(0) << setw(5) << (inodes/(dt * 1000)) << " ";
+                        cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
                     else
-                        cout << "    - ";
+                        cout << "           -  ";
 
                     // store this PV:
                     rememberPV();
