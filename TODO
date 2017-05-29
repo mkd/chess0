@@ -4,9 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix mating move --> When found mating move, don't search any more (and don't
-  crash)
-
 - Move ordering: check how moves are sorted, because sometimes it prefers not to
   pin the queen, even at depth 6, but instead takes a pawn
 

@@ -144,16 +144,18 @@ Move Board::think()
             }
         }
 
+
+        // display search analysis
         if (currentdepth > 1)
             displaySearchStats(2, currentdepth, score);
 
+
         // stop searching if the current depth leads to a forced mate:
-        // FIXME: need to stop if found mate, however the move returned is NOMOVE = 0, so app.cpp crashes
-        /*if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
+        if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
+            rememberPV();
             currentdepth = searchDepth + 1;
         }
-        */
     }
 
     return lastPV[0];
