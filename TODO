@@ -4,10 +4,10 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Move ordering: check how moves are sorted, because sometimes it prefers not to
-  pin the queen, even at depth 6, but instead takes a pawn
-
 - Fix cache: no PV moves stored, so start from scratch at high depth
+
+- 1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7 --> Nd7 is valid move (!!)
+  should be ambiguous
 
 
 
@@ -28,8 +28,6 @@ IMPORTANT
 - Razoring
 
 - Ending tables (syzygy)
-
-- Fine-tune LMR
 
 
 

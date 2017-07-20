@@ -76,10 +76,9 @@ char command[80];
 char userinput[80];
 string userMove = "";
 
-bool useCache = true;
+bool useCache = false;
 bool verbose = true;
 bool LMR = true;
-bool RAZOR = true;
 EndType gameEnd = END_TYPE_NOEND;
 
 
@@ -155,9 +154,7 @@ int startApp(int mode)
             }
 
 
-            /*!
-             * If no move from the book, enter search mode.
-             */
+            // If no move from the book, enter search mode.
             if (input.empty())
             {
                 start = clock();
@@ -180,6 +177,7 @@ int startApp(int mode)
                 
                 end   = clock();
             }
+
             // if the move was form the book, show it with a (%) symbol
             else if (useBook)
             {
@@ -405,9 +403,7 @@ string getInput()
 
 
 
-/*!
- * Terminate the app in a safe way.
- */
+// Terminate the app in a safe way.
 void terminateApp()
 {
     cout << endl << "Goodbye!" << endl;

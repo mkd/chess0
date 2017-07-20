@@ -53,6 +53,7 @@ using namespace std;
 unordered_map<string, int> cache;
 float cacheHit;
 unsigned short nextDepth = 0;
+unsigned short nextPly = 0;
 unsigned short quiesceDepth = 0;
 
 
@@ -218,6 +219,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         selectmove(ply, i, depth, followpv); 
+
         makeMove(moveBuffer[i]);
         {
             if (!isOtherKingAttacked()) 
@@ -233,8 +235,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 if (!ply && (depth > 1))
                     displaySearchStats(3, ply, i); 
 
-                // TODO: cache
-                /*if (useCache)
+                // FIXME: cache
+                if (useCache)
                 {
                     auto t = cache.find(hashToStr(board.hashkey, ply+1, alpha, beta, depth));
                     if (t == cache.end())
@@ -249,22 +251,26 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 if (!cached)
-                {*/
-
+                {
                     // Configure late-move reductions (LMR): assuming that the moves in the
                     // list are ordered from potential best to potential worst, analyzing 
                     // the first moves is more critical than the last ones. Therefore, 
                     // using LMR we analyze the first 2 moves in full-depth, but cut down
                     // the analysis depth for the rest of moves.
+                    nextPly   = ply + 1;
                     nextDepth = depth - 1;
-                    if (LMR && (ply > 4) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion()) && (moveNo > 2) && (depth > 3) && !isOwnKingAttacked())
+                    if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion())
+                            && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START))
+                    {
+                        nextPly   = ply + 2;
                         nextDepth = depth - 2;
+                    }
 
 
                     // alphabeta search 
                     if (pvmovesfound)
                     {
-                        val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
+                        val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
 
                         // in case of failure, proceed with normal alphabeta
                         if ((val > alpha) && (val < beta))
@@ -279,18 +285,29 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                     // store the move in the cache, if cache enabled
-                    /*
                     if (useCache)
                         if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
                             cache[hashToStr(board.hashkey, ply+1, alpha, beta, depth)] = val;
-                     */
-                //}
+                }
 
 
                 unmakeMove(moveBuffer[i]);
 
+                // DEBUG
+                //string crap;
+                char tmpSanMove[12];
+                if (cached)
+                {
+                    toSan(moveBuffer[i], tmpSanMove);
+                    cout << "(1) Found value cached: move = '" << tmpSanMove << "'; " << "score = " << val << endl;
+                    cout.flush();
+                }
+
+
+                // if time is up, then return
                 if (timedout)
                     return 0;
+
 
                 if (val >= beta)
                 {
@@ -299,32 +316,53 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
                     else 
                         whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+
                     return beta;
                 }
+
 
                 // both sides want to maximize from *their* perspective
                 if (val > alpha)
                 {
                     alpha = val;
                     pvmovesfound++;
-                    triangularArray[ply][ply] = moveBuffer[i];                  // save this move
-                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                    {
-                        triangularArray[ply][j] = triangularArray[ply+1][j];    // and append the latest best PV from deeper plies
-                    }
-                    triangularLength[ply] = triangularLength[ply+1];
-                    if (!ply && (depth > 1)) displaySearchStats(2, depth, val);
-                }
 
-                // if alpha doesn't improve: razor the rest of moves
-                //else if (RAZOR && (ply > 4) && (moveNo > 4) && (!isOwnKingAttacked()) && (!isOtherKingAttacked()))
-                //{
-                //    return alpha;
-                //}
+                    // DEBUG
+                    if (cached)
+                    {
+                        toSan(moveBuffer[i], tmpSanMove);
+                        cout << "(2) moveBuffer[i] = '" << tmpSanMove << "'; score = " << val << endl;
+                    }
+
+                    // save this move
+                    triangularArray[ply][ply] = moveBuffer[i];
+
+                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                        triangularArray[ply][j] = triangularArray[ply+1][j];    // and append the latest best PV from deeper plies
+
+                    triangularLength[ply] = triangularLength[ply+1];
+
+                    if (!ply && (depth > 1))
+                        displaySearchStats(2, depth, val);
+                }
             }
             else unmakeMove(moveBuffer[i]);
         }
     }
+
+
+    // DEBUG
+    char tmpSanMove[12];
+    if (cached)
+    {
+        rememberPV();
+        toSan(moveBuffer[i], tmpSanMove);
+        cout << "Cached move = '" << tmpSanMove << "'; " << "score = " << val << endl;
+        toSan(triangularArray[ply][ply], tmpSanMove);
+        cout << "TriangularArrayPly = '" << tmpSanMove << "'; " << "score = " << val << endl;
+        cout.flush();
+    }
+
 
     // update the history heuristic
     if (pvmovesfound)
@@ -335,15 +373,22 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             whiteHeuristics[triangularArray[ply][ply].getFrom()][triangularArray[ply][ply].getTosq()] += depth*depth;
     }
 
+
     //  50-move rule:
-    if (fiftyMove >= 100) return DRAWSCORE;
+    if (fiftyMove >= 100)
+        return DRAWSCORE;
+
 
     //  Checkmate/stalemate detection:
     if (!movesfound)
     {
-        if (isOwnKingAttacked())  return (-CHECKMATESCORE+ply-1);
-        else  return (STALEMATESCORE);
+        if (isOwnKingAttacked())
+            return (-CHECKMATESCORE+ply-1);
+
+        else
+            return (STALEMATESCORE);
     }
+
 
     return alpha;
 }

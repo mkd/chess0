@@ -74,7 +74,6 @@ void initListOfCommands()
     listOfCommands.push_back("new");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
-    listOfCommands.push_back("razor");
     listOfCommands.push_back("remove");
     listOfCommands.push_back("resign");
     listOfCommands.push_back("restart");
@@ -635,23 +634,6 @@ void exec(string input)
     }
 
 
-    // razor
-    //
-    // Enable/disable search razoring
-    else if (cmd == "razor")
-    {
-        if ((arg == "on") || (arg == "true"))
-            RAZOR = true;
-        else if ((arg == "off") || (arg == "false"))
-            RAZOR = false;
-
-        if (RAZOR)
-            cout << "Razoring is enabled." << endl;
-        else
-            cout << "Razoring is disabled." << endl;
-    }
-
-
     /*
      * resign
      *
@@ -819,7 +801,7 @@ void displayHelp(string which)
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  cache  depth  draw  edit  eval  flip  game" << endl;
         cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
-        cout << "pass  razor  remove  resign  save  sd  show  solve  test" << endl;
+        cout << "pass  remove  resign  save  sd  show  solve  test" << endl;
         cout << "think undo  verbose  version  quit" << endl;
         return;
     }

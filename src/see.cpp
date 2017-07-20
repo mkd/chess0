@@ -29,6 +29,8 @@
 #include "extglobals.h"
 #include "move.h" 
 
+
+
 // Macro's to define sliding attacks (note that these macro's slightly differ from the ones used in the move generator)
 #define RANKATTACKS(a)       (RANK_ATTACKS[(a)][((board.occupiedSquares & RANKMASK[(a)]) >> RANKSHIFT[(a)])])
 #define FILEATTACKS(a)       (FILE_ATTACKS[(a)][((board.occupiedSquares & FILEMASK[(a)]) * FILEMAGIC[(a)]) >> 57])
@@ -52,9 +54,6 @@ int Board::SEE(Move &move)
     BitMap attackers, nonremoved;
     unsigned char stm;
     BOOLTYPE ispromorank;
-    #ifdef CHESS0_VERBOSE_SEE
-        BitMap previousattackers; 
-    #endif
 
     nrcapts = 0;
     nonremoved = ~0;
@@ -62,18 +61,10 @@ int Board::SEE(Move &move)
     target = move.getTosq();
     ispromorank = ((RANKS[target] == 8) || (RANKS[target] == 1));
     attackers = attacksTo(target);
-    #ifdef CHESS0_VERBOSE_SEE
-        std::cout << "=== START OF SEE === " << std::endl; 
-        displayMove(move); 
-        std::cout << std::endl; 
-    #endif
     
     // do the first capture 'manually', outside of the loop, because it is prescribed
     // take the first attacker from the supplied capture move:
     from = move.getFrom();
-    #ifdef CHESS0_VERBOSE_SEE
-        std::cout << "first attacker from " << SQUARENAME[from] << std::endl; 
-    #endif
 
     // update the materialgains array:
     materialgains[0] = PIECEVALUES[board.square[target]];
@@ -97,13 +88,7 @@ int Board::SEE(Move &move)
     heading = HEADINGS[target][from];
 
     // another attacker might be revealed, update attackers accordingly:
-    #ifdef CHESS0_VERBOSE_SEE
-        previousattackers = attackers; 
-    #endif
     if (heading) attackers = revealNextAttacker(attackers, nonremoved, target, heading);
-    #ifdef CHESS0_VERBOSE_SEE
-        if (previousattackers != attackers) std::cout << "=>new attacker revealed" << std::endl; 
-    #endif
 
     // switch side to move:
     stm = !stm;
@@ -137,9 +122,6 @@ int Board::SEE(Move &move)
             else if ((whiteKing & attackers) && !(attackers & blackPieces)) from = firstOne(whiteKing);
             else break;
         }
-        #ifdef CHESS0_VERBOSE_SEE
-            std::cout << "next attacker from " << SQUARENAME[from] << std::endl; 
-        #endif
 
         // update the materialgains array:
         materialgains[nrcapts] = -materialgains[nrcapts - 1] + attackedpieceval;
@@ -163,41 +145,31 @@ int Board::SEE(Move &move)
         heading = HEADINGS[target][from];
 
         // another attacker might be revealed, update attackers accordingly:
-        #ifdef CHESS0_VERBOSE_SEE
-            previousattackers = attackers; 
-        #endif
         if (heading) attackers = revealNextAttacker(attackers, nonremoved, target, heading);
-        #ifdef CHESS0_VERBOSE_SEE
-            if (previousattackers != attackers) std::cout << "=>new attacker revealed" << std::endl; 
-        #endif
 
         // switch side to move:
         stm = !stm;
     }
 
-//  ===========================================================================
-//  Start at the end of the capture sequence and use a Minimax-type procedure 
-//  to calculate the SEE value of the first capture:                                            
-//  ===========================================================================
+
+    // Start at the end of the capture sequence and use a Minimax-type procedure 
+    // to calculate the SEE value of the first capture:                                            
     while (--nrcapts)
         if (materialgains[nrcapts] > -materialgains[nrcapts - 1]) 
             materialgains[nrcapts - 1] = -materialgains[nrcapts];
 
-    #ifdef CHESS0_VERBOSE_SEE
-        std::cout << "SEE value of this capture = " << materialgains[0] << std::endl << std::endl; 
-    #endif
     return (materialgains[0]);
 
 }
 
-BitMap Board::attacksTo(int &target)
-{
+
 
 //  attacksTo returns the first-line 'attackers' bitmap for SEE, it has all pieces that 
 //  attack the target square (both colors), excluding any attackers that might be lined-up 
 //  behind the first-line attackers (e.g. queen behind rook) - they will be dealt with by 
 //  revealNextAttacker
-
+BitMap Board::attacksTo(int &target)
+{
     BitMap attacks, attackBitmap;
     
     // attacks along ranks/files (rooks & queens)
@@ -227,18 +199,13 @@ BitMap Board::attacksTo(int &target)
     return attacks;
 }
 
-BitMap Board::revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading)
-{  
 
-//  ===========================================================================
+
 //  revealNextAttacker checks if there was another 'hidden' attacker that was
 //  lined-up after an attacker has been removed. 
 //  If so, the attackers bitmap is updated accordingly.
-//  
-//  
-// 
-//  ===========================================================================
-
+BitMap Board::revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading)
+{  
     int state;
     BitMap targetBitmap = 0;
 

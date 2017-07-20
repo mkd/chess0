@@ -243,7 +243,6 @@ extern int XB_OTIM;
 extern int XB_CTIM;
 
 extern bool LMR;
-extern bool RAZOR;
 extern bool verbose;
 
 extern unsigned short quiesceDepth;

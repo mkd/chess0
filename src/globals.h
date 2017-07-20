@@ -121,10 +121,10 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
  
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
-extern const int KNIGHT_VALUE = 320;
-extern const int BISHOP_VALUE = 340;
-extern const int ROOK_VALUE = 550;
-extern const int QUEEN_VALUE = 920;
+extern const int KNIGHT_VALUE = 310;
+extern const int BISHOP_VALUE = 330;
+extern const int ROOK_VALUE = 520;
+extern const int QUEEN_VALUE = 900;
 extern const int KING_VALUE = 9999;
 extern const int CHECK_MATE = KING_VALUE;
 
@@ -258,7 +258,7 @@ int PENALTY_ISOLATED_PAWN         = 20;
 int PENALTY_BACKWARD_PAWN         =  8;
 int BONUS_PASSED_PAWN             = 25;
 int BONUS_BISHOP_PAIR             = 10;
-int BONUS_ROOK_BEHIND_PASSED_PAWN = 20;
+int BONUS_ROOK_BEHIND_PASSED_PAWN = 10;
 int BONUS_ROOK_ON_OPEN_FILE       = 20;
 int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 20;
 int BONUS_TEMPO_MIDGAME           = 10;
@@ -459,6 +459,7 @@ int HEADINGS[64][64];
 
 // Nullmove parameters:
 int NULLMOVE_REDUCTION = 4;  // equivalent to R=3
+
 // Material (excluding pawns) must be > NULLMOVE_LIMIT to allow a nullmove:
 // Setting this value to 299 ensures that null moves are not done if the 
 // side to move has no major or minor pieces
@@ -466,6 +467,7 @@ int NULLMOVE_LIMIT = KNIGHT_VALUE - 1;
 
 // peek interval in searched node units
 int UPDATEINTERVAL = 100000; 
+
 // don't start a new iteration if STOPFRAC fraction of our max search time has passed:
 double STOPFRAC = 0.6;
 

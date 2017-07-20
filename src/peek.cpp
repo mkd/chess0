@@ -86,13 +86,14 @@ return 0;
 #include "functions.h" 
 #include "timer.h" 
 
+
+
+// check if we need to stop, because time is up, or because the user has hit the keyboard.
+// UPDATEINTERVAL defines how often this check is done in terms of nodes searched.
+// For example, if the search speed is 1000 knods per second, then a value of UPDATEINTERVAL = 100000 
+// will result in 10 checks per second (or 0.1s time intervals)
 void Board::readClockAndInput()
 {
-    // check if we need to stop, because time is up, or because the user has hit the keyboard.
-    // UPDATEINTERVAL defines how often this check is done in terms of nodes searched.
-    // For example, if the search speed is 1000 knods per second, then a value of UPDATEINTERVAL = 100000 
-    // will result in 10 checks per second (or 0.1s time intervals)
-
     DWORD nchar = 0;
     char command[80];
 

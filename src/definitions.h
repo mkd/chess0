@@ -63,6 +63,9 @@
 #define AI_SEARCH_DEPTH           64
 #define AI_DEPTH_QUIESCE_LIMIT    32
 #define TIME_PER_MOVE              5
+#define LMR_PLY_START              3
+#define LMR_MOVE_START             3
+#define LMR_SEARCH_DEPTH           3
 
 #define SOLVE_MAX_DEPTH           64
 #define NODES_TEST_DEPTH          64
@@ -71,7 +74,7 @@
 #define MOVES_TEST_ITER     50000000
 #define PERFT_DEPTH_LIMIT          6
 
-#define CACHE_HIT_LEVEL          0.3
+#define CACHE_HIT_LEVEL          0.1
 #define BOARD_SERIAL_SIZE         32
 
 
