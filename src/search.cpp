@@ -147,7 +147,7 @@ Move Board::think()
 
 
         // display search analysis
-        if (currentdepth > 1)
+        if (currentdepth > 3)
             displaySearchStats(2, currentdepth, score);
 
 
@@ -232,7 +232,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
                 movesfound++;
 
-                if (!ply && (depth > 1))
+                if (!ply && (depth > 3))
                     displaySearchStats(3, ply, i); 
 
                 // FIXME: cache
@@ -342,7 +342,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
                     triangularLength[ply] = triangularLength[ply+1];
 
-                    if (!ply && (depth > 1))
+                    if (!ply && (depth > 3))
                         displaySearchStats(2, depth, val);
                 }
             }

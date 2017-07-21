@@ -39,6 +39,8 @@
 #include <iomanip>
 #include <sstream>
 #include <map>
+#include <set>
+#include <iterator>
 #include <algorithm>
 #include <string>
 #include <cctype>
@@ -83,7 +85,9 @@ EndType gameEnd = END_TYPE_NOEND;
 
 
 
-// Define the Application class and its methods.
+/*!
+ * Start the whole application and main CLI loop.
+ */
 int startApp(int mode)
 {
     // Welcome the user with the program name and a prompt, which is ready to
@@ -212,6 +216,7 @@ int startApp(int mode)
             string tmpStr = "";
             board.moveBufLen[0] = 0;
             board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+            validMoves.clear();
             for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
             {
                 makeMove(board.moveBuffer[i]);
@@ -578,7 +583,6 @@ void changeSide()
 void dealEnd()
 {
     cout << endl;
-
 
     // show result for draw due to insufficient material.
     //if (remainingPieces < 3)

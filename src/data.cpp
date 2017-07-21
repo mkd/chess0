@@ -34,9 +34,11 @@
 
 
  
-//     Initialization of global data at program startup.
-//     This function should be called only once (or else the mirrored data will be 
-//     mirrored back again!!)
+/*!
+ * Initialization of global data at program startup.
+ * This function should be called only once (or else the mirrored data will be 
+ * mirrored back again!!)
+ */
 void dataInit()
 {
        unsigned char CHARBITSET[8];
@@ -763,113 +765,4 @@ void dataInit()
     XB_DO_PENDING = false;
     XB_NO_TIME_LIMIT = false;
     return;
-}
- 
-void info()
-{
- 
-       //  your playground... display variables - meant for testing/verification purposes only
-       std::cout << std::endl << "============ info start ==============" << std::endl;
-       std::cout << "size of board, in bytes   = " << sizeof(board) << std::endl;
-       std::cout << "Material value            = " << board.Material << std::endl;
-       std::cout << "White castling rights     = " << int(board.castleWhite) << std::endl;
-       std::cout << "Black castling rights     = " << int(board.castleBlack) << std::endl;
-       std::cout << "En-passant square         = " << board.epSquare << std::endl;
-       std::cout << "Fifty move count          = " << board.fiftyMove << std::endl;
- 
-       std::cout << "bitCnt of white pawns     = " << bitCnt(board.whitePawns) << std::endl;
-       std::cout << std::endl << "bitmap of blackKnights | board.whitePawns:" << std::endl;
-       displayBitmap(board.blackKnights | board.whitePawns);
-       std::cout << "============ info end ================" << std::endl << std::endl;
- 
-       return;
-}
-
-void readIniFile()
-{
-    int nextc;
-    FILE* inifile;
-
-//  ===========================================================================
-//  Open the ini file:
-//  ===========================================================================
-    inifile = fopen(INIFILE, "r");
-    if (!inifile) 
-    {
-        std::cout << "warning: no ini file " << INIFILE << std::endl;
-        std::cout << "path: " << PATHNAME << std::endl;
-        return;
-    }
-    else
-    {
-        std::cout << "Initialization file: " << INIFILE << std::endl;
-    }
-
-    while ((nextc = getc(inifile)) != EOF)
-    {
-        if (nextc == '\n')
-        {
-            CMD_BUFF[CMD_BUFF_COUNT] = '\0';
-            CMD_BUFF_COUNT = '\0';
-            if (!doIniCommand(CMD_BUFF)) break;
-        }
-        else
-        {
-            if (CMD_BUFF_COUNT >= MAX_CMD_BUFF-1)
-            {
-                std::cout << "Warning: command buffer full !! " << std::endl;
-                CMD_BUFF_COUNT = 0;
-            }
-            CMD_BUFF[CMD_BUFF_COUNT++] = nextc;
-        }
-    }
-    fclose(inifile);
-    return;
-}
- 
-BOOLTYPE doIniCommand(const char *buf)
-{
-    int number;
-
-    if (!strncmp(buf, "depth", 5))
-    {
-        sscanf(buf+5, "%d", &board.searchDepth);
-        if (board.searchDepth < 1) board.searchDepth = 1;
-        if (board.searchDepth > MAX_PLY) board.searchDepth = MAX_PLY;
-        CMD_BUFF_COUNT = '\0';
-        return true;
-    }
-
-    if (!strncmp(buf, "time", 4))
-    {
-        sscanf(buf+4,"%lld", &board.maxTime);
-        board.maxTime *= 1000;  // convert to milliseconds
-        if (board.maxTime <= 0) board.maxTime = 1;
-        CMD_BUFF_COUNT = '\0';
-        return true;
-    }
-
-    if (!strncmp(buf, "NULLMOVE_REDUCTION", 18))
-    {
-        sscanf(buf+18, "%d", &NULLMOVE_REDUCTION);
-        CMD_BUFF_COUNT = '\0';
-        return true;
-    }
-
-    if (!strncmp(buf, "NULLMOVE_LIMIT", 14))
-    {
-        sscanf(buf+14, "%d", &NULLMOVE_LIMIT);
-        CMD_BUFF_COUNT = '\0';
-        return true;
-    }
-
-    if (!strncmp(buf, "STOP_FRAC", 9))
-    {
-        sscanf(buf+9, "%d", &number);
-        STOPFRAC = (float)(number/100.0);
-        CMD_BUFF_COUNT = '\0';
-        return true;
-    }
-
-    return true;
 }
