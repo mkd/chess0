@@ -163,7 +163,10 @@ void exec(string input)
 
         // turn cache off
         else if ((arg == "off") || (arg == "false"))
+        {
+            cache.clear();
             useCache = false;
+        }
 
         // show current cache status
         if (useCache)

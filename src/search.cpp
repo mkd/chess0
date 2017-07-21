@@ -235,7 +235,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 if (!ply && (depth > 3))
                     displaySearchStats(3, ply, i); 
 
-                // FIXME: cache
+
+                // 1. Try to find the value of the current move in the cache, if not found
+				//    then default to normal search
                 if (useCache)
                 {
                     auto t = cache.find(hashToStr(board.hashkey, ply+1, alpha, beta, depth));
@@ -246,10 +248,12 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         cacheHit++;
                         val = t->second;
                         cached = true;
+                        followpv = false;
                     }
                 }
 
 
+				// 2. If no value found in the cache, start a normal search
                 if (!cached)
                 {
                     // Configure late-move reductions (LMR): assuming that the moves in the
@@ -293,16 +297,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
                 unmakeMove(moveBuffer[i]);
 
-                // DEBUG
-                //string crap;
-                char tmpSanMove[12];
-                if (cached)
-                {
-                    toSan(moveBuffer[i], tmpSanMove);
-                    cout << "(1) Found value cached: move = '" << tmpSanMove << "'; " << "score = " << val << endl;
-                    cout.flush();
-                }
-
 
                 // if time is up, then return
                 if (timedout)
@@ -327,12 +321,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     alpha = val;
                     pvmovesfound++;
 
-                    // DEBUG
-                    if (cached)
-                    {
-                        toSan(moveBuffer[i], tmpSanMove);
-                        cout << "(2) moveBuffer[i] = '" << tmpSanMove << "'; score = " << val << endl;
-                    }
 
                     // save this move
                     triangularArray[ply][ply] = moveBuffer[i];
@@ -348,19 +336,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             }
             else unmakeMove(moveBuffer[i]);
         }
-    }
-
-
-    // DEBUG
-    char tmpSanMove[12];
-    if (cached)
-    {
-        rememberPV();
-        toSan(moveBuffer[i], tmpSanMove);
-        cout << "Cached move = '" << tmpSanMove << "'; " << "score = " << val << endl;
-        toSan(triangularArray[ply][ply], tmpSanMove);
-        cout << "TriangularArrayPly = '" << tmpSanMove << "'; " << "score = " << val << endl;
-        cout.flush();
     }
 
 
@@ -447,7 +422,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     cout.fill(' ');
                     if (cacheHitRatio > CACHE_HIT_LEVEL)
                     {
-                        cout << "Cached" << " ";
+                        cout << "   Cached";
                     }
                     else
                     {
@@ -463,8 +438,11 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     // search time
                     cout << setw(8) << fixed << setprecision(2) << dt << "s ";
 
-                    // search speed
+                    // search speed (note: if cache on, multiply by 3.33, for parity)
                     float knps = (inodes / (dt * 1000)) / 1.0;
+                    if (useCache)
+                        knps *= 3.33;
+
                     if (dt > 0)
                         cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
                     else

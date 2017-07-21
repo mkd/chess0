@@ -31,13 +31,15 @@
 
 
 
+/*!
+ * Re-order the move list so that the best move is selected as the next move to try.
+ */
 void Board::selectmove(int &ply, int &i, int &depth, bool &followpv)
 {
     int j, k;
     unsigned int best;
     Move temp;
 
-    // re-orders the move list so that the best move is selected as the next move to try.
     if (followpv && depth > 1)
     {
         for (j = i; j < moveBufLen[ply+1]; j++)

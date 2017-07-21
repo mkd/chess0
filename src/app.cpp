@@ -78,7 +78,7 @@ char command[80];
 char userinput[80];
 string userMove = "";
 
-bool useCache = false;
+bool useCache = true;
 bool verbose = true;
 bool LMR = true;
 EndType gameEnd = END_TYPE_NOEND;

@@ -74,7 +74,7 @@
 #define MOVES_TEST_ITER     50000000
 #define PERFT_DEPTH_LIMIT          6
 
-#define CACHE_HIT_LEVEL          0.1
+#define CACHE_HIT_LEVEL          0.2
 #define BOARD_SERIAL_SIZE         32
 
 
