@@ -804,20 +804,21 @@ int captgen(int index)
        }     
         return index;
 }
+
+
  
-BOOLTYPE isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
+/*!
+ *
+ * isAttacked is used mainly as a move legality test to see if targetBitmap is
+ * attacked by white or black.
+ * Returns true at the first attack found, and returns false if no attack is found.
+ * It can be used for:
+ * - check detection, and
+ * - castling legality: test to see if the king passes through, or ends up on,
+ * a square that is attacked
+ */
+bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
 {
- 
-//  ===========================================================================
-//  isAttacked is used mainly as a move legality test to see if targetBitmap is
-//  attacked by white or black.
-//  Returns true at the first attack found, and returns false if no attack is found.
-//  It can be used for:
-//  - check detection, and
-//  - castling legality: test to see if the king passes through, or ends up on,
-//  a square that is attacked
-//  ===========================================================================
- 
        BitMap tempTarget;
        BitMap slidingAttackers;
        int to;
@@ -881,8 +882,11 @@ BOOLTYPE isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
                      tempTarget ^= BITSET[to];
               }
        }
+
        return false;
 }
+
+
 
 void Board::addCaptScore(int &ifirst, int &index)
 {

@@ -38,7 +38,7 @@ struct Timer
     timeb startBuffer;   
     timeb stopBuffer;   
     timeb currentBuffer;
-    BOOLTYPE running;  
+    bool running;  
  
     void init();               // start the timer
     void stop();               // stop the timer

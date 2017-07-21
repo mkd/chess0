@@ -42,7 +42,7 @@ int Board::eval()
     int whitekingsquare, blackkingsquare;
     int whitetotalmat, blacktotalmat;
     int whitetotal, blacktotal;
-    BOOLTYPE endgame;
+    bool endgame;
     BitMap temp, whitepassedpawns, blackpassedpawns;
 
  

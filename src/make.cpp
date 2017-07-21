@@ -981,7 +981,7 @@ void unmakeBlackPromotion(unsigned int prom, unsigned int &to)
        }
 }
 
-BOOLTYPE isOwnKingAttacked()
+bool isOwnKingAttacked()
 {
        // check to see if we are leaving our king in check
        if (board.nextMove)
@@ -994,7 +994,7 @@ BOOLTYPE isOwnKingAttacked()
        }
 }
 
-BOOLTYPE isOtherKingAttacked()
+bool isOtherKingAttacked()
 {
        // check to see if we are leaving our king in check
        if (board.nextMove)
@@ -1008,13 +1008,13 @@ BOOLTYPE isOtherKingAttacked()
 }
 
 
-BOOLTYPE isValidTextMove(char *userMove, Move &move)
+bool isValidTextMove(char *userMove, Move &move)
 {
        // Checks if userMove is valid by comparing it with moves from the move generator
        // If found valid, the move is returned
  
        unsigned char userFrom, userTo, userPromote;
-       BOOLTYPE moveFound;
+       bool moveFound;
        int i;
  
        if (strlen(userMove) > 3)

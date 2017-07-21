@@ -475,11 +475,11 @@ double STOPFRAC = 0.6;
 int TO_CONSOLE;
 
 // Winboard constants & variables:
-BOOLTYPE XB_MODE;
-BOOLTYPE XB_PONDER;
-BOOLTYPE XB_POST;
-BOOLTYPE XB_DO_PENDING;
-BOOLTYPE XB_NO_TIME_LIMIT;
+bool XB_MODE;
+bool XB_PONDER;
+bool XB_POST;
+bool XB_DO_PENDING;
+bool XB_NO_TIME_LIMIT;
 unsigned char XB_NONE = 2;
 unsigned char XB_ANALYZE = 3;
 unsigned char XB_COMPUTER_SIDE;

@@ -94,47 +94,47 @@ unsigned int Move::getProm()
 // first mask, then compare
 // Note that we are using the bit-wise properties of piece identifiers, so we cannot just change them anymore !
  
-BOOLTYPE Move::isWhitemove()  
+bool Move::isWhitemove()  
 {   // piec is white: bit 15 must be 0
        return (~moveInt & 0x00008000) == 0x00008000;
 } 
  
-BOOLTYPE Move::isBlackmove()  
+bool Move::isBlackmove()  
 {   // piec is black: bit 15 must be 1
        return ( moveInt & 0x00008000) == 0x00008000;
 } 
  
-BOOLTYPE Move::isCapture()    
+bool Move::isCapture()    
 {   // capt is nonzero, bits 16 to 19 must be nonzero
        return ( moveInt & 0x000f0000) != 0x00000000;
 } 
  
-BOOLTYPE Move::isKingcaptured()
+bool Move::isKingcaptured()
 {   // bits 17 to 19 must be 010
        return ( moveInt & 0x00070000) == 0x00020000;
 } 
  
-BOOLTYPE Move::isRookmove()
+bool Move::isRookmove()
 {   // bits 13 to 15 must be 110
        return ( moveInt & 0x00007000) == 0x00006000;
 } 
  
-BOOLTYPE Move::isRookcaptured()
+bool Move::isRookcaptured()
 {   // bits 17 to 19 must be 110
        return ( moveInt & 0x00070000) == 0x00060000;
 } 
  
-BOOLTYPE Move::isKingmove()
+bool Move::isKingmove()
 {   // bits 13 to 15 must be 010
        return ( moveInt & 0x00007000) == 0x00002000;
 } 
  
-BOOLTYPE Move::isPawnmove()
+bool Move::isPawnmove()
 {   // bits 13 to 15 must be 001
        return ( moveInt & 0x00007000) == 0x00001000;
 } 
  
-BOOLTYPE Move::isPawnDoublemove()
+bool Move::isPawnDoublemove()
 {   // bits 13 to 15 must be 001 &
        //     bits 4 to 6 must be 001 (from rank 2) & bits 10 to 12 must be 011 (to rank 4)
     // OR: bits 4 to 6 must be 110 (from rank 7) & bits 10 to 12 must be 100 (to rank 5)
@@ -143,27 +143,27 @@ BOOLTYPE Move::isPawnDoublemove()
                                                           ((( moveInt & 0x00000038) == 0x00000030) && ((( moveInt & 0x00000e00) == 0x00000800)))));
 } 
  
-BOOLTYPE Move::isEnpassant()  
+bool Move::isEnpassant()  
 {   // prom is a pawn, bits 21 to 23 must be 001
        return ( moveInt & 0x00700000) == 0x00100000;
 } 
  
-BOOLTYPE Move::isPromotion()  
+bool Move::isPromotion()  
 {   // prom (with color bit removed), .xxx > 2 (not king or pawn)
        return ( moveInt & 0x00700000) >  0x00200000;
 } 
  
-BOOLTYPE Move::isCastle()     
+bool Move::isCastle()     
 {   // prom is a king, bits 21 to 23 must be 010
        return ( moveInt & 0x00700000) == 0x00200000;
 } 
  
-BOOLTYPE Move::isCastleOO()   
+bool Move::isCastleOO()   
 {   // prom is a king and tosq is on the g-file
        return ( moveInt & 0x007001c0) == 0x00200180;
 } 
  
-BOOLTYPE Move::isCastleOOO()  
+bool Move::isCastleOOO()  
 {   // prom is a king and tosq is on the c-file
        return ( moveInt & 0x007001c0) == 0x00200080;
 }

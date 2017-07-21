@@ -53,7 +53,7 @@ int Board::SEE(Move &move)
     int materialgains[32];
     BitMap attackers, nonremoved;
     unsigned char stm;
-    BOOLTYPE ispromorank;
+    bool ispromorank;
 
     nrcapts = 0;
     nonremoved = ~0;

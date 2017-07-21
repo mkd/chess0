@@ -33,7 +33,7 @@
 
 
  
-BOOLTYPE readFen(char *filename, int number)
+bool readFen(char *filename, int number)
 {
        int numberf;
        char s[180];
@@ -46,7 +46,7 @@ BOOLTYPE readFen(char *filename, int number)
        char temp[80];
        int fenhalfmoveclock;
        int fenfullmovenumber;
-       BOOLTYPE returnValue;
+       bool returnValue;
        FILE * fp;
  
        returnValue = false;

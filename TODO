@@ -4,14 +4,12 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Replace BOOLTYPE with bool
+- Redo cache, try first with followpv=false, then saving PV line
 
 
 
 BEFORE NEXT RELEASE
 ===================
-- Redo cache, try first with followpv=false, then saving PV line
-
 - save.cpp:
   - boardToFEN() (implement FEN writer by looping on the board)
   - FENToBoard() (use readFEN and setup.cpp)

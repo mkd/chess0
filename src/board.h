@@ -56,7 +56,7 @@ struct Board
     int totalWhitePieces;          // sum of Q+R+B+N material value for white (in centipawns)
     int totalBlackPieces;          // sum of Q+R+B+N material value for black  (in centipawns)
 
-    BOOLTYPE flipBoard;          // only used for displaying the board. TRUE or FALSE.
+    bool flipBoard;          // only used for displaying the board. TRUE or FALSE.
 
     // storing moves:
     Move moveBuffer[MAX_MOV_BUFF]; // all generated moves of the current search tree are stored in this array.
@@ -75,13 +75,13 @@ struct Board
     Move lastPV[MAX_PLY];
     unsigned int whiteHeuristics[64][64];
     unsigned int blackHeuristics[64][64];
-    BOOLTYPE followpv;
-    BOOLTYPE allownull;
+    bool followpv;
+    bool allownull;
     U64 inodes;
     U64 countdown;
     U64 maxTime; 
-    BOOLTYPE timedout;
-    BOOLTYPE ponder;
+    bool timedout;
+    bool ponder;
 
     void init();
     int eval();
@@ -91,13 +91,13 @@ struct Board
     int alphabetapvs(int ply, int depth, int alpha, int beta);
     int qsearch(int ply, int alpha, int beta);
     void displaySearchStats(int mode, int depth, int score);
-    BOOLTYPE isEndOfgame(int &legalmoves, Move &singlemove);
+    bool isEndOfgame(int &legalmoves, Move &singlemove);
     int repetitionCount();
     void mirror();
     void initFromSquares(int input[64], unsigned char next, int fiftyM, int castleW, int castleB, int epSq);
     void display();
     void rememberPV();
-    void selectmove(int &ply, int &i, int &depth, BOOLTYPE &followpv); 
+    void selectmove(int &ply, int &i, int &depth, bool &followpv); 
     void addCaptScore(int &ifirst, int &index);
     int SEE(Move &move);
     BitMap attacksTo(int &target);

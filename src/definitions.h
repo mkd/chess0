@@ -124,8 +124,7 @@ enum EndType
 
 typedef uint64_t U64;
 typedef uint64_t BitMap;
-typedef short SHORTINT;
-typedef unsigned short USHORTINT;
-typedef int BOOLTYPE;
+
+
  
 #endif // _DEFINITIONS_H_

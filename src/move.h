@@ -56,20 +56,20 @@ struct Move
     unsigned int getPiec();  
     unsigned int getCapt();
     unsigned int getProm();  
-    BOOLTYPE isWhitemove();
-    BOOLTYPE isBlackmove();
-    BOOLTYPE isCapture();
-    BOOLTYPE isKingcaptured();
-    BOOLTYPE isRookmove();
-    BOOLTYPE isRookcaptured();
-    BOOLTYPE isKingmove();
-    BOOLTYPE isPawnmove();
-    BOOLTYPE isPawnDoublemove();
-    BOOLTYPE isEnpassant();
-    BOOLTYPE isPromotion();
-    BOOLTYPE isCastle();
-    BOOLTYPE isCastleOO();
-    BOOLTYPE isCastleOOO();
+    bool isWhitemove();
+    bool isBlackmove();
+    bool isCapture();
+    bool isKingcaptured();
+    bool isRookmove();
+    bool isRookcaptured();
+    bool isKingmove();
+    bool isPawnmove();
+    bool isPawnDoublemove();
+    bool isEnpassant();
+    bool isPromotion();
+    bool isCastle();
+    bool isCastleOO();
+    bool isCastleOOO();
 };
  
 #endif // _MOVE_H_

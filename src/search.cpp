@@ -502,9 +502,12 @@ void Board::displaySearchStats(int mode, int depth, int score)
 }
 
 
-// Checks if the current position is end-of-game due to:
-// checkmate, stalemate, 50-move rule, or insufficient material
-BOOLTYPE Board::isEndOfgame(int &legalmoves, Move &singlemove)
+
+/*!
+ * Checks if the current position is end-of-game due to:
+ * checkmate, stalemate, 50-move rule, or insufficient material.
+ */
+bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 {
     int whiteknights, whitebishops, whiterooks, whitequeens, whitetotalmat;
     int blackknights, blackbishops, blackrooks, blackqueens, blacktotalmat;
@@ -610,7 +613,9 @@ BOOLTYPE Board::isEndOfgame(int &legalmoves, Move &singlemove)
 
 
 
-//  repetitionCount is used to detect threefold repetitions of the current position
+/*!
+ * RepetitionCount is used to detect threefold repetitions of the current position.
+ */
 int Board::repetitionCount()
 {
     int i, ilast, rep;
@@ -624,8 +629,11 @@ int Board::repetitionCount()
 }
 
 
-// remember the last PV, and also the 5 previous ones because 
-// they usually contain good moves to try
+
+/*!
+ * Remember the last PV, and also the 5 previous ones because
+ * they usually contain good moves to try.
+ */
 void Board::rememberPV()
 {
     int i;

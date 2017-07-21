@@ -31,7 +31,7 @@
 
 
 
-void Board::selectmove(int &ply, int &i, int &depth, BOOLTYPE &followpv)
+void Board::selectmove(int &ply, int &i, int &depth, bool &followpv)
 {
     int j, k;
     unsigned int best;

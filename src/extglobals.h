@@ -227,11 +227,11 @@ extern double STOPFRAC;
 
 extern int TO_CONSOLE;
 
-extern BOOLTYPE XB_MODE;
-extern BOOLTYPE XB_PONDER;
-extern BOOLTYPE XB_POST;
-extern BOOLTYPE XB_DO_PENDING;
-extern BOOLTYPE XB_NO_TIME_LIMIT;
+extern bool XB_MODE;
+extern bool XB_PONDER;
+extern bool XB_POST;
+extern bool XB_DO_PENDING;
+extern bool XB_NO_TIME_LIMIT;
 extern unsigned char XB_NONE;
 extern unsigned char XB_ANALYZE;
 extern unsigned char XB_COMPUTER_SIDE;
