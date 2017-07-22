@@ -4,7 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Redo cache, try first with followpv=false, then saving PV line
 
 
 
@@ -22,6 +21,10 @@ BEFORE NEXT RELEASE
 IMPORTANT
 =========
 - Improve evaluation function (opening, middle, end)
+
+- Proper cache implementation ttEntry and Cache class, use Zobrist for index and
+  LRU to make sure it doesn't explode into Gbytes of data. Condition: cache=true
+  should make the program noticeably faster and stronger at every time.
 
 - Razoring
 

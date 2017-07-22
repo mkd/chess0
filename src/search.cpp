@@ -50,8 +50,6 @@ using namespace std;
 
 
 
-unordered_map<string, int> cache;
-float cacheHit;
 unsigned short nextDepth = 0;
 unsigned short nextPly = 0;
 unsigned short quiesceDepth = 0;
@@ -71,7 +69,6 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
     Move singlemove;
-    cacheHit = 0;
 
 
     //  Check if the game has ended, or if there is only one legal move,
@@ -168,7 +165,6 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
-    bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -236,62 +232,35 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     displaySearchStats(3, ply, i); 
 
 
-                // 1. Try to find the value of the current move in the cache, if not found
-				//    then default to normal search
-                if (useCache)
+                // Configure late-move reductions (LMR): assuming that the moves in the
+                // list are ordered from potential best to potential worst, analyzing 
+                // the first moves is more critical than the last ones. Therefore, 
+                // using LMR we analyze the first 2 moves in full-depth, but cut down
+                // the analysis depth for the rest of moves.
+                nextPly   = ply + 1;
+                nextDepth = depth - 1;
+                if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion())
+                        && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START))
                 {
-                    auto t = cache.find(hashToStr(board.hashkey, ply+1, alpha, beta, depth));
-                    if (t == cache.end())
-                        cached = false;
-                    else
-                    {
-                        cacheHit++;
-                        val = t->second;
-                        cached = true;
-                        followpv = false;
-                    }
+                    nextPly   = ply + 2;
+                    nextDepth = depth - 2;
                 }
 
 
-				// 2. If no value found in the cache, start a normal search
-                if (!cached)
+                // alphabeta search 
+                if (pvmovesfound)
                 {
-                    // Configure late-move reductions (LMR): assuming that the moves in the
-                    // list are ordered from potential best to potential worst, analyzing 
-                    // the first moves is more critical than the last ones. Therefore, 
-                    // using LMR we analyze the first 2 moves in full-depth, but cut down
-                    // the analysis depth for the rest of moves.
-                    nextPly   = ply + 1;
-                    nextDepth = depth - 1;
-                    if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion())
-                            && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START))
-                    {
-                        nextPly   = ply + 2;
-                        nextDepth = depth - 2;
-                    }
+                    val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
 
+                    // in case of failure, proceed with normal alphabeta
+                    if ((val > alpha) && (val < beta))
+                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
+                }
 
-                    // alphabeta search 
-                    if (pvmovesfound)
-                    {
-                        val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
-
-                        // in case of failure, proceed with normal alphabeta
-                        if ((val > alpha) && (val < beta))
-                            val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
-                    }
-
-                    // normal alphabeta
-                    else
-                    {
-                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
-                    }
-
-
-                    // store the move in the cache, if cache enabled
-                    if (useCache)
-                        if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
-                            cache[hashToStr(board.hashkey, ply+1, alpha, beta, depth)] = val;
+                // normal alphabeta
+                else
+                {
+                    val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
                 }
 
 
@@ -418,31 +387,20 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     cout << noshowpos;
 
                     // display the amount of nodes searched
-                    float cacheHitRatio = cacheHit / inodes;
                     cout.fill(' ');
-                    if (cacheHitRatio > CACHE_HIT_LEVEL)
-                    {
-                        cout << "   Cached";
-                    }
+                    cout << ' ';
+                    if (inodes > 1000000)
+                        cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
+                    else if (inodes > 1000)
+                        cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
                     else
-                    {
-                        cout << " ";
-                        if (inodes > 1000000)
-                            cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
-                        else if (inodes > 1000)
-                            cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
-                        else
-                            cout << setw(8) << setprecision(0) << inodes;
-                    }
+                        cout << setw(8) << setprecision(0) << inodes;
 
                     // search time
                     cout << setw(8) << fixed << setprecision(2) << dt << "s ";
 
-                    // search speed (note: if cache on, multiply by 3.33, for parity)
+                    // search speed
                     float knps = (inodes / (dt * 1000)) / 1.0;
-                    if (useCache)
-                        knps *= 3.33;
-
                     if (dt > 0)
                         cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
                     else

@@ -56,7 +56,6 @@ void initListOfCommands()
     listOfCommands.push_back("back");
     listOfCommands.push_back("bench");
     listOfCommands.push_back("book");
-    listOfCommands.push_back("cache");
     listOfCommands.push_back("depth");
     listOfCommands.push_back("draw");
     listOfCommands.push_back("edit");
@@ -149,60 +148,6 @@ void exec(string input)
         // TODO: analyze
     }
 
-
-    /*
-     * cache
-     *
-     * Enable/disable/show cache usage.
-     */
-    else if (cmd == "cache")
-    {
-        // turn cache on
-        if ((arg == "on") || (arg == "true"))
-            useCache = true;
-
-        // turn cache off
-        else if ((arg == "off") || (arg == "false"))
-        {
-            cache.clear();
-            useCache = false;
-        }
-
-        // show current cache status
-        if (useCache)
-        {
-            char measure = '\0';
-            float size = 0;
-
-            cout << "Cache is enabled." << endl;
-
-            // check the current cache size (usage)
-            size = (cache.size() * (BOARD_SERIAL_SIZE + sizeof(float)));
-            if (size > 1024)
-            {
-                measure = 'K';
-                size /= 1024;
-            }
-            if (size > 1024)
-            {
-                measure = 'M';
-                size /= 1024;
-            }
-            if (size > 1024)
-            {
-                measure = 'G';
-                size /= 1024;
-            }
-            cout << "Current cache size: " << fixed << setprecision(2);
-            cout << size << " ";
-            cout << measure << "bytes (";
-            cout << cache.size() << " positions)" << endl;
-        }
-        else
-        {
-            cout << "Cache is disabled." << endl;
-        }
-    }
 
     
     /*
@@ -441,7 +386,6 @@ void exec(string input)
 
         dataInit();
         board.init();
-        cache.clear();
 
         // enable book by default
         useBook = true;
@@ -462,11 +406,9 @@ void exec(string input)
     // Perform test or benchmark.
     else if ((cmd == "test") || (cmd == "bench"))
     {
-        // disable cache, book and verbose
-        bool wasUsingCache   = useCache;
+        // disable book and verbose
         bool wasUsingBook    = useBook;
         bool wasUsingVerbose = verbose;
-        useCache = false;
         useBook = false;
         verbose = false;
 
@@ -565,8 +507,7 @@ void exec(string input)
         }
 
 
-        // re-enable cache, book and verbose
-        useCache = wasUsingCache;
+        // re-enable book and verbose
         useBook  = wasUsingBook;
         verbose  = wasUsingVerbose;
     }
@@ -802,7 +743,7 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "auto  book  cache  depth  draw  edit  eval  flip  game" << endl;
+        cout << "auto  book  depth  draw  edit  eval  flip  game" << endl;
         cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
         cout << "pass  remove  resign  save  sd  show  solve  test" << endl;
         cout << "think undo  verbose  version  quit" << endl;
@@ -829,17 +770,6 @@ void displayHelp(string which)
         cout << "book [on | off]" << endl;
         cout << " Enable or disable the moves from the book for the computer.";
         cout << endl;
-    }
-
-    // help cache
-    else if (which == "cache")
-    {
-        cout << "cache [on | off]" << endl;
-        cout << " Let the computer use the transposition tables to find" << endl;
-        cout << " previously searched positions faster. This typically" << endl;
-        cout << " makes the engine more powerful in middle and end-game." << endl;
-        cout << " Please note that using transposition tables can take" << endl;
-        cout << " a few hundreds of Megabytes for a ~1h game." << endl;
     }
 
 

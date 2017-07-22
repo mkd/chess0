@@ -121,10 +121,10 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
  
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
-extern const int KNIGHT_VALUE = 310;
+extern const int KNIGHT_VALUE = 320;
 extern const int BISHOP_VALUE = 330;
 extern const int ROOK_VALUE = 520;
-extern const int QUEEN_VALUE = 900;
+extern const int QUEEN_VALUE = 960;
 extern const int KING_VALUE = 9999;
 extern const int CHECK_MATE = KING_VALUE;
 
@@ -253,19 +253,19 @@ int ICHECK;
 // They are mirrored back in the right order in dataInit().
 // This is only done to make data entry easier, because you can enter the scoring data as if you're
 // looking at the chess board from White's point of perspective.
-int PENALTY_DOUBLED_PAWN          = 15;
+int PENALTY_DOUBLED_PAWN          = 12;
 int PENALTY_ISOLATED_PAWN         = 20;
 int PENALTY_BACKWARD_PAWN         =  8;
-int BONUS_PASSED_PAWN             = 25;
+int BONUS_PASSED_PAWN             = 30;
 int BONUS_BISHOP_PAIR             = 10;
-int BONUS_ROOK_BEHIND_PASSED_PAWN = 10;
+int BONUS_ROOK_BEHIND_PASSED_PAWN = 15;
 int BONUS_ROOK_ON_OPEN_FILE       = 20;
-int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 20;
+int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 25;
 int BONUS_TEMPO_MIDGAME           = 10;
 int BONUS_TEMPO_ENDGAME           = 20;
  
-int BONUS_PAWN_SHIELD_STRONG = 9;
-int BONUS_PAWN_SHIELD_WEAK = 4;
+int BONUS_PAWN_SHIELD_STRONG = 10;
+int BONUS_PAWN_SHIELD_WEAK = 5;
  
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
 int PAWN_OPPONENT_DISTANCE[8] =      { 0,   2,  1,  0,  0,  0,  0,  0 };

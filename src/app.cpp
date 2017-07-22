@@ -78,7 +78,6 @@ char command[80];
 char userinput[80];
 string userMove = "";
 
-bool useCache = true;
 bool verbose = true;
 bool LMR = true;
 EndType gameEnd = END_TYPE_NOEND;
@@ -628,7 +627,6 @@ void dealEnd()
 
     dataInit();
     board.init();
-    cache.clear();
 
     // enable book by default
     useBook = true;
