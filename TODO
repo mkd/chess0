@@ -4,17 +4,18 @@ TODO
 
 WORK IN PROGRESS
 ================
+- Save/load board
+  - boardToFEN() (implement FEN writer by looping on the board)
+  - FENToBoard() (use readFEN and setup.cpp)
 
 
 
 BEFORE NEXT RELEASE
 ===================
-- save.cpp:
-  - boardToFEN() (implement FEN writer by looping on the board)
-  - FENToBoard() (use readFEN and setup.cpp)
-  - Edit board
-
-- Save/load board
+- Implement commands:
+  - pass/null
+  - material
+  - info (eval, material, phase, sideToMove)
 
 
 

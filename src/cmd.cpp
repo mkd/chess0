@@ -269,7 +269,8 @@ void exec(string input)
      */
     else if (cmd == "edit")
     {
-        // TODO: edit
+        edit();
+        useBook = false;
     }
 
 
@@ -342,12 +343,13 @@ void exec(string input)
     // moves
     else if (cmd == "moves")
     {
-        int i = 0;
-        int number = 0;
+        unsigned int i = 0, number = 0;
         char sanMove[12];
+
         board.moveBufLen[0] = 0;
         board.moveBufLen[1] = movegen(board.moveBufLen[0]);
         cout << endl << "moves from this position:" << endl;
+
         for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
         {
             makeMove(board.moveBuffer[i]);
@@ -443,7 +445,7 @@ void exec(string input)
         else if (arg == "perft")
         {
             clock_t start, end;
-            uint64_t moves;
+            uint64_t perftMoves;
 
             cout << "Testing Perft() function:" << endl;
             cout << "Ply\t  Moves\t     Time\t Moves/s" << endl;
@@ -454,15 +456,15 @@ void exec(string input)
                 board.moveBufLen[0] = 0;
 
                 start = clock();
-                moves = perft(z, z);
+                perftMoves = perft(z, z);
                 end = clock();
 
                 float sec = (end - start) / (CLOCKS_PER_SEC / 1000);
-                float speed = moves / sec;
+                float speed = perftMoves / sec;
  
                 // PRINT: Depth, Moves, Time, Moves/s
                 cout.fill(' ');
-                cout << setw(3) << z << "\t" << setw(7) << moves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
+                cout << setw(3) << z << "\t" << setw(7) << perftMoves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
                 if (isinf(speed))
                     cout << "  -" << endl;
                 else
@@ -744,7 +746,7 @@ void displayHelp(string which)
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  depth  draw  edit  eval  flip  game" << endl;
-        cout << "go  cout  help  history  lmr  load  manual  new  null" << endl;
+        cout << "go  help  history  lmr  load  manual  new  null" << endl;
         cout << "pass  remove  resign  save  sd  show  solve  test" << endl;
         cout << "think undo  verbose  version  quit" << endl;
         return;

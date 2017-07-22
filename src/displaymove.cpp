@@ -108,7 +108,7 @@ void displayPV()
  */
 bool toSan(Move &move, char *sanMove)
 {
-    int i, j, k, ibuf, from, to, piece, capt, prom, ambigfile, ambigrank;
+    unsigned int i, j, k, ibuf, from, to, piece, capt, prom, ambigfile, ambigrank;
     int asciiShift;
     bool legal, check, mate, ambig;
 

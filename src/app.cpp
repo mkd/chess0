@@ -91,16 +91,23 @@ int startApp(int mode)
 {
     // Welcome the user with the program name and a prompt, which is ready to
     // start taking moves (or commands) and play a game.
-    cout << "Welcome to " << PROGRAM_NAME << "!" << endl;
+    if (mode == APP_MODE_CLI)
+        cout << "Welcome to " << PROGRAM_NAME << "!" << endl;
+
+    // XBoard protocol goes here
+    else
+    {
+        // TODO
+    }
 
 
     // Reset all variables before starting a new game.
-    InputType itype;
     string input = "";
     curPlayerType = wPlayer;
     Move myMove;
     string moveIsFromBook = "";
     clock_t start, end;
+    InputType itype;
 
 
     // Initialize the board, the list of commands and the openings book.

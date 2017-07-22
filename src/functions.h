@@ -60,7 +60,7 @@ void		  mstostring(U64 dt, char *);
 U64           perft(int, int);
 bool      readFen(char *, int);
 void		  readIniFile();
-void          setup();
+void          edit();
 void          setupFen(char *, char *, char *, char *, int , int );
 void		  test(char *);
 void		  timeControl();
