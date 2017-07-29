@@ -314,33 +314,36 @@ void Board::display()
 string Board::toFEN()
 {
     string serial = "";
-    cout << "serial = " << serial << endl;
+    unsigned rank, file;
 
     // TODO
-    for (short i = 63; i >= 0; i--)
+    for (rank = 8; rank >= 1; rank--)
     {
-        if (square[i] == EMPTY)         serial.append(1, '1');
-        if (square[i] == WHITE_PAWN)    serial.append(1, 'P');
-        if (square[i] == WHITE_KNIGHT)  serial.append(1, 'N');
-        if (square[i] == WHITE_BISHOP)  serial.append(1, 'B');
-        if (square[i] == WHITE_ROOK)    serial.append(1, 'R');
-        if (square[i] == WHITE_QUEEN)   serial.append(1, 'Q');
-        if (square[i] == WHITE_KING)    serial.append(1, 'K');
-        if (square[i] == BLACK_PAWN)    serial.append(1, 'p');
-        if (square[i] == BLACK_KNIGHT)  serial.append(1, 'n');
-        if (square[i] == BLACK_BISHOP)  serial.append(1, 'b');
-        if (square[i] == BLACK_ROOK)    serial.append(1, 'r');
-        if (square[i] == BLACK_QUEEN)   serial.append(1, 'q');
-        if (square[i] == BLACK_KING)    serial.append(1, 'k');
+        for (file = 1; file <= 8; file++)
+        {
+            if (square[BOARDINDEX[file][rank]] == EMPTY)         serial.append(1, '1');
+            if (square[BOARDINDEX[file][rank]] == WHITE_PAWN)    serial.append(1, 'P');
+            if (square[BOARDINDEX[file][rank]] == WHITE_KNIGHT)  serial.append(1, 'N');
+            if (square[BOARDINDEX[file][rank]] == WHITE_BISHOP)  serial.append(1, 'B');
+            if (square[BOARDINDEX[file][rank]] == WHITE_ROOK)    serial.append(1, 'R');
+            if (square[BOARDINDEX[file][rank]] == WHITE_QUEEN)   serial.append(1, 'Q');
+            if (square[BOARDINDEX[file][rank]] == WHITE_KING)    serial.append(1, 'K');
+            if (square[BOARDINDEX[file][rank]] == BLACK_PAWN)    serial.append(1, 'p');
+            if (square[BOARDINDEX[file][rank]] == BLACK_KNIGHT)  serial.append(1, 'n');
+            if (square[BOARDINDEX[file][rank]] == BLACK_BISHOP)  serial.append(1, 'b');
+            if (square[BOARDINDEX[file][rank]] == BLACK_ROOK)    serial.append(1, 'r');
+            if (square[BOARDINDEX[file][rank]] == BLACK_QUEEN)   serial.append(1, 'q');
+            if (square[BOARDINDEX[file][rank]] == BLACK_KING)    serial.append(1, 'k');
+        }
 
-        if ((i % 8) == 0)
+        if (rank > 1)
             serial.append(1, '/');
     }
 
 
     // append the moving side ('w' or 'b')
     serial.append(1, ' ');
-    if (movingSide == COLOR_TYPE_WHITE)
+    if (movingSide == WHITE_MOVE)
         serial.append(1, 'w');
     else
         serial.append(1, 'b');
