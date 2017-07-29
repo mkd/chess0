@@ -45,9 +45,9 @@
  * perft is also used to measure the performance of the move generator and (un)makeMove in terms
  * of speed, and to compare different implementations of generating, storing and (un)making moves.
  */
-U64 perft(int ply, int depth)
+uint64_t perft(int ply, int depth)
 {
-    U64 retVal = 0;     
+    uint64_t retVal = 0;     
     int i;
 
     // count this node

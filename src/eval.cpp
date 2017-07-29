@@ -22,7 +22,9 @@
 
 // @file eval.cpp
 //
-// XXX
+// This file contains the necessary functions to evaluate the current board
+// position (i.e., static evaluation) taking into account both material and
+// position.
 #include <iostream>
 #include "definitions.h"
 #include "functions.h"
@@ -31,9 +33,10 @@
 
 
 
-/*!
- * This is Chess0's evaluation function.
- */
+// Board::eval()
+//
+// This is Chess0's evaluation function, including both material and positional
+// evaluation.
 int Board::eval()
 {
     int score, square;

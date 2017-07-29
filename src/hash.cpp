@@ -54,7 +54,7 @@ void HashKeys::init()
     return;
 }
 
-U64 HashKeys::rand64()
+uint64_t HashKeys::rand64()
 {
-    return rand()^((U64)rand()<<15)^((U64)rand()<<30)^((U64)rand()<<45)^((U64)rand()<<60);
+    return rand()^((uint64_t)rand()<<15)^((uint64_t)rand()<<30)^((uint64_t)rand()<<45)^((uint64_t)rand()<<60);
 }

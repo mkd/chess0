@@ -42,7 +42,7 @@ using namespace std;
  * Global variables used in this part of the program.
  */
 int curPlayerType;
-U64 msStart,msStop, moves;
+uint64_t msStart,msStop, moves;
 Timer timer;
 
 
@@ -435,7 +435,7 @@ void exec(string input)
 
             // store current AI settings to restore them after the test
             int cur_depth = board.searchDepth;
-            U64 prevTPM = board.maxTime;
+            uint64_t prevTPM = board.maxTime;
 
 
             // change the depth to make sure the test runs in a controlled environment

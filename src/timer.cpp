@@ -110,7 +110,7 @@ void Timer::displayhms()
        return;
 }
  
-U64 Timer::getms()
+uint64_t Timer::getms()
 {
        if (running)
        {
@@ -122,7 +122,7 @@ U64 Timer::getms()
               return (stopTime - startTime);
 }
  
-U64 Timer::getsysms()
+uint64_t Timer::getsysms()
 {
        ftime(&currentBuffer);
        return (currentBuffer.time * 1000 + currentBuffer.millitm);

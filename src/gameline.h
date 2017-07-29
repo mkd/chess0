@@ -22,11 +22,16 @@
 
 // @file gameline.h
 //
-// XXX
+// This file contains the necessary structure to keep a record of every move in
+// the game line.
 #ifndef _GAMELINE_H_
 #define _GAMELINE_H_
+
+
  
 #include "move.h"
+
+
  
 struct GameLineRecord
 {
@@ -35,7 +40,9 @@ struct GameLineRecord
     unsigned char castleBlack;     // Black's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
     int epSquare;                  // En-passant target square after double pawn move
     int fiftyMove;                 // Moves since the last pawn move or capture
-    U64 key;                       // hash key of the position
+    uint64_t key;                  // hash key of the position
 };
+
+
  
 #endif // _GAMELINE_H_

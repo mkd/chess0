@@ -56,8 +56,8 @@ void          makeCapture(unsigned int &, unsigned int &);
 void          makeMove(Move &);
 void          makeWhitePromotion(unsigned int, unsigned int &);
 int           movegen(int);
-void		  mstostring(U64 dt, char *);
-U64           perft(int, int);
+void		  mstostring(uint64_t dt, char *);
+uint64_t           perft(int, int);
 bool      readFen(char *, int);
 void		  readIniFile();
 void          edit();
@@ -73,7 +73,7 @@ string        getInput();
 void          terminateApp();
 string        bunmap(int);
 bool      isValidTextMove(char *, Move &);
-string        hashToStr(U64, int, int, int, int);
+string        hashToStr(uint64_t, int, int, int, int);
 
 
 

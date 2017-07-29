@@ -945,7 +945,12 @@ void makeBlackPromotion(unsigned int prom, unsigned int &to)
               board.Material           -= KNIGHT_VALUE;
        }
 }
- 
+
+
+
+// unmakeBlackPromotion()
+//
+// XXX 
 void unmakeBlackPromotion(unsigned int prom, unsigned int &to)
 {
        BitMap toBitMap;
@@ -981,396 +986,100 @@ void unmakeBlackPromotion(unsigned int prom, unsigned int &to)
        }
 }
 
+
+
+// isOwnKingAttacked()
+//
+// Check to see if we are leaving our king in check.
 bool isOwnKingAttacked()
 {
-       // check to see if we are leaving our king in check
-       if (board.nextMove)
-       {
-           return isAttacked(board.blackKing, !board.nextMove);
-       }
-       else
-       {
-           return isAttacked(board.whiteKing, !board.nextMove);
-       }
+    if (board.nextMove)
+        return isAttacked(board.blackKing, !board.nextMove);
+    else
+        return isAttacked(board.whiteKing, !board.nextMove);
 }
 
+
+
+// isOtherKingAttacked()
+//
+// Check to see if we are leaving our king in check.
 bool isOtherKingAttacked()
 {
-       // check to see if we are leaving our king in check
-       if (board.nextMove)
-       {
-           return isAttacked(board.whiteKing, board.nextMove);
-       }
-       else
-       {
-           return isAttacked(board.blackKing, board.nextMove);
-       }
+    if (board.nextMove)
+        return isAttacked(board.whiteKing, board.nextMove);
+    else
+        return isAttacked(board.blackKing, board.nextMove);
 }
 
 
+
+// isValidTextMove()
+//
+// Checks if userMove is valid by comparing it with moves from the move generator.
+// If found valid, the move is returned.
 bool isValidTextMove(char *userMove, Move &move)
 {
-       // Checks if userMove is valid by comparing it with moves from the move generator
-       // If found valid, the move is returned
+    unsigned char userFrom, userTo, userPromote;
+    bool moveFound;
+    int i;
  
-       unsigned char userFrom, userTo, userPromote;
-       bool moveFound;
-       int i;
- 
-       if (strlen(userMove) > 3)
-       {
-              userFrom = userMove[0] - 97;
-              userFrom += 8 * (userMove[1] - 49);
-              userTo = userMove[2] - 97;
-              userTo += 8 * (userMove[3] - 49);
-       }
- 
-       userPromote = 0;
-       if (strlen(userMove) > 4)
-       {
-              if (board.nextMove == WHITE_MOVE)
-              {
-                     switch (userMove[4])
-                     {                   
-                           case 'q': userPromote = WHITE_QUEEN; break;
-                           case 'r': userPromote = WHITE_ROOK; break;
-                           case 'b': userPromote = WHITE_BISHOP; break;
-                           case 'n': userPromote = WHITE_KNIGHT; break;
-                     }
-              }
-              else
-                     switch (userMove[4])
-                     {                   
-                           case 'q': userPromote = BLACK_QUEEN; break;
-                           case 'r': userPromote = BLACK_ROOK; break;
-                           case 'b': userPromote = BLACK_BISHOP; break;
-                           case 'n': userPromote = BLACK_KNIGHT; break;
-                     }
-       }
- 
-       moveFound = false;
-       for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
-       {
-              if ((board.moveBuffer[i].getFrom() == userFrom) && (board.moveBuffer[i].getTosq() == userTo))
-              { 
-                     if (((board.square[userFrom] == WHITE_PAWN) && (RANKS[userFrom] == 7)) ||
-                         ((board.square[userFrom] == BLACK_PAWN) && (RANKS[userFrom] == 2)))
-                     {
-                           if (board.moveBuffer[i].getProm() == userPromote)
-                           {
-                                  move.moveInt = board.moveBuffer[i].moveInt;
-                                  return true;
-                           }
-                     }
-                     else
-                     {
-                           move.moveInt = board.moveBuffer[i].moveInt;
-                           return true;
-                     }
-              }
-       }
-       move.moveInt = 0;
-       return false;
-}
-
-  
-// check if board.square, piece bitmaps and whitepieces and blackpiese and occupied square are all consistent after (un)makmove
-void debugMoves(char *caller, Move &move)
-{
-       char input[80];
-       int mat, i, j;
-       int totwpawn, totbpawn, totwpiec, totbpiec;
-
-        U64 key;
- 
-       // check if both kings are present
-       if ((bitCnt(board.whiteKing) != 1) || (bitCnt(board.blackKing) != 1))
-       {
-              cout << "king captured after  " << caller << endl;
-              displayMove(move); cout << endl;
-              for (j = 0 ; j < board.endOfSearch ; j++)
-       {
-                     cout << j+1 << ". ";
-                     displayMove(board.gameLine[j].move);
-                     cout <<endl;
-              }
-              board.display();
-              cin >> input;
-       }
- 
-       // check if board.square and piece bitmaps and whitepieces and blackpiese and occupied square are all telling the same
-       for (i = 0 ; i < 64 ; i++)
-       {
-              if ((board.blackQueens & BITSET[i]) && (board.square[i] != BLACK_QUEEN))
-              {
-                     cout << "inconsistency in black queens after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.blackRooks & BITSET[i]) && (board.square[i] != BLACK_ROOK))
-              {
-                     cout << "inconsistency in black rooks after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     displayBitmap(board.blackRooks);
-                     cin >> input;
-              }
-              if ((board.blackBishops & BITSET[i]) && (board.square[i] != BLACK_BISHOP))
-              {
-                     cout << "inconsistency in black bishops after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.blackKnights & BITSET[i]) && (board.square[i] != BLACK_KNIGHT))
-              {
-                     cout << "inconsistency in black knights after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     displayMove(move);
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.blackKing & BITSET[i]) && (board.square[i] != BLACK_KING))
-              {
-                     cout << "inconsistency in black king after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.blackPawns & BITSET[i]) && (board.square[i] != BLACK_PAWN))
-              {
-                     cout << "inconsistency in black pawns after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     displayBitmap(board.blackPawns);
-                     cout.flush();
-                     cin >> input;
-              }
-              if ((board.whiteQueens & BITSET[i]) && (board.square[i] != WHITE_QUEEN))
-              {
-                     cout << "inconsistency in white queens after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.whiteRooks & BITSET[i]) && (board.square[i] != WHITE_ROOK))
-              {
-                     cout << "inconsistency in white rooks after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                            cout <<endl;
-                     }
-                     board.display();
-                     displayBitmap(board.whiteRooks);
-                     cin >> input;
-              }
-              if ((board.whiteBishops & BITSET[i]) && (board.square[i] != WHITE_BISHOP))
-              {
-                     cout << "inconsistency in white bishops after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.whiteKnights & BITSET[i]) && (board.square[i] != WHITE_KNIGHT))
-              {
-                     cout << "inconsistency in white knights  after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.whiteKing & BITSET[i]) && (board.square[i] != WHITE_KING))
-              {
-                     cout << "inconsistency in white king after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                            cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-              if ((board.whitePawns & BITSET[i]) && (board.square[i] != WHITE_PAWN))
-              {
-                     cout << "inconsistency in white pawns after " << caller << endl;
-                     displayMove(move); cout << endl;
-                     for (j = 0 ; j < board.endOfSearch ; j++)
-              {
-                           cout << j+1 << ". ";
-                           displayMove(board.gameLine[j].move);
-                           cout <<endl;
-                     }
-                     board.display();
-                     cin >> input;
-              }
-       }
- 
-       if (board.whitePieces != (board.whiteKing | board.whiteQueens | board.whiteRooks | board.whiteBishops | board.whiteKnights | board.whitePawns ))
-       {
-              cout << "inconsistency in whitePieces after " << caller << endl;
-              displayMove(move); cout << endl;
-              for (j = 0 ; j < board.endOfSearch ; j++)
-       {
-                     cout << j+1 << ". ";
-                     displayMove(board.gameLine[j].move);
-                     cout <<endl;
-              }
-              board.display();
-              displayBitmap(board.whitePieces);
-              cin >> input;
-       }
- 
-       if (board.blackPieces != (board.blackKing | board.blackQueens | board.blackRooks | board.blackBishops | board.blackKnights | board.blackPawns ))
-       {
-              cout << "inconsistency in blackPieces after " << caller << endl;
-              displayMove(move); cout << endl;
-              for (j = 0 ; j < board.endOfSearch ; j++)
-       {
-                     cout << j+1 << ". ";
-                     displayMove(board.gameLine[j].move);
-                     cout <<endl;
-              }
-              board.display();
-              displayBitmap(board.blackPieces);
-              cin >> input;
-       }
- 
-       if (board.occupiedSquares != (board.whitePieces | board.blackPieces))
-       {
-              cout << "inconsistency in occupiedSquares after " << caller << endl;
-              displayMove(move); cout << endl;
-              for (j = 0 ; j < board.endOfSearch ; j++)
-       {
-                     cout << j+1 << ". ";
-                     displayMove(board.gameLine[j].move);
-                     cout <<endl;
-              }
-              board.display();
-              displayBitmap(board.occupiedSquares);
-              cin >> input;
-       }
- 
-        totwpawn = bitCnt(board.whitePawns) * PAWN_VALUE;
-        totbpawn = bitCnt(board.blackPawns) * PAWN_VALUE;
-        totwpiec =  bitCnt(board.whiteKnights) * KNIGHT_VALUE + bitCnt(board.whiteBishops) * BISHOP_VALUE +
-                            bitCnt(board.whiteRooks) * ROOK_VALUE + bitCnt(board.whiteQueens) * QUEEN_VALUE;
-        totbpiec =  bitCnt(board.blackKnights) * KNIGHT_VALUE + bitCnt(board.blackBishops) * BISHOP_VALUE +
-                            bitCnt(board.blackRooks) * ROOK_VALUE + bitCnt(board.blackQueens) * QUEEN_VALUE;
-        mat = totwpawn + totwpiec - totbpawn - totbpiec;
-
-       if (board.totalWhitePawns != totwpawn)
-       {
-              cout << "inconsistency in white pawn material after " << caller << endl;
-              displayMove(move);
-              board.display();
-              cin >> input;
-       }
-       if (board.totalBlackPawns != totbpawn)
-       {
-              cout << "inconsistency in black pawn material after " << caller << endl;
-              displayMove(move);
-              board.display();
-              cin >> input;
-       }
-       if (board.totalWhitePieces!= totwpiec)
-       {
-              cout << "inconsistency in white pieces material after " << caller << endl;
-              displayMove(move);
-              board.display();
-              cin >> input;
-       }
-       if (board.totalBlackPieces != totbpiec)
-       {
-              cout << "inconsistency in black pieces material after " << caller << endl;
-              displayMove(move);
-              board.display();
-              cin >> input;
-       }
-
-       if (board.Material != mat)
-       {
-              cout << "inconsistency in material after " << caller << endl;
-              displayMove(move);
-              board.display();
-              cin >> input;
-       }
-
-    key = 0;
-    for (i = 0; i < 64; i++)
+    if (strlen(userMove) > 3)
     {
-        if (board.square[i] != EMPTY) key ^= KEY.keys[i][board.square[i]];  
+        userFrom = userMove[0] - 97;
+        userFrom += 8 * (userMove[1] - 49);
+        userTo = userMove[2] - 97;
+        userTo += 8 * (userMove[3] - 49);
     }
-    if (board.castleWhite & CANCASTLEOO)  key ^= KEY.wk;
-    if (board.castleWhite & CANCASTLEOOO) key ^= KEY.wq;
-    if (board.castleBlack & CANCASTLEOO)  key ^= KEY.bk;
-    if (board.castleBlack & CANCASTLEOOO) key ^= KEY.bq;
-    if (board.nextMove) key ^= KEY.side;
-    if (board.epSquare) key ^= KEY.ep[board.epSquare];
-    if (board.hashkey != key)
+ 
+    userPromote = 0;
+    if (strlen(userMove) > 4)
     {
-        cout << "inconsistency in hashkey after " << caller << endl;
-        displayMove(move);
-        board.display();
-        cin >> input;
+        if (board.nextMove == WHITE_MOVE)
+        {
+            switch (userMove[4])
+            {                   
+                case 'q': userPromote = WHITE_QUEEN; break;
+                case 'r': userPromote = WHITE_ROOK; break;
+                case 'b': userPromote = WHITE_BISHOP; break;
+                case 'n': userPromote = WHITE_KNIGHT; break;
+            }
+        }
+        else
+        {
+            switch (userMove[4])
+            {                   
+                case 'q': userPromote = BLACK_QUEEN; break;
+                case 'r': userPromote = BLACK_ROOK; break;
+                case 'b': userPromote = BLACK_BISHOP; break;
+                case 'n': userPromote = BLACK_KNIGHT; break;
+            }
+        }
     }
-    return;
+ 
+    moveFound = false;
+    for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
+    {
+        if ((board.moveBuffer[i].getFrom() == userFrom) && (board.moveBuffer[i].getTosq() == userTo))
+        { 
+            if (((board.square[userFrom] == WHITE_PAWN) && (RANKS[userFrom] == 7)) ||
+                ((board.square[userFrom] == BLACK_PAWN) && (RANKS[userFrom] == 2)))
+            {
+                if (board.moveBuffer[i].getProm() == userPromote)
+                {
+                    move.moveInt = board.moveBuffer[i].moveInt;
+                    return true;
+                }
+            }
+            else
+            {
+                move.moveInt = board.moveBuffer[i].moveInt;
+                return true;
+            }
+        }
+    }
+
+    move.moveInt = 0;
+
+    return false;
 }

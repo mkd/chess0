@@ -601,9 +601,9 @@ void Board::rememberPV()
 
 
 // convert milliseconds to a time string (hh:mm:ss, mm:ss, s, ms)
-void mstostring(U64 dt, char *timestring)
+void mstostring(uint64_t dt, char *timestring)
 {
-    U64 hh, mm, ss;
+    uint64_t hh, mm, ss;
 
     if (dt > 3600000) 
     {      
@@ -733,7 +733,7 @@ int Board::qsearch(int ply, int alpha, int beta)
 
 
 // XXX
-string hashToStr(U64 hk, int ply, int a, int b, int d)
+string hashToStr(uint64_t hk, int ply, int a, int b, int d)
 {
     return to_string(hk) + "|" + to_string(ply) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
 }

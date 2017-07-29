@@ -70,7 +70,7 @@ struct Board
     unsigned char castleBlack;     // Black's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
     int epSquare;                  // En-passant target square after double pawn move
     int fiftyMove;                 // Moves since the last pawn move or capture
-    U64 hashkey;                   // Random 'almost' unique signature for current board position.
+    uint64_t hashkey;                   // Random 'almost' unique signature for current board position.
  
     // additional variables:
     int square[64];                // incrementally updated, this array is usefull if we want to
@@ -95,7 +95,7 @@ struct Board
     int triangularLength[MAX_PLY];
     Move triangularArray[MAX_PLY][MAX_PLY];
     Timer timer;
-    U64 msStart, msStop;
+    uint64_t msStart, msStop;
     int searchDepth;
     int lastPVLength;
     Move lastPV[MAX_PLY];
@@ -103,9 +103,9 @@ struct Board
     unsigned int blackHeuristics[64][64];
     bool followpv;
     bool allownull;
-    U64 inodes;
-    U64 countdown;
-    U64 maxTime; 
+    uint64_t inodes;
+    uint64_t countdown;
+    uint64_t maxTime; 
     bool timedout;
     bool ponder;
 

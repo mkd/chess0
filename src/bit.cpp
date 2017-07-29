@@ -34,14 +34,14 @@ using namespace std;
 
  
 // MIT HAKMEM algorithm, see http://graphics.stanford.edu/~seander/bithacks.html
-unsigned int bitCnt(U64 bitmap)
+unsigned int bitCnt(uint64_t bitmap)
 {
-    static const U64  M1 = 0x5555555555555555;  // 1 zero,  1 one ...
-    static const U64  M2 = 0x3333333333333333;  // 2 zeros,  2 ones ...
-    static const U64  M4 = 0x0f0f0f0f0f0f0f0f;  // 4 zeros,  4 ones ...
-    static const U64  M8 = 0x00ff00ff00ff00ff;  // 8 zeros,  8 ones ...
-    static const U64 M16 = 0x0000ffff0000ffff;  // 16 zeros, 16 ones ...
-    static const U64 M32 = 0x00000000ffffffff;  // 32 zeros, 32 ones
+    static const uint64_t  M1 = 0x5555555555555555;  // 1 zero,  1 one ...
+    static const uint64_t  M2 = 0x3333333333333333;  // 2 zeros,  2 ones ...
+    static const uint64_t  M4 = 0x0f0f0f0f0f0f0f0f;  // 4 zeros,  4 ones ...
+    static const uint64_t  M8 = 0x00ff00ff00ff00ff;  // 8 zeros,  8 ones ...
+    static const uint64_t M16 = 0x0000ffff0000ffff;  // 16 zeros, 16 ones ...
+    static const uint64_t M32 = 0x00000000ffffffff;  // 32 zeros, 32 ones
  
     bitmap = (bitmap & M1 ) + ((bitmap >>  1) & M1 );   //put count of each  2 bits into those  2 bits
     bitmap = (bitmap & M2 ) + ((bitmap >>  2) & M2 );   //put count of each  4 bits into those  4 bits
@@ -52,7 +52,7 @@ unsigned int bitCnt(U64 bitmap)
     return (int)bitmap;
 }
  
-unsigned int firstOne(U64 bitmap)
+unsigned int firstOne(uint64_t bitmap)
 {
     // De Bruijn Multiplication, see http://chessprogramming.wikispaces.com/BitScan
     // don't use this if bitmap = 0
@@ -67,14 +67,14 @@ unsigned int firstOne(U64 bitmap)
     56, 45, 25, 31, 35, 16,  9, 12,
     44, 24, 15,  8, 23,  7,  6,  5  };
  
-    static const U64 DEBRUIJN64 = U64(0x07EDD5E59A4E28C2);
+    static const uint64_t DEBRUIJN64 = uint64_t(0x07EDD5E59A4E28C2);
  
     // here you would get a warming: "unary minus operator applied to unsigned type",
     // that's intended and OK so I'll disable it
     return INDEX64[((bitmap & -bitmap) * DEBRUIJN64) >> 58];  
 }
  
-unsigned int lastOne(U64 bitmap)
+unsigned int lastOne(uint64_t bitmap)
 {
     // this is Eugene Nalimov's bitScanReverse
     // use firstOne if you can, it is faster than lastOne.
