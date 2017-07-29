@@ -3,8 +3,8 @@ Chess0 is a computer chess program developed in C++ and based on Winglet chess
 by Stef Luijten.
 
 Chess0 approximate ELO:
-- Blitz (fast games, <30min) = 1611
-- Standard (>30min) = 1590
+- Blitz (fast games, <30min) = 1649
+- Standard (>30min) = 1611
 
 
 ## Download
@@ -58,5 +58,5 @@ Chess0's implementation is currently based on
   that you can play against Chess0 using a graphical user interface (GUI) board.
 
 - **Opening book:** Chess0 comes with a built-in openings book (currently about
-  1200 learned theory lines). The book is always in use by default, however you
+  700 learned theory lines). The book is always in use by default, however you
   can disable it with the command 'book off'.
