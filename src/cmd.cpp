@@ -25,6 +25,7 @@
 // This file contains the functionality to execute all commands from the CLI
 // interface of Chess0.
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <unordered_map>
 #include <stdio.h>
@@ -530,7 +531,26 @@ void exec(string input)
     // save: save a position to a disk file
     else if (cmd == "save")
     {
-        // TODO: save
+        // open the disk file for loading or return on fail
+        string filename = arg.c_str();
+        filename += ".c0";
+        ofstream fout(filename);
+        if (!fout.is_open())
+        {
+            cout << "Error saving position to '" << filename << "'." << endl;
+        }
+        else
+        { 
+            // if the file was successfully opened, save the position
+            fout << "[FEN ";
+            fout << board.toFEN();
+            fout << "]";
+            fout.close();
+
+            // tell the user that the saving was correct
+            cout << "Current board position saved to file '" << filename;
+            cout << "'." << endl;
+        }
     }
 
 

@@ -4,9 +4,9 @@ TODO
 
 WORK IN PROGRESS
 ================
-- save:
-  - boardToFEN() (implement FEN writer by looping on the board)
-  - start by copying save() command from original chess0
+- toFEN():
+  - perform loop row by row (right now it changes direction every second row)
+  - implement castling rights, 50rule and move number
 
 
 
@@ -19,6 +19,7 @@ BEFORE NEXT RELEASE
 
 - Implement commands:
   - pass/null
+  - auto
 
 - Implement ttEntry cache
   - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,

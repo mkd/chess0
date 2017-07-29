@@ -201,7 +201,9 @@ BitMap Board::attacksTo(int &target)
 
 
 
-//  revealNextAttacker checks if there was another 'hidden' attacker that was
+//  Board::revealNextAttacker()
+//
+//  Check if there was another 'hidden' attacker that was
 //  lined-up after an attacker has been removed. 
 //  If so, the attackers bitmap is updated accordingly.
 BitMap Board::revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading)

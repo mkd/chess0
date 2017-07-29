@@ -58,6 +58,9 @@
 #include "timer.h"
 
 
+using namespace std;
+
+
 
 struct Board
 {
@@ -129,6 +132,7 @@ struct Board
     BitMap attacksTo(int &target);
     BitMap revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading);
     void readClockAndInput();
+    string toFEN();
 
 };
 
