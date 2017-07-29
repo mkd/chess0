@@ -22,12 +22,21 @@
 
 // @file search.cpp
 //
-// XXX
+// This file contains the main search methods for finding the best next move.
+//
+// It is based on a simple alpha-beta pruning mechanism runnning on top of a
+// miniMAX, and it includes multiple optimizations, such as:
+// - Principal Variation search (PVS)
+// - null move heuristics
+// - history & killer heuristics
+// - late move reductions (LMR)
+// - quiescence search
 #if defined(_WIN32) || defined(_WIN64)
 #include <conio.h>
 #else
 #include <unistd.h>
 #endif
+
 
 #include <stdio.h>
 #include <iostream>
@@ -56,15 +65,15 @@ unsigned short quiesceDepth = 0;
 
 
 
-/*!
- * This is the entry point for search, it is intended to drive iterative deepening 
- * The search stops if (whatever comes first): 
- * - there is no legal move (checkmate or stalemate)
- * - there is only one legal move (in this case we don't need to search)
- * - time is up 
- * - the search is interrupted by the user, or by winboard
- * - the search depth is reached
- */
+// Board::think()
+//
+// This is the entry point for search, it is intended to drive iterative deepening 
+// The search stops if (whatever comes first): 
+// - there is no legal move (checkmate or stalemate)
+// - there is only one legal move (in this case we don't need to search)
+// - time is up 
+// - the search is interrupted by the user, or by winboard
+// - the search depth is reached
 Move Board::think()
 {
     int score, legalmoves, currentdepth;
@@ -161,7 +170,10 @@ Move Board::think()
 
 
 
-// PV search
+// Board::alphabetapvs()
+//
+// Main alphabeta algorithm coupled with Principal Variation search. This is the
+// recurrent loop that is called millions of times in every search.
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
@@ -301,7 +313,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
                     if (!ply && (depth > 3))
                         displaySearchStats(2, depth, val);
-                }
+                } 
             }
             else unmakeMove(moveBuffer[i]);
         }
@@ -663,7 +675,12 @@ int Board::qsearch(int ply, int alpha, int beta)
 
 
     triangularLength[ply] = ply;
-    if (isOwnKingAttacked()) return alphabetapvs(ply, 1, alpha, beta);
+
+
+    // in-check extension (search one more ply when in check)
+    if (isOwnKingAttacked())
+        return alphabetapvs(ply, 1, alpha, beta);
+
     val = board.eval();
     if (val >= beta) return val;
     if (val > alpha) alpha = val;
@@ -704,6 +721,8 @@ int Board::qsearch(int ply, int alpha, int beta)
 }
 
 
+
+// XXX
 string hashToStr(U64 hk, int ply, int a, int b, int d)
 {
     return to_string(hk) + "|" + to_string(ply) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
