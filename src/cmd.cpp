@@ -74,6 +74,7 @@ void initListOfCommands()
     listOfCommands.push_back("manual");
     listOfCommands.push_back("moves");
     listOfCommands.push_back("new");
+    listOfCommands.push_back("pass");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
     listOfCommands.push_back("remove");
@@ -83,9 +84,9 @@ void initListOfCommands()
     listOfCommands.push_back("sd");
     listOfCommands.push_back("show");
     listOfCommands.push_back("solve");
+    listOfCommands.push_back("st");
     listOfCommands.push_back("test");
     listOfCommands.push_back("think");
-    listOfCommands.push_back("time");
     listOfCommands.push_back("undo");
     listOfCommands.push_back("v");
     listOfCommands.push_back("ver");
@@ -127,21 +128,17 @@ void exec(string input)
         arg = input.substr(pos + 1, input.size() - pos - 1);
 
 
-    /*!
-     * Run the command (cmd) through a list of supported commands in an if-else
-     * fashion. If the command is found in the list, execute the code associated
-     * and use the argument as a parameter, otherwise return without doing
-     * anything.
-     *
-     * See the list of supported commmands below:
-     */
+    //
+    // Run the command (cmd) through a list of supported commands in an if-else
+    // fashion. If the command is found in the list, execute the code associated
+    // and use the argument as a parameter, otherwise return without doing
+    // anything.
+    //
+    // See the list of supported commmands below:
 
-    /*
-     * analyze
-     *
-     * enter analysis mode, which means that the computer will infinitely
-     * analyze the current position without any limit in time or depth.
-     */
+
+    // analyze: enter analysis mode, which means that the computer will infinitely
+    // analyze the current position without any limit in time or depth.
     if (cmd == "analyze")
     {
         // TODO: analyze
@@ -149,11 +146,7 @@ void exec(string input)
 
 
     
-    /*
-     * auto
-     *
-     * make the machine play both sides
-     */
+    // auto: make the machine play both sides
     else if (cmd == "auto")
     {
         wPlayer = PLAYER_TYPE_COMPUTER;
@@ -161,11 +154,7 @@ void exec(string input)
     }
 
 
-    /*
-     * book
-     *
-     * turn on or off openings book
-     */
+    // book: turn on or off openings book
     else if (cmd == "book")
     {
         // turn default book on
@@ -199,18 +188,18 @@ void exec(string input)
     }
 
 
-    // depth
-    //
-    // change AI depth
+
+    // depth: change hsearch depth
     else if ((cmd == "depth") || (cmd == "sd"))
     {
         int d;
         d = atoi(arg.c_str());
-        if ((d > 1) && (d < SOLVE_MAX_DEPTH))
+        if ((d > 3) && (d < SOLVE_MAX_DEPTH))
             board.searchDepth = d;
 
         cout << "Search depth: " << board.searchDepth << endl;
     }
+
 
 
     // eval: display current board's evaluation
@@ -250,12 +239,14 @@ void exec(string input)
     }
 
 
+
     // flip: flip the board when displaying
     else if (cmd == "flip")
     {
         board.flipBoard = !board.flipBoard;
         board.display();
     }
+
 
 
     // go: force the computer to move now
@@ -278,27 +269,23 @@ void exec(string input)
     }
 
 
-    // help
-    //
-    // print help
+    // help: print help about commands
     else if (cmd == "help")
     {
         displayHelp(arg);
     }
 
 
-    // history
-    //
-    // display game history
+
+    // history: display game history
     else if ((cmd == "history") || (cmd == "game"))
     {
         displayGame();
     }
 
+
     
-    // manual
-    //
-    // human vs human
+    // manual: human vs human
     else if (cmd == "manual")
     {
         wPlayer = PLAYER_TYPE_HUMAN;
@@ -308,7 +295,8 @@ void exec(string input)
     }
 
 
-    // moves
+
+    // moves: show the list of valid moves
     else if (cmd == "moves")
     {
         unsigned int i = 0, number = 0;
@@ -335,12 +323,8 @@ void exec(string input)
     }
 
 
-    /*
-     * new
-     * restart
-     *
-     * new game / restart
-     */
+     
+    // new | restart: new game / restart
     else if ((cmd == "new") || (cmd == "restart"))
     {
         cout << "Starting a new game..." << endl;
@@ -362,18 +346,16 @@ void exec(string input)
     }
 
 
-    /*
-     * xboard
-     *
-     * Xboard mode (protovol ver 1)
-     */
+
+    // xboard: Xboard mode (protovol ver 1)
     else if (cmd == "xboard")
     {
         // TODO: xboard
     }
 
 
-    // Perform test or benchmark.
+
+    // test | bench: perform test or benchmark
     else if ((cmd == "test") || (cmd == "bench"))
     {
         // disable book and verbose
@@ -483,12 +465,9 @@ void exec(string input)
     }
 
 
-    /*
-     * think
-     *
-     * change AI thinking time limit
-     */
-    else if ((cmd == "think") || (cmd == "time"))
+
+    // think: change AI thinking time limit
+    else if ((cmd == "think") || (cmd == "st"))
     {
         int t;
 
@@ -513,92 +492,66 @@ void exec(string input)
             cout << "Max. time per move: " << (board.maxTime / 1000) << "s" << endl;
     }
 
+
     
-    /*
-     * playother
-     *
-     * move the turn to the other player and make computer play (XBoard)
-     */
+    // playother: move the turn to the other player and make computer play (XBoard)
     else if (cmd == "playother")
     {
         // TODO: playother
     }
 
 
-    /*
-     * ping
-     *
-     * reply to ping command (XBoard)
-     */
+
+    // ping: reply to ping command (XBoard)
     else if (cmd == "ping")
     {
-        //cout << "pong " << param << endl;
-        //cout << flush;
+        cout << "pong " << arg << endl;
+        cout << flush;
     }
 
 
-    /*
-     * post
-     *
-     * show analysis (XBoard)
-     */
+
+    // post: show analysis (XBoard)
     else if (cmd == "post")
     {
-        // TODO: post
+        verbose = true;
     }
 
 
-    /*
-     * resign
-     *
-     * resign for current player
-     */
+
+    // resign: resign for current player
     else if (cmd == "resign")
     {
         gameEnd = END_TYPE_RESIGN;
     }
 
 
-    /*
-     * save
-     *
-     * save a position to a disk file
-     */
+
+    // save: save a position to a disk file
     else if (cmd == "save")
     {
         // TODO: save
     }
 
+
     
-    /*
-     * show
-     * display
-     *
-     * show board
-     */
+    // show | display: show current board
     else if ((cmd == "show") || (cmd == "display"))
     {
         board.display();
     }
 
 
-    /*
-     * solve
-     *
-     * solve
-     */
+
+    // solve: try to find a checkmate for the given position
     else if (cmd == "solve")
     {
         // TODO: solve
     }
 
 
-    /*
-     * back
-     * undo
-     *
-     * go back one move
-     */
+
+    // back | undo: go back one move
     else if ((cmd == "back") || (cmd == "undo"))
     {
         if (board.endOfGame)
@@ -619,9 +572,8 @@ void exec(string input)
     }
 
 
-    // remove
-    //
-    // go back two moves (XBoard --> "remove" feature)
+
+    // remove: go back two moves (XBoard --> "remove" feature)
     else if (cmd == "remove")
     {
         if (board.endOfGame)
@@ -646,11 +598,8 @@ void exec(string input)
     }
 
 
-    /*
-     * verbose
-     *
-     * set application verbose mode
-     */
+
+    // verbose: set application verbose mode
     else if (cmd == "verbose")
     {
         if ((arg == "on") || (arg == "true"))
@@ -665,9 +614,8 @@ void exec(string input)
     }
 
 
-    // quiet
-    //
-    // set application quiet mode (verbose off)
+
+    // quiet: set application quiet mode (verbose off)
     else if (cmd == "quiet")
     {
         verbose = false;
@@ -675,13 +623,8 @@ void exec(string input)
     }
 
 
-    /*
-     * version
-     * ver
-     * v
-     *
-     * show application version number
-     */
+
+    // version: show application version number
     else if ((cmd == "version") || (cmd == "ver") || (cmd == "v"))
     {
         cout << PROGRAM_NAME << " (version " << PROGRAM_VERSION << ")" << endl;
@@ -690,12 +633,8 @@ void exec(string input)
     }
 
 
-    /*
-     * exit
-     * quit
-     *
-     * exit / quit
-     */
+
+    // exit | quit: terminate the app
     else if ((cmd == "quit") || (cmd == "exit") || (cmd == "q"))
     {
         terminateApp();
@@ -714,9 +653,9 @@ void displayHelp(string which)
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  depth  edit  eval  flip  game" << endl;
-        cout << "go  help  history  lmr  load  manual  new" << endl;
-        cout << "pass  remove  resign  save  sd  show  solve" << endl;
-        cout << "test  think  undo  verbose  version  quit" << endl;
+        cout << "go  help  history  load  manual  new  pass" << endl;
+        cout << "remove  resign  restart  save  sd  show  solve" << endl;
+        cout << "st  test  think  undo  verbose  version  quit" << endl;
         return;
     }
 
@@ -743,10 +682,10 @@ void displayHelp(string which)
     }
 
 
-    // help depth
-    else if (which == "depth")
+    // help depth | sd
+    else if ((which == "depth") || (which == "sd"))
     {
-        cout << "depth [N]" << endl;
+        cout << "depth | sd [N]" << endl;
         cout << " Set the search depth of the computer to N-plies" << endl;
         cout << " (half-moves). The depth must be a minimum of 1," << endl;
         cout << " and there is no maximum limit. However, consider" << endl;
@@ -852,24 +791,6 @@ void displayHelp(string which)
     }
 
 
-    // help lmr
-    else if (which == "lmr")
-    {
-        cout << "lmr [on | off]" << endl;
-        cout << " Enable/disable late-move reductions (LMR) optimization.";
-        cout << endl;
-        cout << " When LMR is enabled, the computer will only search at full";
-        cout << endl;
-        cout << " depth the first 2 nodes, assuming that they are the most";
-        cout << endl;
-        cout << " promising ones. The rest of nodes will be examined at a";
-        cout << endl;
-        cout << " much shallower depth. When LMR is disabled, all possible";
-        cout << endl;
-        cout << " moves are searched at full depth.";
-        cout << endl;
-    }
-
 
     // help load
     else if (which == "load")
@@ -939,9 +860,9 @@ void displayHelp(string which)
         cout << "save FILENAME" << endl;
         cout << " Save a board position to a file. Please note that";
         cout << endl;
-        cout << " this command saves a position, not a match (do not confuse";
+        cout << " this command saves a position using FEN notation, not an";
         cout << endl;
-        cout << " with the PGN format.";
+        cout << " entire match (do not confuse with the PGN format).";
         cout << endl;
         cout << endl;
         cout << " As a note, these board positions (files) are usually loaded";
@@ -952,19 +873,6 @@ void displayHelp(string which)
         cout << endl;
     }
 
-
-    // help sd
-    else if (which == "sd")
-    {
-        cout << "sd [N]" << endl;
-        cout << " Set the search depth of the computer to N-plies" << endl;
-        cout << " (half-moves). The depth must be a minimum of 1," << endl;
-        cout << " and there is no maximum limit. However, consider" << endl;
-        cout << " that a depth higher than 7 will result in a very" << endl;
-        cout << " long time for obtaining a move from the computer." << endl;
-        cout << " If no depth is given, then the application tells" << endl;
-        cout << " what is the current search depth." << endl;
-    }
 
 
     // help solve
@@ -985,6 +893,7 @@ void displayHelp(string which)
         cout << endl;
         cout << " given depth." << endl;
     }
+
 
 
     // help test
@@ -1009,10 +918,11 @@ void displayHelp(string which)
     }
 
 
-    // help think (time per move)
+
+    // help st | think (time per move)
     else if (which == "think")
     {
-        cout << "think [N]" << endl;
+        cout << "st | think [N]" << endl;
         cout << " Set the maximum amount of time the engine can think" << endl;
         cout << " before performing a move. The time must be a minimum of" << endl;
         cout << " 1 (seconds) and there is no maximum limit. Setting the" << endl;
@@ -1022,16 +932,6 @@ void displayHelp(string which)
     }
 
 
-    // help time
-    else if (which == "time")
-    {
-        cout << "time [N]" << endl;
-        cout << " Set the clock time for the game (in minutes). Using this" << endl;
-        cout << " command will let the computer adjust its own time per move" << endl;
-        cout << " (TPM) automatically. The closest the clock is to 00:00, the" << endl;
-        cout << " less time the computer will think." << endl;
-    }
-
 
     // help undo
     else if ((which == "undo") || (which == "back"))
@@ -1039,6 +939,7 @@ void displayHelp(string which)
         cout << "undo | back" << endl;
         cout << " Take back a move from the game." << endl;
     }
+
 
 
     // help verbose
