@@ -20,142 +20,102 @@
 
 
 
-// @file readfen.cpp
+// @file fen.cpp
 //
-// XXX
+// This file contains the functionality for serializing, saving and loading a
+// board from and to a file, using the FEN notation.
 #include <iostream>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <fstream>
 #include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
 
 
- 
-bool readFen(char *filename, int number)
+
+// readFen()
+//
+// Open a file and read a board position from a FEN string.
+bool readFen(char *filename)
 {
-       int numberf;
-       char s[180];
-       char fenwhite[80];
-       char fenblack[80];
-       char fen[100];
-       char fencolor[2];     
-       char fencastling[5];
-       char fenenpassant[3];
-       char temp[80];
-       int fenhalfmoveclock;
-       int fenfullmovenumber;
-       bool returnValue;
-       FILE * fp;
+    char s[180];
+    char fen[100];
+    char fencolor[2];     
+    char fencastling[5];
+    char fenenpassant[3];
+    int fenhalfmoveclock;
+    int fenfullmovenumber;
+    bool returnValue;
+    FILE * fp;
+	bool foundFEN = false;
  
-       returnValue = false;
-       if (number <= 0) return returnValue;
+    returnValue = false;
  
     // open the file for read and scan through until we find the number-th position:
-       fp=fopen(filename, "rt");
-       if (fp != NULL)
-       {
-              numberf = 0;
-              while (fscanf(fp, "%s", s) != EOF) 
-              {
-                     if (!strcmp(s, "[White"))
-                     {
-                           fscanf(fp, "%s", fenwhite);
-                           // remove first (") and last two characters ("]) from fenwhite:
-                           strcpy(temp, "");
-                           strncat(temp, fenwhite, strlen(fenwhite)-2);
-                           strcpy(temp, temp+1);
-                           strcpy(fenwhite, temp);
-                     }
-                     if (!strcmp(s, "[Black"))
-                     {
-                           fscanf(fp, "%s", fenblack);
-                           // remove first (") and last two characters ("]) from fenblack:
-                           strcpy(temp, "");
-                           strncat(temp, fenblack, strlen(fenblack)-2);
-                           strcpy(temp, temp+1);
-                           strcpy(fenblack, temp);
-                     }
-                     if (!strcmp(s, "[FEN"))
-                     {
-                           // position found, so increment numberf.
-                           // we already have fenwhite and fenblack.
-                           numberf++;
-                           if (numberf == number)
-                           {
-                                  fscanf(fp, "%s", fen);
-                                  fscanf(fp, "%s", fencolor);           // b or w
-                                  fscanf(fp, "%s", fencastling);        // -, or KQkq
-                                  fscanf(fp, "%s", fenenpassant);       // -, or e3, or b6, etc
-                                  fscanf(fp, "%d", &fenhalfmoveclock);  // int, used for the fifty move draw rule
-                                  fscanf(fp, "%d", &fenfullmovenumber); // int. start with 1, It is incremented after move by Black
+    fp=fopen(filename, "rt");
+    if (fp != NULL)
+    {
+		foundFEN = true;
+        while (fscanf(fp, "%s", s) != EOF) 
+        {
+            if (!strcmp(s, "[FEN"))
+            {
+                fscanf(fp, "%s", fen);
+                fscanf(fp, "%s", fencolor);           // b or w
+                fscanf(fp, "%s", fencastling);        // -, or KQkq
+                fscanf(fp, "%s", fenenpassant);       // -, or e3, or b6, etc
+                fscanf(fp, "%d", &fenhalfmoveclock);  // int, used for the fifty move draw rule
+                fscanf(fp, "%d", &fenfullmovenumber); // int. start with 1, It is incremented after move by Black
+            }
  
-                                  std::cout << std::endl << "fen #" << numberf << " in " << filename << ":" << std::endl << std::endl;
-                                  std::cout << " White: " << fenwhite << std::endl;
-                                  std::cout << " Black: " << fenblack << std::endl;
-                                  std::cout << " " << &fen[1] << std::endl;
-                                  if (fencolor[0] == 'w')
-                                  {
-                                         std::cout << " wt to move next" << std::endl;
-                                  }
-                                  else
-                                  {
-                                         std::cout << " bl to move next" << std::endl;
-                                  }
-                                  std::cout << " Castling: " << fencastling << std::endl;
-                                  std::cout << " EP square: " << fenenpassant << std::endl;
-                                  std::cout << " Fifty move count: " << fenhalfmoveclock << std::endl;
-                                  std::cout << " Move number: " << fenfullmovenumber << std::endl << std::endl;
-                           }
-                     }
-              }
- 
-              if (numberf < number)
-              {
-                     printf("Only %d fens present in %s, fen #%d not found\n",
-                     numberf, filename, number);
-                     returnValue = false;
-              }
-              else
-              {
-                     setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
-                     returnValue = true;
-              }
-              fclose(fp);
-       }
-       else
-       {
-              printf("Error opening file: %s\n", filename);
-              returnValue = false;
-       }
-       return returnValue;
+            if (!foundFEN)
+            {
+                cout << "Could not load FEN position from file '" << filename << "'" << endl;
+                returnValue = false;
+            }
+            else
+            {
+                setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
+                returnValue = true;
+            }
+
+            fclose(fp);
+        }
+    }
+    else
+    {
+        cerr << "Error opening file '" << filename << "'" << endl;
+        returnValue = false;
+    }
+
+    return returnValue;
 }
- 
+
+
+// setupFen()
+//
+// XXX 
 void setupFen(char *fen, char *fencolor, char *fencastling, char *fenenpassant, int fenhalfmoveclock, int fenfullmovenumber)
 {
-       int i, file, rank, counter, piece;
-       int whiteCastle, blackCastle, next, epsq;
+    int i, file, rank, counter, piece;
+    int whiteCastle, blackCastle, next, epsq;
  
-       piece = 0;
-       for (i = 0; i < 64; i++)
-       {
-              board.square[i] = EMPTY;
-       }
+    piece = 0;
+    for (i = 0; i < 64; i++)
+        board.square[i] = EMPTY;
  
-       // loop over the FEN string characters, and populate board.square[]
-       // i is used as index for the FEN string
-       // counter is the index for board.square[], 0..63
-       // file and rank relate to the position on the chess board, 1..8
-       // There is no error/legality checking on the FEN string!!
-       file = 1;
-       rank = 8;
-       i = 0;
-       counter = 0;
-       while ((counter < 64) && (fen[i] != '\0'))
-       {
-              // '1'  through '8':
-              if (((int) fen[i] > 48) && ((int) fen[i] < 57))
+    // loop over the FEN string characters, and populate board.square[]
+    // i is used as index for the FEN string
+    // counter is the index for board.square[], 0..63
+    // file and rank relate to the position on the chess board, 1..8
+    // There is no error/legality checking on the FEN string!!
+    file = 1;
+    rank = 8;
+    i = 0;
+    counter = 0;
+    while ((counter < 64) && (fen[i] != '\0'))
+    {
+        // '1'  through '8':
+        if (((int) fen[i] > 48) && ((int) fen[i] < 57))
               {
                      file+= (int) fen[i] - 48;
                      counter+= (int) fen[i] - 48;

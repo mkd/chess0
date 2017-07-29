@@ -39,52 +39,48 @@ using namespace std;
 
 
 
-unsigned int  bitCnt(BitMap);
-int           captgen(int);
-void          dataInit();
-void          displayBitmap(BitMap);
-void          displayMove(Move &);
-void		  displayPV();
-void		  commands();
-unsigned int  firstOne(BitMap);
-bool          isAttacked(BitMap &, const unsigned char &);
-bool      isOtherKingAttacked();
-bool      isOwnKingAttacked();
-unsigned int  lastOne(BitMap);
-void          makeBlackPromotion(unsigned int, unsigned int &);
-void          makeCapture(unsigned int &, unsigned int &);
-void          makeMove(Move &);
-void          makeWhitePromotion(unsigned int, unsigned int &);
-int           movegen(int);
-void		  mstostring(uint64_t dt, char *);
-uint64_t           perft(int, int);
-bool      readFen(char *, int);
-void		  readIniFile();
-void          edit();
-void          setupFen(char *, char *, char *, char *, int , int );
-void		  test(char *);
-void		  timeControl();
-bool	  toSan(Move &, char *);
-void          unmakeBlackPromotion(unsigned int, unsigned int &);
-void          unmakeCapture(unsigned int &, unsigned int &);
-void          unmakeMove(Move &);
-void          unmakeWhitePromotion(unsigned int, unsigned int &);
-string        getInput();
-void          terminateApp();
-string        bunmap(int);
-bool      isValidTextMove(char *, Move &);
-string        hashToStr(uint64_t, int, int, int, int);
+unsigned int    bitCnt(BitMap);
+int             captgen(int);
+void            dataInit();
+void            displayBitmap(BitMap);
+void            displayMove(Move &);
+void            displayPV();
+void            commands();
+unsigned int    firstOne(BitMap);
+bool            isAttacked(BitMap &, const unsigned char &);
+bool            isOtherKingAttacked();
+bool            isOwnKingAttacked();
+unsigned int    lastOne(BitMap);
+void            makeBlackPromotion(unsigned int, unsigned int &);
+void            makeCapture(unsigned int &, unsigned int &);
+void            makeMove(Move &);
+void            makeWhitePromotion(unsigned int, unsigned int &);
+int             movegen(int);
+void            mstostring(uint64_t dt, char *);
+uint64_t        perft(int, int);
+bool            readFen(char *);
+void            readIniFile();
+void            edit();
+void            setupFen(char *, char *, char *, char *, int , int );
+void            test(char *);
+void            timeControl();
+bool            toSan(Move &, char *);
+void            unmakeBlackPromotion(unsigned int, unsigned int &);
+void            unmakeCapture(unsigned int &, unsigned int &);
+void            unmakeMove(Move &);
+void            unmakeWhitePromotion(unsigned int, unsigned int &);
+string          getInput();
+void            terminateApp();
+string          bunmap(int);
+bool            isValidTextMove(char *, Move &);
+string          hashToStr(uint64_t, int, int, int, int);
 
 
 
-/*!
- * Check if the given character represents a piece (N for Knight, B for
- * Bishop, R for Rook, Q for Queen and K for King).
- *
- * @param p Char holding a piece letter.
- *
- * @return true of p is N, B, R, Q, or K, false otherwise.
- */
+// isPiece()
+//
+// Check if the given character represents a piece (N for Knight, B for
+// Bishop, R for Rook, Q for Queen and K for King).
 inline bool isPiece(char p)
 {
     return ((p == 'N') || (p == 'B') || (p == 'R') || (p == 'Q') ||

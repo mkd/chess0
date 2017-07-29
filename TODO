@@ -4,6 +4,8 @@ TODO
 
 WORK IN PROGRESS
 ================
+fen.cpp  / test.fen
+
 - save:
   - boardToFEN() (implement FEN writer by looping on the board)
   - start by copying save() command from original chess0

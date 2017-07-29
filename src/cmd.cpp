@@ -18,6 +18,12 @@
     along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+
+// @file board.cpp
+//
+// This file contains the functionality to execute all commands from the CLI
+// interface of Chess0.
 #include <iostream>
 #include <iomanip>
 #include <unordered_map>
@@ -34,22 +40,21 @@
 #include "extglobals.h"
 
 
+
 using namespace std;
 
 
 
-/*!
- * Global variables used in this part of the program.
- */
+// Global variables used in this part of the program
 int curPlayerType;
 uint64_t msStart,msStop, moves;
 Timer timer;
 
 
 
-/*!
- * Initialize the list of commands supported by the application.
- */
+// initListOfCommands
+//
+// Initialize the list of commands supported by the application.
 void initListOfCommands()
 {
     listOfCommands.push_back("auto");
@@ -90,23 +95,19 @@ void initListOfCommands()
 
 
 
-/*!
- * Execute a given command.
- *
- * exec() takes an input string (it can be anything) and tries to find a command
- * and its arguments, and execute the command. This is how this function works:
- *
- * 1) convert everyting to lower case, since all commands and arguments are
- *    case insensitive
- * 2) take only the first and second 'words' from the input string, being the
- *    first one the command (cmd) and the second one the argument (arg)
- * 3) try to match the command (cmd) in a if-else fashion and execute the given
- *    command; apply the argument (arg)  if any
- *
- *
- * @param input String containing the command to be executed, including
- *              arguments.
- */
+// exec()
+//
+// Execute a given command.
+//
+// exec() takes an input string (it can be anything) and tries to find a command
+// and its arguments, and execute the command. This is how this function works:
+//
+// 1) convert everyting to lower case, since all commands and arguments are
+//    case insensitive
+// 2) take only the first and second 'words' from the input string, being the
+//    first one the command (cmd) and the second one the argument (arg)
+// 3) try to match the command (cmd) in a if-else fashion and execute the given
+//    command; apply the argument (arg)  if any
 void exec(string input)
 {
     string cmd;
@@ -223,7 +224,20 @@ void exec(string input)
     // load: load position from a file
     else if (cmd == "load")
     {
-        // TODO: load
+        // convert argument (file name) from string to const char *, for
+        // readFen()
+        vector<char> char_array(arg.begin(), arg.end());
+        char_array.push_back(0);
+
+        // loading a position from a file disables book usage, and sets the game
+        // to manual mode
+        wPlayer = PLAYER_TYPE_HUMAN;
+        bPlayer = PLAYER_TYPE_HUMAN;
+        playMode = HUMAN_HUMAN;
+        useBook = false;
+
+        // read the FEN string and update the board
+        readFen(&char_array[0]);
     }
 
 
@@ -690,9 +704,9 @@ void exec(string input)
 
 
 
-// Display help information, either general or about a concrete command.
+// displayHelp()
 //
-// @param which Command to display help for.
+// Display help information, either general or about a concrete command.
 void displayHelp(string which)
 {
     // no specific command
