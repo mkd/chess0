@@ -34,52 +34,50 @@
 
 
  
-/*!
- * Initialization of global data at program startup.
- * This function should be called only once (or else the mirrored data will be 
- * mirrored back again!!)
- */
+// dataInit()
+//
+// Initialization of global data at program startup.
+// This function should be called only once (or else the mirrored data will be 
+// mirrored back again!!)
 void dataInit()
 {
-       unsigned char CHARBITSET[8];
-       int i, square, rank, file, arank, afile, state, slide, diaga1h8, diaga8h1, attackbit;
-       unsigned char state6Bit, state8Bit, attack8Bit;
-       Move move;
+    unsigned char CHARBITSET[8];
+    int i, square, rank, file, arank, afile, state, slide, diaga1h8, diaga8h1, attackbit;
+    unsigned char state6Bit, state8Bit, attack8Bit;
+    Move move;
 
-       board.searchDepth = AI_SEARCH_DEPTH; // default for startup
-       board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
 
-//     BITSET has only one bit set:
-       BITSET[0] = 0x1;
-       for (i = 1; i < 64 ; i++)
-       {
-            BITSET[i] = BITSET[i-1] << 1;
-       }
+    board.searchDepth = AI_SEARCH_DEPTH; // default for startup
+    board.maxTime = TIME_PER_MOVE * 1000; // default for startup, milliseconds
+
+
+    // BITSET has only one bit set:
+    BITSET[0] = 0x1;
+    for (i = 1; i < 64 ; i++)
+        BITSET[i] = BITSET[i-1] << 1;
+
  
-//     BOARDINDEX is used to translate [file][rank] to [square],
-//     Note that file is from 1..8 and rank from 1..8 (not starting from 0)
-       for (rank = 0 ; rank < 9; rank++)
-       {
-              for (file = 0 ; file < 9; file++)
-              {
-                     BOARDINDEX[file][rank] = (rank-1) * 8 + file - 1;
-              }
-       }
+    // BOARDINDEX is used to translate [file][rank] to [square],
+    // Note that file is from 1..8 and rank from 1..8 (not starting from 0)
+    for (rank = 0 ; rank < 9; rank++)
+        for (file = 0 ; file < 9; file++)
+            BOARDINDEX[file][rank] = (rank-1) * 8 + file - 1;
+
  
-       // PIECEVALUES are used in quiesence move ordering only:
-       for (i = 0; i < 16 ; i++) PIECEVALUES[i] = 0;
-       PIECEVALUES[WHITE_PAWN] = PAWN_VALUE;
-       PIECEVALUES[WHITE_KNIGHT] = KNIGHT_VALUE;
-       PIECEVALUES[WHITE_BISHOP] = BISHOP_VALUE;
-       PIECEVALUES[WHITE_ROOK] = ROOK_VALUE;
-       PIECEVALUES[WHITE_QUEEN] = QUEEN_VALUE;
-       PIECEVALUES[WHITE_KING] = KING_VALUE;  
-       PIECEVALUES[BLACK_PAWN] = PAWN_VALUE;
-       PIECEVALUES[BLACK_KNIGHT] = KNIGHT_VALUE;
-       PIECEVALUES[BLACK_BISHOP] = BISHOP_VALUE;
-       PIECEVALUES[BLACK_ROOK] = ROOK_VALUE;
-       PIECEVALUES[BLACK_QUEEN] = QUEEN_VALUE;
-       PIECEVALUES[BLACK_KING] = KING_VALUE;
+    // PIECEVALUES are used in quiesence move ordering only:
+    for (i = 0; i < 16 ; i++) PIECEVALUES[i] = 0;
+    PIECEVALUES[WHITE_PAWN] = PAWN_VALUE;
+    PIECEVALUES[WHITE_KNIGHT] = KNIGHT_VALUE;
+    PIECEVALUES[WHITE_BISHOP] = BISHOP_VALUE;
+    PIECEVALUES[WHITE_ROOK] = ROOK_VALUE;
+    PIECEVALUES[WHITE_QUEEN] = QUEEN_VALUE;
+    PIECEVALUES[WHITE_KING] = KING_VALUE;  
+    PIECEVALUES[BLACK_PAWN] = PAWN_VALUE;
+    PIECEVALUES[BLACK_KNIGHT] = KNIGHT_VALUE;
+    PIECEVALUES[BLACK_BISHOP] = BISHOP_VALUE;
+    PIECEVALUES[BLACK_ROOK] = ROOK_VALUE;
+    PIECEVALUES[BLACK_QUEEN] = QUEEN_VALUE;
+    PIECEVALUES[BLACK_KING] = KING_VALUE;
 
     // Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
     for (i = 0; i < 256; i++)
@@ -95,51 +93,47 @@ void dataInit()
     }
 
  
-//     Initialize rank, file and diagonal 6-bit masking bitmaps, to get the
-//     occupancy state, used in the movegenerator (see movegen.ccp)
-       for (square = 0; square < 64; square++)
-       {
-              RANKMASK[square] = 0x0;
-              FILEMASK[square] = 0x0;
-              DIAGA8H1MASK[square] = 0x0;
-              DIAGA1H8MASK[square] = 0x0;
-              FILEMAGIC[square] = 0x0;
-              DIAGA8H1MAGIC[square] = 0x0;
-              DIAGA1H8MAGIC[square] = 0x0;
-       }
+    //  Initialize rank, file and diagonal 6-bit masking bitmaps, to get the
+    //  occupancy state, used in the movegenerator (see movegen.ccp)
+    for (square = 0; square < 64; square++)
+    {
+        RANKMASK[square] = 0x0;
+        FILEMASK[square] = 0x0;
+        DIAGA8H1MASK[square] = 0x0;
+        DIAGA1H8MASK[square] = 0x0;
+        FILEMAGIC[square] = 0x0;
+        DIAGA8H1MAGIC[square] = 0x0;
+        DIAGA1H8MAGIC[square] = 0x0;
+    }
  
-       for (file = 1; file < 9; file++)
-       {
-              for (rank = 1; rank < 9; rank++)
-              {
-                // initialize 6-bit rank mask, used in the movegenerator (see movegen.ccp)
-                     RANKMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[2][rank]] | BITSET[BOARDINDEX[3][rank]] | BITSET[BOARDINDEX[4][rank]] ;
-                     RANKMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[5][rank]] | BITSET[BOARDINDEX[6][rank]] | BITSET[BOARDINDEX[7][rank]] ;
+    for (file = 1; file < 9; file++)
+    {
+        for (rank = 1; rank < 9; rank++)
+        {
+            // initialize 6-bit rank mask, used in the movegenerator (see movegen.ccp)
+            RANKMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[2][rank]] | BITSET[BOARDINDEX[3][rank]] | BITSET[BOARDINDEX[4][rank]] ;
+            RANKMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[5][rank]] | BITSET[BOARDINDEX[6][rank]] | BITSET[BOARDINDEX[7][rank]] ;
  
-                    // initialize 6-bit file mask, used in the movegenerator (see movegen.ccp)
-                     FILEMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[file][2]] | BITSET[BOARDINDEX[file][3]] | BITSET[BOARDINDEX[file][4]] ;
-                     FILEMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][5]] | BITSET[BOARDINDEX[file][6]] | BITSET[BOARDINDEX[file][7]] ;
+            // initialize 6-bit file mask, used in the movegenerator (see movegen.ccp)
+            FILEMASK[BOARDINDEX[file][rank]]  = BITSET[BOARDINDEX[file][2]] | BITSET[BOARDINDEX[file][3]] | BITSET[BOARDINDEX[file][4]] ;
+            FILEMASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[file][5]] | BITSET[BOARDINDEX[file][6]] | BITSET[BOARDINDEX[file][7]] ;
  
-                    // Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
-                     diaga8h1 = file + rank; // from 2 to 16, longest diagonal = 9
-                     DIAGA8H1MAGIC[BOARDINDEX[file][rank]] = _DIAGA8H1MAGICS[diaga8h1 - 2];
+            // Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
+            diaga8h1 = file + rank; // from 2 to 16, longest diagonal = 9
+            DIAGA8H1MAGIC[BOARDINDEX[file][rank]] = _DIAGA8H1MAGICS[diaga8h1 - 2];
  
-//             Initialize 6-bit diagonal mask, used in the movegenerator (see movegen.ccp)
-                     DIAGA8H1MASK[BOARDINDEX[file][rank]] = 0x0;
-                     if (diaga8h1 < 10)  // lower half, diagonals 2 to 9
-                     {
-                           for (square = 2 ; square < diaga8h1-1 ; square ++)
-                           {
+            // Initialize 6-bit diagonal mask, used in the movegenerator (see movegen.ccp)
+            DIAGA8H1MASK[BOARDINDEX[file][rank]] = 0x0;
+            if (diaga8h1 < 10)  // lower half, diagonals 2 to 9
+            {
+                for (square = 2 ; square < diaga8h1-1 ; square ++)
                                   DIAGA8H1MASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[square][diaga8h1-square]];
-                           }
-                     }
-                     else  // upper half, diagonals 10 to 16
-                     {
-                           for (square = 2 ; square < 17 - diaga8h1 ; square ++)
-                           {
-                                  DIAGA8H1MASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[diaga8h1+square-9][9-square]];
-                           }
-                     }
+             }
+             else  // upper half, diagonals 10 to 16
+             {
+                for (square = 2 ; square < 17 - diaga8h1 ; square ++)
+                    DIAGA8H1MASK[BOARDINDEX[file][rank]] |= BITSET[BOARDINDEX[diaga8h1+square-9][9-square]];
+             }
       
 //             Initialize diagonal magic multiplication numbers, used in the movegenerator (see movegen.ccp)
                      diaga1h8 = file - rank; // from -7 to +7, longest diagonal = 0

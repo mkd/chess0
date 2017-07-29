@@ -35,15 +35,15 @@ using namespace std;
 
 
 
-/*!
- * Application types and definitions.
- */
+// Application types and definitions.
 #define PLAYER_TYPE_HUMAN    1
 #define PLAYER_TYPE_COMPUTER 2
+
 
 #define HUMAN_CPU   1
 #define HUMAN_HUMAN 2
 #define CPU_CPU     3
+
 
 
 // different types of inputs
@@ -56,15 +56,14 @@ enum InputType
 
 
 
-/*!
- * Application methods and variables.
- */
+// Application methods and variables.
 extern int             appMode;
 extern vector<string>  listOfCommands;
 extern string          lastErrorMessage;
 extern vector<string>  history;
 extern bool            useCache;
 extern EndType         gameEnd;
+
 
 int startApp(int);
 void prompt(unsigned);
@@ -79,9 +78,7 @@ string getGameSequence();
 
 
 
-/*!
- * Game status variables.
- */
+// Game status variables.
 extern int playMode;
 extern int wPlayer;
 extern int bPlayer;
@@ -94,9 +91,7 @@ extern bool usePersonalBook;
 
 
 
-/*!
- * Built-in helper functions.
- */
+// Built-in helper functions.
 inline bool isFile(char c) { return ((c >= 'a' ) && (c <= 'h')); }
 inline bool isRank(char r) { return ((r >= '1' ) && (r <= '8')); }
 

@@ -192,9 +192,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
     // repetition check:
     if (repetitionCount() >= 3)
-    {
         return DRAWSCORE;
-    }
 
     
     // now try a null move to get an early beta cut-off:
@@ -206,15 +204,23 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             {
                 allownull = false;
                 inodes++;
-                if (--countdown <=0) readClockAndInput();
+
+                if (--countdown <=0)
+                    readClockAndInput();
+
                 nextMove = !nextMove;
                 hashkey ^= KEY.side; 
                 val = -alphabetapvs(ply, depth - NULLMOVE_REDUCTION, -beta, -beta+1);
                 nextMove = !nextMove;
                 hashkey ^= KEY.side;
-                if (timedout) return 0;
+
+                if (timedout)
+                    return 0;
+
                 allownull = true;
-                if (val >= beta) return val;
+
+                if (val >= beta)
+                    return val;
             }
         }
     }
@@ -673,7 +679,6 @@ int Board::qsearch(int ply, int alpha, int beta)
     if (timedout)
         return 0;
 
-
     triangularLength[ply] = ply;
 
 
@@ -698,10 +703,15 @@ int Board::qsearch(int ply, int alpha, int beta)
                 inodes++;
                 quiesceDepth++;
 
-                if (--countdown <=0) readClockAndInput();
+                if (--countdown <=0)
+                    readClockAndInput();
+
                 val = -qsearch(ply+1, -beta, -alpha);
                 unmakeMove(moveBuffer[i]);
-                if (val >= beta) return val;
+
+                if (val >= beta)
+                    return val;
+
                 if (val > alpha)
                 {
                     alpha = val;

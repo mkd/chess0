@@ -23,16 +23,17 @@ BEFORE NEXT RELEASE
 
 - Implement commands:
   - pass/null
-  - material
-  - info (eval, material, phase, sideToMove)
 
 - Implement ttEntry cache
   - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,
     everything needed
-  - use LRU cache (from web) to store ttEntry objects
-  - Make sure cache is fast enough --> 
-    Old cache implementation (hashToStr) was 3.5x slower than without cache
-    (i.e., kN/s was 3.5 times less when cache ON, and up to 20x slower when
+  - use unordered_map() without a limit
+  - index is U64 board.key
+  - at every iteration, search by board.key and if ply > current ply, then use
+    cached value, because accuracy must be higher
+  - Make sure cache is fast enough --> old cache implementation (hashToStr) was
+    3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
+    and up to 20x slower when
     cache goes over 1Gb)
 
 
@@ -45,12 +46,12 @@ IMPORTANT
 
 - Ending tables (syzygy)
 
+- Lazy SMP
+
 
 
 WISH LIST
 =========
 - Read/write PGN files.
-
-- Lazy SMP
 
 - Ponder support (test that works once Cache is enabled)

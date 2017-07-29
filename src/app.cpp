@@ -84,9 +84,9 @@ EndType gameEnd = END_TYPE_NOEND;
 
 
 
-/*!
- * Start the whole application and main CLI loop.
- */
+// startApp()
+//
+// Start the whole application and main CLI loop.
 int startApp(int mode)
 {
     // Welcome the user with the program name and a prompt, which is ready to
@@ -359,11 +359,9 @@ int startApp(int mode)
 
 
 
-/*!
- * Show the prompt to the user, waiting for an input.
- *
- * @param nmove Number of the move for an ongoing game.
- */
+// prompt()
+//
+// Show the prompt to the user, waiting for an input.
 void prompt(unsigned nmove)
 {
     ostringstream line(ostringstream::out);
@@ -382,11 +380,9 @@ void prompt(unsigned nmove)
 
 
 
-/*!
- * Retrieve an input line from the user.
- *
- * @return a string object containig the user input.
- */
+// getInput()
+//
+// Retrieve an input line from the user.
 string getInput()
 {
     // clean the input, if necessary
@@ -396,16 +392,12 @@ string getInput()
     char input[MAX_INPUT_SIZE];
 
 
-    /*!
-     * Get a line from the input until we reach the maximum input size.
-     */
+    // get a line from the input until we reach the maximum input size.
     cin.getline(input, MAX_INPUT_SIZE);
     string input_str(input);
 
 
-    /*!
-     * If Ctrl+D is entered, then terminate the program.
-     */
+    // If Ctrl+D is entered, then terminate the program.
     if (cin.eof())
         terminateApp();
 
@@ -414,6 +406,8 @@ string getInput()
 
 
 
+// terminateApp()
+//
 // Terminate the app in a safe way.
 void terminateApp()
 {
@@ -423,6 +417,8 @@ void terminateApp()
 
 
 
+// getInputType()
+//
 // Analyze a given input and find out whether it is a move, a command or an
 // invalid input.
 InputType getInputType(string input)
@@ -543,10 +539,8 @@ InputType getInputType(string input)
     }
 
 
-    /*!
-     * Look for 6-character moves => promotion after capture in SAN notation =>
-     * column + 'x' + column + '8' + '=' + piece.
-     */
+    // Look for 6-character moves => promotion after capture in SAN notation =>
+    // column + 'x' + column + '8' + '=' + piece.
     else if (input.length() == 6)
     {
         if (isFile(input[0]) && (input[1] == 'x') && isFile(input[2]) &&
@@ -559,18 +553,16 @@ InputType getInputType(string input)
     }
 
 
-    /*!
-     * By default, an input is invalid unless proven otherwise.
-     */
+    // by default, an input is invalid unless proven otherwise.
     return INPUT_TYPE_INVALID;
 }
 
 
 
-/*!
- * Change the side playing, including color, type of input (human vs computer),
- * clocks, etc.
- */
+// changeSide()
+//
+// Change the side playing, including color, type of input (human vs computer),
+// * clocks, etc.
 void changeSide()
 {
     if (playMode == HUMAN_CPU)
@@ -583,9 +575,9 @@ void changeSide()
 
 
 
-/*!
- * Deal with the end of the current match.
- */
+// dealEnd()
+//
+// Deal with the end of the current match.
 void dealEnd()
 {
     cout << endl;
@@ -641,11 +633,9 @@ void dealEnd()
 
 
 
-/*!
- * Display the list of moves of this game.
- * 
- * @return an Error if the history is empty.
- */
+// displayGame()
+//
+// Display the list of moves of this game.
 void displayGame()
 {
     if (board.endOfGame)
@@ -695,11 +685,9 @@ void displayGame()
 
 
 
-/*!
- * Get the whole game history into a linear sequence, encoded in a string.
- *
- * @return a string containing the game history (e.g., 1. e4 e5 2. Nf3).
- */
+// getGameSequence()
+//
+// Get the whole game history into a linear sequence, encoded in a string.
 string getGameSequence()
 {
     int count = 1;
