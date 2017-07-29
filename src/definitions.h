@@ -22,7 +22,9 @@
 
 // @file definitions.h
 //
-// XXX
+// This file contains all the necessary definitions for the program to run,
+// including application-specific definitions, game definitions, chess board
+// definitions, piece types, move types, square values, etc.
 #ifndef _DEFINITIONS_H_
 #define _DEFINITIONS_H_
 
@@ -32,9 +34,6 @@
 
 
  
-/*!
- * Application settings and definitions.
- */
 #define PROGRAM_NAME    "Chess0"
 #define PROGRAM_VERSION "1.0"
 #define PROGRAM_AUTHOR  "Claudio M. Camacho <claudiomkd@gmail.com>"
@@ -49,16 +48,16 @@
 #define MAX_GAME_LINE   1024   // Max number of moves in the (game + search) line that we can store
 
 
-/*!
- * Different execution modes of Chess0:
- * - XBOARD: the program will be quiet and interact with a graphical user
- *           interface (GUI), by using the Winboard/Xboard protocol.
- *
- * - CLI:    the program will be verbose and interact with the user through the
- *           command line of the system, using text-based input and commands.
- */
+
+// Different execution modes of Chess0:
+// - XBOARD: the program will be quiet and interact with a graphical user
+//           interface (GUI), by using the Winboard/Xboard protocol.
+//
+// - CLI:    the program will be verbose and interact with the user through the
+//           command line of the system, using text-based input and commands.
 #define APP_MODE_XBOARD 1
 #define APP_MODE_CLI    2
+
 
 #define AI_SEARCH_DEPTH           64
 #define AI_DEPTH_QUIESCE_LIMIT    32
@@ -67,6 +66,7 @@
 #define LMR_MOVE_START             3
 #define LMR_SEARCH_DEPTH           3
 
+
 #define SOLVE_MAX_DEPTH           64
 #define NODES_TEST_DEPTH          64
 #define NODES_TEST_TIME            4
@@ -74,13 +74,13 @@
 #define MOVES_TEST_ITER     50000000
 #define PERFT_DEPTH_LIMIT          6
 
+
 #define CACHE_HIT_LEVEL          0.2
 #define BOARD_SERIAL_SIZE         32
 
 
-/*!
- * Define color types: +1 for white, -1 for black, 0 for none.
- */
+
+// Define color types: +1 for white, -1 for black, 0 for none.
 enum ColorType
 {
     COLOR_TYPE_BLACK = -1,
@@ -91,21 +91,7 @@ enum ColorType
 
 
 
-/*!
- * Define the different phases of the game.
- */
-enum PhaseType
-{
-    PHASE_TYPE_OPENING,
-    PHASE_TYPE_MIDDLE,
-    PHASE_TYPE_END,
-};
-
-
-
-/*!
- * End types
- */
+// End types.
 enum EndType
 {
     END_TYPE_NOEND,
@@ -120,6 +106,7 @@ enum EndType
     END_TYPE_DRAW_STALE,
     END_TYPE_SOLVE,
 };
+
 
 
 typedef uint64_t U64;

@@ -50,8 +50,12 @@ void initBook()
 {
     ////////////////
     // WHITE 
+    //
+    // OPENINGS
     /////////////////
-    
+   
+   
+    //  Initial openings
     po["%"] = "e4";
 
 
@@ -66,6 +70,45 @@ void initBook()
     po["1. e4 e5 2. Nf3 Qe7"] = "Bc4";
     po["1. e4 e5 2. Nf3 Bc5"] = "Nxe5";
 
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 d6"] = "Nf3";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7"] = "d4";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7 4. d4 Nf6"] = "Bc4";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7 4. d4 Bb6"] = "Bc4";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7 4. d4 Bb4+"] = "c3";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7 4. d4 Bd6"] = "Nf3";
+    po["1. e4 e5 2. Nf3 Bc5 3. Nxe5 Qe7 4. d4 Bd6 5. Nf3 Qxe4+"] = "Be2";
+
+    po["1. e4 e5 2. Nf3 d6 3. d4 exd4"] = "Nxd4";
+    po["1. e4 e5 2. Nf3 d6 3. d4 Nf6"] = "Nc3";
+    po["1. e4 e5 2. Nf3 d6 3. d4 Nf6 4. Nc3 Nbd7"] = "Bc4";
+    po["1. e4 e5 2. Nf3 d6 3. d4 Nf6 4. Nc3 exd4"] = "Nxd4";
+
+
+
+    // Petrov Defense -- BLACK
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6"] = "Nf3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4"] = "d4";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5"] = "Bd3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Be7"] = "Bd3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Bg4"] = "Bd3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Nc6"] = "Bd3";
+
+    // C42 Petrov, classical attack -- BLACK
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Be7 6. Bd3 Nf6"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Be7 6. Bd3 d5"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 Be7 6. Bd3 d5 7. 0-0 Nc6"] = "c4";
+
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Bg4"] = "Nc3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nc6"] = "Nc3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Qe7"] = "d3";
+
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 Qe7"] = "Nf3";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nxe4"] = "Qe2";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nc6"] = "Nxc6";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 Bd6"] = "Nc4";
+    po["1. e4 e5 2. Nf3 Nf6 3. Nxe5 Bc5"] = "d4";
+
+
 
     // Alekhine Defense (WHITE)
     po["1. e4 Nf6"] = "e5";
@@ -77,13 +120,17 @@ void initBook()
 
 
 
-    // French Defense (WHITE)
+    // French Defense (XX) -- WHITE
     po["1. e4 e6"] = "d4";
     po["1. e4 e6 2. d4 d5"] = "Nc3";
     po["1. e4 e6 2. d4 d5 3. Nc3 Bb4"] = "e5";
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6"] = "Bg5";
     po["1. e4 e6 2. d4 d5 3. Nc3 dxe4"] = "Nxe4";
     po["1. e4 e6 2. d4 d5 3. Nc3 c5"] = "exd5";
+
+    po["1. e4 e6 2. d4 d5 3. Nc3 c5 4. exd5 exd5"] = "dxc4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 c5 4. exd5 cxd4"] = "Bb5+";
+    po["1. e4 e6 2. d4 d5 3. Nc3 c5 4. exd5 cxd4 5.Bb5+ Bd7"] = "Qxd4";
 
     po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5"] = "Bd2";
     po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Ne7"] = "a3";
@@ -92,9 +139,44 @@ void initBook()
     po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Nh6"] = "Nb5";
     po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Bxc3"] = "Bxc3";
 
+
+    // C17 French, Winawer, advance, Bogolyubov variation -- BLACK
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Bxc3 6. Bxc3 cxd4"] = "Qxd4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Bxc3 6. Bxc3 cxd4 7. Qxd4 Ne7"] = "Nf3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Bxc3 6. Bxc3 cxd4 7. Qxd4 Nc6"] = "Qg4";
+
+
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Bc5"] = "Qg4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Bxd2+"] = "Qxd2";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Bf8"] = "Nf3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Be7"] = "Qg4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6"] = "Bxb4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4"] = "Qd2";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4 8. Qd2 Qa5"] = "Nxd4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4 8. Qd2 Nc6"] = "Nd6+";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4 8. Qd2 Nc6 9. Nd6+ Kf8"] = "f4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4 8. Qd2 Nc6 9. Nd6+ Ke7"] = "f4";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Nc6 7. Bxb4 Nxb4 8. Qd2 Nc6 9. Nd6+ Ke7 10. f4 g5"] = "Bb5";
+
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Ne7 6. a3 Bxc3"] = "Bxc3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 Ne7 6. a3 Ba5"] = "dxc5";
+
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. Bd2 cxd4 6. Nb5 Bxd2+ 7. Qxd2 Nc6"] = "f4";
+
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 Ne7"] = "a3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 Bf8"] = "Nf3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 Bf8 5. Nf3 b6"] = "Bd3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 Bf8 5. Nf3 a6"] = "Be3";
+
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7"] = "e5";
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7"] = "Bxe7";
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7 6. Bxe7 Qxe7"] = "f4";
+
+    // C12 French, MacCutcheon variation
+    po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Bb4"] = "e5";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Bb4 5. e5 h6"] = "Bd2";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Bb4 5. e5 h6 6. Bd2 Bxc3+"] = "Bxc3";
+    po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Bb4 5. e5 Bxc3+"] = "bxc3";
 
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 h6"] = "Bxf6";
     po["1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 h6 5. Bxf6 Qxf6"] = "exd5";
@@ -126,6 +208,16 @@ void initBook()
     po["1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Nxf6+ gxf6 6. Nf3 Bg4 7. Be2 Qc7"] = "Be3";
     po["1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Nxf6+ exf6"] = "c3";
 
+    po["1. e4 c6 2. d4 d5 3. Nc3 g6 4. Nf3 Bg7"] = "h3";
+    po["1. e4 c6 2. d4 d5 3. Nc3 g6 4. Nf3 Bg4"] = "Be2";
+    po["1. e4 c6 2. d4 d5 3. Nc3 g6 4. Nf3 dxc4"] = "Nxe4";
+    po["1. e4 c6 2. d4 d5 3. Nc3 g6 4. Nf3 e6"] = "Bg5";
+
+    po["1. e4 c6 2. d4 d6"] = "Nc3";
+    po["1. e4 c6 2. d4 d6 3. Nc3 Nf6"] = "f4";
+    po["1. e4 c6 2. d4 d6 3. Nc3 g6"] = "Be3";
+    po["1. e4 c6 2. d4 d6 3. Nc3 Qc7"] = "f4";
+
     
 
 
@@ -138,10 +230,15 @@ void initBook()
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+"] = "Be2";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe6+"] = "Be2";
 
+    po["1. e4 d5 2. exd5 Nf6"] = "d4";
+    po["1. e4 d5 2. exd5 Nf6 3. d4 Nxd5"] = "Nf3";
+    po["1. e4 d5 2. exd5 Nf6 3. d4 Bg4"] = "Bb5+";
+
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 Nf6"] = "d4";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 Bg4"] = "Be2";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 c6"] = "d4";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 c6 5. d4 Nf6"] = "Bc4";
+    po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 Bf5"] = "Bc4";
 
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6"] = "Nf3";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 c6"] = "Bc4";
@@ -154,6 +251,11 @@ void initBook()
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe6+ 4. Be2 Nc6"] = "d4";
     po["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe6+ 4. Be2 Qc6"] = "Nf3";
 
+    po["1. e4 d5 2. exd5 c6"] = "dxc6";
+    po["1. e4 d5 2. exd5 c6 3. dxc6 Nxc6"] = "Nf3";
+    po["1. e4 d5 2. exd5 c6 3. dxc6 Nxc6 4. Nf3 e5"] = "Nc3";
+    po["1. e4 d5 2. exd5 c6 3. dxc6 Nxc6 4. Nf3 Bg4"] = "Be2";
+    po["1. e4 d5 2. exd5 c6 3. dxc6 Nxc6 4. Nf3 Nf6"] = "Bb5";
 
 
     // Sicilian Defense (WHITE)
@@ -183,6 +285,14 @@ void initBook()
     po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Qb6"] = "Nb3";
     po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 d6"] = "Nc3";
     po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 a6"] = "Nc3";
+
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nxd4"] = "Qxd4";
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nxd4 5. Qxd4 d6"] = "Nc3";
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nxd4 5. Qxd4 e6"] = "Nc3";
+
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6"] = "Ndb5";
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. Ndb5 d6"] = "Bf4";
+    po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. Ndb5 Bb4"] = "a3";
 
     po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 e5 5. Nb5 d6"] = "N1c3";
     po["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 e5 5. Nb5 a6"] = "Nd6+";
@@ -247,7 +357,7 @@ void initBook()
 
 
 
-    // Spanish Opening (WHITE)
+    // Spanish Opening (XX) -- WHITE
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6"] = "0-0";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4"] = "d4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6"] = "Bxc6";
@@ -259,11 +369,19 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 exd4 6. Re1 Be7"] = "Rxe4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 exd4 6. Re1 Qe7 7. Nxd4 Nxd4"] = "Qxd4";
 
+
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6"] = "Ba4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6"] = "0-0";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6"] = "c3";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 b5"] = "Bb3";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Bc5"] = "0-0";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 Bd7"] = "d4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 f5"] = "exf5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 Nf6"] = "d4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 b5"] = "Bc2";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 b5 6. Bc2 Bg4"] = "h3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. c3 b5 6. Bc2 h6"] = "d4";
 
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 Be7"] = "Re1";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5"] = "Bb3";
@@ -271,11 +389,36 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 d6"] = "Re1";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 Bc5"] = "c3";
 
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 Be7"] = "Re1";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 Bc5"] = "c3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 Bb7"] = "d3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 d6"] = "c3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 Nxe4"] = "d4";
+
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6"] = "d4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7"] = "Nc3";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4"] = "Nxd4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 a6"] = "Bxc6+";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 a6 5. Bxc6+ bxc6"] = "dxe5";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nf6"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 exd4"] = "Nxd4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nge7"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 a6"] = "Bxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 a6 6. Bxc6 Bxc6"] = "dxe5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 a6 6. Bxc6 Bxc6 7. dxe5 dxe5"] = "Qxd8";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 a6 6. Bxc6 Bxc6 7. dxe5 dxe5 8. Qxd8 Rxd8"] ="Nxe5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4"] = "Nxd4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4"] = "Qxd4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Bxb5"] = "Nxb5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Nf6"] = "Bxd7+";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Nf6 8. Bxd7+ Qxd7"] = "Bg5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7"] = "Bxd7+";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7 8. Bxd7+ Qxd7"] = "Be3";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4 5. Nxd4 Bd7"] = "Nc3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4 5. Nxd4 Bd7 6. Nc3 Nf6"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4 5. Nxd4 Bd7 6. Nc3 Nf6 7. 0-0 Be7"] = "Re1";
 
 
 
@@ -283,19 +426,31 @@ void initBook()
     po["1. e4 d6"] = "d4";
     po["1. e4 d6 2. d4 c6"] = "Nc3";
 
+    po["1. e4 d6 2. d4 Nf6"] = "Nc3";
+    po["1. e4 d6 2. d4 Nf6 3. Nc3 g6"] = "Nf3";
+    po["1. e4 d6 2. d4 Nf6 3. Nc3 e5"] = "Nf3";
+
+    po["1. e4 a6"] = "d4";
+    po["1. e4 a6 2. d4 h6"] = "Nf3";
+
+
 
 
 
 
     ////////////////
     // BLACK
+    //
+    // OPENINGS
     ////////////////
 
+
+    // Initial openings
     po["1. e4"] = "e5";
     po["1. d4"] = "Nf6";
     po["1. Nf3"] = "d5";
     po["1. c4"] = "e5";
-    po["1. f4"] = "Nf3";
+    po["1. c4"] = "e5";
 
 
 
@@ -305,6 +460,127 @@ void initBook()
     po["1. e4 e5 2. f4"] = "exf4";
     po["1. e4 e5 2. Nc3"] = "Nf6";
     po["1. e4 e5 2. d3"] = "Nc6";
+
+
+
+    // Nimzovich-Larsen attack (A01) -- BLACK
+    po["1. b3"] = "e5";
+    po["1. b3 e5 2. Bb2"] = "Nc6";
+
+
+
+    // Bird's opening (A02) -- BLACK
+    po["1. f4"] = "d5";
+
+    po["1. f4 d5 2. e3"] = "Nf6";
+    po["1. f4 d5 2. Nf3"] = "Nf6";
+    po["1. f4 d5 2. b3"] = "Nf6";
+    po["1. f4 d5 2. g3"] = "Nf6";
+
+    po["1. f4 d5 2. Nf3 Nf6 3. e3"] = "g6";
+    po["1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. b3"] = "Bg7";
+    po["1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. b3 Bg7 5. Bb2"] = "0-0";
+    po["1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. d4"] = "Bg7";
+    po["1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. d4 Bg7 5. Bd3"] = "0-0";
+
+    po["1. f4 d5 2. Nf3 Nf6 3. g3"] = "Bf5";
+
+
+
+    // English opening (A10) -- BLACK
+    po["1. c4 e5 2. g3"] = "Nf6";
+    po["1. c4 e5 2. g3 Nf6 3. Bg2"] = "d5";
+    po["1. c4 e5 2. g3 Nf6 3. Bg2 d5 4. cxd5"] = "Nxd5";
+    po["1. c4 e5 2. g3 Nf6 3. Bg2 d5 4. d3"] = "d4";
+
+    po["1. c4 e5 2. Nc3"] = "Nf6";
+    po["1. c4 e5 2. Nc3 Nf6 3. Nf3"] = "Nc6";
+    po["1. c4 e5 2. Nc3 Nf6 3. g3"] = "Bb4";
+    po["1. c4 e5 2. Nc3 Nf6 3. g3 Bb4 4. Bg2"] = "0-0";
+    po["1. c4 e5 2. Nc3 Nf6 3. d3"] = "Nc6";
+    po["1. c4 e5 2. Nc3 Nf6 3. e4"] = "Bc5";
+    po["1. c4 e5 2. Nc3 Nf6 3. e3"] = "Bb4";
+
+    po["1. c4 e5 2. Nc3 Nf6 3. d3 Nc6 4. g3"] = "Bb4";
+    po["1. c4 e5 2. Nc3 Nf6 3. d3 Nc6 4. Nf3"] = "Bb4";
+    po["1. c4 e5 2. Nc3 Nf6 3. d3 Nc6 4. e4"] = "Bc5";
+
+    po["1. c4 e5 2. b3"] = "Nf6";
+    po["1. c4 e5 2. b3 Nf6 3. Bb2"] = "Nc6";
+
+
+    // Indian opening (C21)
+    po["1. e4 e5 2. d3 Nc6 3. Nf3"] = "Nf6";
+    po["1. e4 e5 2. d3 Nc6 3. Nc3"] = "Nf6";
+    po["1. e4 e5 2. d3 Nc6 3. g3"] = "Nf6";
+    po["1. e4 e5 2. d3 Nc6 3. g3 Nf6 4. Bg2"] = "Bc5";
+    po["1. e4 e5 2. d3 Nc6 3. c3"] = "Nf6";
+
+
+    // Centre game (C21)
+    po["1. e4 e5 2. d4"] = "exd4";
+    po["1. e4 e5 2. d4 exd4 3. Qxd4"] = "Nc6";
+    po["1. e4 e5 2. d4 exd4 3. c3"] = "dxc3";
+    po["1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4"] = "cxb2";
+    po["1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2"] = "d5";
+    po["1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Nxc3"] = "Nc6";
+    po["1. e4 e5 2. d4 exd4 3. Nf3"] = "Nc6";
+    po["1. e4 e5 2. d4 exd4 3. Bc4"] = "Nf6";
+
+
+
+    // XXX
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3"] = "Nf6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4"] = "Nxe4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bxd5"] = "Qxd5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3"] = "Qd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3 d6 8. d3"] = "Bg4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3"] = "dxe4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3 dxe4 7. Bxe4"] = "Bd6";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+"] = "Kxf7";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+"] = "Nxe5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Qh5+"] = "g6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Qh5+ g6 8. Qxe5"] = "Nxc3";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4"] = "exd4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4"] = "Bb4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bb4 6. Nxc6"] = "bxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bb4 6. Nxc6 bxc6 7. Bd3"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. exd5"] = "cxd5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. e5"] = "Ng4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. 0-0"] = "Bxc3";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3"] = "Nxe4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5 6. Bxd5"] = "Qxd5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3"] = "Qd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3 d6 8. d3"] = "Bg4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5 6. Bd3"] = "dxe4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5 6. Bd3 dxe4 7. Bxe4"] = "Bd6";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+"] = "Kxf7";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+ Kxf7 6. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+"] = "Nxe5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Nxe4"] = "d5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Qh5+"] = "g6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Bxf7+ Kxf7 6. Nxe5+ Nxe5 7. Qh5+ g6 8. Qxe5"] = "Nxc3";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3"] = "Bc5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5 5. c3"] = "d6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5 5. 0-0"] = "d6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5 5. Nc3"] = "d6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 Bc5 5. Bg5"] = "d6";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. b3"] = "Nf6";
+    po["1. e4 e5 2. Nf3 Nc6 3. b3 Nf6 4. Bb2"] = "Bc3";
+    po["1. e4 e5 2. Nf3 Nc6 3. b3 Nf6 4. Bb2 Bc5 5. h3"] = "Nxe4";
+    po["1. e4 e5 2. Nf3 Nc6 3. b3 Nf6 4. Bb2 Bc5 5. Nc3"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nc6 3. b3 Nf6 4. Bb2 Bc5 5. Nxe5"] = "Nxe5";
+    po["1. e4 e5 2. Nf3 Nc6 3. b3 Nf6 4. Bb2 Bc5 5. Nxe5 Nxe5 6. Bxe5"] = "Qe7";
 
     po["1. e4 e5 2. Nf3 Nc6 3. Bc4"] = "Nf6";
     po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. c3"] = "Nxe4";
@@ -338,6 +614,8 @@ void initBook()
     po["1. e4 e5 2. Nc3 Nf6 3. Bc4 Bc5 4. d3"] = "d6";
     po["1. e4 e5 2. Nc3 Nf6 3. Bc4 Bc5 4. Nf3"] = "d6";
 
+    po["1. e4 e5 2. Nc3 Nf6 3. Nf3"] = "Nc6";
+
 
 
     // Scotch (BLACK)
@@ -347,6 +625,14 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3"] = "Bb4";
     po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Bg5"] = "h6";
 
+    po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4"] = "Nf6";
+    po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3"] = "dxc3";
+    po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3 dxc3 5. Bc4"] = "cxb2";
+    po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3 dxc3 5. Bc4 cxb2 6. Bxb2"] = "Bb4+";
+    po["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3 dxc3 5. Nxc3"] = "Bb4";
+
+
+
 
     // King's Gambit
     po["1. e4 e5 2. f4 exf4 3. Nf3"] = "g5";
@@ -355,6 +641,14 @@ void initBook()
     po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. d4"] = "g4";
     po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Nc3"] = "g4";
     po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h3"] = "Bg7";
+
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5"] = "d6";
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ng5"] = "h6";
+
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 d6 6. Nxg4"] = "Be7";
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 d6 6. Nxg4 Be7 7. d4"] = "Bxh4+";
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 d6 6. Nxg4 Be7 7. Bc4"] = "Bxh4+";
+    po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 d6 6. Nxg4 Be7 7. Qf3"] = "Bxh4+";
 
     po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. 0-0"] = "gxf3";
     po["1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. 0-0 gxf3 6. Qxf3"] = "Qf6";
@@ -383,14 +677,35 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Be2 h6 9. Nf3"] = "e4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Ba4 h6 9. Nf3"] = "e4";
 
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Be2 h6 9. Nf3 e4 10. 0-0"] = "exf3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Be2 h6 9. Nf3 e4 10. 0-0 exf3 11. Bxf3"] = "Bd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Be2 h6 9. Nf3 e4 10. 0-0 exf3 11. Bxf3 Bd6 12. Re1+"] = "Be6";
 
 
-    // Spanish Defense
+
+    // Spanish Defense (BLACK)
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5"]= "Nf6";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0"] = "Nxe4";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4"] = "Nd6";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6 6. Bxc6"] = "dxc6";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5"] = "Nf5";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+"] = "Kxd8";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Nc3"] = "Ke8";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Rd1+"] = "Ke8";
+
+
+    // C67 Ruy Lopez, Berlin defence, open variation -- BLACK
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6"] = "dxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. Re1"] = "Nd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. Nxe5"] = "Nd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. Qe2"] = "Ng5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. d3"] = "Nd6";
+
+
+    // C67 Ruy Lopez, Berlin defence, open variation -- BLACK
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. Nxe5 Nd6 7. d3"] = "Be7";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Bxc6 dxc6 6. Nxe5 Nd6 7. d4"] = "Be7";
 
 
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 Nxe4 5. Re1"] = "Nd6";
@@ -407,6 +722,37 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d3 Bc5 5. 0-0"] = "d6";
     po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d3 Bc5 5. Nc3"] = "d6";
 
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3"] = "Bb4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0"] = "0-0";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. d3"] = "d6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. Bxc6"] = "dxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. a3"] = "Bxc3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. Nd5"] = "Nxd5";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. Qe2"] = "0-0";
+
+    // C49 Four knights, Nimzovich (Paulsen) variation -- BLACK
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3"] = "d6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. Bxc6"] = "dxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. Bxc6 dxc6 7. d3"] = "Re8";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. Bxc6 dxc6 7. Nxe5"] = "Re8";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5"] = "Bxc3";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3"] = "Qe7";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Re1"] = "Nd8";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6"] = "bxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1"] = "h6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3"] = "Bd7";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3 Bd7 12. Rb7"] = "Ng4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Nc3 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3 Bd7 12. Rb7 Ng4 18. Bxa7"] = "Bc8";
+
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6"] = "dxc6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. d3"] = "Bd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. Nxe5"] = "Qd4";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. 0-0"] = "Bd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. Nc3"] = "Bd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. Qe2"] = "Bd6";
+    po["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Bxc6 dxc6 5. d4"] = "Bg4";
+
 
 
     // Grünfeld Defense (BLACK)
@@ -419,11 +765,51 @@ void initBook()
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1"] = "0-0";
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 0-0 9. Be2"] = "Nc6";
 
+    po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 0-0 9. Be2 Nc6 10. d5"] = "Ne5";
+    po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 0-0 9. Be2 Nc6 10. d5 Ne5 11. Nxe5"] = "Bxe5";
+
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3"] = "Bg7";
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Nf3"] = "0-0";
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Qb3"] = "e6";
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. cxd5"] = "Nxd5";
     po["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Bd3"] = "0-0";
+
+
+    
+    // Trompovsky attack (A45)
+    po["1. d4 Nf6 2. Bg5"] = "d5";
+    po["1. d4 Nf6 2. Bg5 d5 3. Bxf6"] = "exf6";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3"] = "c5";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nd2"] = "c5";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nf3"] = "Ne4";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nc3"] = "Nbd7";
+    po["1. d4 Nf6 2. Bg5 d5 3. c4"] = "Ne4";
+
+
+    // D01 Richter-Veresov attack
+    po["1. d4 Nf6 2. Bg5 d5 3. Nc3 Nbd7 4. f3"] = "c6";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nc3 Nbd7 4. f3 c6 5. e4"] = "dxe4";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nc3 Nbd7 4. f3 c6 5. e4 dxe4 6. fxe4"] = "e5";
+    po["1. d4 Nf6 2. Bg5 d5 3. Nc3 Nbd7 4. f3 c6 5. Bxf6"] = "Nxf6";
+
+
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. Bxf6"] = "gxf6";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. c3"] = "Nc6";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. Nc3"] = "Nc6";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. Nd2"] = "cxd4";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. Nf3"] = "Ne4";
+    po["1. d4 Nf6 2. Bg5 d5 3. e3 c5 4. dxc5"] = "Ne4";
+
+
+    // Reti opening (A07)
+    po["1. Nf3 d5 2. g3"] = "Nf6";
+    po["1. Nf3 d5 2. g3 Nf6 3. Bg2"] = "c5";
+
+    po["1. Nf3 d5 2. d4"] = "Nf6";
+    po["1. Nf3 d5 2. c4"] = "d4";
+    po["1. Nf3 d5 2. e3"] = "Nf6";
+    po["1. Nf3 d5 2. b3"] = "Nf6";
+
 
 
     // Queen opening (BLACK)
@@ -435,6 +821,26 @@ void initBook()
     po["1. d4 Nf6 2. e3 d5 3. Nd2"] = "Bf5";
     po["1. d4 Nf6 2. e3 d5 3. Nc3"] = "Bf5";
     po["1. d4 Nf6 2. e3 d5 3. Bd2"] = "Bf5";
+
+    po["1. d4 Nf6 2. Nf3"] = "d5";
+    po["1. d4 Nf6 2. Nf3 d5 3. c4"] = "e6";
+    po["1. d4 Nf6 2. Nf3 d5 3. e3"] = "e6";
+    po["1. d4 Nf6 2. Nf3 d5 3. Bf4"] = "c5";
+    po["1. d4 Nf6 2. Nf3 d5 3. g3"] = "c5";
+    po["1. d4 Nf6 2. Nf3 d5 3. g3 c5 4. Bg2"] = "Nc6";
+    po["1. d4 Nf6 2. Nf3 d5 3. Bg5"] = "Ne4";
+    po["1. d4 Nf6 2. Nf3 d5 3. c3"] = "Bf5";
+    po["1. d4 Nf6 2. Nf3 d5 3. Nc3"] = "e6";
+    po["1. d4 Nf6 2. Nf3 d5 3. Nbd2"] = "Bf5";
+
+    po["1. d4 Nf6 2. Nf3 d5 3. c3 Bf5 4. Bf4"] = "e6";
+    po["1. d4 Nf6 2. Nf3 d5 3. c3 Bf5 4. Bf4 e6 5. e3"] = "Bd6";
+
+    po["1. d4 Nf6 2. e3 d5 3. Bd3 c5 4. c3"] = "Nc6";
+    po["1. d4 Nf6 2. e3 d5 3. Bd3 c5 4. c3 Nc6 5. f4"] = "Bg4";
+    po["1. d4 Nf6 2. e3 d5 3. Bd3 c5 4. c3 Nc6 5. Nd2"] = "e5";
+    po["1. d4 Nf6 2. e3 d5 3. Bd3 c5 4. c3 Nc6 5. Nf3"] = "Bg4";
+    po["1. d4 Nf6 2. e3 d5 3. Bd3 c5 4. c3 Nc6 5. dxc5"] = "e5";
 
     po["1. d4 Nf6 2. e3 d5 3. c4 c6 4. Nc3"] = "e6";
     po["1. d4 Nf6 2. e3 d5 3. c4 c6 4. Nc3 e6 5. Bd2"] = "Nbd7";
@@ -462,6 +868,10 @@ void initBook()
     po["1. d4 Nf6 2. Bf4 d5 3. e3 c5 4. Nf3"] = "Nc6";
     po["1. d4 Nf6 2. Bf4 d5 3. e3 c5 4. dxc5"] = "Nc6";
 
+    po["1. d4 Nf6 2. Bf4 d5 3. e3 c5 4. c3 Nc6 5. Nf3"] = "e6";
+    po["1. d4 Nf6 2. Bf4 d5 3. e3 c5 4. c3 Nc6 5. Nf3 e6 6. Nbd2"] = "Bd6";
+    po["1. d4 Nf6 2. Bf4 d5 3. e3 c5 4. c3 Nc6 5. Nf3 e6 6. Nbd2 Bd6 7. Bg3"] = "0-0";
+
     po["1. d4 Nf6 2. Bf4 d5 3. Nf3"] = "c5";
     po["1. d4 Nf6 2. Bf4 d5 3. Nf3 c5 4. e3"] = "Nc6";
     po["1. d4 Nf6 2. Bf4 d5 3. Nf3 c5 4. c3"] = "Nc6";
@@ -474,15 +884,41 @@ void initBook()
     po["1. e4 e5 2. Nf3 Nc6 3. g4 Nf6 4. Ng5"] = "Bc4";
     po["1. e4 e5 2. Bc4"] = "Nf6";
     po["1. e4 e5 2. Bc4 Nf6 3. d3"] = "Nc6";
+    po["1. e4 e5 2. Bc4 Nf6 3. d3 Nc6 4. a3"] = "Bc5";
+    po["1. e4 e5 2. Bc4 Nf6 3. d3 Nc6 4. a3 Bc5 5. h3"] = "0-0";
 
     po["1. e4 b6"] = "d4";
     po["1. e4 b6 2. d4 g6"] = "Nf3";
     po["1. e4 b6 2. d4 g6 3. Nf3 Bg7"] = "Nc3";
 
+    po["1. e4 e5 2. Qh5"] = "Nc6";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4"] = "g6";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qd1"] = "Bg7";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3"] = "Nf6";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 5. Ne2"] = "Bg7";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 5. d3"] = "Nd4";
+    po["1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 5. Nc3"] = "Nd4";
+
     po["1. e4 b6 2. d4 Bb7"] = "Nc3";
 
     po["1. Nc3"] = "d5";
     po["1. Nc3 d5 2. Nf3"] = "Nf6";
+
+    po["1. e4 e5 2. h4"] = "Nf6";
+
+    po["1. e4 e5 2. Ne2"] = "Nf6";
+    po["1. e4 e5 2. Ne2 Nf6 3. Ng3"] = "Nc6";
+
+    po["1. d3"] = "d5";
+    po["1. d3 d5 2. e3"] = "e5";
+    po["1. d3 d5 2. e3 e5 3. Nf3"] = "Nc6";
+    po["1. d3 d5 2. e3 e5 3. Nc3"] = "Nc6";
+
+    po["1. g4"] = "d5";
+    po["1. g4 d5 2. Bg2"] = "c6";
+
+    po["1. e3"] = "e5";
+    po["1. e3 e5 2. Nc3"] = "Nf6";
 
 
 

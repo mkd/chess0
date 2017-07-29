@@ -4,28 +4,42 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Save/load board
+- save:
   - boardToFEN() (implement FEN writer by looping on the board)
-  - FENToBoard() (use readFEN and setup.cpp)
+  - start by copying save() command from original chess0
+
+- load:
+  - FENToBoard() (use readFEN and setup.cpp) -- use setupFEN()
+  - start by coyping load() command from original chess0
 
 
 
 BEFORE NEXT RELEASE
 ===================
+- Improve edit()
+  - clean  up code
+  - fix bugs
+  - simplify
+
 - Implement commands:
   - pass/null
   - material
   - info (eval, material, phase, sideToMove)
+
+- Implement ttEntry cache
+  - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,
+    everything needed
+  - use LRU cache (from web) to store ttEntry objects
+  - Make sure cache is fast enough --> 
+    Old cache implementation (hashToStr) was 3.5x slower than without cache
+    (i.e., kN/s was 3.5 times less when cache ON, and up to 20x slower when
+    cache goes over 1Gb)
 
 
 
 IMPORTANT
 =========
 - Improve evaluation function (opening, middle, end)
-
-- Proper cache implementation ttEntry and Cache class, use Zobrist for index and
-  LRU to make sure it doesn't explode into Gbytes of data. Condition: cache=true
-  should make the program noticeably faster and stronger at every time.
 
 - Razoring
 

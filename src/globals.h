@@ -86,10 +86,12 @@ extern const int RANKS[64] = {
        7, 7, 7, 7, 7, 7, 7, 7,
        8, 8, 8, 8, 8, 8, 8, 8
 };
+
  
 // Identifier of next move:
 extern const unsigned char WHITE_MOVE  = 0; 
 extern const unsigned char BLACK_MOVE  = 1; 
+
  
 // Piece identifiers, 4 bits each.
 // Usefull bitwise properties of this numbering scheme:
@@ -118,6 +120,7 @@ const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," 
  
 BitMap BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
+
  
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
@@ -128,8 +131,10 @@ extern const int QUEEN_VALUE = 960;
 extern const int KING_VALUE = 9999;
 extern const int CHECK_MATE = KING_VALUE;
 
+
 // used for MVV/LVA and SEE:
 int PIECEVALUES[16];
+
  
 // used in Eugene Nalimov's bitScanReverse
 int MS1BTABLE[256];

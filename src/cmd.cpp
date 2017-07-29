@@ -57,7 +57,6 @@ void initListOfCommands()
     listOfCommands.push_back("bench");
     listOfCommands.push_back("book");
     listOfCommands.push_back("depth");
-    listOfCommands.push_back("draw");
     listOfCommands.push_back("edit");
     listOfCommands.push_back("eval");
     listOfCommands.push_back("exit");
@@ -66,7 +65,6 @@ void initListOfCommands()
     listOfCommands.push_back("go");
     listOfCommands.push_back("help");
     listOfCommands.push_back("history");
-    listOfCommands.push_back("lmr");
     listOfCommands.push_back("load");
     listOfCommands.push_back("manual");
     listOfCommands.push_back("moves");
@@ -214,59 +212,23 @@ void exec(string input)
     }
 
 
-    /* eval
-     *
-     * display current board's evaluation
-     */
+    // eval: display current board's evaluation
     else if (cmd == "eval")
     {
         displayEval();
     }
 
 
-    // lmr
-    //
-    // Enable/disable late-move reductions (LMR) optimization
-    else if (cmd == "lmr")
-    {
-        if ((arg == "on") || (arg == "true"))
-            LMR = true;
-        else if ((arg == "off") || (arg == "false"))
-            LMR = false;
 
-        if (LMR)
-            cout << "LMR optimizations are enabled." << endl;
-        else
-            cout << "LMR optimizations are disabled." << endl;
-    }
-
-
-    /* load
-     *
-     * load position from a file
-     */
+    // load: load position from a file
     else if (cmd == "load")
     {
         // TODO: load
     }
 
 
-    /*
-     * draw
-     *
-     * offer draw to the other player
-     */
-    else if (cmd == "draw")
-    {
-        // TODO: draw
-    }
 
-
-    /* 
-     * edit
-     *
-     * edit a board for setting a position
-     */
+    // edit: edit a board for setting a position
     else if (cmd == "edit")
     {
         edit();
@@ -274,11 +236,7 @@ void exec(string input)
     }
 
 
-    /*
-     * flip
-     *
-     * flip the board when displaying
-     */
+    // flip: flip the board when displaying
     else if (cmd == "flip")
     {
         board.flipBoard = !board.flipBoard;
@@ -286,11 +244,7 @@ void exec(string input)
     }
 
 
-    /* 
-     * go
-     *
-     * force the computer to move now
-     */
+    // go: force the computer to move now
     else if (cmd == "go")
     {
         if (board.nextMove)
@@ -745,10 +699,10 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "auto  book  depth  draw  edit  eval  flip  game" << endl;
-        cout << "go  help  history  lmr  load  manual  new  null" << endl;
-        cout << "pass  remove  resign  save  sd  show  solve  test" << endl;
-        cout << "think undo  verbose  version  quit" << endl;
+        cout << "auto  book  depth  edit  eval  flip  game" << endl;
+        cout << "go  help  history  lmr  load  manual  new" << endl;
+        cout << "pass  remove  resign  save  sd  show  solve" << endl;
+        cout << "test  think  undo  verbose  version  quit" << endl;
         return;
     }
 
@@ -811,16 +765,7 @@ void displayHelp(string which)
         cout << " with small letters next to an asterisk." << endl;
     }
 
-    // help draw
-    else if (which == "draw")
-    {
-        cout << "draw" << endl;
-        cout << " Offer draw to your opponent. If the draw is accepted,";
-        cout << endl;
-        cout << " the match ends in draw score. Otherwise, the match just";
-        cout << endl;
-        cout << " continues as normal." << endl;
-    }
+
 
     // help edit
     else if (which == "edit")
@@ -951,10 +896,10 @@ void displayHelp(string which)
     }
 
 
-    // help pass/null
-    else if ((which == "pass") || (which == "null"))
+    // help pass
+    else if (which == "pass")
     {
-        cout << "pass | null" << endl;
+        cout << "pass" << endl;
         cout << " Make a null move. This means that no move is actually";
         cout << endl;
         cout << " performed on the board, but the turn moves over the" << endl;
@@ -1127,17 +1072,30 @@ void displayHelp(string which)
 
 
 
-/*!
- * Display the current heuristic evaluation according to the board.
- */
+// displayEval()
+//
+// Display the current heuristic evaluation according to the board.
 void displayEval()
 {
-    float evaluationValue;
+    // calculate the static evaluation value (material + position)
+    float evaluationValue = 0;
     if (board.nextMove)
         evaluationValue = -board.eval() / 100.00f;
     else
         evaluationValue = board.eval() / 100.00f;
 
-    cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl;
+    // calculate the material evaluation (without taking the position into
+    // account)
+    float materialValue = 0;
+    for (unsigned i = 0; i < 64; i++)
+    {
+        if ((board.square[i] >= 9) && (board.square[i] <= 15))
+            materialValue -= PIECEVALUES[board.square[i]];
+        else
+            materialValue += PIECEVALUES[board.square[i]];
+    }
+    materialValue /= 100.00f;
+
+    cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << materialValue << ")" << endl;
     cout << noshowpos;
 }

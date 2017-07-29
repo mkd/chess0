@@ -31,7 +31,7 @@ BINDIR = $(PREFIX)/bin
 OBJS = app.o bit.o board.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o readfen.o eval.o book.o see.o setup.o sort.o timer.o
 
 ### Compilation flags
-CXXFLAGS += -O3 -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++11 -m64 -flto -msse
+CXXFLAGS += -O3 -Wall -Wcast-qual -Wextra -Wshadow -fno-exceptions -fno-rtti -std=c++11 -m64 -flto -msse
 DEPENDFLAGS += -std=c++11
 
 ### Build targets
