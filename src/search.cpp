@@ -666,7 +666,7 @@ void timeControl()
 
 
 
-// Quiescence search.
+// qsearch()
 //
 // Perform a search indefinitely until all the following conditions happen:
 // a) no more possible captures

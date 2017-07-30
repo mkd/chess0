@@ -4,19 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement commands:
-  - pass/null
-  - auto
-
-
-
-BEFORE NEXT RELEASE
-===================
-- Improve edit()
-  - clean  up code
-  - fix bugs
-  - simplify
-
 - Implement ttEntry cache
   - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,
     everything needed
@@ -28,6 +15,11 @@ BEFORE NEXT RELEASE
     3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
     and up to 20x slower when
     cache goes over 1Gb)
+
+
+
+BEFORE NEXT RELEASE
+===================
 
 
 

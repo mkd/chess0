@@ -567,6 +567,8 @@ void changeSide()
 {
     if (playMode == HUMAN_CPU)
         (curPlayerType == PLAYER_TYPE_HUMAN) ? curPlayerType = PLAYER_TYPE_COMPUTER : curPlayerType = PLAYER_TYPE_HUMAN;
+    else if (playMode == CPU_CPU)
+        curPlayerType = PLAYER_TYPE_COMPUTER;
 
     cursor++;
 

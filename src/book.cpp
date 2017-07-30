@@ -406,6 +406,8 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 d6"] = "c3";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. 0-0 b5 6. Bb3 Nxe4"] = "d4";
 
+
+    // C62 Ruy Lopez, old Steinitz defence -- WHITE
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6"] = "d4";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7"] = "Nc3";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4"] = "Nxd4";
@@ -426,6 +428,9 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Nf6 8. Bxd7+ Qxd7"] = "Bg5";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7"] = "Bxd7+";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7 8. Bxd7+ Qxd7"] = "Be3";
+    
+    book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 exd4 6. Nxd4 g6"] = "Be3";
+    book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 exd4 6. Nxd4 g6 7. Be3 Bg7"] = "Qd2";
 
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4 5. Nxd4 Bd7"] = "Nc3";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 exd4 5. Nxd4 Bd7 6. Nc3 Nf6"] = "0-0";
@@ -549,6 +554,30 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3 d6 8. d3"] = "Bg4";
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3"] = "dxe4";
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3 dxe4 7. Bxe4"] = "Bd6";
+
+    // C49 Four knights, Nimzovich (Paulsen) variation -- BLACK
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5"] = "Bb4";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0"] = "0-0";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. d3"] = "d6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. Bxc6"] = "dxc6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. a3"] = "Bxc3";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. Nd5"] = "Nxd5";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. Qe2"] = "0-0";
+
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3"] = "d6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. Bxc6"] = "dxc6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. Bxc6 dxc6 7. d3"] = "Re8";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. Bxc6 dxc6 7. Nxe5"] = "Re8";
+
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5"] = "Bxc3";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3"] = "Qe7";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Re1"] = "Nd8";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6"] = "bxc6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1"] = "h6";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3"] = "Bd7";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3 Bd7 12. Rb7"] = "Ng4";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bb4 5. 0-0 0-0 6. d3 d6 7. Bg5 Bxc3 8. bxc3 Qe7 9. Bxc6 bxc6 10. Rb1 h6 11. Be3 Bd7 12. Rb7 Ng4 18. Bxa7"] = "Bc8";
+
 
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+"] = "Kxf7";
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Bxf7+ Kxf7 6. Nxe4"] = "d5";

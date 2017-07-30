@@ -75,7 +75,6 @@ void initListOfCommands()
     listOfCommands.push_back("manual");
     listOfCommands.push_back("moves");
     listOfCommands.push_back("new");
-    listOfCommands.push_back("pass");
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
     listOfCommands.push_back("remove");
@@ -152,6 +151,8 @@ void exec(string input)
     {
         wPlayer = PLAYER_TYPE_COMPUTER;
         bPlayer = PLAYER_TYPE_COMPUTER;
+        curPlayerType = PLAYER_TYPE_COMPUTER;
+        playMode = CPU_CPU;
     }
 
 
@@ -673,9 +674,9 @@ void displayHelp(string which)
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  depth  edit  eval  flip  game" << endl;
-        cout << "go  help  history  load  manual  new  pass" << endl;
-        cout << "remove  resign  restart  save  sd  show  solve" << endl;
-        cout << "st  test  think  undo  verbose  version  quit" << endl;
+        cout << "go  help  history  load  manual  new  remove" << endl;
+        cout << "resign  restart  save  sd  show  solve  st" << endl;
+        cout << "test  think  undo  verbose  version  quit" << endl;
         return;
     }
 
@@ -851,19 +852,6 @@ void displayHelp(string which)
     }
 
 
-    // help pass
-    else if (which == "pass")
-    {
-        cout << "pass" << endl;
-        cout << " Make a null move. This means that no move is actually";
-        cout << endl;
-        cout << " performed on the board, but the turn moves over the" << endl;
-        cout << " other player. This command is mainly used for testing";
-        cout << endl;
-        cout << " certain positions." << endl;
-    }
-
-
     // help resign
     else if (which == "resign")
     {
@@ -940,7 +928,7 @@ void displayHelp(string which)
 
 
     // help st | think (time per move)
-    else if (which == "think")
+    else if ((which == "think") || (which == "st"))
     {
         cout << "st | think [N]" << endl;
         cout << " Set the maximum amount of time the engine can think" << endl;
