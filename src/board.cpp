@@ -26,6 +26,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
+#include <string>
 #include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
@@ -316,7 +318,8 @@ string Board::toFEN()
     string serial = "";
     unsigned rank, file;
 
-    // TODO
+
+    // 1) iterate over the entire board and write out in FEN 
     for (rank = 8; rank >= 1; rank--)
     {
         for (file = 1; file <= 8; file++)
@@ -339,10 +342,10 @@ string Board::toFEN()
         if (rank > 1)
             serial.append(1, '/');
     }
-
-
-    // append the moving side ('w' or 'b')
     serial.append(1, ' ');
+
+
+    // 2) set the moving side ('w' or 'b')
     if (movingSide == WHITE_MOVE)
         serial.append(1, 'w');
     else
@@ -350,11 +353,78 @@ string Board::toFEN()
     serial.append(1, ' ');
 
 
-    // TODO
-    //castleWhite = castleW;
-    //castleBlack = castleB;
-    //epSquare = epSq;
-    //fiftyMove = fiftyM;
+    // 3) add castling rights
+    if (castleWhite & CANCASTLEOO)  serial.append(1, 'K');
+    if (castleWhite & CANCASTLEOOO) serial.append(1, 'Q');
+    if (castleBlack & CANCASTLEOO)  serial.append(1, 'k');
+    if (castleBlack & CANCASTLEOOO) serial.append(1, 'q');
+    if (!(castleWhite & CANCASTLEOO) && !(castleWhite & CANCASTLEOOO) &&
+        !(castleBlack & CANCASTLEOO) && !(castleBlack & CANCASTLEOOO))
+        serial.append(1, '-');
+    serial.append(1, ' ');
+
+
+    // 4) add enpassant square
+    if (epSquare)
+    {
+        serial.append(bunmap(epSquare));
+    }
+    else
+        serial.append(1, '-');
+    serial.append(1, ' ');
+    
+    
+    // 5) add 50rule
+    serial += to_string(fiftyMove) + ' ';
+
+
+    // 6) add move number
+    serial.append(1, '1');
+
+
+    // 7) compress the string
+    size_t start_pos = 0;
+    while((start_pos = serial.find("11111111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("11111111").length(), "8");
+        start_pos += string("8").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("1111111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("1111111").length(), "7");
+        start_pos += string("7").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("111111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("111111").length(), "6");
+        start_pos += string("6").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("11111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("11111").length(), "5");
+        start_pos += string("5").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("1111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("1111").length(), "4");
+        start_pos += string("4").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("111", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("111").length(), "3");
+        start_pos += string("3").length();
+    }
+    start_pos = 0;
+    while((start_pos = serial.find("11", start_pos)) != std::string::npos)
+    {
+        serial.replace(start_pos, string("11").length(), "2");
+        start_pos += string("2").length();
+    }
 
 
     // append the depth as well

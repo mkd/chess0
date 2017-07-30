@@ -4,8 +4,9 @@ TODO
 
 WORK IN PROGRESS
 ================
-- toFEN():
-  - implement castling rights, 50rule and move number
+- Implement commands:
+  - pass/null
+  - auto
 
 
 
@@ -15,10 +16,6 @@ BEFORE NEXT RELEASE
   - clean  up code
   - fix bugs
   - simplify
-
-- Implement commands:
-  - pass/null
-  - auto
 
 - Implement ttEntry cache
   - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,
