@@ -22,22 +22,31 @@
 
 // @file globals.h
 //
-// XXX
+// This file contains various global definitions that are used across the entire
+// application, including piece values, square names, positional bonuses, etc.
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
+
+
  
 #include <iostream>
 #include <unordered_map>
 #include "definitions.h"
 #include "board.h"
 #include "hash.h"
+
+
  
 char INIFILE[80];
 char PATHNAME[80];
 char CMD_BUFF[MAX_CMD_BUFF];
 int CMD_BUFF_COUNT = 0;
+
+
  
 Board board;
+
+
 
 extern const int A8 = 56; extern const int B8 = 57; extern const int C8 = 58; extern const int D8 = 59;
 extern const int E8 = 60; extern const int F8 = 61; extern const int G8 = 62; extern const int H8 = 63;
@@ -55,6 +64,7 @@ extern const int A2 =  8; extern const int B2 =  9; extern const int C2 = 10; ex
 extern const int E2 = 12; extern const int F2 = 13; extern const int G2 = 14; extern const int H2 = 15;
 extern const int A1 =  0; extern const int B1 =  1; extern const int C1 =  2; extern const int D1 =  3;
 extern const int E1 =  4; extern const int F1 =  5; extern const int G1 =  6; extern const int H1 =  7;
+
  
 const char* SQUARENAME[64] = {"a1","b1","c1","d1","e1","f1","g1","h1",
                               "a2","b2","c2","d2","e2","f2","g2","h2",
@@ -64,6 +74,7 @@ const char* SQUARENAME[64] = {"a1","b1","c1","d1","e1","f1","g1","h1",
                               "a6","b6","c6","d6","e6","f6","g6","h6",
                               "a7","b7","c7","d7","e7","f7","g7","h7",
                               "a8","b8","c8","d8","e8","f8","g8","h8"};
+
  
 extern const int FILES[64] = {
        1, 2, 3, 4, 5, 6, 7, 8,
@@ -75,6 +86,7 @@ extern const int FILES[64] = {
        1, 2, 3, 4, 5, 6, 7, 8,
        1, 2, 3, 4, 5, 6, 7, 8
 };
+
  
 extern const int RANKS[64] = {
        1, 1, 1, 1, 1, 1, 1, 1,
@@ -87,10 +99,12 @@ extern const int RANKS[64] = {
        8, 8, 8, 8, 8, 8, 8, 8
 };
 
+
  
 // Identifier of next move:
 extern const unsigned char WHITE_MOVE  = 0; 
 extern const unsigned char BLACK_MOVE  = 1; 
+
 
  
 // Piece identifiers, 4 bits each.
@@ -268,9 +282,11 @@ int BONUS_ROOK_ON_OPEN_FILE       = 20;
 int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 25;
 int BONUS_TEMPO_MIDGAME           = 10;
 int BONUS_TEMPO_ENDGAME           = 20;
+
  
-int BONUS_PAWN_SHIELD_STRONG = 10;
-int BONUS_PAWN_SHIELD_WEAK = 5;
+int BONUS_PAWN_SHIELD_STRONG = 9;
+int BONUS_PAWN_SHIELD_WEAK = 4;
+
  
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
 int PAWN_OPPONENT_DISTANCE[8] =      { 0,   2,  1,  0,  0,  0,  0,  0 };
@@ -289,8 +305,8 @@ int PAWNPOS_W[64] = {
          0,   0,   0,   0,   0,   0,   0,   0,
          //5,  10,  15,  20,  20,  15,  10,   5,
          //4,   8,  12,  16,  16,  12,   8,   4,
-         9,  14,  19,  25,  25,  19,  14,   9,
-         6,  10,  15,  20,  20,  15,  10,   6,
+        10,  15,  20,  25,  25,  20,  15,  10,
+         6,  11,  16,  21,  21,  16,  11,   6,
          3,   6,   9,  12,  12,   9,   6,   3,
          2,   4,   6,   8,   8,   6,   4,   2,
          1,   2,   3, -10, -10,   3,   2,   1,
