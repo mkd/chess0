@@ -52,6 +52,7 @@
 #include "board.h" 
 #include "timer.h" 
 #include "app.h"
+#include "cache.h"
 
 
 
@@ -62,6 +63,8 @@ using namespace std;
 unsigned short nextDepth = 0;
 unsigned short nextPly = 0;
 unsigned short quiesceDepth = 0;
+ttEntry tt;
+float cacheHit;
 
 
 
@@ -78,6 +81,7 @@ Move Board::think()
 {
     int score, legalmoves, currentdepth;
     Move singlemove;
+    cacheHit = 0;
 
 
     //  Check if the game has ended, or if there is only one legal move,
@@ -88,8 +92,6 @@ Move Board::think()
 
     if (legalmoves == 1) 
     {
-        //cout << "forced move: ";
-        //displayMove(singlemove);
         cout << endl; 
 
         if (XB_MODE && XB_POST) 
@@ -177,6 +179,8 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
+    bool cached = false;
+    //cout << "Cache size = " << cache.size() << " bytes; " << cache.positions() << " positions." << endl;
 
 
     // prepare structure to store the principal variation (PV)
@@ -235,21 +239,43 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
         selectmove(ply, i, depth, followpv); 
 
         makeMove(moveBuffer[i]);
+
+        if (!isOtherKingAttacked()) 
         {
-            if (!isOtherKingAttacked()) 
+            inodes++;
+            moveNo++;
+
+            if (--countdown <=0)
+                readClockAndInput();
+
+            movesfound++;
+
+            
+            if (!ply && (depth > 3))
+                displaySearchStats(3, ply, i); 
+
+
+            // 1) Look up the cache
+            if (useCache)
             {
-                inodes++;
-                moveNo++;
+                tt = cache.find(board.hashkey, ply);
+                if (tt.depth < ply)
+                {
+                    cached = false;
+                }
+                else
+                {
+                    cacheHit++;
+                    val = tt.score;
+                    cached = true;
+                }
+            }
 
-                if (--countdown <=0)
-                    readClockAndInput();
 
-                movesfound++;
-
-                if (!ply && (depth > 3))
-                    displaySearchStats(3, ply, i); 
-
-
+            if (!cached)
+            {
+                // 2) LMR
+                //
                 // Configure late-move reductions (LMR): assuming that the moves in the
                 // list are ordered from potential best to potential worst, analyzing 
                 // the first moves is more critical than the last ones. Therefore, 
@@ -265,7 +291,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 }
 
 
-                // alphabeta search 
+                // 3) Alphabeta with Principal Variation Search (PVS)
                 if (pvmovesfound)
                 {
                     val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
@@ -274,55 +300,66 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     if ((val > alpha) && (val < beta))
                         val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
                 }
-
-                // normal alphabeta
                 else
                 {
                     val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
                 }
 
 
-                unmakeMove(moveBuffer[i]);
-
-
-                // if time is up, then return
-                if (timedout)
-                    return 0;
-
-
-                if (val >= beta)
+                // 4) Store in cache (replacement scheme --> always replace)
+                if (useCache && (ply > 4))
                 {
-                    // update the history heuristic
-                    if (nextMove) 
-                        blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
-                    else 
-                        whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
-
-                    return beta;
+                    if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
+                    {
+                        tt.score = val;
+                        tt.depth = ply;
+                        cache.add(board.hashkey, tt);
+                    }
                 }
-
-
-                // both sides want to maximize from *their* perspective
-                if (val > alpha)
-                {
-                    alpha = val;
-                    pvmovesfound++;
-
-
-                    // save this move
-                    triangularArray[ply][ply] = moveBuffer[i];
-
-                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                        triangularArray[ply][j] = triangularArray[ply+1][j];    // and append the latest best PV from deeper plies
-
-                    triangularLength[ply] = triangularLength[ply+1];
-
-                    if (!ply && (depth > 3))
-                        displaySearchStats(2, depth, val);
-                } 
             }
-            else unmakeMove(moveBuffer[i]);
+
+
+            // 5) unmake the move
+            unmakeMove(moveBuffer[i]);
+
+
+            // if time is up, then return
+            if (timedout)
+                return 0;
+
+
+            if (val >= beta)
+            {
+                // update the history heuristic
+                if (nextMove) 
+                    blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+                else 
+                    whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+
+                return beta;
+            }
+
+
+            // both sides want to maximize from *their* perspective
+            if (val > alpha)
+            {
+                alpha = val;
+                pvmovesfound++;
+
+
+                // save this move
+                triangularArray[ply][ply] = moveBuffer[i];
+
+                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                    triangularArray[ply][j] = triangularArray[ply+1][j];    // and append the latest best PV from deeper plies
+
+                triangularLength[ply] = triangularLength[ply+1];
+
+                if (!ply && (depth > 3))
+                    displaySearchStats(2, depth, val);
+            } 
         }
+        else unmakeMove(moveBuffer[i]);
     }
 
 
@@ -357,9 +394,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
 
-/*
- * Display analysis statistics about the calculation of a move.
- */
+// displaySearchStats()
+//
+// Display analysis statistics about the calculation of a move.
 void Board::displaySearchStats(int mode, int depth, int score)
 {
     char sanMove[12], timestring[8];
@@ -405,17 +442,28 @@ void Board::displaySearchStats(int mode, int depth, int score)
                     cout << noshowpos;
 
                     // display the amount of nodes searched
+                    float cacheHitRatio = cacheHit / inodes;
                     cout.fill(' ');
-                    cout << ' ';
-                    if (inodes > 1000000)
-                        cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
-                    else if (inodes > 1000)
-                        cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
+                    if (cacheHitRatio > CACHE_HIT_LEVEL)
+                    {
+                        cout << "   Cached";
+                    }
                     else
-                        cout << setw(8) << setprecision(0) << inodes;
+                    {
+                        cout << " ";
+                        if (inodes > 1000000)
+                            cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
+                        else if (inodes > 1000)
+                            cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
+                        else
+                            cout << setw(8) << setprecision(0) << inodes;
+                    }
+                    cout.fill(' ');
+
 
                     // search time
                     cout << setw(8) << fixed << setprecision(2) << dt << "s ";
+
 
                     // search speed
                     float knps = (inodes / (dt * 1000)) / 1.0;
@@ -423,6 +471,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
                         cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
                     else
                         cout << "           -  ";
+
 
                     // store this PV:
                     rememberPV();
@@ -457,10 +506,10 @@ void Board::displaySearchStats(int mode, int depth, int score)
 
 
 
-/*!
- * Checks if the current position is end-of-game due to:
- * checkmate, stalemate, 50-move rule, or insufficient material.
- */
+// isEndOfgame()
+//
+// Checks if the current position is end-of-game due to:
+// checkmate, stalemate, 50-move rule, or insufficient material.
 bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 {
     int whiteknights, whitebishops, whiterooks, whitequeens, whitetotalmat;
@@ -567,9 +616,9 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 
 
 
-/*!
- * RepetitionCount is used to detect threefold repetitions of the current position.
- */
+// repetitionCount()
+//
+// RepetitionCount is used to detect threefold repetitions of the current position.
 int Board::repetitionCount()
 {
     int i, ilast, rep;
@@ -584,10 +633,10 @@ int Board::repetitionCount()
 
 
 
-/*!
- * Remember the last PV, and also the 5 previous ones because
- * they usually contain good moves to try.
- */
+// rememberPV()
+//
+// Remember the last PV, and also the 5 previous ones because
+// they usually contain good moves to try.
 void Board::rememberPV()
 {
     int i;
@@ -600,6 +649,8 @@ void Board::rememberPV()
 
 
 
+// mstostring()
+//
 // convert milliseconds to a time string (hh:mm:ss, mm:ss, s, ms)
 void mstostring(uint64_t dt, char *timestring)
 {

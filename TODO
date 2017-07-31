@@ -5,12 +5,7 @@ TODO
 WORK IN PROGRESS
 ================
 - Implement ttEntry cache
-  - use ttEntry class with fields for depth, ply, beta, alpha, score, lastPV,
-    everything needed
-  - use unordered_map() without a limit
-  - index is U64 board.key
-  - at every iteration, search by board.key and if ply > current ply, then use
-    cached value, because accuracy must be higher
+  - Fix cache usage
   - Make sure cache is fast enough --> old cache implementation (hashToStr) was
     3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
     and up to 20x slower when

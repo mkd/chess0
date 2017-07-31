@@ -27,9 +27,14 @@
 #ifndef _APP_H_
 #define _APP_H_
 
+
+
 #include <vector>
 #include <unordered_map>
 #include "definitions.h"
+#include "cache.h"
+
+
 
 using namespace std;
 
@@ -88,6 +93,7 @@ extern unsigned cursor;
 extern ColorType gameMate;
 extern bool useBook;
 extern bool usePersonalBook;
+extern Cache cache;
 
 
 
