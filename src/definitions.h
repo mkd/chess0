@@ -109,7 +109,7 @@ enum EndType
 
 
 
-typedef uint64_t BitMap;
+typedef uint64_t Bitboard;
 
 
  

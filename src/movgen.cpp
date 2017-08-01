@@ -45,7 +45,9 @@
 
 
  
-// This is winglet's pseudo-legal bitmap move generator,
+// movegen()
+//
+// This is winglet's pseudo-legal bitboard move generator,
 // using magic multiplication instead of rotated bitboards.
 // There is no check if a move leaves the king in check
 // The first free location in moveBuffer[] is supplied in index,
@@ -54,8 +56,8 @@ int movegen(int index)
 {
     unsigned char opponentSide;
     unsigned int from, to;
-    BitMap tempPiece, tempMove;
-    BitMap targetBitmap, freeSquares;
+    Bitboard tempPiece, tempMove;
+    Bitboard targetBitmap, freeSquares;
     Move move;
  
     move.clear();
@@ -444,8 +446,8 @@ int captgen(int index)
     unsigned char opponentSide;
     unsigned int from, to;
     int ifirst;
-    BitMap tempPiece, tempMove;
-    BitMap targetBitmap, freeSquares;
+    Bitboard tempPiece, tempMove;
+    Bitboard targetBitmap, freeSquares;
     Move move;
  
     ifirst = index;
@@ -807,20 +809,20 @@ int captgen(int index)
 
 
  
-/*!
- *
- * isAttacked is used mainly as a move legality test to see if targetBitmap is
- * attacked by white or black.
- * Returns true at the first attack found, and returns false if no attack is found.
- * It can be used for:
- * - check detection, and
- * - castling legality: test to see if the king passes through, or ends up on,
- * a square that is attacked
- */
-bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
+// is Attacked()
+//
+// isAttacked is used mainly as a move legality test to see if targetBitmap is
+// attacked by white or black.
+//
+// Returns true at the first attack found, and returns false if no attack is found.
+// It can be used for:
+// - check detection, and
+// - castling legality: test to see if the king passes through, or ends up on,
+// a square that is attacked
+bool isAttacked(Bitboard &targetBitmap, const unsigned char &fromSide)
 {
-       BitMap tempTarget;
-       BitMap slidingAttackers;
+       Bitboard tempTarget;
+       Bitboard slidingAttackers;
        int to;
  
        tempTarget = targetBitmap;
@@ -888,6 +890,9 @@ bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
 
 
 
+// addCaptScore()
+//
+// XXX
 void Board::addCaptScore(int &ifirst, int &index)
 {
     int i, val;

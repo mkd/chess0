@@ -41,7 +41,7 @@
 
 
 
-//  This is a bitmap implementation of SEE (Static Exchange Evaluator), 
+//  This is a Bitboard implementation of SEE (Static Exchange Evaluator), 
 //  Captures that don't gain material are discarded during the quiescence search.
 //  SEE speeds up the search in two ways: 
 //  1) not all captures are searched, as in MVV/LVA
@@ -51,7 +51,7 @@ int Board::SEE(Move &move)
 {
     int nrcapts, from, target, heading, attackedpieceval;
     int materialgains[32];
-    BitMap attackers, nonremoved;
+    Bitboard attackers, nonremoved;
     unsigned char stm;
     bool ispromorank;
 
@@ -164,13 +164,13 @@ int Board::SEE(Move &move)
 
 
 
-//  attacksTo returns the first-line 'attackers' bitmap for SEE, it has all pieces that 
+//  attacksTo returns the first-line 'attackers' Bitboard for SEE, it has all pieces that 
 //  attack the target square (both colors), excluding any attackers that might be lined-up 
 //  behind the first-line attackers (e.g. queen behind rook) - they will be dealt with by 
 //  revealNextAttacker
-BitMap Board::attacksTo(int &target)
+Bitboard Board::attacksTo(int &target)
 {
-    BitMap attacks, attackBitmap;
+    Bitboard attacks, attackBitmap;
     
     // attacks along ranks/files (rooks & queens)
     attackBitmap = ROOKATTACKS(target);
@@ -205,11 +205,11 @@ BitMap Board::attacksTo(int &target)
 //
 //  Check if there was another 'hidden' attacker that was
 //  lined-up after an attacker has been removed. 
-//  If so, the attackers bitmap is updated accordingly.
-BitMap Board::revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading)
+//  If so, the attackers Bitboard is updated accordingly.
+Bitboard Board::revealNextAttacker(Bitboard &attackers, Bitboard &nonremoved, int &target, int &heading)
 {  
     int state;
-    BitMap targetBitmap = 0;
+    Bitboard targetBitmap = 0;
 
     switch (heading) 
     {

@@ -59,16 +59,16 @@ void makeMove(Move &move)
        board.gameLine[board.endOfSearch].epSquare     = board.epSquare;
        board.gameLine[board.endOfSearch].key          = board.hashkey;
 
-       BitMap fromBitMap  = BITSET[from];
-       BitMap fromToBitMap = fromBitMap  | BITSET[to];
+       Bitboard fromBitboard  = BITSET[from];
+       Bitboard fromToBitboard = fromBitboard  | BITSET[to];
        board.hashkey ^= (KEY.keys[from][piece] ^ KEY.keys[to][piece]);
        if (board.epSquare) board.hashkey ^= KEY.ep[board.epSquare];
 
        switch (piece)
        {
               case 1: // white pawn:
-                     board.whitePawns           ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whitePawns           ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_PAWN;
                      board.epSquare            = 0;
@@ -84,7 +84,7 @@ void makeMove(Move &move)
                            {
                                   board.blackPawns           ^= BITSET[to-8];
                                   board.blackPieces          ^= BITSET[to-8];
-                                  board.occupiedSquares    ^= fromToBitMap | BITSET[to-8];
+                                  board.occupiedSquares    ^= fromToBitboard | BITSET[to-8];
                                   board.square[to-8]       = EMPTY;
                                   board.totalBlackPawns     -= PAWN_VALUE;
                                   board.Material           += PAWN_VALUE;
@@ -93,10 +93,10 @@ void makeMove(Move &move)
                            else
                            {
                                   makeCapture(captured, to);
-                                  board.occupiedSquares ^= fromBitMap;
+                                  board.occupiedSquares ^= fromBitboard;
                            }
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isPromotion())
                      {
@@ -106,8 +106,8 @@ void makeMove(Move &move)
                      break;
  
               case 2: // white king:
-                     board.whiteKing             ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteKing             ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_KING;
                      board.epSquare            = 0;    
@@ -118,9 +118,9 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isCastle())
                      {
@@ -146,8 +146,8 @@ void makeMove(Move &move)
                      break;
  
               case 3: // white knight:
-                     board.whiteKnights         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteKnights         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_KNIGHT;
                      board.epSquare            = 0;    
@@ -155,14 +155,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 5: // white bishop:
-                     board.whiteBishops         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteBishops         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_BISHOP;
                      board.epSquare            = 0;
@@ -170,14 +170,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 6: // white rook:
-                     board.whiteRooks         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteRooks         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_ROOK;
                      board.epSquare            = 0;    
@@ -195,14 +195,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 7: // white queen:
-                     board.whiteQueens          ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteQueens          ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = WHITE_QUEEN;
                      board.epSquare            = 0;    
@@ -210,14 +210,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 9: // black pawn:
-                     board.blackPawns           ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackPawns           ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_PAWN;
                      board.epSquare            = 0;
@@ -233,7 +233,7 @@ void makeMove(Move &move)
                            {
                                   board.whitePawns           ^= BITSET[to+8];
                                   board.whitePieces          ^= BITSET[to+8];
-                                  board.occupiedSquares    ^= fromToBitMap | BITSET[to+8];
+                                  board.occupiedSquares    ^= fromToBitboard | BITSET[to+8];
                                   board.square[to+8]       = EMPTY;
                                   board.totalWhitePawns     -= PAWN_VALUE;
                                   board.Material           -= PAWN_VALUE;
@@ -242,10 +242,10 @@ void makeMove(Move &move)
                            else
                            {
                                   makeCapture(captured, to);
-                                  board.occupiedSquares ^= fromBitMap;
+                                  board.occupiedSquares ^= fromBitboard;
                            }
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isPromotion())
                      {
@@ -255,8 +255,8 @@ void makeMove(Move &move)
                      break;
  
               case 10: // black king:
-                     board.blackKing             ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackKing             ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_KING;
                      board.epSquare            = 0;    
@@ -267,9 +267,9 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isCastle())
                      {
@@ -295,8 +295,8 @@ void makeMove(Move &move)
                      break;
  
               case 11: // black knight:
-                     board.blackKnights         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackKnights         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_KNIGHT;
                      board.epSquare            = 0;    
@@ -304,14 +304,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 13: // black bishop:
-                     board.blackBishops         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackBishops         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_BISHOP;
                      board.epSquare            = 0;
@@ -319,14 +319,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 14: // black rook:
-                     board.blackRooks         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackRooks         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_ROOK;
                      board.epSquare            = 0;    
@@ -344,14 +344,14 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 15: // black queen:
-                     board.blackQueens          ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackQueens          ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = EMPTY;
                      board.square[to]          = BLACK_QUEEN;
                      board.epSquare            = 0;    
@@ -359,9 +359,9 @@ void makeMove(Move &move)
                      if (captured)
                      {
                            makeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
        }
 
@@ -377,14 +377,14 @@ void unmakeMove(Move &move)
        unsigned int from = move.getFrom();
        unsigned int to = move.getTosq();
  
-       BitMap fromBitMap  = BITSET[from];
-       BitMap fromToBitMap = fromBitMap  | BITSET[to];
+       Bitboard fromBitboard  = BITSET[from];
+       Bitboard fromToBitboard = fromBitboard  | BITSET[to];
 
        switch (piece)
        {
               case 1: // white pawn:
-                     board.whitePawns           ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whitePawns           ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_PAWN;
                      board.square[to]          = EMPTY;
                      if (captured)
@@ -393,7 +393,7 @@ void unmakeMove(Move &move)
                            {
                                   board.blackPawns           ^= BITSET[to-8];
                                   board.blackPieces          ^= BITSET[to-8];
-                                  board.occupiedSquares    ^= fromToBitMap | BITSET[to-8];
+                                  board.occupiedSquares    ^= fromToBitboard | BITSET[to-8];
                                   board.square[to-8]        = BLACK_PAWN;
                                   board.totalBlackPawns     += PAWN_VALUE;
                                   board.Material           -= PAWN_VALUE;
@@ -401,10 +401,10 @@ void unmakeMove(Move &move)
                            else
                            {
                                   unmakeCapture(captured, to);
-                                  board.occupiedSquares ^= fromBitMap;
+                                  board.occupiedSquares ^= fromBitboard;
                            }
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isPromotion())
                      {
@@ -413,16 +413,16 @@ void unmakeMove(Move &move)
                      break;
  
               case 2: // white king:
-                     board.whiteKing             ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteKing             ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_KING;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isCastle())
                      {
@@ -446,61 +446,61 @@ void unmakeMove(Move &move)
                      break;
  
               case 3: // white knight:
-                     board.whiteKnights         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteKnights         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_KNIGHT;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 5: // white bishop:
-                     board.whiteBishops         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteBishops         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_BISHOP;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      break;
  
               case 6: // white rook:
-                     board.whiteRooks         ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteRooks         ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_ROOK;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 7: // white queen:
-                     board.whiteQueens          ^= fromToBitMap;
-                     board.whitePieces          ^= fromToBitMap;
+                     board.whiteQueens          ^= fromToBitboard;
+                     board.whitePieces          ^= fromToBitboard;
                      board.square[from]        = WHITE_QUEEN;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
                      break;
  
               case 9: // black pawn:
-                     board.blackPawns           ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackPawns           ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_PAWN;
                      board.square[to]          = EMPTY;
                      if (captured)
@@ -509,7 +509,7 @@ void unmakeMove(Move &move)
                            {
                                   board.whitePawns           ^= BITSET[to+8];
                                   board.whitePieces          ^= BITSET[to+8];
-                                  board.occupiedSquares    ^= fromToBitMap | BITSET[to+8];
+                                  board.occupiedSquares    ^= fromToBitboard | BITSET[to+8];
                                   board.square[to+8]        = WHITE_PAWN;
                                   board.totalWhitePawns     += PAWN_VALUE;
                                   board.Material           += PAWN_VALUE;
@@ -517,10 +517,10 @@ void unmakeMove(Move &move)
                            else
                            {
                                   unmakeCapture(captured, to);
-                                  board.occupiedSquares ^= fromBitMap;
+                                  board.occupiedSquares ^= fromBitboard;
                            }
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isPromotion())
                      {
@@ -529,16 +529,16 @@ void unmakeMove(Move &move)
                      break;
  
               case 10: // black king:
-                     board.blackKing             ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackKing             ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_KING;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;
+                     else board.occupiedSquares ^= fromToBitboard;
  
                      if (move.isCastle())
                      {
@@ -562,55 +562,55 @@ void unmakeMove(Move &move)
                      break;
  
               case 11: // black knight:
-                     board.blackKnights         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackKnights         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_KNIGHT;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;                  
+                     else board.occupiedSquares ^= fromToBitboard;                  
                      break;
  
               case 13: // black bishop:
-                     board.blackBishops         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackBishops         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_BISHOP;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;                  
+                     else board.occupiedSquares ^= fromToBitboard;                  
                      break;
  
               case 14: // black rook:
-                     board.blackRooks         ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackRooks         ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_ROOK;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;                  
+                     else board.occupiedSquares ^= fromToBitboard;                  
                      break;
  
               case 15: // black queen:
-                     board.blackQueens          ^= fromToBitMap;
-                     board.blackPieces          ^= fromToBitMap;
+                     board.blackQueens          ^= fromToBitboard;
+                     board.blackPieces          ^= fromToBitboard;
                      board.square[from]        = BLACK_QUEEN;
                      board.square[to]          = EMPTY;
                      if (captured)
                      {
                            unmakeCapture(captured, to);
-                           board.occupiedSquares ^= fromBitMap;
+                           board.occupiedSquares ^= fromBitboard;
                      }
-                     else board.occupiedSquares ^= fromToBitMap;                  
+                     else board.occupiedSquares ^= fromToBitboard;                  
                      break;
        }
  
@@ -627,41 +627,41 @@ void unmakeMove(Move &move)
 void makeCapture(unsigned int &captured, unsigned int &to)
 {
        // deals with all captures, except en-passant
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
        board.hashkey ^= KEY.keys[to][captured];
  
        switch (captured)
        {
               case 1: // white pawn:
-                     board.whitePawns           ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whitePawns           ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.totalWhitePawns     -= PAWN_VALUE;
                      board.Material           -= PAWN_VALUE;
                      break;
  
               case 2: // white king:
-                     board.whiteKing             ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteKing             ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      break;
  
               case 3: // white knight:
-                     board.whiteKnights         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteKnights         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.totalWhitePieces     -= KNIGHT_VALUE;
                      board.Material           -= KNIGHT_VALUE;
                      break;
  
               case 5: // white bishop:
-                     board.whiteBishops         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteBishops         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.totalWhitePieces     -= BISHOP_VALUE;
                      board.Material           -= BISHOP_VALUE;
                      break;
  
               case 6: // white rook:
-                     board.whiteRooks         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteRooks         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.totalWhitePieces     -= ROOK_VALUE;
                      board.Material           -= ROOK_VALUE;
                      if (to == A1) 
@@ -677,41 +677,41 @@ void makeCapture(unsigned int &captured, unsigned int &to)
                      break;
  
               case 7: // white queen:
-                     board.whiteQueens          ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteQueens          ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.totalWhitePieces     -= QUEEN_VALUE;
                      board.Material           -= QUEEN_VALUE;
                      break;
  
               case 9: // black pawn:
-                     board.blackPawns           ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackPawns           ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.totalBlackPawns     -= PAWN_VALUE;
                      board.Material           += PAWN_VALUE;
                      break;
  
               case 10: // black king:
-                     board.blackKing             ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackKing             ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      break;
  
               case 11: // black knight:
-                     board.blackKnights         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackKnights         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.totalBlackPieces     -= KNIGHT_VALUE;
                      board.Material           += KNIGHT_VALUE;
                      break;
  
               case 13: // black bishop:
-                     board.blackBishops         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackBishops         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.totalBlackPieces     -= BISHOP_VALUE;
                      board.Material           += BISHOP_VALUE;
                      break;
  
               case 14: // black rook:
-                     board.blackRooks         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackRooks         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.totalBlackPieces     -= ROOK_VALUE;
                      board.Material           += ROOK_VALUE;
                      if (to == A8) 
@@ -727,8 +727,8 @@ void makeCapture(unsigned int &captured, unsigned int &to)
                      break;
  
               case 15: // black queen:
-                     board.blackQueens          ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackQueens          ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.totalBlackPieces     -= QUEEN_VALUE;
                      board.Material           += QUEEN_VALUE;
                      break;
@@ -739,98 +739,98 @@ void makeCapture(unsigned int &captured, unsigned int &to)
 void unmakeCapture(unsigned int &captured, unsigned int &to)
 {
        // deals with all captures, except en-passant
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
  
        switch (captured)
        {
               case 1: // white pawn:
-                     board.whitePawns           ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whitePawns           ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_PAWN;
                      board.totalWhitePawns    += PAWN_VALUE;
                      board.Material           += PAWN_VALUE;
                      break;
  
               case 2: // white king:
-                     board.whiteKing             ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteKing             ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_KING;
                      break;
  
               case 3: // white knight:
-                     board.whiteKnights         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteKnights         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_KNIGHT;
                      board.totalWhitePieces   += KNIGHT_VALUE;
                      board.Material           += KNIGHT_VALUE;
                      break;
  
               case 5: // white bishop:
-                     board.whiteBishops         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteBishops         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_BISHOP;
                      board.totalWhitePieces   += BISHOP_VALUE;
                      board.Material           += BISHOP_VALUE;
                      break;
  
               case 6: // white rook:
-                     board.whiteRooks         ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteRooks         ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_ROOK;
                      board.totalWhitePieces   += ROOK_VALUE;
                      board.Material           += ROOK_VALUE;
                      break;
  
               case 7: // white queen:
-                     board.whiteQueens          ^= toBitMap;
-                     board.whitePieces          ^= toBitMap;
+                     board.whiteQueens          ^= toBitboard;
+                     board.whitePieces          ^= toBitboard;
                      board.square[to]             = WHITE_QUEEN;
                      board.totalWhitePieces   += QUEEN_VALUE;
                      board.Material           += QUEEN_VALUE;
                      break;
  
               case 9: // black pawn:
-                     board.blackPawns           ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackPawns           ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_PAWN;
                      board.totalBlackPawns     += PAWN_VALUE;
                      board.Material           -= PAWN_VALUE;
                      break;
  
               case 10: // black king:
-                     board.blackKing             ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackKing             ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_KING;
                      break;
  
               case 11: // black knight:
-                     board.blackKnights         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackKnights         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_KNIGHT;
                      board.totalBlackPieces    += KNIGHT_VALUE;
                      board.Material           -= KNIGHT_VALUE;
                      break;
  
               case 13: // black bishop:
-                     board.blackBishops         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackBishops         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_BISHOP;
                      board.totalBlackPieces    += BISHOP_VALUE;
                      board.Material           -= BISHOP_VALUE;
                      break;
  
               case 14: // black rook:
-                     board.blackRooks         ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackRooks         ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_ROOK;
                      board.totalBlackPieces    += ROOK_VALUE;
                      board.Material           -= ROOK_VALUE;
                      break;
  
               case 15: // black queen:
-                     board.blackQueens          ^= toBitMap;
-                     board.blackPieces          ^= toBitMap;
+                     board.blackQueens          ^= toBitboard;
+                     board.blackPieces          ^= toBitboard;
                      board.square[to]             = BLACK_QUEEN;
                      board.totalBlackPieces    += QUEEN_VALUE;
                      board.Material           -= QUEEN_VALUE;
@@ -840,35 +840,35 @@ void unmakeCapture(unsigned int &captured, unsigned int &to)
  
 void makeWhitePromotion(unsigned int prom, unsigned int &to)
 {
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
  
-       board.whitePawns ^= toBitMap;
+       board.whitePawns ^= toBitboard;
        board.totalWhitePawns -= PAWN_VALUE;
        board.Material -= PAWN_VALUE;
        board.hashkey ^= (KEY.keys[to][WHITE_PAWN] ^ KEY.keys[to][prom]);
  
        if (prom == 7)
        {
-              board.whiteQueens          ^= toBitMap;
+              board.whiteQueens          ^= toBitboard;
               board.totalWhitePieces    += QUEEN_VALUE;
               board.Material           += QUEEN_VALUE;
        }
        else if (prom == 6)
        {
-              board.whiteRooks         ^= toBitMap;
+              board.whiteRooks         ^= toBitboard;
               board.totalWhitePieces    += ROOK_VALUE;
               board.Material           += ROOK_VALUE;
        }
        else if (prom == 5)
        {
-              board.whiteBishops       ^= toBitMap;
+              board.whiteBishops       ^= toBitboard;
               board.totalWhitePieces    += BISHOP_VALUE;
               board.Material           += BISHOP_VALUE;
        }
        else if (prom == 3)
        {
-              board.whiteKnights       ^= toBitMap;
+              board.whiteKnights       ^= toBitboard;
               board.totalWhitePieces    += KNIGHT_VALUE;
               board.Material           += KNIGHT_VALUE;
        }
@@ -876,34 +876,34 @@ void makeWhitePromotion(unsigned int prom, unsigned int &to)
  
 void unmakeWhitePromotion(unsigned int prom, unsigned int &to)
 {
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
  
-       board.whitePawns ^= toBitMap;
+       board.whitePawns ^= toBitboard;
        board.totalWhitePawns += PAWN_VALUE;
        board.Material += PAWN_VALUE;
  
        if (prom == 7)
        {
-              board.whiteQueens          ^= toBitMap;
+              board.whiteQueens          ^= toBitboard;
               board.totalWhitePieces    -= QUEEN_VALUE;
               board.Material           -= QUEEN_VALUE;
        }
        else if (prom == 6)
        {
-              board.whiteRooks         ^= toBitMap;
+              board.whiteRooks         ^= toBitboard;
               board.totalWhitePieces    -= ROOK_VALUE;
               board.Material           -= ROOK_VALUE;
        }
        else if (prom == 5)
        {
-              board.whiteBishops       ^= toBitMap;
+              board.whiteBishops       ^= toBitboard;
               board.totalWhitePieces    -= BISHOP_VALUE;
               board.Material           -= BISHOP_VALUE;
        }
        else if (prom == 3)
        {
-              board.whiteKnights       ^= toBitMap;
+              board.whiteKnights       ^= toBitboard;
               board.totalWhitePieces    -= KNIGHT_VALUE;
               board.Material           -= KNIGHT_VALUE;
        }
@@ -912,35 +912,35 @@ void unmakeWhitePromotion(unsigned int prom, unsigned int &to)
  
 void makeBlackPromotion(unsigned int prom, unsigned int &to)
 {
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
  
-       board.blackPawns ^= toBitMap;
+       board.blackPawns ^= toBitboard;
        board.totalBlackPawns -= PAWN_VALUE;
        board.Material += PAWN_VALUE;
        board.hashkey ^= (KEY.keys[to][BLACK_PAWN] ^ KEY.keys[to][prom]);
  
        if (prom == 15)
        {
-              board.blackQueens          ^= toBitMap;
+              board.blackQueens          ^= toBitboard;
               board.totalBlackPieces    += QUEEN_VALUE;
               board.Material           -= QUEEN_VALUE;
        }
        else if (prom == 14)
        {
-              board.blackRooks         ^= toBitMap;
+              board.blackRooks         ^= toBitboard;
               board.totalBlackPieces    += ROOK_VALUE;
               board.Material           -= ROOK_VALUE;
        }
        else if (prom == 13)
        {
-              board.blackBishops       ^= toBitMap;
+              board.blackBishops       ^= toBitboard;
               board.totalBlackPieces    += BISHOP_VALUE;
               board.Material           -= BISHOP_VALUE;
        }
        else if (prom == 11)
        {
-              board.blackKnights       ^= toBitMap;
+              board.blackKnights       ^= toBitboard;
               board.totalBlackPieces    += KNIGHT_VALUE;
               board.Material           -= KNIGHT_VALUE;
        }
@@ -953,34 +953,34 @@ void makeBlackPromotion(unsigned int prom, unsigned int &to)
 // XXX 
 void unmakeBlackPromotion(unsigned int prom, unsigned int &to)
 {
-       BitMap toBitMap;
-       toBitMap = BITSET[to];
+       Bitboard toBitboard;
+       toBitboard = BITSET[to];
  
-       board.blackPawns ^= toBitMap;
+       board.blackPawns ^= toBitboard;
        board.totalBlackPawns += PAWN_VALUE;
        board.Material -= PAWN_VALUE;
  
        if (prom == 15)
        {
-              board.blackQueens          ^= toBitMap;
+              board.blackQueens          ^= toBitboard;
               board.totalBlackPieces    -= QUEEN_VALUE;
               board.Material           += QUEEN_VALUE;
        }
        else if (prom == 14)
        {
-              board.blackRooks         ^= toBitMap;
+              board.blackRooks         ^= toBitboard;
               board.totalBlackPieces    -= ROOK_VALUE;
               board.Material           += ROOK_VALUE;
        }
        else if (prom == 13)
        {
-              board.blackBishops       ^= toBitMap;
+              board.blackBishops       ^= toBitboard;
               board.totalBlackPieces    -= BISHOP_VALUE;
               board.Material           += BISHOP_VALUE;
        }
        else if (prom == 11)
        {
-              board.blackKnights       ^= toBitMap;
+              board.blackKnights       ^= toBitboard;
               board.totalBlackPieces    -= KNIGHT_VALUE;
               board.Material           += KNIGHT_VALUE;
        }

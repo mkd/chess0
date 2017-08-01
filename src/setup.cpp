@@ -34,9 +34,9 @@
 
 
  
-/*!
- * Interactively edit the chess board.
- */
+// edit()
+//
+// Interactively edit the chess board.
 void edit()
 {
     int file, rank;

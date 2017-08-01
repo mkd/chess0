@@ -31,24 +31,21 @@
 
 
  
-/*!
- * Raw node count, up to depth, doing a full tree search.
- * perft is very similar to the search algorithm - instead of evaluating the leaves, we count them.
- *
- * Be carefull when calling this function with depths > 7, because it can take a very long
- * time before the result is returned: the average branching factor in chess is 35, so every
- * increment in depth will require 35x more computer time.
- *
- * perft is a good way of verifying correctness of the movegenerator and (un)makeMove,
- * because you can compare the results with published results for certain test positions.
- *
- * perft is also used to measure the performance of the move generator and (un)makeMove in terms
- * of speed, and to compare different implementations of generating, storing and (un)making moves.
- */
+// perft()
+//
+// Raw node count, up to depth, doing a full tree search.
+// perft is very similar to the search algorithm - instead of evaluating the leaves, we count them.
+//
+// perft is a good way of verifying correctness of the movegenerator and (un)makeMove,
+// because you can compare the results with published results for certain test positions.
+//
+// perft is also used to measure the performance of the move generator and (un)makeMove in terms
+// of speed, and to compare different implementations of generating, storing and (un)making moves.
 uint64_t perft(int ply, int depth)
 {
     uint64_t retVal = 0;     
     int i;
+
 
     // count this node
     if (depth == 0)
@@ -58,7 +55,8 @@ uint64_t perft(int ply, int depth)
     // generate moves from this position
     board.moveBufLen[ply+1] = movegen(board.moveBufLen[ply]);
 
-    // loop over moves:
+
+    // loop over moves
     for (i = board.moveBufLen[ply]; i < board.moveBufLen[ply+1]; i++)
     {
         makeMove(board.moveBuffer[i]);
@@ -66,5 +64,7 @@ uint64_t perft(int ply, int depth)
             retVal += perft(ply + 1, depth-1);
         unmakeMove(board.moveBuffer[i]);
     }
+
+
     return retVal;
 }

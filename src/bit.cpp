@@ -101,7 +101,7 @@ unsigned int lastOne(uint64_t bitmap)
 
 
  
-void displayBitmap(BitMap in)
+void displayBitmap(Bitboard in)
 {
     int i, rank, file;
     char boardc[64];

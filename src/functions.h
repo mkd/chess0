@@ -39,18 +39,18 @@ using namespace std;
 
 
 
-unsigned int    bitCnt(BitMap);
+unsigned int    bitCnt(Bitboard);
 int             captgen(int);
 void            dataInit();
-void            displayBitmap(BitMap);
+void            displayBitmap(Bitboard);
 void            displayMove(Move &);
 void            displayPV();
 void            commands();
-unsigned int    firstOne(BitMap);
-bool            isAttacked(BitMap &, const unsigned char &);
+unsigned int    firstOne(Bitboard);
+bool            isAttacked(Bitboard &, const unsigned char &);
 bool            isOtherKingAttacked();
 bool            isOwnKingAttacked();
-unsigned int    lastOne(BitMap);
+unsigned int    lastOne(Bitboard);
 void            makeBlackPromotion(unsigned int, unsigned int &);
 void            makeCapture(unsigned int &, unsigned int &);
 void            makeMove(Move &);

@@ -46,7 +46,7 @@ int Board::eval()
     int whitetotalmat, blacktotalmat;
     int whitetotal, blacktotal;
     bool endgame;
-    BitMap temp, whitepassedpawns, blackpassedpawns;
+    Bitboard temp, whitepassedpawns, blackpassedpawns;
 
  
     // Material
@@ -166,7 +166,7 @@ int Board::eval()
 
 
         // If it is not isolated, then it might be backward. Two conditions must be true:
-        //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS bitmaps to check this
+        //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS Bitboards to check this
         //  2) if there are no pawns left that could defend this pawn
         else
         {
@@ -300,7 +300,7 @@ int Board::eval()
 
 
         // If it is not isolated, then it might be backward. Two conditions must be true:
-        //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS bitmaps to check this
+        //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS Bitboards to check this
         //  2) if there are no pawns left that could defend this pawn
         else
         {

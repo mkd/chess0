@@ -64,9 +64,9 @@ using namespace std;
 
 struct Board
 {
-    BitMap whiteKing, whiteQueens, whiteRooks, whiteBishops, whiteKnights, whitePawns;
-    BitMap blackKing, blackQueens, blackRooks, blackBishops, blackKnights, blackPawns;
-    BitMap whitePieces, blackPieces, occupiedSquares;
+    Bitboard whiteKing, whiteQueens, whiteRooks, whiteBishops, whiteKnights, whitePawns;
+    Bitboard blackKing, blackQueens, blackRooks, blackBishops, blackKnights, blackPawns;
+    Bitboard whitePieces, blackPieces, occupiedSquares;
  
     unsigned char nextMove;        // WHITE_MOVE or BLACK_MOVE
     unsigned char castleWhite;     // White's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
@@ -129,8 +129,8 @@ struct Board
     void selectmove(int &ply, int &i, int &depth, bool &followpv); 
     void addCaptScore(int &ifirst, int &index);
     int SEE(Move &move);
-    BitMap attacksTo(int &target);
-    BitMap revealNextAttacker(BitMap &attackers, BitMap &nonremoved, int &target, int &heading);
+    Bitboard attacksTo(int &target);
+    Bitboard revealNextAttacker(Bitboard &attackers, Bitboard &nonremoved, int &target, int &heading);
     void readClockAndInput();
     string toFEN();
 

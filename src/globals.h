@@ -132,7 +132,7 @@ const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ",
                               "  ","P*","K*","N*","  ","B*","R*","Q*"};
 const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," ","B","R","Q"};
  
-BitMap BITSET[64];
+Bitboard BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
  
@@ -154,18 +154,18 @@ int PIECEVALUES[16];
 int MS1BTABLE[256];
  
 // Attack tables:
-BitMap WHITE_PAWN_ATTACKS[64];
-BitMap WHITE_PAWN_MOVES[64];
-BitMap WHITE_PAWN_DOUBLE_MOVES[64];
-BitMap BLACK_PAWN_ATTACKS[64];
-BitMap BLACK_PAWN_MOVES[64];
-BitMap BLACK_PAWN_DOUBLE_MOVES[64];
-BitMap KNIGHT_ATTACKS[64];
-BitMap KING_ATTACKS[64];
-BitMap RANK_ATTACKS[64][64];      // 32KB
-BitMap FILE_ATTACKS[64][64];      // 32KB
-BitMap DIAGA8H1_ATTACKS[64][64];  // 32KB
-BitMap DIAGA1H8_ATTACKS[64][64];  // 32KB
+Bitboard WHITE_PAWN_ATTACKS[64];
+Bitboard WHITE_PAWN_MOVES[64];
+Bitboard WHITE_PAWN_DOUBLE_MOVES[64];
+Bitboard BLACK_PAWN_ATTACKS[64];
+Bitboard BLACK_PAWN_MOVES[64];
+Bitboard BLACK_PAWN_DOUBLE_MOVES[64];
+Bitboard KNIGHT_ATTACKS[64];
+Bitboard KING_ATTACKS[64];
+Bitboard RANK_ATTACKS[64][64];      // 32KB
+Bitboard FILE_ATTACKS[64][64];      // 32KB
+Bitboard DIAGA8H1_ATTACKS[64][64];  // 32KB
+Bitboard DIAGA1H8_ATTACKS[64][64];  // 32KB
  
 // Move generator shift for ranks:
 extern const int RANKSHIFT[64] = {
@@ -180,7 +180,7 @@ extern const int RANKSHIFT[64] = {
 };
  
 // Move generator magic multiplication numbers for files:
-extern const BitMap _FILEMAGICS[8] = {
+extern const Bitboard _FILEMAGICS[8] = {
        0x8040201008040200,
        0x4020100804020100,
        0x2010080402010080,
@@ -192,7 +192,7 @@ extern const BitMap _FILEMAGICS[8] = {
 };
  
 // Move generator magic multiplication numbers for diagonals:
-extern const BitMap _DIAGA8H1MAGICS[15] = {
+extern const Bitboard _DIAGA8H1MAGICS[15] = {
        0x0,
        0x0,
        0x0101010101010100,
@@ -211,7 +211,7 @@ extern const BitMap _DIAGA8H1MAGICS[15] = {
 };
  
 // Move generator magic multiplication numbers for diagonals:
-extern const BitMap _DIAGA1H8MAGICS[15] = {
+extern const Bitboard _DIAGA1H8MAGICS[15] = {
        0x0,
        0x0,
        0x0101010101010100,
@@ -230,13 +230,13 @@ extern const BitMap _DIAGA1H8MAGICS[15] = {
 };
  
 // Move generator 6-bit masking and magic multiplication numbers:
-BitMap RANKMASK[64];
-BitMap FILEMASK[64];
-BitMap FILEMAGIC[64];
-BitMap DIAGA8H1MASK[64];
-BitMap DIAGA8H1MAGIC[64];
-BitMap DIAGA1H8MASK[64];
-BitMap DIAGA1H8MAGIC[64];
+Bitboard RANKMASK[64];
+Bitboard FILEMASK[64];
+Bitboard FILEMAGIC[64];
+Bitboard DIAGA8H1MASK[64];
+Bitboard DIAGA8H1MAGIC[64];
+Bitboard DIAGA1H8MASK[64];
+Bitboard DIAGA1H8MAGIC[64];
  
 // We use one generalized sliding attacks array: [8 squares][64 states]
 // the unsigned char (=8 bits) contains the attacks for a rank, file or diagonal
@@ -245,10 +245,10 @@ unsigned char GEN_SLIDING_ATTACKS[8][64];
 // Used for castling:
 unsigned char CANCASTLEOO = 1;
 unsigned char CANCASTLEOOO = 2;
-BitMap maskEG[2];
-BitMap maskFG[2];
-BitMap maskBD[2];
-BitMap maskCE[2];
+Bitboard maskEG[2];
+Bitboard maskFG[2];
+Bitboard maskBD[2];
+Bitboard maskCE[2];
 unsigned int WHITE_OOO_CASTL;
 unsigned int BLACK_OOO_CASTL;
 unsigned int WHITE_OO_CASTL;
@@ -433,18 +433,18 @@ int ROOKPOS_B[64];
 int QUEENPOS_B[64];
 int KINGPOS_B[64];
 int KINGPOS_ENDGAME_B[64];
-BitMap PASSED_WHITE[64];
-BitMap PASSED_BLACK[64];
-BitMap ISOLATED_WHITE[64];
-BitMap ISOLATED_BLACK[64];
-BitMap BACKWARD_WHITE[64];
-BitMap BACKWARD_BLACK[64];
-BitMap KINGSHIELD_STRONG_W[64];
-BitMap KINGSHIELD_STRONG_B[64];
-BitMap KINGSHIELD_WEAK_W[64];
-BitMap KINGSHIELD_WEAK_B[64];
-BitMap WHITE_SQUARES;
-BitMap BLACK_SQUARES;
+Bitboard PASSED_WHITE[64];
+Bitboard PASSED_BLACK[64];
+Bitboard ISOLATED_WHITE[64];
+Bitboard ISOLATED_BLACK[64];
+Bitboard BACKWARD_WHITE[64];
+Bitboard BACKWARD_BLACK[64];
+Bitboard KINGSHIELD_STRONG_W[64];
+Bitboard KINGSHIELD_STRONG_B[64];
+Bitboard KINGSHIELD_WEAK_W[64];
+Bitboard KINGSHIELD_WEAK_B[64];
+Bitboard WHITE_SQUARES;
+Bitboard BLACK_SQUARES;
 
 
 //
@@ -469,14 +469,14 @@ int EAST = +1;
 int SOUTHEAST = -7;
 int SOUTH = -8;
 int SOUTHWEST = -9;
-BitMap RAY_W[64];
-BitMap RAY_NW[64];
-BitMap RAY_N[64];
-BitMap RAY_NE[64];
-BitMap RAY_E[64];
-BitMap RAY_SE[64];
-BitMap RAY_S[64];
-BitMap RAY_SW[64];
+Bitboard RAY_W[64];
+Bitboard RAY_NW[64];
+Bitboard RAY_N[64];
+Bitboard RAY_NE[64];
+Bitboard RAY_E[64];
+Bitboard RAY_SE[64];
+Bitboard RAY_S[64];
+Bitboard RAY_SW[64];
 int HEADINGS[64][64];
 
 

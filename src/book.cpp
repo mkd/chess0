@@ -241,6 +241,15 @@ void initBook()
     book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+"] = "Be2";
     book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe6+"] = "Be2";
 
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 c6"] = "Nf3";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4"] = "d4";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Bxe2"] = "Ngxe2";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Qe6"] = "f3";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Qe6 6. f3 Bf5"] = "g4";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Qe6 6. f3 Bf5 7. g4 Bg6"] = "f4";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Qe6 6. f3 Bh5"] = "g4";
+    book["1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4 5. d4 Qe6 6. f3 Bh5 7. g4 Bg6"] = "f4";
+
     book["1. e4 d5 2. exd5 Nf6"] = "d4";
     book["1. e4 d5 2. exd5 Nf6 3. d4 Nxd5"] = "Nf3";
     book["1. e4 d5 2. exd5 Nf6 3. d4 Bg4"] = "Bb5+";
@@ -335,6 +344,12 @@ void initBook()
     book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 e5"] = "Nb3";
     book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 e6"] = "Nc3";
     book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Bd7"] = "Nc3";
+
+    book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6"] = "Nb3";
+    book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6"] = "Be3";
+    book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 7. Be3 Bg7"] = "f3";
+    book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 Nc6"] = "Bg5";
+    book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6"] = "Be2";
 
     book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nc6 5. Nc3 g6"] = "Be3";
     book["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nc6 5. Nc3 Nf6"] = "Bg5";
@@ -566,6 +581,18 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bxd5 Qxd5 7. Nc3 d6 8. d3"] = "Bg4";
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3"] = "dxe4";
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4 d5 6. Bd3 dxe4 7. Bxe4"] = "Bd6";
+
+
+    // C46 Four knights game -- BLACK
+    book["1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. b3"] = "Bc5";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. b3"] = "Bc5";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. b3 Bc5 5. Bb2"] = "0-0";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. b3 Bc5 5. h3"] = "0-0";
+    book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. b3 Bc5 5. Bb5"] = "Qe7";
+    book["1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. b3 Bc5 5. Bb2"] = "0-0";
+    book["1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. b3 Bc5 5. h3"] = "0-0";
+    book["1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. b3 Bc5 5. Bb5"] = "Qe7";
+
 
     // C49 Four knights, Nimzovich (Paulsen) variation -- BLACK
     book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5"] = "Bb4";

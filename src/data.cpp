@@ -93,7 +93,7 @@ void dataInit()
     }
 
  
-    //  Initialize rank, file and diagonal 6-bit masking bitmaps, to get the
+    //  Initialize rank, file and diagonal 6-bit masking Bitboards, to get the
     //  occupancy state, used in the movegenerator (see movegen.ccp)
     for (square = 0; square < 64; square++)
     {
@@ -221,10 +221,7 @@ void dataInit()
               }
        }
  
-//     ===========================================================================
-//     Initialize all attack bitmaps, used in the movegenerator (see movegen.ccp)
-//     ===========================================================================
- 
+        // Initialize all attack Bitboards, used in the movegenerator (see movegen.ccp)
        for (square = 0; square < 64; square++)
        {
               KNIGHT_ATTACKS[square] = 0x0;
@@ -361,7 +358,7 @@ void dataInit()
  
        //  RANK attacks (ROOKS and QUEENS):
        //  use           unsigned char GEN_SLIDING_ATTACKS[8 squares] [64 states]
-       //  to initialize BitMap        RANK_ATTACKS       [64 squares][64 states]
+       //  to initialize Bitboard        RANK_ATTACKS       [64 squares][64 states]
        //
        for (square = 0; square < 64; square++)
        {
@@ -369,13 +366,13 @@ void dataInit()
               {
                      RANK_ATTACKS[square][state6Bit] = 0;
                      RANK_ATTACKS[square][state6Bit] |=
-                           BitMap(GEN_SLIDING_ATTACKS[FILES[square]-1][state6Bit]) << (RANKSHIFT[square] - 1);
+                           Bitboard(GEN_SLIDING_ATTACKS[FILES[square]-1][state6Bit]) << (RANKSHIFT[square] - 1);
               }
        }
  
        //  FILE attacks (ROOKS and QUEENS):
        //  use           unsigned char GEN_SLIDING_ATTACKS[8 squares] [64 states]
-       //  to initialize BitMap        FILE_ATTACKS       [64 squares][64 states]
+       //  to initialize Bitboard        FILE_ATTACKS       [64 squares][64 states]
        //
        //  Occupancy transformation is as follows:
        //
@@ -509,10 +506,7 @@ void dataInit()
        maskCE[0] = BITSET[C1] | BITSET[D1] | BITSET[E1];
        maskCE[1] = BITSET[C8] | BITSET[D8] | BITSET[E8];
  
-//     ===========================================================================
 //     The 4 castling moves can be predefined:
-//     ===========================================================================
- 
        move.clear();
        move.setCapt(EMPTY);
        move.setPiec(WHITE_KING);
@@ -530,19 +524,18 @@ void dataInit()
        BLACK_OO_CASTL = move.moveInt;
        move.setTosq(C8);
        BLACK_OOO_CASTL = move.moveInt;
+
  
-//     ===========================================================================
-//     Initialize evaluation data & bitmaps
-//     ===========================================================================
- 
+//     Initialize evaluation data & Bitboards
        BLACK_SQUARES = 0;
        for (i = 0; i < 64; i++)
        {
               if ((i + RANKS[i]) % 2) BLACK_SQUARES ^= BITSET[i];
        }
        WHITE_SQUARES = ~BLACK_SQUARES;
+
  
-       // Clear bitmaps:
+       // clear Bitboards
        for (i = 0; i < 64; i++)
        {
               PASSED_WHITE[i] = 0;
@@ -585,7 +578,7 @@ void dataInit()
               }
        }
  
-       // Pawn shield bitmaps for king safety, only if the king is on the first 3 ranks:
+       // Pawn shield Bitboards for king safety, only if the king is on the first 3 ranks:
        for (i = 0; i < 24; i++)
        {
         //  KINGSHIELD_STRONG_W & KINGSHIELD_WEAK_W:
@@ -653,19 +646,21 @@ void dataInit()
  
               for (square = 0; square < 64; square ++)
               {
-                     //  PASSED_BLACK bitmaps (mirror of PASSED_WHITE bitmaps):
+                     //  PASSED_BLACK Bitboards (mirror of PASSED_WHITE //  Bitboards):
                      if (PASSED_WHITE[i] & BITSET[square]) PASSED_BLACK[MIRROR[i]] |= BITSET[MIRROR[square]];
  
-                     //  ISOLATED_BLACK bitmaps (mirror of ISOLATED_WHITE bitmaps):
+                     //  ISOLATED_BLACK Bitboards (mirror of ISOLATED_WHITE
+                     //  Bitboards):
                      if (ISOLATED_WHITE[i] & BITSET[square]) ISOLATED_BLACK[MIRROR[i]] |= BITSET[MIRROR[square]];
  
-                     //  BACKWARD_BLACK bitmaps (mirror of BACKWARD_WHITE bitmaps):
+                     //  BACKWARD_BLACK Bitboards (mirror of BACKWARD_WHITE
+                     //  Bitboards):
                      if (BACKWARD_WHITE[i] & BITSET[square]) BACKWARD_BLACK[MIRROR[i]] |= BITSET[MIRROR[square]];
  
-                     //  KINGSHIELD_STRONG_B bitmaps (mirror of KINGSHIELD_STRONG_W bitmaps):
+                     //  KINGSHIELD_STRONG_B Bitboards (mirror of KINGSHIELD_STRONG_W Bitboards):
                      if (KINGSHIELD_STRONG_W[i] & BITSET[square]) KINGSHIELD_STRONG_B[MIRROR[i]] |= BITSET[MIRROR[square]];
  
-                     //  KINGSHIELD_WEAK_B bitmaps (mirror of KINGSHIELD_WEAK_W bitmaps):
+                     //  KINGSHIELD_WEAK_B Bitboards (mirror of KINGSHIELD_WEAK_W Bitboards):
                      if (KINGSHIELD_WEAK_W[i] & BITSET[square]) KINGSHIELD_WEAK_B[MIRROR[i]] |= BITSET[MIRROR[square]];
               }
        }
@@ -673,9 +668,8 @@ void dataInit()
     NOMOVE.moveInt = 0;
     KEY.init();
 
-//  ===========================================================================
+
 //  HEADINGS and RAYS, used in SEE:
-//  ===========================================================================
     for (i = 0 ; i < 64; i++)
     {
         RAY_W[i]  = 0;

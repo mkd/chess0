@@ -38,6 +38,7 @@
 #endif
 
 
+
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
@@ -65,6 +66,7 @@ unsigned short nextPly = 0;
 unsigned short quiesceDepth = 0;
 ttEntry tt;
 float cacheHit;
+unsigned moveNo = 0;
 
 
 
@@ -84,12 +86,12 @@ Move Board::think()
     cacheHit = 0;
 
 
-    //  Check if the game has ended, or if there is only one legal move,
-    //  because then we don't need to search:
+    //  if the game has ended, don't search
     if (isEndOfgame(legalmoves, singlemove))
         return NOMOVE;
 
 
+    // if only one legal move possible, don't search
     if (legalmoves == 1) 
     {
         cout << endl; 
@@ -104,9 +106,10 @@ Move Board::think()
     }
 
 
-    //  There is more than legal 1 move, so prepare to search:
+    //  prepare for normal search
     if (XB_MODE)
         timeControl();
+
 
     lastPVLength = 0;
     memset(lastPV, 0 , sizeof(lastPV));
@@ -115,6 +118,7 @@ Move Board::think()
     inodes = 0;
     countdown = UPDATEINTERVAL;
     timedout = false;
+
 
     // display console header
     displaySearchStats(1, 0, 0);  
@@ -125,14 +129,18 @@ Move Board::think()
     //  iterative deepening:
     for (currentdepth = 1; currentdepth <= searchDepth; currentdepth++)
     {
-        //  clear the buffers:
+        // clear the buffers
         memset(moveBufLen, 0, sizeof(moveBufLen));
         memset(moveBuffer, 0, sizeof(moveBuffer));
         memset(triangularLength, 0, sizeof(triangularLength));
         memset(triangularArray, 0, sizeof(triangularArray));
         followpv = true;
         allownull = true;
+
+
+        // enter actual search
         score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
+
 
         // now check if time is up and decide whether to start a new iteration
         if (timedout) 
@@ -155,7 +163,7 @@ Move Board::think()
 
 
         // display search analysis
-        if (currentdepth > 3)
+        if (currentdepth > 1)
             displaySearchStats(2, currentdepth, score);
 
 
@@ -180,11 +188,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
     bool cached = false;
-    //cout << "Cache size = " << cache.size() << " bytes; " << cache.positions() << " positions." << endl;
 
 
-    // prepare structure to store the principal variation (PV)
-    triangularLength[ply] = ply;
+    // if at leaf node, return qval
     if (depth <= 0) 
     {
         followpv = false;
@@ -199,6 +205,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
         return DRAWSCORE;
 
     
+    // prepare structure to store the principal variation (PV)
+    triangularLength[ply] = ply;
+
+
     // now try a null move to get an early beta cut-off:
     if (!followpv && allownull)
     {
@@ -232,8 +242,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
     movesfound = 0;
     pvmovesfound = 0;
+    moveNo = 0;
     moveBufLen[ply+1] = movegen(moveBufLen[ply]);
-    unsigned moveNo = 0;
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         selectmove(ply, i, depth, followpv); 
@@ -251,7 +261,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             movesfound++;
 
             
-            if (!ply && (depth > 3))
+            if (!ply && (depth > 1))
                 displaySearchStats(3, ply, i); 
 
 
@@ -267,6 +277,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 {
                     cacheHit++;
                     val = tt.score;
+                    rememberPV();
                     cached = true;
                 }
             }
@@ -343,6 +354,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             // both sides want to maximize from *their* perspective
             if (val > alpha)
             {
+                // update bounds
                 alpha = val;
                 pvmovesfound++;
 
@@ -350,12 +362,15 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // save this move
                 triangularArray[ply][ply] = moveBuffer[i];
 
-                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                    triangularArray[ply][j] = triangularArray[ply+1][j];    // and append the latest best PV from deeper plies
 
+                // append the latest best PV from deeper pleis
+                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                    triangularArray[ply][j] = triangularArray[ply+1][j];
                 triangularLength[ply] = triangularLength[ply+1];
 
-                if (!ply && (depth > 3))
+
+                // show intermediate search results
+                if (!ply && (depth > 1))
                     displaySearchStats(2, depth, val);
             } 
         }
@@ -787,4 +802,70 @@ int Board::qsearch(int ply, int alpha, int beta)
 string hashToStr(uint64_t hk, int ply, int a, int b, int d)
 {
     return to_string(hk) + "|" + to_string(ply) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
+}
+
+
+
+// Board::selectmove()
+//
+// Re-order the move list so that the best move is selected as the next move to try.
+void Board::selectmove(int &ply, int &i, int &depth, bool &isFollowPV)
+{
+    int j, k;
+    unsigned int best;
+    Move temp;
+
+    if (isFollowPV && depth > 1)
+    {
+        for (j = i; j < moveBufLen[ply+1]; j++)
+        {
+            if (moveBuffer[j].moveInt == lastPV[ply].moveInt)
+            {
+                temp.moveInt = moveBuffer[j].moveInt;
+                moveBuffer[j].moveInt = moveBuffer[i].moveInt;
+                moveBuffer[i].moveInt = temp.moveInt;
+                return;
+            }
+        }
+    }
+
+
+    if (nextMove) 
+    {
+        best = blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()];
+        j = i;
+        for (k = i + 1; k < moveBufLen[ply+1]; k++)
+        {
+            if (blackHeuristics[moveBuffer[k].getFrom()][moveBuffer[k].getTosq()] > best)
+            {
+                best = blackHeuristics[moveBuffer[k].getFrom()][moveBuffer[k].getTosq()];
+                j = k;                  
+            }
+        }
+        if (j > i)
+        {
+            temp.moveInt = moveBuffer[j].moveInt;
+            moveBuffer[j].moveInt = moveBuffer[i].moveInt;
+            moveBuffer[i].moveInt = temp.moveInt;
+        }
+    }
+    else
+    {
+        best = whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()];
+        j = i;
+        for (k = i + 1; k < moveBufLen[ply+1]; k++)
+        {
+            if (whiteHeuristics[moveBuffer[k].getFrom()][moveBuffer[k].getTosq()] > best)
+            {
+                best = whiteHeuristics[moveBuffer[k].getFrom()][moveBuffer[k].getTosq()];
+                j = k;                  
+            }
+        }
+        if (j > i)
+        {
+            temp.moveInt = moveBuffer[j].moveInt;
+            moveBuffer[j].moveInt = moveBuffer[i].moveInt;
+            moveBuffer[i].moveInt = temp.moveInt;
+        }
+    }
 }
