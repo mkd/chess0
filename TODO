@@ -15,6 +15,13 @@ WORK IN PROGRESS
 
 BEFORE NEXT RELEASE
 ===================
+- Refactor *heavily* eval.cpp
+
+- Remove functions.h (include every necessary .h file)
+
+- Move all extglobals into app.h (like in chess0x)
+
+- Move all globals into corresponding .h files (like in chess0x)
 
 
 

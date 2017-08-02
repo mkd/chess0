@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -47,31 +47,31 @@ void displayMove(Move &move)
         return;      
     };
 
-       if (((move.getPiece() == WHITE_KING) && (move.isCastleOOO())) || ((move.getPiece() == BLACK_KING) && (move.isCastleOOO())))
-       {
-              cout << "0-0-0";
-              return;      
-       };
+    if (((move.getPiece() == WHITE_KING) && (move.isCastleOOO())) || ((move.getPiece() == BLACK_KING) && (move.isCastleOOO())))
+    {
+        cout << "0-0-0";
+        return;      
+    };
 
-       if (!move.isPawnMove()) cout << PIECECHARS[move.getPiece()];
-       if (move.isPawnMove() && move.isCapture()) cout << char('a' + FILES[move.getFrom()]-1);
-       if (move.isCapture()) cout << "x" ; 
-       cout << char('a' + FILES[move.getTosq()]-1);
-       cout << RANKS[move.getTosq()]; 
-       if (move.isPromo()) 
-       {
-           cout << "=";
-           cout << PIECECHARS[move.getPromo()];
-       }
-       cout.flush();
-       return;
+    if (!move.isPawnMove()) cout << PIECECHARS[move.getPiece()];
+    if (move.isPawnMove() && move.isCapture()) cout << char('a' + FILES[move.getFrom()]-1);
+    if (move.isCapture()) cout << "x" ; 
+    cout << char('a' + FILES[move.getTosq()]-1);
+    cout << RANKS[move.getTosq()]; 
+    if (move.isPromo()) 
+    {
+        cout << "=";
+        cout << PIECECHARS[move.getPromo()];
+    }
+    cout.flush();
+    return;
 }
 
 
 
-/*!
- * XXX
- */
+// displayPV()
+//
+// XXX
 void displayPV()
 {
     int i;
@@ -94,19 +94,19 @@ void displayPV()
 
 
 
-/*!
- *  toSan will convert a move into non-ambiguous SAN-notation, returned in char sanMove[].
- *  "move" must belong to the current "board". Returns true if successful.
- *  The move is compared with other moves from the current board position. 
- *  Ambiguities can arise if two (or more) identical pieces can move to the same square.
- *  In such cases, the piece's initial is followed by (in this priority):
- *  - the from file, if it's unique, 
- *  - or else the from rank, if it's unique
- *  - or else the from file and rank (this can happen after pawn promotions, 
- *    e.g. with 4 rooks on c3, c7, a5 and e5; they all can move to c5, and then move notation would be: R3c5
- *  'e.p.' is added for an en-passant capture 
- *  '+'is added for check, '#' is added for mate.
- */
+// toSan()
+//
+//  toSan will convert a move into non-ambiguous SAN-notation, returned in char sanMove[].
+//  "move" must belong to the current "board". Returns true if successful.
+//  The move is compared with other moves from the current board position. 
+//  Ambiguities can arise if two (or more) identical pieces can move to the same square.
+//  In such cases, the piece's initial is followed by (in this priority):
+//  - the from file, if it's unique, 
+//  - or else the from rank, if it's unique
+//  - or else the from file and rank (this can happen after pawn promotions, 
+//    e.g. with 4 rooks on c3, c7, a5 and e5; they all can move to c5, and then move notation would be: R3c5
+//  'e.p.' is added for an en-passant capture 
+//  '+'is added for check, '#' is added for mate.
 bool toSan(Move &move, char *sanMove)
 {
     unsigned int i, j, k, ibuf, from, to, piece, capt, prom, ambigfile, ambigrank;

@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -51,7 +51,7 @@
 #define _BOARD_H_
 
 
- 
+
 #include "definitions.h"
 #include "move.h"
 #include "gameline.h"
@@ -67,19 +67,19 @@ struct Board
     Bitboard whiteKing, whiteQueens, whiteRooks, whiteBishops, whiteKnights, whitePawns;
     Bitboard blackKing, blackQueens, blackRooks, blackBishops, blackKnights, blackPawns;
     Bitboard whitePieces, blackPieces, occupiedSquares;
- 
+
     unsigned char nextMove;        // WHITE_MOVE or BLACK_MOVE
     unsigned char castleWhite;     // White's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
     unsigned char castleBlack;     // Black's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
     int epSquare;                  // En-passant target square after double pawn move
     int fiftyMove;                 // Moves since the last pawn move or capture
     uint64_t hashkey;                   // Random 'almost' unique signature for current board position.
- 
+
     // additional variables:
     int square[64];                // incrementally updated, this array is usefull if we want to
-                                   // probe what kind of piece is on a particular square.
+    // probe what kind of piece is on a particular square.
     int Material;                  // incrementally updated, total material balance on board,
-                                   // in centipawns, from white’s side of view
+    // in centipawns, from white’s side of view
     int totalWhitePawns;           // sum of P material value for white (in centipawns)
     int totalBlackPawns;           // sum of P material value for black  (in centipawns)
     int totalWhitePieces;          // sum of Q+R+B+N material value for white (in centipawns)
@@ -93,6 +93,7 @@ struct Board
     int endOfGame;                 // index for board.gameLine
     int endOfSearch;               // index for board.gameLine
     GameLineRecord gameLine[MAX_GAME_LINE];
+
 
     // search variables:
     int triangularLength[MAX_PLY];
@@ -136,5 +137,5 @@ struct Board
 };
 
 
- 
+
 #endif // _BOARD_H_

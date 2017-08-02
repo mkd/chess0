@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -138,17 +138,8 @@ void exec(string input)
     // See the list of supported commmands below:
 
 
-    // analyze: enter analysis mode, which means that the computer will infinitely
-    // analyze the current position without any limit in time or depth.
-    if (cmd == "analyze")
-    {
-        // TODO: analyze
-    }
-
-
-    
     // auto: make the machine play both sides
-    else if (cmd == "auto")
+    if (cmd == "auto")
     {
         wPlayer = PLAYER_TYPE_COMPUTER;
         bPlayer = PLAYER_TYPE_COMPUTER;
@@ -339,7 +330,7 @@ void exec(string input)
     }
 
 
-    
+
     // manual: human vs human
     else if (cmd == "manual")
     {
@@ -378,12 +369,12 @@ void exec(string input)
     }
 
 
-     
+
     // new | restart: new game / restart
     else if ((cmd == "new") || (cmd == "restart"))
     {
         cout << "Starting a new game..." << endl;
-        
+
         // restart the game
         wPlayer = PLAYER_TYPE_HUMAN;
         bPlayer = PLAYER_TYPE_COMPUTER;
@@ -469,7 +460,7 @@ void exec(string input)
 
                 float sec = (end - start) / (CLOCKS_PER_SEC / 1000);
                 float speed = perftMoves / sec;
- 
+
                 // PRINT: Depth, Moves, Time, Moves/s
                 cout.fill(' ');
                 cout << setw(3) << z << "\t" << setw(7) << perftMoves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
@@ -552,7 +543,7 @@ void exec(string input)
     }
 
 
-    
+
     // playother: move the turn to the other player and make computer play (XBoard)
     else if (cmd == "playother")
     {
@@ -612,7 +603,7 @@ void exec(string input)
     }
 
 
-    
+
     // show | display: show current board
     else if ((cmd == "show") || (cmd == "display"))
     {
@@ -624,7 +615,24 @@ void exec(string input)
     // solve: try to find a checkmate for the given position
     else if (cmd == "solve")
     {
-        // TODO: solve
+        board.searchDepth = SOLVE_MAX_DEPTH;
+        board.maxTime = SOLVE_MAX_TIME * 1000;
+
+        // force computer to start thinking
+        if (board.nextMove)
+        {
+            wPlayer = PLAYER_TYPE_HUMAN;
+            bPlayer = PLAYER_TYPE_COMPUTER;
+            curPlayerType = bPlayer;
+            playMode = HUMAN_CPU;
+        }
+        else
+        {
+            wPlayer = PLAYER_TYPE_COMPUTER;
+            bPlayer = PLAYER_TYPE_HUMAN;
+            curPlayerType = wPlayer;
+            playMode = HUMAN_CPU;
+        }
     }
 
 
@@ -1070,25 +1078,12 @@ void displayHelp(string which)
 // Display the current heuristic evaluation according to the board.
 void displayEval()
 {
-    // calculate the static evaluation value (material + position)
     float evaluationValue = 0;
     if (board.nextMove)
         evaluationValue = -board.eval() / 100.00f;
     else
         evaluationValue = board.eval() / 100.00f;
 
-    // calculate the material evaluation (without taking the position into
-    // account)
-    float materialValue = 0;
-    for (unsigned i = 0; i < 64; i++)
-    {
-        if ((board.square[i] >= 9) && (board.square[i] <= 15))
-            materialValue -= PIECEVALUES[board.square[i]];
-        else
-            materialValue += PIECEVALUES[board.square[i]];
-    }
-    materialValue /= 100.00f;
-
-    cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << materialValue << ")" << endl;
+    cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << (board.Material / 100.00f) << ")" << endl;
     cout << noshowpos;
 }

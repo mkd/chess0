@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -97,7 +97,7 @@ void Board::init()
 void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int castleW, int castleB, int epSq)
 {
     int i;
- 
+
     // bitboards
     whiteKing    = 0;
     whiteQueens  = 0;
@@ -181,11 +181,11 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
             hashkey     ^= KEY.keys[i][BLACK_PAWN];         
         }
     }
- 
+
     whitePieces = whiteKing | whiteQueens | whiteRooks | whiteBishops | whiteKnights | whitePawns;
     blackPieces = blackKing | blackQueens | blackRooks | blackBishops | blackKnights | blackPawns;
     occupiedSquares = whitePieces | blackPieces;
- 
+
     nextMove = next;
 
     castleWhite = castleW;
@@ -199,15 +199,15 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
     if (castleBlack & CANCASTLEOOO) hashkey ^= KEY.bq;
     if (nextMove) hashkey ^= KEY.side;
     if (epSq) hashkey ^= KEY.ep[epSq];
- 
+
     totalWhitePawns = bitCnt(whitePawns) * PAWN_VALUE;
     totalBlackPawns = bitCnt(blackPawns) * PAWN_VALUE;
     totalWhitePieces =  bitCnt(whiteKnights) * KNIGHT_VALUE + bitCnt(whiteBishops) * BISHOP_VALUE +
-                            bitCnt(whiteRooks) * ROOK_VALUE + bitCnt(whiteQueens) * QUEEN_VALUE;
+        bitCnt(whiteRooks) * ROOK_VALUE + bitCnt(whiteQueens) * QUEEN_VALUE;
     totalBlackPieces =  bitCnt(blackKnights) * KNIGHT_VALUE + bitCnt(blackBishops) * BISHOP_VALUE +
-                            bitCnt(blackRooks) * ROOK_VALUE + bitCnt(blackQueens) * QUEEN_VALUE;
+        bitCnt(blackRooks) * ROOK_VALUE + bitCnt(blackQueens) * QUEEN_VALUE;
     Material  = totalWhitePawns + totalWhitePieces - totalBlackPawns - totalBlackPieces;
- 
+
     endOfGame = 0;
     endOfSearch = 0;
     for (i = 0; i < MAX_PLY; i++) 
@@ -315,7 +315,7 @@ string Board::toFEN()
     if (castleBlack & CANCASTLEOO)  serial.append(1, 'k');
     if (castleBlack & CANCASTLEOOO) serial.append(1, 'q');
     if (!(castleWhite & CANCASTLEOO) && !(castleWhite & CANCASTLEOOO) &&
-        !(castleBlack & CANCASTLEOO) && !(castleBlack & CANCASTLEOOO))
+            !(castleBlack & CANCASTLEOO) && !(castleBlack & CANCASTLEOOO))
         serial.append(1, '-');
     serial.append(1, ' ');
 
@@ -328,8 +328,8 @@ string Board::toFEN()
     else
         serial.append(1, '-');
     serial.append(1, ' ');
-    
-    
+
+
     // 5) add 50rule
     serial += to_string(fiftyMove) + ' ';
 

@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -28,7 +28,7 @@
 #define _GLOBALS_H_
 
 
- 
+
 #include <iostream>
 #include <unordered_map>
 #include "definitions.h"
@@ -36,14 +36,14 @@
 #include "hash.h"
 
 
- 
+
 char INIFILE[80];
 char PATHNAME[80];
 char CMD_BUFF[MAX_CMD_BUFF];
 int CMD_BUFF_COUNT = 0;
 
 
- 
+
 Board board;
 
 
@@ -65,48 +65,48 @@ extern const int E2 = 12; extern const int F2 = 13; extern const int G2 = 14; ex
 extern const int A1 =  0; extern const int B1 =  1; extern const int C1 =  2; extern const int D1 =  3;
 extern const int E1 =  4; extern const int F1 =  5; extern const int G1 =  6; extern const int H1 =  7;
 
- 
+
 const char* SQUARENAME[64] = {"a1","b1","c1","d1","e1","f1","g1","h1",
-                              "a2","b2","c2","d2","e2","f2","g2","h2",
-                              "a3","b3","c3","d3","e3","f3","g3","h3",
-                              "a4","b4","c4","d4","e4","f4","g4","h4",
-                              "a5","b5","c5","d5","e5","f5","g5","h5",
-                              "a6","b6","c6","d6","e6","f6","g6","h6",
-                              "a7","b7","c7","d7","e7","f7","g7","h7",
-                              "a8","b8","c8","d8","e8","f8","g8","h8"};
+    "a2","b2","c2","d2","e2","f2","g2","h2",
+    "a3","b3","c3","d3","e3","f3","g3","h3",
+    "a4","b4","c4","d4","e4","f4","g4","h4",
+    "a5","b5","c5","d5","e5","f5","g5","h5",
+    "a6","b6","c6","d6","e6","f6","g6","h6",
+    "a7","b7","c7","d7","e7","f7","g7","h7",
+    "a8","b8","c8","d8","e8","f8","g8","h8"};
 
- 
+
 extern const int FILES[64] = {
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8,
-       1, 2, 3, 4, 5, 6, 7, 8
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8
 };
 
- 
+
 extern const int RANKS[64] = {
-       1, 1, 1, 1, 1, 1, 1, 1,
-       2, 2, 2, 2, 2, 2, 2, 2,
-       3, 3, 3, 3, 3, 3, 3, 3,
-       4, 4, 4, 4, 4, 4, 4, 4,
-       5, 5, 5, 5, 5, 5, 5, 5,
-       6, 6, 6, 6, 6, 6, 6, 6,
-       7, 7, 7, 7, 7, 7, 7, 7,
-       8, 8, 8, 8, 8, 8, 8, 8
+    1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3, 3, 3, 3,
+    4, 4, 4, 4, 4, 4, 4, 4,
+    5, 5, 5, 5, 5, 5, 5, 5,
+    6, 6, 6, 6, 6, 6, 6, 6,
+    7, 7, 7, 7, 7, 7, 7, 7,
+    8, 8, 8, 8, 8, 8, 8, 8
 };
 
 
- 
+
 // Identifier of next move:
 extern const unsigned char WHITE_MOVE  = 0; 
 extern const unsigned char BLACK_MOVE  = 1; 
 
 
- 
+
 // Piece identifiers, 4 bits each.
 // Usefull bitwise properties of this numbering scheme:
 // white = 0..., black = 1..., sliding = .1.., nonsliding = .0..
@@ -127,15 +127,15 @@ extern const unsigned char BLACK_KNIGHT = 11;        //  1011
 extern const unsigned char BLACK_BISHOP = 13;        //  1101
 extern const unsigned char BLACK_ROOK = 14;          //  1110
 extern const unsigned char BLACK_QUEEN = 15;         //  1111
- 
+
 const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ",
-                              "  ","P*","K*","N*","  ","B*","R*","Q*"};
+    "  ","P*","K*","N*","  ","B*","R*","Q*"};
 const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," ","B","R","Q"};
- 
+
 Bitboard BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
- 
+
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
 extern const int KNIGHT_VALUE = 320;
@@ -149,10 +149,10 @@ extern const int CHECK_MATE = KING_VALUE;
 // used for MVV/LVA and SEE:
 int PIECEVALUES[16];
 
- 
+
 // used in Eugene Nalimov's bitScanReverse
 int MS1BTABLE[256];
- 
+
 // Attack tables:
 Bitboard WHITE_PAWN_ATTACKS[64];
 Bitboard WHITE_PAWN_MOVES[64];
@@ -166,69 +166,69 @@ Bitboard RANK_ATTACKS[64][64];      // 32KB
 Bitboard FILE_ATTACKS[64][64];      // 32KB
 Bitboard DIAGA8H1_ATTACKS[64][64];  // 32KB
 Bitboard DIAGA1H8_ATTACKS[64][64];  // 32KB
- 
+
 // Move generator shift for ranks:
 extern const int RANKSHIFT[64] = {
-        1,  1,  1,  1,  1,  1,  1,  1,
-        9,  9,  9,  9,  9,  9,  9,  9,
-       17, 17, 17, 17, 17, 17, 17, 17,  
-       25, 25, 25, 25, 25, 25, 25, 25,
-       33, 33, 33, 33, 33, 33, 33, 33,
-       41, 41, 41, 41, 41, 41, 41, 41,
-       49, 49, 49, 49, 49, 49, 49, 49,
-       57, 57, 57, 57, 57, 57, 57, 57
+    1,  1,  1,  1,  1,  1,  1,  1,
+    9,  9,  9,  9,  9,  9,  9,  9,
+    17, 17, 17, 17, 17, 17, 17, 17,  
+    25, 25, 25, 25, 25, 25, 25, 25,
+    33, 33, 33, 33, 33, 33, 33, 33,
+    41, 41, 41, 41, 41, 41, 41, 41,
+    49, 49, 49, 49, 49, 49, 49, 49,
+    57, 57, 57, 57, 57, 57, 57, 57
 };
- 
+
 // Move generator magic multiplication numbers for files:
 extern const Bitboard _FILEMAGICS[8] = {
-       0x8040201008040200,
-       0x4020100804020100,
-       0x2010080402010080,
-       0x1008040201008040,
-       0x0804020100804020,
-       0x0402010080402010,
-       0x0201008040201008,
-       0x0100804020100804
+    0x8040201008040200,
+    0x4020100804020100,
+    0x2010080402010080,
+    0x1008040201008040,
+    0x0804020100804020,
+    0x0402010080402010,
+    0x0201008040201008,
+    0x0100804020100804
 };
- 
+
 // Move generator magic multiplication numbers for diagonals:
 extern const Bitboard _DIAGA8H1MAGICS[15] = {
-       0x0,
-       0x0,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0080808080808080,
-       0x0040404040404040,
-       0x0020202020202020,
-       0x0010101010101010,
-       0x0008080808080808,
-       0x0,
-       0x0
+    0x0,
+    0x0,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0080808080808080,
+    0x0040404040404040,
+    0x0020202020202020,
+    0x0010101010101010,
+    0x0008080808080808,
+    0x0,
+    0x0
 };
- 
+
 // Move generator magic multiplication numbers for diagonals:
 extern const Bitboard _DIAGA1H8MAGICS[15] = {
-       0x0,
-       0x0,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x0101010101010100,
-       0x8080808080808000,
-       0x4040404040400000,
-       0x2020202020000000,
-       0x1010101000000000,
-       0x0808080000000000,
-       0x0,
-       0x0
+    0x0,
+    0x0,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x0101010101010100,
+    0x8080808080808000,
+    0x4040404040400000,
+    0x2020202020000000,
+    0x1010101000000000,
+    0x0808080000000000,
+    0x0,
+    0x0
 };
- 
+
 // Move generator 6-bit masking and magic multiplication numbers:
 Bitboard RANKMASK[64];
 Bitboard FILEMASK[64];
@@ -237,11 +237,11 @@ Bitboard DIAGA8H1MASK[64];
 Bitboard DIAGA8H1MAGIC[64];
 Bitboard DIAGA1H8MASK[64];
 Bitboard DIAGA1H8MAGIC[64];
- 
+
 // We use one generalized sliding attacks array: [8 squares][64 states]
 // the unsigned char (=8 bits) contains the attacks for a rank, file or diagonal
 unsigned char GEN_SLIDING_ATTACKS[8][64];
- 
+
 // Used for castling:
 unsigned char CANCASTLEOO = 1;
 unsigned char CANCASTLEOOO = 2;
@@ -283,11 +283,11 @@ int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 25;
 int BONUS_TEMPO_MIDGAME           = 10;
 int BONUS_TEMPO_ENDGAME           = 20;
 
- 
+
 int BONUS_PAWN_SHIELD_STRONG = 9;
 int BONUS_PAWN_SHIELD_WEAK = 4;
 
- 
+
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
 int PAWN_OPPONENT_DISTANCE[8] =      { 0,   2,  1,  0,  0,  0,  0,  0 };
 int KNIGHT_DISTANCE[8] =             { 0,   4,  4,  0,  0,  0,  0,  0 };
@@ -302,129 +302,129 @@ int QUEEN_DISTANCE[8] =              { 0,  10,  8,  5,  4,  0,  0,  0 };
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int PAWNPOS_W[64] = {
-         0,   0,   0,   0,   0,   0,   0,   0,
-         //5,  10,  15,  20,  20,  15,  10,   5,
-         //4,   8,  12,  16,  16,  12,   8,   4,
-        10,  15,  20,  25,  25,  20,  15,  10,
-         6,  11,  16,  21,  21,  16,  11,   6,
-         3,   6,   9,  12,  12,   9,   6,   3,
-         2,   4,   6,   8,   8,   6,   4,   2,
-         1,   2,   3, -10, -10,   3,   2,   1,
-         0,   0,   0, -40, -40,   0,   0,   0,
-         0,   0,   0,   0,   0,   0,   0,   0
+    0,   0,   0,   0,   0,   0,   0,   0,
+    //5,  10,  15,  20,  20,  15,  10,   5,
+    //4,   8,  12,  16,  16,  12,   8,   4,
+    10,  15,  20,  25,  25,  20,  15,  10,
+    6,  11,  16,  21,  21,  16,  11,   6,
+    3,   6,   9,  12,  12,   9,   6,   3,
+    2,   4,   6,   8,   8,   6,   4,   2,
+    1,   2,   3, -10, -10,   3,   2,   1,
+    0,   0,   0, -40, -40,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0
 };
 
 
 
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int KNIGHTPOS_W[64] = {
-       -10, -10, -10, -10, -10, -10, -10, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10, -30, -10, -10, -10, -10, -30, -10
+    -10, -10, -10, -10, -10, -10, -10, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10, -30, -10, -10, -10, -10, -30, -10
 };
 
 
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int BISHOPPOS_W[64] = {
-       -10, -10, -10, -10, -10, -10, -10, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10, -10, -10, -10, -10, -10, -10, -10
+    -10, -10, -10, -10, -10, -10, -10, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10, -10, -10, -10, -10, -10, -10, -10
 };
 
 
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int ROOKPOS_W[64] = {
-      0,  0,  0,  0,   0,  0,  0,   0,
-     15, 15, 15, 15,  15, 15, 15,  15,
-      0,  0,  0,  0,   0,  0,  0,   0,
-      0,  0,  0,  0,   0,  0,  0,   0,
-      0,  0,  0,  0,   0,  0,  0,   0,
-      0,  0,  0,  0,   0,  0,  0,   0,
-      0,  0,  0,  0,   0,  0,  0,   0,
+    0,  0,  0,  0,   0,  0,  0,   0,
+    15, 15, 15, 15,  15, 15, 15,  15,
+    0,  0,  0,  0,   0,  0,  0,   0,
+    0,  0,  0,  0,   0,  0,  0,   0,
+    0,  0,  0,  0,   0,  0,  0,   0,
+    0,  0,  0,  0,   0,  0,  0,   0,
+    0,  0,  0,  0,   0,  0,  0,   0,
     -10,  0,  0, 10,  10,  0,  0, -10
 };
 
 
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int QUEENPOS_W[64] = {
-       -10, -10, -10, -10, -10, -10, -10, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,  10,  10,   5,   0, -10,
-       -10,   0,   5,   5,   5,   5,   0, -10,
-       -10,   0,   0,   0,   0,   0,   0, -10,
-       -10, -10, -20, -10, -10, -20, -10, -10
+    -10, -10, -10, -10, -10, -10, -10, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,  10,  10,   5,   0, -10,
+    -10,   0,   5,   5,   5,   5,   0, -10,
+    -10,   0,   0,   0,   0,   0,   0, -10,
+    -10, -10, -20, -10, -10, -20, -10, -10
 };
 
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int KINGPOS_W[64]  = {
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -40, -40, -40, -40, -40, -40, -40, -40,
-       -20, -20, -20, -20, -20, -20, -20, -20,
-         0,  20,  40, -20,   0, -20,  40,  20
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -40, -40, -40, -40, -40, -40, -40, -40,
+    -20, -20, -20, -20, -20, -20, -20, -20,
+    0,  20,  40, -20,   0, -20,  40,  20
 };
- 
+
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int KINGPOS_ENDGAME_W[64] = {
-         0,  10,  20,  30,  30,  20,  10,   0,
-        10,  20,  30,  40,  40,  30,  20,  10,
-        20,  30,  40,  50,  50,  40,  30,  20,
-        30,  40,  50,  60,  60,  50,  40,  30,
-        30,  40,  50,  60,  60,  50,  40,  30,
-        20,  30,  40,  50,  50,  40,  30,  20,
-        10,  20,  30,  40,  40,  30,  20,  10,
-         0,  10,  20,  30,  30,  20,  10,   0
+    0,  10,  20,  30,  30,  20,  10,   0,
+    10,  20,  30,  40,  40,  30,  20,  10,
+    20,  30,  40,  50,  50,  40,  30,  20,
+    30,  40,  50,  60,  60,  50,  40,  30,
+    30,  40,  50,  60,  60,  50,  40,  30,
+    20,  30,  40,  50,  50,  40,  30,  20,
+    10,  20,  30,  40,  40,  30,  20,  10,
+    0,  10,  20,  30,  30,  20,  10,   0
 }; 
- 
+
 int MIRROR[64] = {
-        56,  57,  58,  59,  60,  61,  62,  63,
-        48,  49,  50,  51,  52,  53,  54,  55,
-        40,  41,  42,  43,  44,  45,  46,  47,
-        32,  33,  34,  35,  36,  37,  38,  39,
-        24,  25,  26,  27,  28,  29,  30,  31,
-        16,  17,  18,  19,  20,  21,  22,  23,
-         8,   9,  10,  11,  12,  13,  14,  15,  
-         0,   1,   2,   3,   4,   5,   6,   7
+    56,  57,  58,  59,  60,  61,  62,  63,
+    48,  49,  50,  51,  52,  53,  54,  55,
+    40,  41,  42,  43,  44,  45,  46,  47,
+    32,  33,  34,  35,  36,  37,  38,  39,
+    24,  25,  26,  27,  28,  29,  30,  31,
+    16,  17,  18,  19,  20,  21,  22,  23,
+    8,   9,  10,  11,  12,  13,  14,  15,  
+    0,   1,   2,   3,   4,   5,   6,   7
 };
- 
+
 int DISTANCE[64][64];
 int PAWNPOS_B[64];
 int KNIGHTPOS_B[64];

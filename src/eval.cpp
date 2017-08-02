@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -48,16 +48,16 @@ int Board::eval()
     bool endgame;
     Bitboard temp, whitepassedpawns, blackpassedpawns;
 
- 
+
     // Material
     score = board.Material;
 
- 
+
     // Remember where the kings are
     whitekingsquare = firstOne(board.whiteKing);
     blackkingsquare = firstOne(board.blackKing);
 
- 
+
     // Piece counts, note that we could have done this incrementally in (un)makeMove
     // because it's basically the same thing as keeping board.Material up to date..
     whitepawns = bitCnt(board.whitePawns);
@@ -75,13 +75,13 @@ int Board::eval()
     blacktotalmat = 3 * blackknights + 3 * blackbishops + 5 * blackrooks + 10 * blackqueens;
     blacktotal = blackpawns + blackknights + blackbishops + blackrooks + blackqueens;
 
- 
+
     // Check if we are in the endgame
     // Anything less than a queen (=10) + rook (=5) is considered endgame
     // (pawns excluded in this count)
     endgame = (whitetotalmat < 15 || blacktotalmat < 15);
 
- 
+
     // Evaluate for draws due to insufficient material:
     if (!whitepawns && !blackpawns)
     {
@@ -91,23 +91,23 @@ int Board::eval()
             if (board.nextMove) return -DRAWSCORE;
             else return DRAWSCORE;
         }
- 
+
         // king and knight versus king:
         if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
-            ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
+                ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
         {
             if (board.nextMove) return -DRAWSCORE;
             else return DRAWSCORE;
         }
- 
+
         // 2 kings with one or more bishops, and all bishops on the same colour:
         if ((whitebishops + blackbishops) > 0)
         {
-                if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
-                (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
+            if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
+                    (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
             {
                 if (!((board.whiteBishops | board.blackBishops) & WHITE_SQUARES) ||
-                    !((board.whiteBishops | board.blackBishops) & BLACK_SQUARES))
+                        !((board.whiteBishops | board.blackBishops) & BLACK_SQUARES))
                 {
                     if (board.nextMove) return -DRAWSCORE;
                     else return DRAWSCORE;
@@ -116,9 +116,9 @@ int Board::eval()
         }
     }
 
- 
+
     // Evaluate MATERIAL
- 
+
     // Have the winning side prefer to exchange pieces
     // Every exchange with unequal material adds 3 centipawns to the score
     // Loosing a piece (from balanced material) becomes more
@@ -129,9 +129,9 @@ int Board::eval()
     else if (whitetotalmat + whitepawns < blacktotalmat + blackpawns)
         score += -45 - 3 * blacktotal + 6 * whitetotal;
 
- 
+
     // Evaluate WHITE PIECES
-     
+
     // Evaluate white pawns
     // - position on the board
     // - distance from opponent king
@@ -144,21 +144,21 @@ int Board::eval()
         square = firstOne(temp);
         score += PAWNPOS_W[square];
         score += PAWN_OPPONENT_DISTANCE[DISTANCE[square][blackkingsquare]];
- 
+
         if (endgame)
             score += PAWN_OWN_DISTANCE[DISTANCE[square][whitekingsquare]];
- 
+
         if (!(PASSED_WHITE[square] & board.blackPawns))
         {
             score += BONUS_PASSED_PAWN;
- 
+
             // remember its location, we need it later when evaluating the white rooks:
             whitepassedpawns ^= BITSET[square];
         }
- 
+
         if ((board.whitePawns ^ BITSET[square]) & FILEMASK[square])
             score -= PENALTY_DOUBLED_PAWN;
- 
+
         if (!(ISOLATED_WHITE[square] & board.whitePawns))
         {
             score -= PENALTY_ISOLATED_PAWN;
@@ -174,11 +174,11 @@ int Board::eval()
                 if (!(BACKWARD_WHITE[square] & board.whitePawns))
                     score -= PENALTY_BACKWARD_PAWN;
         }
- 
+
         temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate white knights
     // - position on the board
     // - distance from opponent king
@@ -191,7 +191,7 @@ int Board::eval()
         temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate white bishops
     // - having the pair
     // - position on the board
@@ -199,7 +199,7 @@ int Board::eval()
     if (board.whiteBishops)
         if ((board.whiteBishops & WHITE_SQUARES) && (board.whiteBishops & BLACK_SQUARES))
             score += BONUS_BISHOP_PAIR;
- 
+
     temp = board.whiteBishops;
     while (temp)
     {
@@ -209,7 +209,7 @@ int Board::eval()
         temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate white rooks
     // - position on the board
     // - distance from opponent king
@@ -221,15 +221,15 @@ int Board::eval()
         score += ROOKPOS_W[square];
         if (!board.castleWhite)
             score += ROOK_DISTANCE[DISTANCE[square][blackkingsquare]];
- 
+
         if (FILEMASK[square] & whitepassedpawns)
             if ((unsigned int) square < lastOne(FILEMASK[square] & whitepassedpawns))
                 score += BONUS_ROOK_BEHIND_PASSED_PAWN;
 
-         temp ^= BITSET[square];
+        temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate white queens
     // - position on the board
     // - distance from opponent king
@@ -242,7 +242,7 @@ int Board::eval()
         temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate the white king
     // - position on the board
     // - proximity to the pawns
@@ -254,18 +254,18 @@ int Board::eval()
     else
     {
         score += KINGPOS_W[whitekingsquare];
- 
+
         // add pawn shield bonus if we're not in the endgame:
         // strong pawn shield bonus if the pawns are near the king:
         score += BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_W[whitekingsquare] & board.whitePawns);
- 
+
         // weaker pawn shield bonus if the pawns are not so near the king:
         score += BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_W[whitekingsquare] & board.whitePawns);
     }
 
- 
+
     // Evaluate BLACK PIECES
-     
+
     // Evaluate black pawns
     // - position on the board
     // - distance from opponent king
@@ -278,21 +278,21 @@ int Board::eval()
         square = firstOne(temp);
         score -= PAWNPOS_B[square];
         score -= PAWN_OPPONENT_DISTANCE[DISTANCE[square][whitekingsquare]];
- 
+
         if (endgame)
             score -= PAWN_OWN_DISTANCE[DISTANCE[square][blackkingsquare]];
- 
+
         if (!(PASSED_BLACK[square] & board.whitePawns))
         {
             score -= BONUS_PASSED_PAWN;
- 
+
             // remember its location, we need it later when evaluating the black rooks:
             blackpassedpawns ^= BITSET[square];
         }
- 
+
         if ((board.blackPawns ^ BITSET[square]) & FILEMASK[square])
             score += PENALTY_DOUBLED_PAWN;
- 
+
         if (!(ISOLATED_BLACK[square] & board.blackPawns))
         {
             score += PENALTY_ISOLATED_PAWN;
@@ -305,28 +305,28 @@ int Board::eval()
         else
         {
             if ((BLACK_PAWN_ATTACKS[square - 8] & board.whitePawns))
-                  if (!(BACKWARD_BLACK[square] & board.blackPawns))
-                         score += PENALTY_BACKWARD_PAWN;
+                if (!(BACKWARD_BLACK[square] & board.blackPawns))
+                    score += PENALTY_BACKWARD_PAWN;
         }
- 
+
         temp ^= BITSET[square];
- 
+
     }
 
- 
+
     // Evaluate black knights
     // - position on the board
     // - distance from opponent king
     temp = board.blackKnights;
     while (temp)
     {
-       square = firstOne(temp);
-       score -= KNIGHTPOS_B[square];
-       score -= KNIGHT_DISTANCE[DISTANCE[square][whitekingsquare]];
-       temp ^= BITSET[square];
+        square = firstOne(temp);
+        score -= KNIGHTPOS_B[square];
+        score -= KNIGHT_DISTANCE[DISTANCE[square][whitekingsquare]];
+        temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate black bishops
     // - having the pair
     // - position on the board
@@ -334,17 +334,17 @@ int Board::eval()
     if (board.blackBishops)
         if ((board.blackBishops & WHITE_SQUARES) && (board.blackBishops & BLACK_SQUARES))
             score -= BONUS_BISHOP_PAIR;
- 
+
     temp = board.blackBishops;
     while (temp)
     {
-       square = firstOne(temp);
-       score -= BISHOPPOS_B[square];
-       score -= BISHOP_DISTANCE[DISTANCE[square][whitekingsquare]];
-       temp ^= BITSET[square];
+        square = firstOne(temp);
+        score -= BISHOPPOS_B[square];
+        score -= BISHOP_DISTANCE[DISTANCE[square][whitekingsquare]];
+        temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate black rooks
     // - position on the board
     // - distance from opponent king
@@ -352,50 +352,50 @@ int Board::eval()
     temp = board.blackRooks;
     while (temp)
     {
-       square = firstOne(temp);
-       score -= ROOKPOS_B[square];
+        square = firstOne(temp);
+        score -= ROOKPOS_B[square];
         if (!board.castleBlack)
             score -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
 
-       if (FILEMASK[square] & blackpassedpawns)
-              if ((unsigned int) square > firstOne(FILEMASK[square] & blackpassedpawns))
-                    score -= BONUS_ROOK_BEHIND_PASSED_PAWN;
+        if (FILEMASK[square] & blackpassedpawns)
+            if ((unsigned int) square > firstOne(FILEMASK[square] & blackpassedpawns))
+                score -= BONUS_ROOK_BEHIND_PASSED_PAWN;
 
-       temp ^= BITSET[square];
+        temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate black queens
     // - position on the board
     // - distance from opponent king
     temp = board.blackQueens;
     while (temp)
     {
-       square = firstOne(temp);
-       score -= QUEENPOS_B[square];
-       score -= QUEEN_DISTANCE[DISTANCE[square][whitekingsquare]];
-       temp ^= BITSET[square];
+        square = firstOne(temp);
+        score -= QUEENPOS_B[square];
+        score -= QUEEN_DISTANCE[DISTANCE[square][whitekingsquare]];
+        temp ^= BITSET[square];
     }
 
- 
+
     // Evaluate the black king
     // - position on the board
     // - proximity to the pawns
     // - pawn shield (not in the endgame)
     if (endgame)
     {
-           score -= KINGPOS_ENDGAME_B[blackkingsquare];
+        score -= KINGPOS_ENDGAME_B[blackkingsquare];
     }
     else
     {
-       score -= KINGPOS_B[blackkingsquare];
- 
-       // add pawn shield bonus if we're not in the endgame:
-       // strong pawn shield bonus if the pawns are near the king:
-       score -= BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns);
- 
-       // weaker pawn shield bonus if the pawns are not so near the king:
-       score -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
+        score -= KINGPOS_B[blackkingsquare];
+
+        // add pawn shield bonus if we're not in the endgame:
+        // strong pawn shield bonus if the pawns are near the king:
+        score -= BONUS_PAWN_SHIELD_STRONG * bitCnt(KINGSHIELD_STRONG_B[blackkingsquare] & board.blackPawns);
+
+        // weaker pawn shield bonus if the pawns are not so near the king:
+        score -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
     }
 
     // Bonus for tempo
@@ -409,7 +409,7 @@ int Board::eval()
     else
         score += tempoBonus;
 
- 
+
     // Return the score
     if (board.nextMove)
         return -score;

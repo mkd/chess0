@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -152,7 +152,7 @@ int startApp(int mode)
         }
         else if (curPlayerType == PLAYER_TYPE_COMPUTER)
         {
-             // first, we try to get a reply from the openings book.
+            // first, we try to get a reply from the openings book.
             moveIsFromBook = "";
 
             if (useBook)
@@ -186,7 +186,7 @@ int startApp(int mode)
                 // set the input from computer to the SAN move
                 toSan(myMove, sanMove);
                 input = string(sanMove);
-                
+
                 end   = clock();
             }
 
@@ -339,19 +339,15 @@ int startApp(int mode)
         }
 
 
-        /*!
-         * If the input was a command, execute it and prompt again.
-         */
+        // if the input was a command, execute it and prompt again.
         else if (itype == INPUT_TYPE_CMD)
         {
             exec(input);
         }
 
 
-        /*!
-         * If the input is not a command nor a move, display an error and prompt
-         * again.
-         */
+        // if the input is not a command nor a move, display an error and prompt
+        // again.
         else
         {
             cerr << "Unknown command or move '" << input << "'." << endl << endl;
@@ -379,7 +375,7 @@ void prompt(unsigned nmove)
     {
         line << "White (" << nmove << "): ";
     }
-    
+
     cout << endl << line.str();
 }
 
@@ -472,23 +468,21 @@ InputType getInputType(string input)
     }
 
 
-    /*!
-     * Look for 4-character moves, including:
-     * - move_orig_dest   => column + row + column + row (e.g. d2d4)
-     * - capture_simple   => piece|column + 'x' + column + row (e.g. exd4, Nxd4)
-     * - promotion_simple => column + row + '=' + piece
-     */
+    // Look for 4-character moves, including:
+    // - move_orig_dest   => column + row + column + row (e.g. d2d4)
+    // - capture_simple   => piece|column + 'x' + column + row (e.g. exd4, Nxd4)
+    // - promotion_simple => column + row + '=' + piece
     else if (input.length() == 4)
     {
         // look for promotions
         if (isFile(input[0]) && isRank(input[1]) && (input[2] == '=') &&
-            isPiece(input[3])  && (input[3] != 'K') && (input[3] != 'k'))
+                isPiece(input[3])  && (input[3] != 'K') && (input[3] != 'k'))
             return INPUT_TYPE_MOVE;
 
         // look for algebraic move (xyXY)
         else if ((isFile(input[0])) && (isRank(input[1]))
-                                 && (isFile(input[2]))
-                                 && (isRank(input[3])))
+                && (isFile(input[2]))
+                && (isRank(input[3])))
             return INPUT_TYPE_MOVE;
 
         // look for captures
@@ -500,7 +494,7 @@ InputType getInputType(string input)
 
         // look for long moves
         else if (isPiece(input[0]) && (isFile(input[1]) || isRank(input[1]))
-                                   && isFile(input[2]) && isRank(input[3]))
+                && isFile(input[2]) && isRank(input[3]))
             return INPUT_TYPE_MOVE;
 
         else
@@ -509,24 +503,22 @@ InputType getInputType(string input)
     }
 
 
-    /*!
-     * Look for 5-character moves, including:
-     * - algebraic promotion     => e7e8Q
-     * - move_piece_ambiguous    => piece + column|row + column + row
-     * - castle_long             => 0-0-0
-     * - promotion_capture_short => column + 'x' + column + '=' + piece
-     */
+    // Look for 5-character moves, including:
+    // - algebraic promotion     => e7e8Q
+    // - move_piece_ambiguous    => piece + column|row + column + row
+    // - castle_long             => 0-0-0
+    // - promotion_capture_short => column + 'x' + column + '=' + piece
     else if (input.length() == 5)
     {
         // look for algebraic promotions
         if (isFile(input[0]) && isRank(input[1]) &&
-            isFile(input[2]) && isRank(input[3]) &&
-            isPiece(input[4]))
+                isFile(input[2]) && isRank(input[3]) &&
+                isPiece(input[4]))
             return INPUT_TYPE_MOVE;
-       
+
         // look for promotions
         else if (isFile(input[0]) && (input[1] == 'x') && isFile(input[2]) &&
-            (input[3] == '=')  && (input[4] != 'K') && (input[4] != 'k'))
+                (input[3] == '=')  && (input[4] != 'K') && (input[4] != 'k'))
             return INPUT_TYPE_MOVE;
 
         // look for long castling
@@ -535,8 +527,8 @@ InputType getInputType(string input)
 
         // look for long moves
         else if (isPiece(input[0]) && (isFile(input[1]) || isRank(input[1]))
-                                   && (input[2] == 'x')
-                                   && isFile(input[3]) && isRank(input[4]))
+                && (input[2] == 'x')
+                && isFile(input[3]) && isRank(input[4]))
             return INPUT_TYPE_MOVE;
 
         else
@@ -549,8 +541,8 @@ InputType getInputType(string input)
     else if (input.length() == 6)
     {
         if (isFile(input[0]) && (input[1] == 'x') && isFile(input[2]) &&
-            ((input[3] == '8') || (input[3] == '1')) && (input[4] == '=') &&
-            (input[5] != 'K') && (input[5] != 'k'))
+                ((input[3] == '8') || (input[3] == '1')) && (input[4] == '=') &&
+                (input[5] != 'K') && (input[5] != 'k'))
             return INPUT_TYPE_MOVE;
 
         else
@@ -567,7 +559,7 @@ InputType getInputType(string input)
 // changeSide()
 //
 // Change the side playing, including color, type of input (human vs computer),
-// * clocks, etc.
+// clocks, etc.
 void changeSide()
 {
     if (playMode == HUMAN_CPU)
@@ -590,13 +582,13 @@ void dealEnd()
     cout << endl;
 
     // show result for draw due to insufficient material.
-    //if (remainingPieces < 3)
-    //    cout << "1/2-1/2 {Insufficient material}" << endl;
+    if (bitCnt(board.whitePieces | board.blackPieces) < 3)
+        cout << "1/2-1/2 {Insufficient material}" << endl;
 
 
     // deal with 50-fold repetition which ends the game.
-    //else if (fiftyMove >= 50)
-    //    cout << "1/2-1/2 {Draw by 50-move repetition}" << endl;
+    else if (board.fiftyMove > 99)
+        cout << "1/2-1/2 {Draw by 50-move repetition}" << endl;
 
 
     // show results for mate.
@@ -742,6 +734,6 @@ string getGameSequence()
         // delete the temporary copy
         delete[] tmp;
     }
-    
+
     return sequence; 
 }

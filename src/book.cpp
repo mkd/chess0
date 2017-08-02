@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -55,8 +55,8 @@ void initBook()
     //
     // OPENINGS
     /////////////////
-   
-   
+
+
     //  Initial openings
     book["%"] = "e4";
 
@@ -229,7 +229,7 @@ void initBook()
     book["1. e4 c6 2. d4 d6 3. Nc3 g6"] = "Be3";
     book["1. e4 c6 2. d4 d6 3. Nc3 Qc7"] = "f4";
 
-    
+
 
 
     // Danish Defense (WHITE)
@@ -477,7 +477,7 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Nf6 8. Bxd7+ Qxd7"] = "Bg5";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7"] = "Bxd7+";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 Nxd4 6. Nxd4 exd4 7. Qxd4 Ne7 8. Bxd7+ Qxd7"] = "Be3";
-    
+
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 exd4 6. Nxd4 g6"] = "Be3";
     book["1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 Bd7 5. Nc3 exd4 6. Nxd4 g6 7. Be3 Bg7"] = "Qd2";
 
@@ -726,6 +726,18 @@ void initBook()
     book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3"] = "Bb4";
     book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Bg5"] = "h6";
 
+    // C45 Scotch, Schmidt variation -- BLACK
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Nxc6"] = "bxc6";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Nxc6 bxc6 7. Bd3"] = "d5";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. exd5"] = "cxd5";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. e5"] = "Ng4";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Nxc6 bxc6 7. Bd2"] = "Qe7";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Bg5"] = "Qe7";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. f3"] = "0-0";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. f3 0-0 7. Nxc6"] = "bxc6";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. f3 0-0 7. Bg5"] = "h6";
+    book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. f3 0-0 7. Bg5 h6 8. Bh4"] = "Re8";
+
     book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4"] = "Nf6";
     book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3"] = "dxc3";
     book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. c3 dxc3 5. Bc4"] = "cxb2";
@@ -891,7 +903,7 @@ void initBook()
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Bd3"] = "0-0";
 
 
-    
+
     // Trompovsky attack (A45)
     book["1. d4 Nf6 2. Bg5"] = "d5";
     book["1. d4 Nf6 2. Bg5 d5 3. Bxf6"] = "exf6";

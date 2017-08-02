@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -25,26 +25,26 @@
 // XXX
 #ifndef _EXTGLOBALS_H_
 #define _EXTGLOBALS_H_
- 
+
 #include <iostream>
 #include <unordered_map>
 #include "definitions.h"
 #include "board.h"
 #include "hash.h"
 
- using namespace std;
+using namespace std;
 
 
- 
+
 extern char INIFILE[];
 extern char PATHNAME[];
 extern char CMD_BUFF[];
 extern int CMD_BUFF_COUNT;
- 
+
 extern Board board;
 
 extern unsigned char movingSide;   // Who is currently moving (WHITE_MOVE || BLACK_MOVE), during search
- 
+
 extern const int A8; extern const int B8; extern const int C8; extern const int D8;
 extern const int E8; extern const int F8; extern const int G8; extern const int H8;
 extern const int A7; extern const int B7; extern const int C7; extern const int D7;
@@ -61,15 +61,15 @@ extern const int A2; extern const int B2; extern const int C2; extern const int 
 extern const int E2; extern const int F2; extern const int G2; extern const int H2;
 extern const int A1; extern const int B1; extern const int C1; extern const int D1;
 extern const int E1; extern const int F1; extern const int G1; extern const int H1;
- 
+
 extern const char* SQUARENAME[];
- 
+
 extern const int FILES[];
 extern const int RANKS[];
- 
+
 extern const unsigned char WHITE_MOVE; 
 extern const unsigned char BLACK_MOVE; 
- 
+
 extern const unsigned char EMPTY;
 extern const unsigned char WHITE_KNIGHT;
 extern const unsigned char WHITE_PAWN;
@@ -83,13 +83,13 @@ extern const unsigned char BLACK_KING;
 extern const unsigned char BLACK_BISHOP;
 extern const unsigned char BLACK_ROOK;
 extern const unsigned char BLACK_QUEEN;
- 
+
 extern const char* PIECENAMES[];
 extern const char* PIECECHARS[];
- 
+
 extern Bitboard BITSET[];
 extern int BOARDINDEX[9][9];
- 
+
 extern const int PAWN_VALUE;
 extern const int KNIGHT_VALUE;
 extern const int BISHOP_VALUE;
@@ -100,7 +100,7 @@ extern const int CHECK_MATE;
 extern int PIECEVALUES[];
 
 extern int MS1BTABLE[];
- 
+
 extern Bitboard WHITE_PAWN_ATTACKS[];
 extern Bitboard WHITE_PAWN_MOVES[];
 extern Bitboard WHITE_PAWN_DOUBLE_MOVES[];
@@ -113,12 +113,12 @@ extern Bitboard RANK_ATTACKS[64][64];
 extern Bitboard FILE_ATTACKS[64][64];
 extern Bitboard DIAGA8H1_ATTACKS[64][64];
 extern Bitboard DIAGA1H8_ATTACKS[64][64];
- 
+
 extern const int RANKSHIFT[];
 extern const Bitboard _FILEMAGICS[];
 extern const Bitboard _DIAGA8H1MAGICS[];
 extern const Bitboard _DIAGA1H8MAGICS[];
- 
+
 extern Bitboard RANKMASK[];
 extern Bitboard FILEMAGIC[];
 extern Bitboard FILEMASK[];
@@ -126,9 +126,9 @@ extern Bitboard DIAGA8H1MASK[];
 extern Bitboard DIAGA8H1MAGIC[];
 extern Bitboard DIAGA1H8MASK[];
 extern Bitboard DIAGA1H8MAGIC[];
- 
+
 extern unsigned char GEN_SLIDING_ATTACKS[8][64];
- 
+
 extern unsigned char CANCASTLEOO;
 extern unsigned char CANCASTLEOOO;
 extern Bitboard maskEG[];

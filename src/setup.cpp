@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -33,7 +33,7 @@
 #include "extglobals.h"
 
 
- 
+
 // edit()
 //
 // Interactively edit the chess board.
@@ -52,13 +52,13 @@ void edit()
     char fenenpassant[3];
     int fenhalfmoveclock;
     int fenfullmovenumber;
- 
+
     whiteCastle = board.castleWhite;
     blackCastle = board.castleBlack;
     next = board.nextMove;
     halfmoves = board.fiftyMove;
     epsq = board.epSquare;
- 
+
     if (board.nextMove == WHITE_MOVE)
     {
         std::cout << "White> edit> type 'help' for more info" << std::endl;
@@ -67,7 +67,7 @@ void edit()
     {
         std::cout << "Black> edit> type 'help' for more info" << std::endl;
     }
- 
+
     // infinite loop - user input:
     for (;;)
     {
@@ -81,7 +81,7 @@ void edit()
         }
         std::cout.flush();
         std::cin >> s;
- 
+
         if ((!strcmp(s, "help")) || (!strcmp(s, "h")) || (!strcmp(s, "?")))
         {
             std::cout  << std::endl << "edit help:" << std::endl;
@@ -109,13 +109,13 @@ void edit()
             std::cout << "                      Examples: 'rank 1 R1BQKBNR' or 'rank 6 3p2p1'" << std::endl;
             std::cout << "white               : WHITE to move" << std::endl << std::endl;
         }
- 
+
         else if (!strcmp(s, "black"))
         {
             next = BLACK_MOVE;
             board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);
         }
- 
+
         else if (!strncmp(s, "castle", 5))
         {
             std::cin >> castle;
@@ -127,7 +127,7 @@ void edit()
             if (strstr(castle, "q")) blackCastle += CANCASTLEOOO;
             board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);
         }
- 
+
         else if (!strcmp(s, "clear"))
         {
             for (i = 0; i < 64; i++)
@@ -141,28 +141,28 @@ void edit()
             epsq = 0;
             board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);
         }
- 
+
         else if (!strcmp(s, "d"))
         {
             board.display();
             std::cout << "  castleWhite = " << (int) board.castleWhite << " castleBlack = " << (int) board.castleBlack << " epSquare = "
-            << board.epSquare << " fiftyMove = " << board.fiftyMove << std::endl << std::endl;
+                << board.epSquare << " fiftyMove = " << board.fiftyMove << std::endl << std::endl;
         }
- 
+
         else if (!strncmp(s, "epsq", 4))
         {
             std::cin >> epsqc;
             epsq = ((int) epsqc[0] - 96) + 8 * ((int) epsqc[1] - 48) - 9;
             board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);
         }
- 
+
         else if (!strcmp(s, "exit"))
         {
             std::cout.flush();
             std::cin.clear();
             return;
         }
- 
+
         else if (!strncmp(s, "fen", 3))
         {
             std::cin >> fen;
@@ -173,18 +173,18 @@ void edit()
             std::cin >> fenfullmovenumber;
             setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
         }
- 
+
         else if (!strncmp(s, "fifty", 5))
         {
             std::cin >> halfmoves;
             board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);
         }
- 
+
         else if (!strcmp(s, "new"))
         {
             board.init();
         }
- 
+
         else if (!strcmp(s, "rank"))
         {
             std::cin >> rank;
@@ -206,7 +206,7 @@ void edit()
                         file+= (int) fenrank[i] - 48;
                     }
                     else
-                    //  other characters:
+                        //  other characters:
                     {
                         switch (fenrank[i])
                         {
@@ -214,62 +214,62 @@ void edit()
                                 board.square[BOARDINDEX[file][rank]] = WHITE_PAWN;
                                 file += 1;
                                 break;
- 
+
                             case 'N':
                                 board.square[BOARDINDEX[file][rank]] = WHITE_KNIGHT;
                                 file += 1;
                                 break;
- 
+
                             case 'B':
                                 board.square[BOARDINDEX[file][rank]] = WHITE_BISHOP;
                                 file += 1;
                                 break;
- 
+
                             case 'R':
                                 board.square[BOARDINDEX[file][rank]] = WHITE_ROOK;
                                 file += 1;
                                 break;
- 
+
                             case 'Q':
                                 board.square[BOARDINDEX[file][rank]] = WHITE_QUEEN;
                                 file += 1;
                                 break;
- 
+
                             case 'K':
                                 board.square[BOARDINDEX[file][rank]] = WHITE_KING;
                                 file += 1;
                                 break;
- 
+
                             case 'p':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_PAWN;
                                 file += 1;
                                 break;
- 
+
                             case 'n':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_KNIGHT;
                                 file += 1;
                                 break;
- 
+
                             case 'b':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_BISHOP;
                                 file += 1;
                                 break;
- 
+
                             case 'r':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_ROOK;
                                 file += 1;
                                 break;
- 
+
                             case 'q':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_QUEEN;
                                 file += 1;
                                 break;
- 
+
                             case 'k':
                                 board.square[BOARDINDEX[file][rank]] = BLACK_KING;
                                 file += 1;
                                 break;
- 
+
                             default:
                                 break;
                         }
@@ -279,12 +279,12 @@ void edit()
                 board.initFromSquares(board.square, next, halfmoves, whiteCastle , blackCastle , epsq);     
             }
         }
- 
+
         else if (!strcmp(s, "r"))
         {
             board.flipBoard = !board.flipBoard;
         }
- 
+
         else if (!strcmp(s, "white"))
         {
             next = BLACK_MOVE;

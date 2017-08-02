@@ -4,7 +4,7 @@ by Stef Luijten.
 
 Chess0 approximate ELO:
 - Blitz (fast games, <30min) = 1662
-- Standard (>30min) = 1624
+- Standard (>30min) = 1641
 
 
 ## Download

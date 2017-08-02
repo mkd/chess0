@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -63,7 +63,7 @@ int Board::SEE(Move &move)
     target = move.getTosq();
     ispromorank = ((RANKS[target] == 8) || (RANKS[target] == 1));
     attackers = attacksTo(target);
-    
+
     // do the first capture 'manually', outside of the loop, because it is prescribed
     // take the first attacker from the supplied capture move:
     from = move.getFrom();
@@ -173,7 +173,7 @@ int Board::SEE(Move &move)
 Bitboard Board::attacksTo(int &target)
 {
     Bitboard attacks, attackBitmap;
-    
+
     // attacks along ranks/files (rooks & queens)
     attackBitmap = ROOKATTACKS(target);
     attacks = (attackBitmap & (blackQueens | whiteQueens | blackRooks | whiteRooks));

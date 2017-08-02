@@ -1,22 +1,22 @@
 /* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2017 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   This file is part of Chess0, a computer chess program based on Winglet chess
+   by Stef Luijten.
 
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Copyright (C) 2017 Claudio M. Camacho
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+   Chess0 is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Chess0 is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
+   */
 
 
 
@@ -202,7 +202,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     if (repetitionCount() >= 3)
         return DRAWSCORE;
 
-    
+
     // prepare structure to store the principal variation (PV)
     triangularLength[ply] = ply;
 
@@ -260,7 +260,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
             movesfound++;
 
-            
+
             if (!ply && (depth > 1))
                 displaySearchStats(3, ply, i); 
 
@@ -389,7 +389,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
     //  50-move rule:
-    if (fiftyMove >= 100)
+    if (fiftyMove > 99)
         return DRAWSCORE;
 
 
@@ -426,7 +426,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
         netScore *= -1;
         z = -1;
     }
-    
+
 
     // display various search statistics
     //
@@ -437,83 +437,83 @@ void Board::displaySearchStats(int mode, int depth, int score)
     switch (mode)
     {
         case 1: 
-                if (!XB_MODE) cout << "  Ply  Score    Nodes     Time\t Speed kN/s  PV" << endl;
-                break;
+            if (!XB_MODE) cout << "  Ply  Score    Nodes     Time\t Speed kN/s  PV" << endl;
+            break;
 
         case 2:
-                if (XB_MODE && XB_POST)
+            if (XB_MODE && XB_POST)
+            {
+                printf("%5d %6d %8f %9llu ", depth, netScore, dt/10, inodes);
+                rememberPV();
+                displayPV();
+            }
+            else
+            {
+                // depth
+                cout << setw(5) << depth;
+
+                // score
+                cout << showpos << setw(7) << setprecision(2) << float(netScore/100.0);
+                cout << noshowpos;
+
+                // display the amount of nodes searched
+                float cacheHitRatio = cacheHit / inodes;
+                cout.fill(' ');
+                if (cacheHitRatio > CACHE_HIT_LEVEL)
                 {
-                    printf("%5d %6d %8f %9llu ", depth, netScore, dt/10, inodes);
-                    rememberPV();
-                    displayPV();
+                    cout << "   Cached";
                 }
                 else
                 {
-                    // depth
-                    cout << setw(5) << depth;
-
-                    // score
-                    cout << showpos << setw(7) << setprecision(2) << float(netScore/100.0);
-                    cout << noshowpos;
-
-                    // display the amount of nodes searched
-                    float cacheHitRatio = cacheHit / inodes;
-                    cout.fill(' ');
-                    if (cacheHitRatio > CACHE_HIT_LEVEL)
-                    {
-                        cout << "   Cached";
-                    }
+                    cout << " ";
+                    if (inodes > 1000000)
+                        cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
+                    else if (inodes > 1000)
+                        cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
                     else
-                    {
-                        cout << " ";
-                        if (inodes > 1000000)
-                            cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
-                        else if (inodes > 1000)
-                            cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
-                        else
-                            cout << setw(8) << setprecision(0) << inodes;
-                    }
-                    cout.fill(' ');
-
-
-                    // search time
-                    cout << setw(8) << fixed << setprecision(2) << dt << "s ";
-
-
-                    // search speed
-                    float knps = (inodes / (dt * 1000)) / 1.0;
-                    if (dt > 0)
-                        cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
-                    else
-                        cout << "           -  ";
-
-
-                    // store this PV:
-                    rememberPV();
-
-                    // display the PV
-                    displayPV();
+                        cout << setw(8) << setprecision(0) << inodes;
                 }
-                break;
+                cout.fill(' ');
+
+
+                // search time
+                cout << setw(8) << fixed << setprecision(2) << dt << "s ";
+
+
+                // search speed
+                float knps = (inodes / (dt * 1000)) / 1.0;
+                if (dt > 0)
+                    cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
+                else
+                    cout << "           -  ";
+
+
+                // store this PV:
+                rememberPV();
+
+                // display the PV
+                displayPV();
+            }
+            break;
 
         case 3: // Note that the numbers refer to pseudo-legal moves:
-                if (!TO_CONSOLE) break;
-                if (XB_MODE)
-                {
+            if (!TO_CONSOLE) break;
+            if (XB_MODE)
+            {
 
-                }
-                else
-                {
-                    mstostring(dt, timestring);
-                    printf("             (%2d/%2d) %8s       ", score+1, moveBufLen[depth+1]-moveBufLen[depth], timestring);
-                    unmakeMove(moveBuffer[score]);
-                    toSan(moveBuffer[score], sanMove);
-                    cout << sanMove;
-                    makeMove(moveBuffer[score]);
-                    printf("...    \r");
-                    cout.flush();
-                }
-                break;
+            }
+            else
+            {
+                mstostring(dt, timestring);
+                printf("             (%2d/%2d) %8s       ", score+1, moveBufLen[depth+1]-moveBufLen[depth], timestring);
+                unmakeMove(moveBuffer[score]);
+                toSan(moveBuffer[score], sanMove);
+                cout << sanMove;
+                makeMove(moveBuffer[score]);
+                printf("...    \r");
+                cout.flush();
+            }
+            break;
 
         default: break;
     }
@@ -586,23 +586,23 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
             cout << "1/2-1/2 {material}" << endl;
             return true;
         }
- 
+
         // king and knight versus king:
         if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
-                    ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
+                ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
         {
             cout << "1/2-1/2 {material}" << endl;
             return true;
         }
- 
+
         // 2 kings with one or more bishops, all bishops on the same colour:
         if ((whitebishops + blackbishops) > 0)
         {
             if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
-                (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
+                    (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
             {
                 if (!((whiteBishops | blackBishops) & WHITE_SQUARES) ||
-                !((whiteBishops | blackBishops) & BLACK_SQUARES))
+                        !((whiteBishops | blackBishops) & BLACK_SQUARES))
                 {
                     cout << "1/2-1/2 {material}" << endl;
                     return true;
@@ -620,7 +620,7 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
     }
 
     // draw due to 50 move rule:
-    if (fiftyMove >= 100) 
+    if (fiftyMove > 99) 
     {
         cout << "1/2-1/2 {50-move rule}" << endl;
         return true;
