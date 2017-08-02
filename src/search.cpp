@@ -63,7 +63,6 @@ using namespace std;
 
 unsigned short nextDepth = 0;
 unsigned short nextPly = 0;
-unsigned short quiesceDepth = 0;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
@@ -195,7 +194,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     {
         followpv = false;
         qval = qsearch(ply, alpha, beta);
-        quiesceDepth = 0;
         return qval;
     }
 
@@ -246,8 +244,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     moveBufLen[ply+1] = movegen(moveBufLen[ply]);
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
+        // pick the next best move from a sorted list
         selectmove(ply, i, depth, followpv); 
 
+        // make the move and evaluate the board
         makeMove(moveBuffer[i]);
 
         if (!isOtherKingAttacked()) 
@@ -767,7 +767,6 @@ int Board::qsearch(int ply, int alpha, int beta)
             if (!isOtherKingAttacked()) 
             {
                 inodes++;
-                quiesceDepth++;
 
                 if (--countdown <=0)
                     readClockAndInput();
@@ -794,14 +793,6 @@ int Board::qsearch(int ply, int alpha, int beta)
     }
 
     return alpha;
-}
-
-
-
-// XXX
-string hashToStr(uint64_t hk, int ply, int a, int b, int d)
-{
-    return to_string(hk) + "|" + to_string(ply) + "|" + to_string(a) + "|" + to_string(b) + "|" + to_string(d);
 }
 
 

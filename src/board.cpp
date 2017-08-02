@@ -89,50 +89,6 @@ void Board::init()
 
 
 
-// Board::mirror()
-//
-// Mirror the board position. The intended use is to test symmetry of the
-// evalaution function.
-//
-// Don't forget to mirror the position back to the original position, after testing the evaluation function.
-//
-// NOTE: move buffers are not effected.
-void Board::mirror()
-{
-    int i, mirroredBoard[64];
-    unsigned char nextMirror;
-    int fiftyMMirror, castleWMirror, castleBMirror, epSqMirror;
-    int kmoveBufLen, kendOfGame, kendOfSearch;
-
-    nextMirror = !nextMove;
-    fiftyMMirror = fiftyMove;
-    castleWMirror = castleBlack;
-    castleBMirror = castleWhite;
-    if (epSquare)
-    {
-          if (epSquare < 24) epSqMirror = epSquare + 24;
-          else epSqMirror = epSquare - 24;
-    }
-
-    for (i = 0; i < 64; i++)
-    {
-          mirroredBoard[i] = square[MIRROR[i]];
-          // swap piece color (4th bit):
-          if (mirroredBoard[i] != EMPTY) mirroredBoard[i] ^= 8;
-    }
-
-    // keep the move buffer intact:
-    kmoveBufLen = moveBufLen[0];
-    kendOfGame = endOfGame;
-    kendOfSearch = endOfSearch;
-    initFromSquares(mirroredBoard, nextMirror, fiftyMMirror, castleWMirror, castleBMirror, epSqMirror);
-    moveBufLen[0] = kmoveBufLen;
-    endOfGame = kendOfGame;
-    endOfSearch = kendOfSearch;
-}
-
-
-
 // Board::initFromSquares()
 //
 // Set up the board variables according to the information found in the

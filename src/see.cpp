@@ -41,6 +41,8 @@
 
 
 
+//  Board::SEE()
+//
 //  This is a Bitboard implementation of SEE (Static Exchange Evaluator), 
 //  Captures that don't gain material are discarded during the quiescence search.
 //  SEE speeds up the search in two ways: 

@@ -122,7 +122,6 @@ struct Board
     void displaySearchStats(int mode, int depth, int score);
     bool isEndOfgame(int &legalmoves, Move &singlemove);
     int repetitionCount();
-    void mirror();
     void initFromSquares(int input[64], unsigned char next, int fiftyM, int castleW, int castleB, int epSq);
     void display();
     void rememberPV();

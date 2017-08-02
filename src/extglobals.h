@@ -245,6 +245,6 @@ extern int XB_CTIM;
 extern bool LMR;
 extern bool verbose;
 
-extern unsigned short quiesceDepth;
+
 
 #endif // _EXTGLOBALS_H_
