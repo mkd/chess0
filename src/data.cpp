@@ -508,17 +508,17 @@ void dataInit()
  
 //     The 4 castling moves can be predefined:
        move.clear();
-       move.setCapt(EMPTY);
-       move.setPiec(WHITE_KING);
-       move.setProm(WHITE_KING);
+       move.setCapture(EMPTY);
+       move.setPiece(WHITE_KING);
+       move.setPromo(WHITE_KING);
        move.setFrom(E1);
        move.setTosq(G1);
        WHITE_OO_CASTL = move.moveInt;
        move.setTosq(C1);
        WHITE_OOO_CASTL = move.moveInt;
  
-       move.setPiec(BLACK_KING);
-       move.setProm(BLACK_KING);
+       move.setPiece(BLACK_KING);
+       move.setPromo(BLACK_KING);
        move.setFrom(E8);
        move.setTosq(G8);
        BLACK_OO_CASTL = move.moveInt;

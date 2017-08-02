@@ -294,7 +294,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // the analysis depth for the rest of moves.
                 nextPly   = ply + 1;
                 nextDepth = depth - 1;
-                if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromotion())
+                if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromo())
                         && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START))
                 {
                     nextPly   = ply + 2;

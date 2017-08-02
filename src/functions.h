@@ -71,7 +71,6 @@ void            unmakeMove(Move &);
 void            unmakeWhitePromotion(unsigned int, unsigned int &);
 string          getInput();
 void            terminateApp();
-string          bunmap(int);
 bool            isValidTextMove(char *, Move &);
 
 

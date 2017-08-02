@@ -70,7 +70,7 @@ int movegen(int index)
         targetBitmap = ~board.blackPieces; // we cannot capture one of our own pieces!
  
         // Black Pawns
-        move.setPiec(BLACK_PAWN);
+        move.setPiece(BLACK_PAWN);
         tempPiece = board.blackPawns;
         while (tempPiece)   
         {
@@ -84,14 +84,14 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 if ((RANKS[to]) == 1)                                       // add promotions
                 {
-                    move.setProm(BLACK_QUEEN);   board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(BLACK_ROOK);    board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(BLACK_BISHOP);  board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(BLACK_KNIGHT);  board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(EMPTY);      
+                    move.setPromo(BLACK_QUEEN);   board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(BLACK_ROOK);    board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(BLACK_BISHOP);  board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(BLACK_KNIGHT);  board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(EMPTY);      
                 }
                 else
                 {
@@ -106,19 +106,19 @@ int movegen(int index)
                 {
                     if (board.whitePawns & BITSET[board.epSquare + 8])  // final check to protect against same color capture during null move
                     {
-                        move.setProm(BLACK_PAWN);
-                        move.setCapt(WHITE_PAWN);
+                        move.setPromo(BLACK_PAWN);
+                        move.setCapture(WHITE_PAWN);
                         move.setTosq(board.epSquare);
                         board.moveBuffer[index++].moveInt = move.moveInt;
                     }
                 }
             }
             tempPiece ^= BITSET[from];
-            move.setProm(EMPTY);
+            move.setPromo(EMPTY);
         }                         
  
         // Black Knights
-        move.setPiec(BLACK_KNIGHT);
+        move.setPiece(BLACK_KNIGHT);
         tempPiece = board.blackKnights;
         while (tempPiece)
         {
@@ -129,7 +129,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -137,7 +137,7 @@ int movegen(int index)
         }
  
         // Black Bishops
-        move.setPiec(BLACK_BISHOP);
+        move.setPiece(BLACK_BISHOP);
         tempPiece = board.blackBishops;
         while (tempPiece)
         {
@@ -148,7 +148,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -156,7 +156,7 @@ int movegen(int index)
         }
  
         // Black Rooks
-        move.setPiec(BLACK_ROOK);
+        move.setPiece(BLACK_ROOK);
         tempPiece = board.blackRooks;
         while (tempPiece)
         {
@@ -167,7 +167,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -177,7 +177,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Black Queens
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(BLACK_QUEEN);
+        move.setPiece(BLACK_QUEEN);
         tempPiece = board.blackQueens;
         while (tempPiece)
         {
@@ -188,7 +188,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -198,7 +198,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Black King
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(BLACK_KING);
+        move.setPiece(BLACK_KING);
         tempPiece = board.blackKing;
         while (tempPiece)
         {
@@ -209,7 +209,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -237,7 +237,7 @@ int movegen(int index)
                 }
             }
             tempPiece ^= BITSET[from];
-            move.setProm(EMPTY);
+            move.setPromo(EMPTY);
         }
     }
  
@@ -252,7 +252,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Pawns
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_PAWN);
+        move.setPiece(WHITE_PAWN);
         tempPiece = board.whitePawns;
         while (tempPiece)   
         {
@@ -266,14 +266,14 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 if ((RANKS[to]) == 8)                                       // add promotions
                 {
-                    move.setProm(WHITE_QUEEN);   board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(WHITE_ROOK);    board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(WHITE_BISHOP);  board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(WHITE_KNIGHT);  board.moveBuffer[index++].moveInt = move.moveInt;
-                    move.setProm(EMPTY);      
+                    move.setPromo(WHITE_QUEEN);   board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(WHITE_ROOK);    board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(WHITE_BISHOP);  board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(WHITE_KNIGHT);  board.moveBuffer[index++].moveInt = move.moveInt;
+                    move.setPromo(EMPTY);      
                 }
                 else
                 {
@@ -288,21 +288,21 @@ int movegen(int index)
                 {
                     if (board.blackPawns & BITSET[board.epSquare - 8])  // final check to protect against same color capture during null move
                     {
-                        move.setProm(WHITE_PAWN);
-                        move.setCapt(BLACK_PAWN);
+                        move.setPromo(WHITE_PAWN);
+                        move.setCapture(BLACK_PAWN);
                         move.setTosq(board.epSquare);
                         board.moveBuffer[index++].moveInt = move.moveInt;
                     }
                 }
             }
             tempPiece ^= BITSET[from];
-            move.setProm(EMPTY);
+            move.setPromo(EMPTY);
         }                         
  
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Knights
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_KNIGHT);
+        move.setPiece(WHITE_KNIGHT);
         tempPiece = board.whiteKnights;
         while (tempPiece)
         {
@@ -313,7 +313,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -323,7 +323,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Bishops
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_BISHOP);
+        move.setPiece(WHITE_BISHOP);
         tempPiece = board.whiteBishops;
         while (tempPiece)
         {
@@ -334,7 +334,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -344,7 +344,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Rooks
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_ROOK);
+        move.setPiece(WHITE_ROOK);
         tempPiece = board.whiteRooks;
         while (tempPiece)
         {
@@ -355,7 +355,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -365,7 +365,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Queens
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_QUEEN);
+        move.setPiece(WHITE_QUEEN);
         tempPiece = board.whiteQueens;
         while (tempPiece)
         {
@@ -376,7 +376,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -386,7 +386,7 @@ int movegen(int index)
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White king
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        move.setPiec(WHITE_KING);
+        move.setPiece(WHITE_KING);
         tempPiece = board.whiteKing;
         while (tempPiece)
         {
@@ -397,7 +397,7 @@ int movegen(int index)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
-                move.setCapt(board.square[to]);
+                move.setCapture(board.square[to]);
                 board.moveBuffer[index++].moveInt = move.moveInt;
                 tempMove ^= BITSET[to];
             }
@@ -426,7 +426,7 @@ int movegen(int index)
                 }
             }
             tempPiece ^= BITSET[from];
-            move.setProm(EMPTY);
+            move.setPromo(EMPTY);
         }
     }     
     return index;
@@ -463,7 +463,7 @@ int captgen(int index)
          targetBitmap = board.whitePieces;
  
          // Black Pawns
-         move.setPiec(BLACK_PAWN);
+         move.setPiece(BLACK_PAWN);
          tempPiece = board.blackPawns;
          while (tempPiece)   
          {
@@ -475,22 +475,22 @@ int captgen(int index)
              {
                  to = firstOne(tempMove);
                  move.setTosq(to);
-                 move.setCapt(board.square[to]);
+                 move.setCapture(board.square[to]);
                  if ((RANKS[to]) == 1)
                  {
-                     move.setProm(BLACK_QUEEN);      board.moveBuffer[index].moveInt = move.moveInt;
+                     move.setPromo(BLACK_QUEEN);      board.moveBuffer[index].moveInt = move.moveInt;
                                                      board.addCaptScore(ifirst,index);
                                                      index++;
-                     move.setProm(BLACK_ROOK);       board.moveBuffer[index].moveInt = move.moveInt;
+                     move.setPromo(BLACK_ROOK);       board.moveBuffer[index].moveInt = move.moveInt;
                                                      board.addCaptScore(ifirst,index);
                                                      index++;
-                     move.setProm(BLACK_BISHOP);     board.moveBuffer[index].moveInt = move.moveInt;
+                     move.setPromo(BLACK_BISHOP);     board.moveBuffer[index].moveInt = move.moveInt;
                                                      board.addCaptScore(ifirst,index);
                                                      index++;
-                     move.setProm(BLACK_KNIGHT);     board.moveBuffer[index].moveInt = move.moveInt;
+                     move.setPromo(BLACK_KNIGHT);     board.moveBuffer[index].moveInt = move.moveInt;
                                                      board.addCaptScore(ifirst,index);
                                                      index++;
-                     move.setProm(EMPTY);
+                     move.setPromo(EMPTY);
                  }
                  else
                  {
@@ -504,8 +504,8 @@ int captgen(int index)
              {
                  if (BLACK_PAWN_ATTACKS[from] & BITSET[board.epSquare])
                  {
-                     move.setProm(BLACK_PAWN);
-                     move.setCapt(WHITE_PAWN);
+                     move.setPromo(BLACK_PAWN);
+                     move.setCapture(WHITE_PAWN);
                      move.setTosq(board.epSquare);
                      board.moveBuffer[index].moveInt = move.moveInt;
                      board.addCaptScore(ifirst,index);
@@ -513,12 +513,12 @@ int captgen(int index)
                  }
              }
              tempPiece ^= BITSET[from];
-             move.setProm(EMPTY);
+             move.setPromo(EMPTY);
          }                         
 
 
            // Black Knights
-           move.setPiec(BLACK_KNIGHT);
+           move.setPiece(BLACK_KNIGHT);
            tempPiece = board.blackKnights;
            while (tempPiece)
            {
@@ -529,7 +529,7 @@ int captgen(int index)
                   {
                         to = firstOne(tempMove);
                         move.setTosq(to);
-                        move.setCapt(board.square[to]);
+                        move.setCapture(board.square[to]);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
                         index++;
@@ -540,7 +540,7 @@ int captgen(int index)
 
  
            // Black Bishops
-           move.setPiec(BLACK_BISHOP);
+           move.setPiece(BLACK_BISHOP);
            tempPiece = board.blackBishops;
            while (tempPiece)
            {
@@ -551,7 +551,7 @@ int captgen(int index)
                   {
                         to = firstOne(tempMove);
                         move.setTosq(to);
-                        move.setCapt(board.square[to]);
+                        move.setCapture(board.square[to]);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
                         index++;
@@ -561,7 +561,7 @@ int captgen(int index)
            }
  
            // Black Rooks
-           move.setPiec(BLACK_ROOK);
+           move.setPiece(BLACK_ROOK);
            tempPiece = board.blackRooks;
            while (tempPiece)
            {
@@ -572,7 +572,7 @@ int captgen(int index)
                   {
                         to = firstOne(tempMove);
                         move.setTosq(to);
-                        move.setCapt(board.square[to]);
+                        move.setCapture(board.square[to]);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
                         index++;
@@ -583,7 +583,7 @@ int captgen(int index)
 
  
            // Black Queens
-           move.setPiec(BLACK_QUEEN);
+           move.setPiece(BLACK_QUEEN);
            tempPiece = board.blackQueens;
            while (tempPiece)
            {
@@ -594,7 +594,7 @@ int captgen(int index)
                   {
                         to = firstOne(tempMove);
                         move.setTosq(to);
-                        move.setCapt(board.square[to]);
+                        move.setCapture(board.square[to]);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
                         index++;
@@ -605,7 +605,7 @@ int captgen(int index)
 
 
            // Black King
-           move.setPiec(BLACK_KING);
+           move.setPiece(BLACK_KING);
            tempPiece = board.blackKing;
            while (tempPiece)
            {
@@ -616,14 +616,14 @@ int captgen(int index)
                   {
                         to = firstOne(tempMove);
                         move.setTosq(to);
-                        move.setCapt(board.square[to]);
+                        move.setCapture(board.square[to]);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
                         index++;
                         tempMove ^= BITSET[to];
                   } 
                   tempPiece ^= BITSET[from];
-                  move.setProm(EMPTY);
+                  move.setPromo(EMPTY);
            }
        }
 
@@ -635,7 +635,7 @@ int captgen(int index)
             targetBitmap = board.blackPieces;
  
             // White Pawns
-            move.setPiec(WHITE_PAWN);
+            move.setPiece(WHITE_PAWN);
             tempPiece = board.whitePawns;
             while (tempPiece)   
             {
@@ -647,22 +647,22 @@ int captgen(int index)
                 {
                     to = firstOne(tempMove);
                     move.setTosq(to);
-                    move.setCapt(board.square[to]);
+                    move.setCapture(board.square[to]);
                     if ((RANKS[to]) == 8)
                     {
-                        move.setProm(WHITE_QUEEN);      board.moveBuffer[index].moveInt = move.moveInt;
+                        move.setPromo(WHITE_QUEEN);      board.moveBuffer[index].moveInt = move.moveInt;
                                                         board.addCaptScore(ifirst,index);
                                                         index++;
-                        move.setProm(WHITE_ROOK);       board.moveBuffer[index].moveInt = move.moveInt;
+                        move.setPromo(WHITE_ROOK);       board.moveBuffer[index].moveInt = move.moveInt;
                                                         board.addCaptScore(ifirst,index);
                                                         index++;
-                        move.setProm(WHITE_BISHOP);     board.moveBuffer[index].moveInt = move.moveInt;
+                        move.setPromo(WHITE_BISHOP);     board.moveBuffer[index].moveInt = move.moveInt;
                                                         board.addCaptScore(ifirst,index);
                                                         index++;
-                        move.setProm(WHITE_KNIGHT);     board.moveBuffer[index].moveInt = move.moveInt;
+                        move.setPromo(WHITE_KNIGHT);     board.moveBuffer[index].moveInt = move.moveInt;
                                                         board.addCaptScore(ifirst,index);
                                                         index++;
-                        move.setProm(EMPTY);
+                        move.setPromo(EMPTY);
                     }
                     else
                     {
@@ -676,8 +676,8 @@ int captgen(int index)
                 {
                     if (WHITE_PAWN_ATTACKS[from] & BITSET[board.epSquare])
                     {
-                        move.setProm(WHITE_PAWN);
-                        move.setCapt(BLACK_PAWN);
+                        move.setPromo(WHITE_PAWN);
+                        move.setCapture(BLACK_PAWN);
                         move.setTosq(board.epSquare);
                         board.moveBuffer[index].moveInt = move.moveInt;
                         board.addCaptScore(ifirst,index);
@@ -685,13 +685,13 @@ int captgen(int index)
                     }
                 }
                 tempPiece ^= BITSET[from];
-                move.setProm(EMPTY);
+                move.setPromo(EMPTY);
             }                         
  
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               // White Knights
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              move.setPiec(WHITE_KNIGHT);
+              move.setPiece(WHITE_KNIGHT);
               tempPiece = board.whiteKnights;
               while (tempPiece)
               {
@@ -702,7 +702,7 @@ int captgen(int index)
                      {
                            to = firstOne(tempMove);
                            move.setTosq(to);
-                           move.setCapt(board.square[to]);
+                           move.setCapture(board.square[to]);
                            board.moveBuffer[index].moveInt = move.moveInt;
                            board.addCaptScore(ifirst,index);
                            index++;
@@ -714,7 +714,7 @@ int captgen(int index)
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               // White Bishops
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              move.setPiec(WHITE_BISHOP);
+              move.setPiece(WHITE_BISHOP);
               tempPiece = board.whiteBishops;
               while (tempPiece)
               {
@@ -725,7 +725,7 @@ int captgen(int index)
                      {
                            to = firstOne(tempMove);
                            move.setTosq(to);
-                           move.setCapt(board.square[to]);
+                           move.setCapture(board.square[to]);
                            board.moveBuffer[index].moveInt = move.moveInt;
                            board.addCaptScore(ifirst,index);
                            index++;
@@ -737,7 +737,7 @@ int captgen(int index)
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               // White Rooks
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              move.setPiec(WHITE_ROOK);
+              move.setPiece(WHITE_ROOK);
               tempPiece = board.whiteRooks;
               while (tempPiece)
               {
@@ -748,7 +748,7 @@ int captgen(int index)
                      {
                            to = firstOne(tempMove);
                            move.setTosq(to);
-                           move.setCapt(board.square[to]);
+                           move.setCapture(board.square[to]);
                            board.moveBuffer[index].moveInt = move.moveInt;
                            board.addCaptScore(ifirst,index);
                            index++;
@@ -760,7 +760,7 @@ int captgen(int index)
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               // White Queens
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              move.setPiec(WHITE_QUEEN);
+              move.setPiece(WHITE_QUEEN);
               tempPiece = board.whiteQueens;
               while (tempPiece)
               {
@@ -771,7 +771,7 @@ int captgen(int index)
                      {
                            to = firstOne(tempMove);
                            move.setTosq(to);
-                           move.setCapt(board.square[to]);
+                           move.setCapture(board.square[to]);
                            board.moveBuffer[index].moveInt = move.moveInt;
                            board.addCaptScore(ifirst,index);
                            index++;
@@ -783,7 +783,7 @@ int captgen(int index)
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               // White king
               // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              move.setPiec(WHITE_KING);
+              move.setPiece(WHITE_KING);
               tempPiece = board.whiteKing;
               while (tempPiece)
               {
@@ -794,14 +794,14 @@ int captgen(int index)
                      {
                            to = firstOne(tempMove);
                            move.setTosq(to);
-                           move.setCapt(board.square[to]);
+                           move.setCapture(board.square[to]);
                            board.moveBuffer[index].moveInt = move.moveInt;
                            board.addCaptScore(ifirst, index);
                            index++;
                            tempMove ^= BITSET[to];
                      } 
                      tempPiece ^= BITSET[from];
-                     move.setProm(EMPTY);
+                     move.setPromo(EMPTY);
               }
        }     
         return index;

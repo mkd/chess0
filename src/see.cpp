@@ -77,8 +77,8 @@ int Board::SEE(Move &move)
     // if it was a promotion, we need to add this into materialgains and attackedpieceval: 
     if (ispromorank && ((board.square[from] & 7) == 1)) 
     {
-        materialgains[0] += PIECEVALUES[move.getProm()] - PIECEVALUES[WHITE_PAWN];
-        attackedpieceval += PIECEVALUES[move.getProm()] - PIECEVALUES[WHITE_PAWN];
+        materialgains[0] += PIECEVALUES[move.getPromo()] - PIECEVALUES[WHITE_PAWN];
+        attackedpieceval += PIECEVALUES[move.getPromo()] - PIECEVALUES[WHITE_PAWN];
     }
     nrcapts++;
 

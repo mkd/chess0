@@ -222,6 +222,7 @@ int startApp(int mode)
         {
             // make a list of current valid moves
             string tmpStr = "";
+            string s1, s2;
             board.moveBufLen[0] = 0;
             board.moveBufLen[1] = movegen(board.moveBufLen[0]);
             validMoves.clear();
@@ -238,14 +239,16 @@ int startApp(int mode)
                     toSan(board.moveBuffer[i], sanMove);
 
                     string moveStr(sanMove);
-                    tmpStr = bunmap((board.moveBuffer[i]).getFrom()) + bunmap((board.moveBuffer[i]).getTosq());
+                    s1 = SQUARENAME[(board.moveBuffer[i]).getFrom()];
+                    s2 = SQUARENAME[(board.moveBuffer[i]).getTosq()];
+                    tmpStr = s1 + s2;
                     moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '+'), moveStr.end());
                     moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '#'), moveStr.end());
 
                     // if promo, append promo piece
-                    if ((board.moveBuffer[i]).isPromotion())
+                    if ((board.moveBuffer[i]).isPromo())
                     {
-                        string tc(PIECECHARS[(board.moveBuffer[i]).getProm()]);
+                        string tc(PIECECHARS[(board.moveBuffer[i]).getPromo()]);
                         tmpStr += tc;
                         transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
                     }

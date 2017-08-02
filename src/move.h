@@ -26,14 +26,17 @@
 #ifndef _MOVE_H_
 #define _MOVE_H_
 
+
  
 #include "definitions.h"
+
 
  
 //  There are at least 3 different ways to store a move in max 32 bits
 //  1) using shift & rank in an unsigned int                
 //  2) using 4 unsigned chars, union-ed with an unsigned int
 //  3) using C++ bitfields, union-ed with an unsigned int   
+
  
 //  this is 1) using shift & rank in an unsigned int (32 bit):
 struct Move                                  
@@ -46,30 +49,32 @@ struct Move
     int moveInt;
  
     void clear();
-    void setFrom(unsigned int from);  
-    void setTosq(unsigned int tosq);  
-    void setPiec(unsigned int piec);  
-    void setCapt(unsigned int capt);  
-    void setProm(unsigned int prom); 
+    void setFrom(unsigned int);
+    void setTosq(unsigned int);  
+    void setPiece(unsigned int);  
+    void setCapture(unsigned int);  
+    void setPromo(unsigned int); 
     unsigned int getFrom();  
     unsigned int getTosq();  
-    unsigned int getPiec();  
-    unsigned int getCapt();
-    unsigned int getProm();  
-    bool isWhitemove();
-    bool isBlackmove();
+    unsigned int getPiece();  
+    unsigned int getCapture();
+    unsigned int getPromo();  
+    bool isWhiteMove();
+    bool isBlackMove();
     bool isCapture();
-    bool isKingcaptured();
-    bool isRookmove();
-    bool isRookcaptured();
-    bool isKingmove();
-    bool isPawnmove();
-    bool isPawnDoublemove();
+    bool isKingCaptured();
+    bool isRookMove();
+    bool isRookCaptured();
+    bool isKingMove();
+    bool isPawnMove();
+    bool isPawnDoubleMove();
     bool isEnpassant();
-    bool isPromotion();
+    bool isPromo();
     bool isCastle();
     bool isCastleOO();
     bool isCastleOOO();
 };
+
+
  
 #endif // _MOVE_H_

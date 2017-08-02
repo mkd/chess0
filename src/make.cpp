@@ -41,28 +41,32 @@
 #include "move.h"
 
 
+
 using namespace std;
 
 
- 
+
+// makeMove()
+//
+// Apply a move to the current board.
 void makeMove(Move &move)
 {
-       unsigned int from = move.getFrom();
-       unsigned int to = move.getTosq();
-       unsigned int piece = move.getPiec();
-       unsigned int captured = move.getCapt();
+    unsigned int from = move.getFrom();
+    unsigned int to = move.getTosq();
+    unsigned int piece = move.getPiece();
+    unsigned int captured = move.getCapture();
 
-       board.gameLine[board.endOfSearch].move.moveInt = move.moveInt;
-       board.gameLine[board.endOfSearch].castleWhite  = board.castleWhite;
-       board.gameLine[board.endOfSearch].castleBlack  = board.castleBlack;
-       board.gameLine[board.endOfSearch].fiftyMove    = board.fiftyMove;
-       board.gameLine[board.endOfSearch].epSquare     = board.epSquare;
-       board.gameLine[board.endOfSearch].key          = board.hashkey;
+    board.gameLine[board.endOfSearch].move.moveInt = move.moveInt;
+    board.gameLine[board.endOfSearch].castleWhite  = board.castleWhite;
+    board.gameLine[board.endOfSearch].castleBlack  = board.castleBlack;
+    board.gameLine[board.endOfSearch].fiftyMove    = board.fiftyMove;
+    board.gameLine[board.endOfSearch].epSquare     = board.epSquare;
+    board.gameLine[board.endOfSearch].key          = board.hashkey;
 
-       Bitboard fromBitboard  = BITSET[from];
-       Bitboard fromToBitboard = fromBitboard  | BITSET[to];
-       board.hashkey ^= (KEY.keys[from][piece] ^ KEY.keys[to][piece]);
-       if (board.epSquare) board.hashkey ^= KEY.ep[board.epSquare];
+    Bitboard fromBitboard  = BITSET[from];
+    Bitboard fromToBitboard = fromBitboard  | BITSET[to];
+    board.hashkey ^= (KEY.keys[from][piece] ^ KEY.keys[to][piece]);
+    if (board.epSquare) board.hashkey ^= KEY.ep[board.epSquare];
 
        switch (piece)
        {
@@ -98,10 +102,10 @@ void makeMove(Move &move)
                      }
                      else board.occupiedSquares ^= fromToBitboard;
  
-                     if (move.isPromotion())
+                     if (move.isPromo())
                      {
-                           makeWhitePromotion(move.getProm(), to);
-                           board.square[to]         = move.getProm();
+                           makeWhitePromotion(move.getPromo(), to);
+                           board.square[to]         = move.getPromo();
                      }
                      break;
  
@@ -247,10 +251,10 @@ void makeMove(Move &move)
                      }
                      else board.occupiedSquares ^= fromToBitboard;
  
-                     if (move.isPromotion())
+                     if (move.isPromo())
                      {
-                           makeBlackPromotion(move.getProm(), to);
-                           board.square[to]         = move.getProm();
+                           makeBlackPromotion(move.getPromo(), to);
+                           board.square[to]         = move.getPromo();
                      }
                      break;
  
@@ -372,8 +376,8 @@ void makeMove(Move &move)
  
 void unmakeMove(Move &move)
 {
-       unsigned int piece = move.getPiec();
-       unsigned int captured = move.getCapt();
+       unsigned int piece = move.getPiece();
+       unsigned int captured = move.getCapture();
        unsigned int from = move.getFrom();
        unsigned int to = move.getTosq();
  
@@ -406,9 +410,9 @@ void unmakeMove(Move &move)
                      }
                      else board.occupiedSquares ^= fromToBitboard;
  
-                     if (move.isPromotion())
+                     if (move.isPromo())
                      {
-                           unmakeWhitePromotion(move.getProm(), to);
+                           unmakeWhitePromotion(move.getPromo(), to);
                      }
                      break;
  
@@ -522,9 +526,9 @@ void unmakeMove(Move &move)
                      }
                      else board.occupiedSquares ^= fromToBitboard;
  
-                     if (move.isPromotion())
+                     if (move.isPromo())
                      {
-                           unmakeBlackPromotion(move.getProm(), to);
+                           unmakeBlackPromotion(move.getPromo(), to);
                      }
                      break;
  
@@ -1065,7 +1069,7 @@ bool isValidTextMove(char *userMove, Move &move)
             if (((board.square[userFrom] == WHITE_PAWN) && (RANKS[userFrom] == 7)) ||
                 ((board.square[userFrom] == BLACK_PAWN) && (RANKS[userFrom] == 2)))
             {
-                if (board.moveBuffer[i].getProm() == userPromote)
+                if (board.moveBuffer[i].getPromo() == userPromote)
                 {
                     move.moveInt = board.moveBuffer[i].moveInt;
                     return true;

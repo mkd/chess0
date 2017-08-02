@@ -323,7 +323,7 @@ string Board::toFEN()
     // 4) add enpassant square
     if (epSquare)
     {
-        serial.append(bunmap(epSquare));
+        serial.append(SQUARENAME[epSquare]);
     }
     else
         serial.append(1, '-');

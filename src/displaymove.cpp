@@ -36,31 +36,32 @@ using namespace std;
 
 
 
-/*!
- * Display a single move on the console, no disambiguation.
- */
+// displayMove()
+//
+// Display a single move on the console, no disambiguation.
 void displayMove(Move &move)
 {
-       if (((move.getPiec() == WHITE_KING) && (move.isCastleOO())) || ((move.getPiec() == BLACK_KING) && (move.isCastleOO())))
-       {
-              cout << "0-0";
-              return;      
-       };
-       if (((move.getPiec() == WHITE_KING) && (move.isCastleOOO())) || ((move.getPiec() == BLACK_KING) && (move.isCastleOOO())))
+    if (((move.getPiece() == WHITE_KING) && (move.isCastleOO())) || ((move.getPiece() == BLACK_KING) && (move.isCastleOO())))
+    {
+        cout << "0-0";
+        return;      
+    };
+
+       if (((move.getPiece() == WHITE_KING) && (move.isCastleOOO())) || ((move.getPiece() == BLACK_KING) && (move.isCastleOOO())))
        {
               cout << "0-0-0";
               return;      
        };
 
-       if (!move.isPawnmove()) cout << PIECECHARS[move.getPiec()];
-       if (move.isPawnmove() && move.isCapture()) cout << char('a' + FILES[move.getFrom()]-1);
+       if (!move.isPawnMove()) cout << PIECECHARS[move.getPiece()];
+       if (move.isPawnMove() && move.isCapture()) cout << char('a' + FILES[move.getFrom()]-1);
        if (move.isCapture()) cout << "x" ; 
        cout << char('a' + FILES[move.getTosq()]-1);
        cout << RANKS[move.getTosq()]; 
-       if (move.isPromotion()) 
+       if (move.isPromo()) 
        {
            cout << "=";
-           cout << PIECECHARS[move.getProm()];
+           cout << PIECECHARS[move.getPromo()];
        }
        cout.flush();
        return;
@@ -113,11 +114,11 @@ bool toSan(Move &move, char *sanMove)
     bool legal, check, mate, ambig;
 
     asciiShift    = (int)'a';
-    piece = move.getPiec();
+    piece = move.getPiece();
     from = move.getFrom();
     to = move.getTosq();
-    capt = move.getCapt();
-    prom = move.getProm();
+    capt = move.getCapture();
+    prom = move.getPromo();
     ibuf = 0;
     ambig = false;
     ambigfile = 0;
@@ -160,7 +161,7 @@ bool toSan(Move &move, char *sanMove)
                 }
             }
             // two same pieces can move to the same square:
-            if ((board.moveBuffer[i].moveInt != move.moveInt) && (board.moveBuffer[i].getPiec() == piece) && (board.moveBuffer[i].getTosq() == to)) 
+            if ((board.moveBuffer[i].moveInt != move.moveInt) && (board.moveBuffer[i].getPiece() == piece) && (board.moveBuffer[i].getTosq() == to)) 
             {
                 ambig = true;
                 if (FILES[from] == FILES[board.moveBuffer[i].getFrom()]) ambigfile++; 
@@ -195,7 +196,7 @@ bool toSan(Move &move, char *sanMove)
             return true;
         }   
         // start building the string
-        if (!move.isPawnmove()) 
+        if (!move.isPawnMove()) 
         {
             sprintf(sanMove, "%s", PIECECHARS[piece]);
             if (ambig) 
@@ -221,7 +222,7 @@ bool toSan(Move &move, char *sanMove)
         if (move.isCapture()) sprintf(sanMove, "%sx", sanMove);
         sprintf(sanMove, "%s%c%d", sanMove, FILES[to] + asciiShift - 1, RANKS[to]);
         if (move.isEnpassant()) sprintf(sanMove, "%s", sanMove);
-        if (move.isPromotion()) sprintf(sanMove, "%s=%s", sanMove, PIECECHARS[prom]);
+        if (move.isPromo()) sprintf(sanMove, "%s=%s", sanMove, PIECECHARS[prom]);
         if (check)
         {
             if (mate) sprintf(sanMove, "%s#", sanMove); 
