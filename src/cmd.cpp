@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include <sstream>
 #include <string>
+#include <cstring>
+#include <cmath>
 #include "definitions.h"
 #include "app.h"
 #include "functions.h"
