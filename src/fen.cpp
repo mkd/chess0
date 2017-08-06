@@ -26,6 +26,7 @@
 // board from and to a file, using the FEN notation.
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "definitions.h"
 #include "functions.h"
 #include "extglobals.h"
