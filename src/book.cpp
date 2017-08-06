@@ -1011,6 +1011,14 @@ void initBook()
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 0-0 9. Be2 Nc6 10. d5"] = "Ne5";
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 0-0 9. Be2 Nc6 10. d5 Ne5 11. Nxe5"] = "Bxe5";
 
+
+    // D86 Gruenfeld, exchange, classical variation -- BLACK
+    book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Bc4"] = "c5";
+    book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Bc4 c5 Ne2"] = "Nc6";
+    book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Bc4 c5 Be3"] = "Nc6";
+    book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Bc4 c5 Nf3"] = "0-0";
+
+
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3"] = "Bg7";
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Nf3"] = "0-0";
     book["1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. e3 Bg7 5. Qb3"] = "e6";

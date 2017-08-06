@@ -4,17 +4,16 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement ttEntry cache
-  - Fix cache usage
-  - Make sure cache is fast enough --> old cache implementation (hashToStr) was
-    3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
-    and up to 20x slower when
-    cache goes over 1Gb)
+- Fix cache: why hitRatio is 100% right away?
 
 
 
 BEFORE NEXT RELEASE
 ===================
+- Make sure cache is fast enough --> old cache implementation (hashToStr) was
+  3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
+  and up to 20x slower when cache goes over 1Gb)
+
 - Remove functions.h (include every necessary .h file)
 
 - Move all extglobals into app.h (like in chess0x)

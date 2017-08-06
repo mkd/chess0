@@ -23,6 +23,7 @@
 // @file cache.cpp
 //
 // XXX
+#include <iostream>
 #include "definitions.h"
 #include "cache.h"
 
@@ -34,17 +35,18 @@ using namespace std;
 
 // find()
 //
-// XXX
+// Look for a ttEntry in the cache.
 ttEntry Cache::find(uint64_t key, int depth)
 {
     ttEntry tt, ttfalse;
     ttfalse.depth = -1;
 
     auto search = cacheData.find(key);
+
     if (search != cacheData.end())
         tt = search->second;
 
-    if (tt.depth >= depth)
+    if (tt.depth > depth)
         return tt;
 
     return ttfalse;
@@ -54,21 +56,17 @@ ttEntry Cache::find(uint64_t key, int depth)
 
 // add()
 //
-// XXX
+// Insert a new ttEntry in the cache.
 void Cache::add(uint64_t key, ttEntry tt)
 {
-    // only overwrite if depth is higher
-    //auto search = cacheData.find(key);
-    //if (search != cacheData.end())
-    //    if ((tt.depth > (search->second).depth))
-    cacheData.insert({key, tt});
+    cacheData[key] = tt;
 }
 
 
 
 // remove()
 //
-// XXX
+// Remove a ttEntry from the cache.
 void Cache::remove(uint64_t key)
 {
     cacheData.erase(key);
@@ -102,4 +100,16 @@ uint64_t Cache::positions()
 uint64_t Cache::size()
 {
     return cacheData.size() * BOARD_SERIAL_SIZE;
+}
+
+
+// dump
+// 
+// XXX
+void Cache::dump()
+{
+    for (auto i : cacheData)
+    {
+        cout << "Key = " << i.first << " => {score = " << (i.second).score << "; depth = " << (i.second).depth << "}" << endl;
+    }
 }

@@ -47,6 +47,7 @@
 #include <memory.h>
 #include <iomanip>
 #include <unordered_map>
+#include <cinttypes>
 #include "definitions.h" 
 #include "extglobals.h" 
 #include "functions.h" 
@@ -135,6 +136,11 @@ Move Board::think()
         memset(triangularArray, 0, sizeof(triangularArray));
         followpv = true;
         allownull = true;
+
+        // DEBUG
+        //cout << "Cache contents:" << endl;
+        //cache.dump();
+        //cout << endl << endl;
 
 
         // enter actual search
@@ -250,6 +256,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
         // make the move and evaluate the board
         makeMove(moveBuffer[i]);
 
+        // only search this move if legal --> remember that movegen() returns
+        // pseudo-legal moves
         if (!isOtherKingAttacked()) 
         {
             inodes++;
@@ -269,6 +277,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             if (useCache)
             {
                 tt = cache.find(board.hashkey, ply);
+                string pepe;
                 if (tt.depth < ply)
                 {
                     cached = false;
@@ -277,8 +286,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 {
                     cacheHit++;
                     val = tt.score;
-                    rememberPV();
                     cached = true;
+                   
+                    // TODO: reconstruct PV from ttEntry 
+                    rememberPV();
                 }
             }
 
@@ -318,7 +329,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // 4) Store in cache (replacement scheme --> always replace)
-                if (useCache && (ply > 4))
+                if (useCache && (ply > 2))
                 {
                     if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
                     {
@@ -363,10 +374,14 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 triangularArray[ply][ply] = moveBuffer[i];
 
 
-                // append the latest best PV from deeper pleis
-                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                    triangularArray[ply][j] = triangularArray[ply+1][j];
-                triangularLength[ply] = triangularLength[ply+1];
+                // append the latest best PV from deeper plies
+                // TODO: store PV in ttEntry and recover here
+                if (!cached)
+                {
+                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                        triangularArray[ply][j] = triangularArray[ply+1][j];
+                    triangularLength[ply] = triangularLength[ply+1];
+                }
 
 
                 // show intermediate search results
@@ -459,9 +474,11 @@ void Board::displaySearchStats(int mode, int depth, int score)
                 // display the amount of nodes searched
                 float cacheHitRatio = cacheHit / inodes;
                 cout.fill(' ');
-                if (cacheHitRatio > CACHE_HIT_LEVEL)
+                //if (cacheHitRatio > CACHE_HIT_LEVEL)
+                if (true)
                 {
-                    cout << "   Cached";
+                    //cout << "   Cached";
+                    cout << " CH = " << cacheHitRatio << "%";
                 }
                 else
                 {
@@ -529,7 +546,6 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 {
     int whiteknights, whitebishops, whiterooks, whitequeens, whitetotalmat;
     int blackknights, blackbishops, blackrooks, blackqueens, blacktotalmat;
-    int i;
 
     // are we checkmating the other side?
     if (isOtherKingAttacked()) 
@@ -543,7 +559,7 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
     legalmoves = 0;
     moveBufLen[0] = 0;
     moveBufLen[1] = movegen(moveBufLen[0]);
-    for (i = moveBufLen[0]; i < moveBufLen[1]; i++)
+    for (auto i = moveBufLen[0]; i < moveBufLen[1]; i++)
     {
         makeMove(moveBuffer[i]);
         if (!isOtherKingAttacked())
@@ -676,21 +692,18 @@ void mstostring(uint64_t dt, char *timestring)
         hh = dt/3600000;
         mm = (dt - 3600000*hh)/60000;
         ss = (dt - 3600000*hh - 60000*mm)/1000;
-        sprintf(timestring, "%02llu:%01llu:%02llu", hh, mm, ss);
+        sprintf(timestring, "%02" PRIu64 ":%01" PRIu64 ":%02" PRIu64 "", hh, mm, ss);
     }
     else if (dt > 60000) 
     {      
         mm = dt/60000;
         ss = (dt - 60000*mm)/1000;
-        sprintf(timestring, "%02llu:%02llu", mm, ss);
+        sprintf(timestring, "%02" PRIu64 ":%02" PRIu64 "", mm, ss);
     }
     else if (dt > 10000)        sprintf(timestring, "%6.1f%s", float(dt/1000.0), "s");
     else if (dt > 1000)         sprintf(timestring, "%6.2f%s", float(dt/1000.0), "s");
-    else if (dt > 0)            sprintf(timestring, "%5llums", dt);
+    else if (dt > 0)            sprintf(timestring, "%5" PRIu64 "ms", dt);
     else                        sprintf(timestring, "0ms");
-
-    return;
-
 }
 
 

@@ -43,6 +43,7 @@
 #include <iterator>
 #include <algorithm>
 #include <string>
+#include <cstring>
 #include <cctype>
 #include "app.h"
 #include "board.h"
@@ -68,7 +69,6 @@ int wPlayer = PLAYER_TYPE_HUMAN;
 int bPlayer = PLAYER_TYPE_COMPUTER;
 vector<string> listOfCommands;
 vector<string> history;
-bool useBook = true;
 bool usePersonalBook = false;
 char sanMove[12];
 unsigned char movingSide = WHITE_MOVE;
@@ -78,6 +78,7 @@ char command[80];
 char userinput[80];
 string userMove = "";
 
+bool useBook = true;
 bool useCache = false;
 bool verbose = true;
 bool LMR = true;
@@ -110,6 +111,7 @@ int startApp(int mode)
     string moveIsFromBook = "";
     clock_t start, end;
     InputType itype;
+    string bookSequence = "";
 
 
     // Initialize the board, the list of commands and the openings book.
@@ -159,7 +161,7 @@ int startApp(int mode)
             {
                 // try to get a move from the opening book
                 // Note: the sequence is assumed to be consistent with the game
-                string bookSequence = getGameSequence();
+                bookSequence = getGameSequence();
                 if (bookSequence == "")
                     bookSequence = "%";
                 input = getReplyTo(bookSequence);
@@ -222,11 +224,11 @@ int startApp(int mode)
         {
             // make a list of current valid moves
             string tmpStr = "";
-            string s1, s2;
+            string s1 = "", s2 = "";
             board.moveBufLen[0] = 0;
             board.moveBufLen[1] = movegen(board.moveBufLen[0]);
             validMoves.clear();
-            for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
+            for (auto i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
             {
                 makeMove(board.moveBuffer[i]);
                 if (isOtherKingAttacked())

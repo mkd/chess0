@@ -51,6 +51,7 @@ class Cache
         void     clear();
         uint64_t size();
         uint64_t positions();
+        void     dump();
 };
 
 
