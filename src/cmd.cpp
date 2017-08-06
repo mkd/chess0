@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <stdio.h>
 #include <sstream>
+#include <string>
 #include "definitions.h"
 #include "app.h"
 #include "functions.h"
