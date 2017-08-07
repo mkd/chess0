@@ -39,14 +39,13 @@ using namespace std;
 ttEntry Cache::find(uint64_t key, int depth)
 {
     ttEntry tt, ttfalse;
-    ttfalse.depth = -1;
 
     auto search = cacheData.find(key);
 
     if (search != cacheData.end())
         tt = search->second;
 
-    if (tt.depth > depth)
+    if (tt.key == key)
         return tt;
 
     return ttfalse;

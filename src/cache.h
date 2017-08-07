@@ -27,14 +27,19 @@
 #define _CACHE_H_
 
 
+#include <string>
 #include <unordered_map>
+
+
+using namespace std;
 
 
 
 struct ttEntry
 {
-    int score = 0;
-    int depth = -1;
+    uint64_t key   =  0;
+    int      score =  0;
+    int      depth = -9;
 };
 
 

@@ -274,15 +274,13 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
             // 1) Look up the cache
+            cached = false;
+
             if (useCache)
             {
                 tt = cache.find(board.hashkey, ply);
-                string pepe;
-                if (tt.depth < ply)
-                {
-                    cached = false;
-                }
-                else
+
+                if (tt.depth > ply)
                 {
                     cacheHit++;
                     val = tt.score;
@@ -333,8 +331,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 {
                     if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
                     {
+                        tt.key   = board.hashkey;
                         tt.score = val;
-                        tt.depth = ply;
+                        tt.depth = depth;
                         cache.add(board.hashkey, tt);
                     }
                 }
@@ -474,11 +473,10 @@ void Board::displaySearchStats(int mode, int depth, int score)
                 // display the amount of nodes searched
                 float cacheHitRatio = cacheHit / inodes;
                 cout.fill(' ');
-                //if (cacheHitRatio > CACHE_HIT_LEVEL)
+                if (cacheHitRatio > CACHE_HIT_LEVEL)
                 if (true)
                 {
-                    //cout << "   Cached";
-                    cout << " CH = " << cacheHitRatio << "%";
+                    cout << "   Cached";
                 }
                 else
                 {

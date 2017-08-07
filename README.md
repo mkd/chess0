@@ -4,6 +4,10 @@ by Stef Luijten. Chess0 is just an example of chess programming and it's
 approximate ELO rating is around 1730, based on the BT2630 online ELO score test
 (http://www.schachcomputer.at/bt2630.htm).
 
+Two main features are still missing or partially implemented:
+- Proper cache (using transposition tables)
+- Lazy SMP (for parallel search on multi-threaded environments)
+
 
 ## Download
 Binaries are available for Chess0. By downloading the ZIP files below, you get
