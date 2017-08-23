@@ -67,6 +67,8 @@ unsigned short nextPly = 0;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
+int latestAlpha = 0;
+ int latestBeta = 0;
 
 
 
@@ -137,14 +139,16 @@ Move Board::think()
         followpv = true;
         allownull = true;
 
-        // DEBUG
-        //cout << "Cache contents:" << endl;
-        //cache.dump();
-        //cout << endl << endl;
 
-
-        // enter actual search
-        score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
+        // enter actual search using aspiration window
+        if ((score <= latestAlpha) || (score >= latestBeta))
+        {
+            score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
+        }
+        else
+        {
+            score = alphabetapvs(0, currentdepth, score + SEARCH_WINDOW_SIZE, score - SEARCH_WINDOW_SIZE);
+        }
 
 
         // now check if time is up and decide whether to start a new iteration
@@ -238,7 +242,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 allownull = true;
 
                 if (val >= beta)
+                {
+                    latestBeta = beta;
                     return val;
+                }
             }
         }
     }
@@ -357,6 +364,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 else 
                     whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
 
+                latestBeta = beta;
                 return beta;
             }
 
@@ -365,7 +373,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             if (val > alpha)
             {
                 // update bounds
-                alpha = val;
+                latestAlpha = alpha = val;
                 pvmovesfound++;
 
 
@@ -418,6 +426,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     }
 
 
+    latestAlpha = alpha;
     return alpha;
 }
 
@@ -474,7 +483,6 @@ void Board::displaySearchStats(int mode, int depth, int score)
                 float cacheHitRatio = cacheHit / inodes;
                 cout.fill(' ');
                 if (cacheHitRatio > CACHE_HIT_LEVEL)
-                if (true)
                 {
                     cout << "   Cached";
                 }
@@ -764,8 +772,15 @@ int Board::qsearch(int ply, int alpha, int beta)
         return alphabetapvs(ply, 1, alpha, beta);
 
     val = board.eval();
-    if (val >= beta) return val;
-    if (val > alpha) alpha = val;
+    if (val >= beta)
+    {
+        latestBeta = beta;
+        return val;
+    }
+    if (val > alpha)
+    {
+        latestAlpha = alpha = val;
+    }
 
 
     // generate captures & promotions:
@@ -786,11 +801,14 @@ int Board::qsearch(int ply, int alpha, int beta)
                 unmakeMove(moveBuffer[i]);
 
                 if (val >= beta)
+                {
+                    latestBeta = beta;
                     return val;
+                }
 
                 if (val > alpha)
                 {
-                    alpha = val;
+                    latestAlpha = alpha = val;
                     triangularArray[ply][ply] = moveBuffer[i];
                     for (j = ply + 1; j < triangularLength[ply+1]; j++) 
                     {
@@ -803,6 +821,7 @@ int Board::qsearch(int ply, int alpha, int beta)
         }
     }
 
+    latestAlpha = alpha;
     return alpha;
 }
 

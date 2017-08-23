@@ -228,9 +228,16 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
 void Board::display()
 {
     int rank, file;
+    int lastMove = 0;
+
+
+    // check the last move
+    if (endOfGame)
+        lastMove = ((gameLine[endOfGame - 1]).move).getTosq();
+
 
     // display white front
-    cout << endl;
+    cout << endl << endl;
     if (!flipBoard)
     {
         cout << "    +----+----+----+----+----+----+----+----+" << endl;
@@ -239,7 +246,10 @@ void Board::display()
             cout << setw(3) << rank <<  " |";
             for (file = 1; file <= 8; file++)
             {
-                cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << " |";
+                if (lastMove == BOARDINDEX[file][rank])
+                	cout << " \033[96m\033[1m" << PIECENAMES[square[BOARDINDEX[file][rank]]] << "\033[0m |";
+		        else
+                	cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << " |";
             }
             cout << endl << "    +----+----+----+----+----+----+----+----+" << endl;
         }
@@ -255,7 +265,10 @@ void Board::display()
             cout << setw(3) << rank << " |";
             for (file = 8; file >= 1; file--)
             {
-                cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << " |";
+                if (lastMove == BOARDINDEX[file][rank])
+                	cout << " \033[96m\033[1m" << PIECENAMES[square[BOARDINDEX[file][rank]]] << "\033[0m |";
+		        else
+                    cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << " |";
             }
             cout << endl << "    +----+----+----+----+----+----+----+----+" << endl;
         }

@@ -308,11 +308,12 @@ int startApp(int mode)
                 float timeUsed = (end - start) / (CLOCKS_PER_SEC / 1000);
 
                 // display the move chosen by the computer and other info
-                cout << endl << endl << "\aMy move: ";
+                cout << endl << endl << "\a\033[1mMy move: ";
                 if (board.nextMove)
                     cout << to_string(numberOfMove) << ". ";
                 else
                     cout << to_string(numberOfMove) << "... ";
+                cout << "\033[96m";
                 input += addSymbol;
                 cout << input;
 
@@ -322,7 +323,7 @@ int startApp(int mode)
 
                 // show how much time was used to think
                 cout.fill('0');
-                cout << " (time: ";
+                cout << "\033[0m (time: ";
                 cout << setprecision(2) << timeUsed / 1000.00f << "s)";
 
                 cout.fill(' ');
