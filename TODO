@@ -4,7 +4,7 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix cache: why hitRatio is 100% right away?
+- Fix cache: corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen appears, or move is Bh3), probably has to do with rememberPV(). Should be able to store the whole PV in TT to reconstruct. Like makeMove() and unmakeMove() are not even when using cache.
 
 
 

@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2017 Claudio M. Camacho
+   Copyright (C) 2019 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -340,7 +340,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     {
                         tt.key   = board.hashkey;
                         tt.score = val;
-                        tt.depth = depth;
+                        tt.depth = ply;
                         cache.add(board.hashkey, tt);
                     }
                 }
@@ -495,6 +495,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
                         cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
                     else
                         cout << setw(8) << setprecision(0) << inodes;
+                    //cout << " cached nodes = " << cacheHit;
                 }
                 cout.fill(' ');
 

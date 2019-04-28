@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2017 Claudio M. Camacho
+   Copyright (C) 2019 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@
 #define PERFT_DEPTH_LIMIT          6
 
 
-#define CACHE_HIT_LEVEL          0.3
+#define CACHE_HIT_LEVEL          0.6
 #define BOARD_SERIAL_SIZE         16
 
 

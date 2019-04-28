@@ -1,7 +1,7 @@
 From v0.7 to v1.0
 =================
 - New C++ code based on Winglet Chess (by Stef Luijten)
-- Proper LMR optimizations, ply razoring, check extensions
+- Proper LMR optimizations, check extensions
 - Proper Zobrist cache implementation
 - Improved evaluation function
 

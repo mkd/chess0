@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2017 Claudio M. Camacho
+   Copyright (C) 2019 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ ttEntry Cache::find(uint64_t key, int depth)
     if (search != cacheData.end())
         tt = search->second;
 
-    if (tt.key == key)
+    if ((tt.key == key) && (tt.depth >= depth))
         return tt;
 
     return ttfalse;
