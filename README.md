@@ -12,10 +12,10 @@ Two main features are still missing or partially implemented:
 ## Download
 Binaries are available for Chess0. By downloading the ZIP files below, you get
 the binary version of the program, which can be run on 64-bit computers with Mac
-OSX, GNU/Linux or Windows. The latest version is 0.6:
+OSX, GNU/Linux or Windows. The latest version is 1.0-alpha:
 - [Chess0 v1.0-alpha OS X 64-bit](https://db.tt/oDCSFVlg)
 - [Chess0 v1.0-alpha GNU/Linux 64-bit](https://db.tt/PySyL47x)
-- [Chess0 v0.6-alpha Windows 64-bit](https://db.tt/KohKED52)
+- [Chess0 v1.0-alpha Windows 64-bit](https://db.tt/KohKED52)
 
 
 ## Implementation
