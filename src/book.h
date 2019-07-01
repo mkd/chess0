@@ -46,6 +46,7 @@ string getReplyTo(string);
 // Dictionary containing the database with the openings. We use unordered_map
 // because it is the fastest STL data structure for this purpose.
 extern unordered_map<string, string> book;
+extern unordered_map<string, string> po;
 
 
 

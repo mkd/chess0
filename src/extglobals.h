@@ -43,8 +43,6 @@ extern int CMD_BUFF_COUNT;
 
 extern Board board;
 
-extern unsigned char movingSide;   // Who is currently moving (WHITE_MOVE || BLACK_MOVE), during search
-
 extern const int A8; extern const int B8; extern const int C8; extern const int D8;
 extern const int E8; extern const int F8; extern const int G8; extern const int H8;
 extern const int A7; extern const int B7; extern const int C7; extern const int D7;

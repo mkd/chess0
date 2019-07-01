@@ -71,7 +71,6 @@ vector<string> listOfCommands;
 vector<string> history;
 bool usePersonalBook = false;
 char sanMove[12];
-unsigned char movingSide = WHITE_MOVE;
 map<string, string> validMoves;
 int i, j, number;
 char command[80];
@@ -173,14 +172,6 @@ int startApp(int mode)
             {
                 start = clock();
                 cout << endl << "Thinking..." << endl << endl;
-
-                // store who's moving right now for netScore in search
-                // statistics
-                if (board.nextMove)
-                    movingSide = BLACK_MOVE;
-                else
-                    movingSide = WHITE_MOVE;
-
 
                 // search the move
                 myMove = board.think();

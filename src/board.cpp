@@ -315,10 +315,10 @@ string Board::toFEN()
 
 
     // 2) set the moving side ('w' or 'b')
-    if (movingSide == WHITE_MOVE)
-        serial.append(1, 'w');
-    else
+    if (nextMove)
         serial.append(1, 'b');
+    else
+        serial.append(1, 'w');
     serial.append(1, ' ');
 
 

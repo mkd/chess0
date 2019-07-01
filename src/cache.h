@@ -29,6 +29,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "move.h"
 
 
 using namespace std;
@@ -51,7 +52,7 @@ class Cache
 
     public:
         ttEntry  find(uint64_t, int);
-        void     add(uint64_t, ttEntry);
+        void     add(uint64_t, ttEntry *);
         void     remove(uint64_t);
         void     clear();
         uint64_t size();

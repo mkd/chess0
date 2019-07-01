@@ -56,9 +56,9 @@ ttEntry Cache::find(uint64_t key, int depth)
 // add()
 //
 // Insert a new ttEntry in the cache.
-void Cache::add(uint64_t key, ttEntry tt)
+void Cache::add(uint64_t key, ttEntry *tt)
 {
-    cacheData[key] = tt;
+    cacheData[key] = *tt;
 }
 
 

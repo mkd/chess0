@@ -293,8 +293,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     val = tt.score;
                     cached = true;
                    
-                    // TODO: reconstruct PV from ttEntry 
-                    rememberPV();
+                    // reconstruct PV after loading from the cache
+					rememberPV();
                 }
             }
 
@@ -341,7 +341,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                         tt.key   = board.hashkey;
                         tt.score = val;
                         tt.depth = ply;
-                        cache.add(board.hashkey, tt);
+                        cache.add(board.hashkey, &tt);
                     }
                 }
             }
@@ -381,14 +381,24 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 triangularArray[ply][ply] = moveBuffer[i];
 
 
-                // append the latest best PV from deeper plies
-                // TODO: store PV in ttEntry and recover here
+                // if nothing in the cache, append the latest best PV from deeper plies
                 if (!cached)
                 {
                     for (j = ply + 1; j < triangularLength[ply+1]; j++) 
                         triangularArray[ply][j] = triangularArray[ply+1][j];
                     triangularLength[ply] = triangularLength[ply+1];
+
+                	if (useCache && (ply > 2) && ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE)))
+                	{
+                    	cache.add(board.hashkey, &tt);
+					}
                 }
+
+                // if cached, restore the PV from the ttEntry
+				else
+				{
+					rememberPV();
+				}
 
 
                 // show intermediate search results
@@ -444,7 +454,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 
 
     // '+' is advantage for White, '-' is advantage for Black
-    if (movingSide == BLACK_MOVE)
+    if (board.nextMove)
     {
         netScore *= -1;
         z = -1;
@@ -679,6 +689,7 @@ void Board::rememberPV()
 {
     int i;
     lastPVLength = board.triangularLength[0];
+
     for (i = 0; i < board.triangularLength[0]; i++)
     {
         lastPV[i] = board.triangularArray[0][i];

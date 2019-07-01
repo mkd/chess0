@@ -137,13 +137,13 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
 
 // Value of material, in centipawns:
-extern const int PAWN_VALUE = 100;
-extern const int KNIGHT_VALUE = 320;
-extern const int BISHOP_VALUE = 330;
-extern const int ROOK_VALUE = 520;
-extern const int QUEEN_VALUE = 960;
-extern const int KING_VALUE = 9999;
-extern const int CHECK_MATE = KING_VALUE;
+extern const int PAWN_VALUE     =  100;
+extern const int KNIGHT_VALUE   =  305;
+extern const int BISHOP_VALUE   =  315;
+extern const int ROOK_VALUE     =  520;
+extern const int QUEEN_VALUE    = 1100;
+extern const int KING_VALUE     = 9999;
+extern const int CHECK_MATE     = KING_VALUE;
 
 
 // used for MVV/LVA and SEE:
@@ -152,6 +152,7 @@ int PIECEVALUES[16];
 
 // used in Eugene Nalimov's bitScanReverse
 int MS1BTABLE[256];
+
 
 // Attack tables:
 Bitboard WHITE_PAWN_ATTACKS[64];
@@ -167,6 +168,7 @@ Bitboard FILE_ATTACKS[64][64];      // 32KB
 Bitboard DIAGA8H1_ATTACKS[64][64];  // 32KB
 Bitboard DIAGA1H8_ATTACKS[64][64];  // 32KB
 
+
 // Move generator shift for ranks:
 extern const int RANKSHIFT[64] = {
     1,  1,  1,  1,  1,  1,  1,  1,
@@ -179,6 +181,7 @@ extern const int RANKSHIFT[64] = {
     57, 57, 57, 57, 57, 57, 57, 57
 };
 
+
 // Move generator magic multiplication numbers for files:
 extern const Bitboard _FILEMAGICS[8] = {
     0x8040201008040200,
@@ -190,6 +193,7 @@ extern const Bitboard _FILEMAGICS[8] = {
     0x0201008040201008,
     0x0100804020100804
 };
+
 
 // Move generator magic multiplication numbers for diagonals:
 extern const Bitboard _DIAGA8H1MAGICS[15] = {
@@ -210,6 +214,7 @@ extern const Bitboard _DIAGA8H1MAGICS[15] = {
     0x0
 };
 
+
 // Move generator magic multiplication numbers for diagonals:
 extern const Bitboard _DIAGA1H8MAGICS[15] = {
     0x0,
@@ -229,6 +234,7 @@ extern const Bitboard _DIAGA1H8MAGICS[15] = {
     0x0
 };
 
+
 // Move generator 6-bit masking and magic multiplication numbers:
 Bitboard RANKMASK[64];
 Bitboard FILEMASK[64];
@@ -238,13 +244,15 @@ Bitboard DIAGA8H1MAGIC[64];
 Bitboard DIAGA1H8MASK[64];
 Bitboard DIAGA1H8MAGIC[64];
 
+
 // We use one generalized sliding attacks array: [8 squares][64 states]
 // the unsigned char (=8 bits) contains the attacks for a rank, file or diagonal
 unsigned char GEN_SLIDING_ATTACKS[8][64];
 
-// Used for castling:
-unsigned char CANCASTLEOO = 1;
-unsigned char CANCASTLEOOO = 2;
+
+// Used for castling rights:
+unsigned char CANCASTLEOO   = 1;
+unsigned char CANCASTLEOOO  = 2;
 Bitboard maskEG[2];
 Bitboard maskFG[2];
 Bitboard maskBD[2];
@@ -272,20 +280,20 @@ int ICHECK;
 // They are mirrored back in the right order in dataInit().
 // This is only done to make data entry easier, because you can enter the scoring data as if you're
 // looking at the chess board from White's point of perspective.
-int PENALTY_DOUBLED_PAWN          = 12;
+int PENALTY_DOUBLED_PAWN          = 10;
 int PENALTY_ISOLATED_PAWN         = 20;
 int PENALTY_BACKWARD_PAWN         =  8;
-int BONUS_PASSED_PAWN             = 30;
-int BONUS_BISHOP_PAIR             = 10;
-int BONUS_ROOK_BEHIND_PASSED_PAWN = 15;
-int BONUS_ROOK_ON_OPEN_FILE       = 20;
-int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 25;
+int BONUS_PASSED_PAWN             = 25;
+int BONUS_BISHOP_PAIR             = 12;
+int BONUS_ROOK_BEHIND_PASSED_PAWN = 10;
+int BONUS_ROOK_ON_OPEN_FILE       = 15;
+int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 20;
 int BONUS_TEMPO_MIDGAME           = 10;
 int BONUS_TEMPO_ENDGAME           = 20;
 
 
-int BONUS_PAWN_SHIELD_STRONG = 9;
-int BONUS_PAWN_SHIELD_WEAK = 4;
+int BONUS_PAWN_SHIELD_STRONG    =  15;
+int BONUS_PAWN_SHIELD_WEAK      = -15;
 
 
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
@@ -303,17 +311,14 @@ int QUEEN_DISTANCE[8] =              { 0,  10,  8,  5,  4,  0,  0,  0 };
 // *** of perspective. Lower left corner is square a1: ***
 int PAWNPOS_W[64] = {
     0,   0,   0,   0,   0,   0,   0,   0,
-    //5,  10,  15,  20,  20,  15,  10,   5,
-    //4,   8,  12,  16,  16,  12,   8,   4,
-    10,  15,  20,  25,  25,  20,  15,  10,
-    6,  11,  16,  21,  21,  16,  11,   6,
-    3,   6,   9,  12,  12,   9,   6,   3,
-    2,   4,   6,   8,   8,   6,   4,   2,
-    1,   2,   3, -10, -10,   3,   2,   1,
-    0,   0,   0, -40, -40,   0,   0,   0,
-    0,   0,   0,   0,   0,   0,   0,   0
+    5,  10,  15,  20,  20,  15,  10,   5,
+	4,   8,  12,  16,  16,  12,   8,   4,
+	3,   6,   9,  12,  12,   9,   6,   3,
+	2,   4,   6,   8,   8,   6,   4,   2,
+	1,   2,   3, -10, -10,   3,   2,   1,
+	0,   0,   0, -40, -40,   0,   0,   0,
+	0,   0,   0,   0,   0,   0,   0,   0
 };
-
 
 
 
@@ -357,13 +362,13 @@ int BISHOPPOS_W[64] = {
 // *** of perspective. Lower left corner is square a1: ***
 int ROOKPOS_W[64] = {
     0,  0,  0,  0,   0,  0,  0,   0,
-    15, 15, 15, 15,  15, 15, 15,  15,
+    25, 25, 25, 25,  25, 25, 25,  25,
     0,  0,  0,  0,   0,  0,  0,   0,
     0,  0,  0,  0,   0,  0,  0,   0,
     0,  0,  0,  0,   0,  0,  0,   0,
     0,  0,  0,  0,   0,  0,  0,   0,
     0,  0,  0,  0,   0,  0,  0,   0,
-    -10,  0,  0, 10,  10,  0,  0, -10
+    0,  0,  0, 10,  10,  0,  0,   0
 };
 
 
