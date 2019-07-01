@@ -68,7 +68,7 @@ ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
 int latestAlpha = 0;
- int latestBeta = 0;
+int latestBeta = 0;
 
 
 
@@ -255,6 +255,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     pvmovesfound = 0;
     moveNo = 0;
     moveBufLen[ply+1] = movegen(moveBufLen[ply]);
+
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         // pick the next best move from a sorted list
@@ -773,11 +774,13 @@ int Board::qsearch(int ply, int alpha, int beta)
 {
     int i, j, val;
 
+    // if interrupted, return immediately
     if (timedout)
-        return 0;
+        return alpha;
+    //    return 0;
+
 
     triangularLength[ply] = ply;
-
 
     // in-check extension (search one more ply when in check)
     if (isOwnKingAttacked())
@@ -801,36 +804,36 @@ int Board::qsearch(int ply, int alpha, int beta)
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         makeMove(moveBuffer[i]);
+
+        if (!isOtherKingAttacked()) 
         {
-            if (!isOtherKingAttacked()) 
+            inodes++;
+
+            if (--countdown <=0)
+                readClockAndInput();
+
+            val = -qsearch(ply+1, -beta, -alpha);
+            unmakeMove(moveBuffer[i]);
+
+            if (val >= beta)
             {
-                inodes++;
-
-                if (--countdown <=0)
-                    readClockAndInput();
-
-                val = -qsearch(ply+1, -beta, -alpha);
-                unmakeMove(moveBuffer[i]);
-
-                if (val >= beta)
-                {
-                    latestBeta = beta;
-                    return val;
-                }
-
-                if (val > alpha)
-                {
-                    latestAlpha = alpha = val;
-                    triangularArray[ply][ply] = moveBuffer[i];
-                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                    {
-                        triangularArray[ply][j] = triangularArray[ply+1][j];
-                    }
-                    triangularLength[ply] = triangularLength[ply+1];
-                }
+                latestBeta = beta;
+                return val;
             }
-            else unmakeMove(moveBuffer[i]);
+
+            if (val > alpha)
+            {
+                latestAlpha = alpha = val;
+                triangularArray[ply][ply] = moveBuffer[i];
+                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                {
+                    triangularArray[ply][j] = triangularArray[ply+1][j];
+                }
+                triangularLength[ply] = triangularLength[ply+1];
+            }
         }
+        else unmakeMove(moveBuffer[i]);
+
     }
 
     latestAlpha = alpha;

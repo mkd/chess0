@@ -60,9 +60,8 @@
 
 
 #define AI_SEARCH_DEPTH           64
-#define AI_DEPTH_QUIESCE_LIMIT    32
 #define SEARCH_WINDOW_SIZE        25
-#define TIME_PER_MOVE              5
+#define TIME_PER_MOVE              4
 #define LMR_PLY_START              3
 #define LMR_MOVE_START             3
 #define LMR_SEARCH_DEPTH           3

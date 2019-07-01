@@ -80,7 +80,7 @@ int Board::eval()
     // Anything less than a queen (=10) + rook (=5) is considered endgame
     // (pawns excluded in this count)
     //endgame = (whitetotalmat < 15 || blacktotalmat < 15);
-    endgame = (whitetotalmat < 20 || blacktotalmat < 20);
+    endgame = (whitetotalmat < 18 || blacktotalmat < 18);
 
 
     // Evaluate for draws due to insufficient material:
