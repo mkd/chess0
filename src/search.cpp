@@ -776,9 +776,7 @@ int Board::qsearch(int ply, int alpha, int beta)
 
     // if interrupted, return immediately
     if (timedout)
-        return alpha;
-    //    return 0;
-
+        return 0;
 
     triangularLength[ply] = ply;
 
@@ -792,10 +790,9 @@ int Board::qsearch(int ply, int alpha, int beta)
         latestBeta = beta;
         return val;
     }
+
     if (val > alpha)
-    {
         latestAlpha = alpha = val;
-    }
 
 
     // generate captures & promotions:

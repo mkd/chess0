@@ -274,6 +274,49 @@ void Board::display()
         }
         cout << "      h    g    f    e    d    c    b    a" << endl << endl;
     }
+
+
+    // DEBUG: print count of material
+    totalWhitePawns = bitCnt(whitePawns) * PAWN_VALUE;
+    totalBlackPawns = bitCnt(blackPawns) * PAWN_VALUE;
+    totalWhitePieces =  bitCnt(whiteKnights) * KNIGHT_VALUE + bitCnt(whiteBishops) * BISHOP_VALUE +
+        bitCnt(whiteRooks) * ROOK_VALUE + bitCnt(whiteQueens) * QUEEN_VALUE;
+    totalBlackPieces =  bitCnt(blackKnights) * KNIGHT_VALUE + bitCnt(blackBishops) * BISHOP_VALUE +
+        bitCnt(blackRooks) * ROOK_VALUE + bitCnt(blackQueens) * QUEEN_VALUE;
+    Material  = totalWhitePawns + totalWhitePieces - totalBlackPawns - totalBlackPieces;
+
+    cout << "Material:" << endl;
+    printf("White pawns: %d * %d = %d\n", bitCnt(whitePawns), PAWN_VALUE, totalWhitePawns);
+    printf("Black pawns: %d * %d = %d\n", bitCnt(blackPawns), PAWN_VALUE, totalBlackPawns);
+    printf("White bishops: %d * %d = %d\n", bitCnt(whiteBishops), BISHOP_VALUE, bitCnt(whiteBishops) * BISHOP_VALUE);
+    printf("Black bishops: %d * %d = %d\n", bitCnt(blackBishops), BISHOP_VALUE, bitCnt(blackBishops) * BISHOP_VALUE);
+    printf("White knights: %d * %d = %d\n", bitCnt(whiteKnights), KNIGHT_VALUE, bitCnt(whiteKnights) * KNIGHT_VALUE);
+    printf("Black knights: %d * %d = %d\n", bitCnt(blackKnights), KNIGHT_VALUE, bitCnt(blackKnights) * KNIGHT_VALUE);
+    printf("White rooks: %d * %d = %d\n", bitCnt(whiteRooks), ROOK_VALUE, bitCnt(whiteRooks) * ROOK_VALUE);
+    printf("Black rooks: %d * %d = %d\n", bitCnt(blackRooks), ROOK_VALUE, bitCnt(blackRooks) * ROOK_VALUE);
+    printf("White queens: %d * %d = %d\n", bitCnt(whiteQueens), KNIGHT_VALUE, bitCnt(whiteQueens) * QUEEN_VALUE);
+    printf("Black queens: %d * %d = %d\n", bitCnt(blackQueens), KNIGHT_VALUE, bitCnt(blackQueens) * QUEEN_VALUE);
+    printf("Total material = %d\n\n", Material);
+
+
+    cout << "Position:" << endl;
+    cout << "White exchange bonus = " << info_whiteexchangebonus << endl;
+    cout << "Black exchange bonus = " << info_blackexchangebonus << endl;
+    cout << "Pawns = " << info_pawns << endl;
+    cout << "Knights = " << info_knights << endl;
+    cout << "Bishops = " << info_bishops << endl;
+    cout << "Rooks = " << info_rooks << endl;
+    cout << "Queens = " << info_queens << endl;
+    cout << "Kings = " << info_kings << endl;
+
+
+    cout << endl << "Total (material + position) = " << Material + info_whiteexchangebonus - info_blackexchangebonus << + info_pawns + info_knights + info_bishops + info_rooks + info_queens + info_kings << endl;
+
+
+    cout << endl << "Phase: ";
+    if (info_endgame) cout << "endgame";
+    else cout << "middle game";
+    cout << endl;
 }
 
 

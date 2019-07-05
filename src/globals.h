@@ -128,9 +128,10 @@ extern const unsigned char BLACK_BISHOP = 13;        //  1101
 extern const unsigned char BLACK_ROOK = 14;          //  1110
 extern const unsigned char BLACK_QUEEN = 15;         //  1111
 
-const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ",
-    "  ","P*","K*","N*","  ","B*","R*","Q*"};
+
+const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ", "  ","P*","K*","N*","  ","B*","R*","Q*"};
 const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," ","B","R","Q"};
+
 
 Bitboard BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
@@ -139,9 +140,9 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 // Value of material, in centipawns:
 extern const int PAWN_VALUE     =  100;
 extern const int KNIGHT_VALUE   =  305;
-extern const int BISHOP_VALUE   =  315;
-extern const int ROOK_VALUE     =  520;
-extern const int QUEEN_VALUE    = 1100;
+extern const int BISHOP_VALUE   =  305;
+extern const int ROOK_VALUE     =  490;
+extern const int QUEEN_VALUE    = 1000;
 extern const int KING_VALUE     = 9999;
 extern const int CHECK_MATE     = KING_VALUE;
 
@@ -280,8 +281,10 @@ int ICHECK;
 // They are mirrored back in the right order in dataInit().
 // This is only done to make data entry easier, because you can enter the scoring data as if you're
 // looking at the chess board from White's point of perspective.
-int PENALTY_DOUBLED_PAWN          = 10;
-int PENALTY_ISOLATED_PAWN         = 20;
+int PENALTY_DOUBLED_PAWN          =  9;
+
+int PENALTY_ISOLATED_PAWN         =  8;
+
 int PENALTY_BACKWARD_PAWN         =  8;
 int BONUS_PASSED_PAWN             = 25;
 int BONUS_BISHOP_PAIR             = 12;
@@ -292,8 +295,8 @@ int BONUS_TEMPO_MIDGAME           = 10;
 int BONUS_TEMPO_ENDGAME           = 20;
 
 
-int BONUS_PAWN_SHIELD_STRONG    =  15;
-int BONUS_PAWN_SHIELD_WEAK      = -15;
+int BONUS_PAWN_SHIELD_STRONG      = 6;
+int BONUS_PAWN_SHIELD_WEAK        = 2;
 
 
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
@@ -351,7 +354,7 @@ int BISHOPPOS_W[64] = {
     -10,   0,   5,  10,  10,   5,   0, -10,
     -10,   0,   5,   5,   5,   5,   0, -10,
     -10,   0,   0,   0,   0,   0,   0, -10,
-    -10, -10, -10, -10, -10, -10, -10, -10
+    -10, -10, -20, -10, -10, -20, -10, -10
 };
 
 
@@ -401,23 +404,25 @@ int KINGPOS_W[64]  = {
     -40, -40, -40, -40, -40, -40, -40, -40,
     -40, -40, -40, -40, -40, -40, -40, -40,
     -20, -20, -20, -20, -20, -20, -20, -20,
-    0,  20,  40, -20,   0, -20,  40,  20
+      0,  20,  25, -20,   0, -20,  25,  20
 };
+
 
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int KINGPOS_ENDGAME_W[64] = {
-    0,  10,  20,  30,  30,  20,  10,   0,
+     0,  10,  20,  30,  30,  20,  10,   0,
     10,  20,  30,  40,  40,  30,  20,  10,
     20,  30,  40,  50,  50,  40,  30,  20,
     30,  40,  50,  60,  60,  50,  40,  30,
     30,  40,  50,  60,  60,  50,  40,  30,
     20,  30,  40,  50,  50,  40,  30,  20,
     10,  20,  30,  40,  40,  30,  20,  10,
-    0,  10,  20,  30,  30,  20,  10,   0
+     0,  10,  20,  30,  30,  20,  10,   0
 }; 
+
 
 int MIRROR[64] = {
     56,  57,  58,  59,  60,  61,  62,  63,
@@ -430,6 +435,7 @@ int MIRROR[64] = {
     0,   1,   2,   3,   4,   5,   6,   7
 };
 
+
 int DISTANCE[64][64];
 int PAWNPOS_B[64];
 int KNIGHTPOS_B[64];
@@ -438,6 +444,7 @@ int ROOKPOS_B[64];
 int QUEENPOS_B[64];
 int KINGPOS_B[64];
 int KINGPOS_ENDGAME_B[64];
+
 Bitboard PASSED_WHITE[64];
 Bitboard PASSED_BLACK[64];
 Bitboard ISOLATED_WHITE[64];

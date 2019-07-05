@@ -113,6 +113,19 @@ struct Board
     bool timedout;
     bool ponder;
 
+
+    // DEBUG
+    bool info_endgame = false;
+    int  info_whiteexchangebonus = 0;
+    int  info_blackexchangebonus = 0;
+    int  info_pawns = 0;
+    int  info_knights = 0;
+    int  info_bishops = 0;
+    int  info_rooks = 0;
+    int  info_queens = 0;
+    int  info_kings = 0;
+
+
     void init();
     int eval();
     Move think();

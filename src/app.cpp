@@ -79,7 +79,7 @@ string userMove = "";
 
 bool useBook = true;
 bool useCache = false;
-bool verbose = true;
+bool verbose = false;
 bool LMR = true;
 Cache cache;
 EndType gameEnd = END_TYPE_NOEND;
