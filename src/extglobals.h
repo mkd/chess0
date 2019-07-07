@@ -124,6 +124,8 @@ extern Bitboard DIAGA8H1MASK[];
 extern Bitboard DIAGA8H1MAGIC[];
 extern Bitboard DIAGA1H8MASK[];
 extern Bitboard DIAGA1H8MAGIC[];
+extern Bitboard KINGCASTLED_MASK_W;
+extern Bitboard KINGCASTLED_MASK_B;
 
 extern unsigned char GEN_SLIDING_ATTACKS[8][64];
 
@@ -145,12 +147,17 @@ extern int ICASTLOO;
 extern int ICASTLOOO;
 extern int ICHECK;
 
-extern int PENALTY_DOUBLED_PAWN;
-extern int PENALTY_ISOLATED_PAWN;
-extern int PENALTY_BACKWARD_PAWN;
+extern int PENALTY_DOUBLED_PAWN_MG;
+extern int PENALTY_DOUBLED_PAWN_EG;
+extern int PENALTY_ISOLATED_PAWN_MG;
+extern int PENALTY_ISOLATED_PAWN_EG;
+extern int PENALTY_BACKWARD_PAWN_MG;
+extern int PENALTY_BACKWARD_PAWN_EG;
 extern int BONUS_PASSED_PAWN;
-extern int BONUS_BISHOP_PAIR;
-extern int BONUS_ROOK_BEHIND_PASSED_PAWN;
+extern int BONUS_BISHOP_PAIR_MG;
+extern int BONUS_BISHOP_PAIR_EG;
+extern int BONUS_ROOK_BEHIND_PASSED_PAWN_MG;
+extern int BONUS_ROOK_BEHIND_PASSED_PAWN_EG;
 extern int BONUS_ROOK_ON_OPEN_FILE;
 extern int BONUS_PAWN_SHIELD_STRONG;
 extern int BONUS_PAWN_SHIELD_WEAK;
@@ -162,22 +169,44 @@ extern int KNIGHT_DISTANCE[];
 extern int BISHOP_DISTANCE[];
 extern int ROOK_DISTANCE[];
 extern int QUEEN_DISTANCE[];
+extern int BONUS_KING_IS_CASTLED;
+
+
+// short (s) and long (l) castle safety masks
+extern Bitboard wKingSafeMask_S1;
+extern Bitboard wKingSafeMask_SX;
+extern Bitboard wKingSafeMask_L1;
+extern Bitboard wKingSafeMask_LX;
+extern Bitboard bKingSafeMask_S1;
+extern Bitboard bKingSafeMask_SX;
+extern Bitboard bKingSafeMask_L1;
+extern Bitboard bKingSafeMask_LX;
+
+
 extern int PAWNPOS_W[];
-extern int KNIGHTPOS_W[];
-extern int BISHOPPOS_W[];
+extern int KNIGHTPOS_W_MG[];
+extern int KNIGHTPOS_W_EG[];
+extern int BISHOPPOS_W_MG[];
+extern int BISHOPPOS_W_EG[];
 extern int ROOKPOS_W[];
-extern int QUEENPOS_W[];
-extern int KINGPOS_W[];
-extern int KINGPOS_ENDGAME_W[];
+extern int QUEENPOS_W_MG[];
+extern int QUEENPOS_W_EG[];
+extern int KINGPOS_W_MG[];
+extern int KINGPOS_W_EG[];
 extern int MIRROR[];
 extern int DISTANCE[64][64];
 extern int PAWNPOS_B[];
-extern int KNIGHTPOS_B[];
-extern int BISHOPPOS_B[];
+extern int KNIGHTPOS_B_MG[];
+extern int KNIGHTPOS_B_EG[];
+extern int BISHOPPOS_B_MG[];
+extern int BISHOPPOS_B_EG[];
 extern int ROOKPOS_B[];
-extern int QUEENPOS_B[];
-extern int KINGPOS_B[];
-extern int KINGPOS_ENDGAME_B[];
+extern int QUEENPOS_B_MG[];
+extern int QUEENPOS_B_EG[];
+extern int KINGPOS_B_MG[];
+extern int KINGPOS_B_EG[];
+
+
 extern Bitboard PASSED_WHITE[];
 extern Bitboard PASSED_BLACK[];
 extern Bitboard ISOLATED_WHITE[];

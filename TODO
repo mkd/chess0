@@ -4,8 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Evaluation for castle.c0 should be +0.78, it shows -0.04
-
 - Fix cache: corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen appears, or move is Bh3), probably has to do with rememberPV(). Should be able to store the whole PV in TT to reconstruct. Like makeMove() and unmakeMove() are not even when using cache.
 - Implement: cache.h should implement triangularArray, and if (cached), triangularArray should overwrite to the cache, so it can be restored at any time when (cahced) and cacheHit ;-)
 
@@ -13,6 +11,14 @@ WORK IN PROGRESS
 
 BEFORE NEXT RELEASE
 ===================
+- Code refactoring
+
+- Implement many useful commands: info (midgame, etc), lmr 1/2/3, etc.
+
+- Evaluation: king under heavy attack is too optimistic
+  - chess0-crafty.c0 -> eval should be -5.33, it is -1.5 instead --> penalty for
+    check without mobility: e.g., penalty = 100 * (8 - mobility)
+
 - Make sure cache is fast enough --> old cache implementation (hashToStr) was
   3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
   and up to 20x slower when cache goes over 1Gb)
@@ -27,8 +33,6 @@ BEFORE NEXT RELEASE
 
 IMPORTANT
 =========
-- Improve evaluation function (opening, middle, end)
-
 - Razoring
 
 - Ending tables (syzygy)

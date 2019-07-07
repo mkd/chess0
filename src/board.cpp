@@ -277,7 +277,7 @@ void Board::display()
 
 
     // DEBUG: print count of material
-    totalWhitePawns = bitCnt(whitePawns) * PAWN_VALUE;
+    /*totalWhitePawns = bitCnt(whitePawns) * PAWN_VALUE;
     totalBlackPawns = bitCnt(blackPawns) * PAWN_VALUE;
     totalWhitePieces =  bitCnt(whiteKnights) * KNIGHT_VALUE + bitCnt(whiteBishops) * BISHOP_VALUE +
         bitCnt(whiteRooks) * ROOK_VALUE + bitCnt(whiteQueens) * QUEEN_VALUE;
@@ -310,13 +310,13 @@ void Board::display()
     cout << "Kings = " << info_kings << endl;
 
 
-    cout << endl << "Total (material + position) = " << Material + info_whiteexchangebonus - info_blackexchangebonus << + info_pawns + info_knights + info_bishops + info_rooks + info_queens + info_kings << endl;
+    cout << endl << "Total (material + position) = " << Material + info_whiteexchangebonus - info_blackexchangebonus + info_pawns + info_knights + info_bishops + info_rooks + info_queens + info_kings << endl;
 
 
     cout << endl << "Phase: ";
     if (info_endgame) cout << "endgame";
     else cout << "middle game";
-    cout << endl;
+    cout << endl;*/
 }
 
 

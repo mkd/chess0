@@ -693,12 +693,15 @@ void dataInit()
     for (square = 0; square < 64; square++)
     {
         PAWNPOS_B[square] = PAWNPOS_W[square];
-        KNIGHTPOS_B[square] = KNIGHTPOS_W[square];
-        BISHOPPOS_B[square] = BISHOPPOS_W[square];
+        KNIGHTPOS_B_MG[square] = KNIGHTPOS_W_MG[square];
+        KNIGHTPOS_B_EG[square] = KNIGHTPOS_W_EG[square];
+        BISHOPPOS_B_MG[square] = BISHOPPOS_W_MG[square];
+        BISHOPPOS_B_EG[square] = BISHOPPOS_W_EG[square];
         ROOKPOS_B[square] = ROOKPOS_W[square];
-        QUEENPOS_B[square] = QUEENPOS_W[square];
-        KINGPOS_B[square] = KINGPOS_W[square];
-        KINGPOS_ENDGAME_B[square] = KINGPOS_ENDGAME_W[square];
+        QUEENPOS_B_MG[square] = QUEENPOS_W_MG[square];
+        QUEENPOS_B_EG[square] = QUEENPOS_W_EG[square];
+        KINGPOS_B_MG[square] = KINGPOS_W_MG[square];
+        KINGPOS_B_EG[square] = KINGPOS_W_EG[square];
     }
 
 
@@ -706,12 +709,15 @@ void dataInit()
     for (i = 0; i < 64; i++)
     {
         PAWNPOS_W[i] = PAWNPOS_B[MIRROR[i]];
-        KNIGHTPOS_W[i] = KNIGHTPOS_B[MIRROR[i]];
-        BISHOPPOS_W[i] = BISHOPPOS_B[MIRROR[i]];
+        KNIGHTPOS_W_MG[i] = KNIGHTPOS_B_MG[MIRROR[i]];
+        KNIGHTPOS_W_EG[i] = KNIGHTPOS_B_EG[MIRROR[i]];
+        BISHOPPOS_W_MG[i] = BISHOPPOS_B_MG[MIRROR[i]];
+        BISHOPPOS_W_EG[i] = BISHOPPOS_B_EG[MIRROR[i]];
         ROOKPOS_W[i] = ROOKPOS_B[MIRROR[i]];
-        QUEENPOS_W[i] = QUEENPOS_B[MIRROR[i]];
-        KINGPOS_W[i] = KINGPOS_B[MIRROR[i]];
-        KINGPOS_ENDGAME_W[i] = KINGPOS_ENDGAME_B[MIRROR[i]];
+        QUEENPOS_W_MG[i] = QUEENPOS_B_MG[MIRROR[i]];
+        QUEENPOS_W_EG[i] = QUEENPOS_B_EG[MIRROR[i]];
+        KINGPOS_W_MG[i] = KINGPOS_B_MG[MIRROR[i]];
+        KINGPOS_W_EG[i] = KINGPOS_B_EG[MIRROR[i]];
 
         for (square = 0; square < 64; square ++)
         {

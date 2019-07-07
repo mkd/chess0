@@ -244,6 +244,8 @@ Bitboard DIAGA8H1MASK[64];
 Bitboard DIAGA8H1MAGIC[64];
 Bitboard DIAGA1H8MASK[64];
 Bitboard DIAGA1H8MAGIC[64];
+Bitboard KINGCASTLED_MASK_W = 227ULL;
+Bitboard KINGCASTLED_MASK_B = 14339461213547659264ULL;
 
 
 // We use one generalized sliding attacks array: [8 squares][64 states]
@@ -281,22 +283,36 @@ int ICHECK;
 // They are mirrored back in the right order in dataInit().
 // This is only done to make data entry easier, because you can enter the scoring data as if you're
 // looking at the chess board from White's point of perspective.
-int PENALTY_DOUBLED_PAWN          =  9;
+int PENALTY_DOUBLED_PAWN_MG          =  9;
+int PENALTY_DOUBLED_PAWN_EG          = 19;
 
-int PENALTY_ISOLATED_PAWN         =  8;
+int PENALTY_ISOLATED_PAWN_MG         =  8;
+int PENALTY_ISOLATED_PAWN_EG         =  4;
 
-int PENALTY_BACKWARD_PAWN         =  8;
-int BONUS_PASSED_PAWN             = 25;
-int BONUS_BISHOP_PAIR             = 12;
-int BONUS_ROOK_BEHIND_PASSED_PAWN = 10;
-int BONUS_ROOK_ON_OPEN_FILE       = 15;
-int BONUS_TWO_ROOKS_ON_OPEN_FILE  = 20;
-int BONUS_TEMPO_MIDGAME           = 10;
-int BONUS_TEMPO_ENDGAME           = 20;
+int PENALTY_BACKWARD_PAWN_MG         = 12;
+int PENALTY_BACKWARD_PAWN_EG         =  3;
+
+int BONUS_PASSED_PAWN                = 16;
+
+int BONUS_BISHOP_PAIR_MG             = 38;
+int BONUS_BISHOP_PAIR_EG             = 56;
+
+int BONUS_ROOK_BEHIND_PASSED_PAWN_MG = 10;
+int BONUS_ROOK_BEHIND_PASSED_PAWN_EG = 10;
+
+int BONUS_ROOK_ON_OPEN_FILE_MG       = 35;
+int BONUS_ROOK_ON_OPEN_FILE_EG       = 20;
+
+int BONUS_TWO_ROOKS_ON_OPEN_FILE     = 20;
+
+int BONUS_TEMPO_MIDGAME              =  5;
+int BONUS_TEMPO_ENDGAME              =  8;
 
 
-int BONUS_PAWN_SHIELD_STRONG      = 6;
-int BONUS_PAWN_SHIELD_WEAK        = 2;
+int BONUS_PAWN_SHIELD_STRONG         =  9;
+int BONUS_PAWN_SHIELD_WEAK           =  4;
+
+int BONUS_KING_IS_CASTLED            = 54;
 
 
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
@@ -305,6 +321,18 @@ int KNIGHT_DISTANCE[8] =             { 0,   4,  4,  0,  0,  0,  0,  0 };
 int BISHOP_DISTANCE[8] =             { 0,   5,  4,  3,  2,  1,  0,  0 };
 int ROOK_DISTANCE[8] =               { 0,   7,  5,  4,  3,  0,  0,  0 };
 int QUEEN_DISTANCE[8] =              { 0,  10,  8,  5,  4,  0,  0,  0 };
+
+
+
+// short (s) and long (l) castle safety masks
+Bitboard wKingSafeMask_S1 = 0x0000000000E00000;
+Bitboard wKingSafeMask_SX = 0x000000000000E000;
+Bitboard wKingSafeMask_L1 = 0x0000000000070000;
+Bitboard wKingSafeMask_LX = 0x0000000000000700;
+Bitboard bKingSafeMask_S1 = 0x0000E00000000000;
+Bitboard bKingSafeMask_SX = 0x00E0000000000000;
+Bitboard bKingSafeMask_L1 = 0x0000070000000000;
+Bitboard bKingSafeMask_LX = 0x0007000000000000;
 
 
 
@@ -329,33 +357,52 @@ int PAWNPOS_W[64] = {
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
-int KNIGHTPOS_W[64] = {
-    -10, -10, -10, -10, -10, -10, -10, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10, -30, -10, -10, -10, -10, -30, -10
-};
+int KNIGHTPOS_W_MG[64] = {
+     -31, -29, -27, -25, -25, -27, -29, -31,
+      -9,  -6,  -2,   0,   0,  -2,  -6,  -9,
+      -7,  -2,  19,  19,  19,  19,  -2,  -7,
+      -5,  10,  23,  28,  28,  23,  10,  -5,
+      -5,  12,  25,  32,  32,  25,  12,  -5,
+      -7,  10,  23,  29,  29,  23,  10,  -7,
+      -9,   4,  14,  20,  20,  14,   4,  -9,
+     -41, -29, -27, -15, -15, -27, -29, -41 };
+
+int KNIGHTPOS_W_EG[64] = {
+     -31, -29, -27, -25, -25, -27, -29, -31,
+      -9,  -6,  -2,   0,   0,  -2,  -6,  -9,
+      -7,  -2,  19,  19,  19,  19,  -2,  -7,
+      -5,  10,  23,  28,  28,  23,  10,  -5,
+      -5,  12,  25,  32,  32,  25,  12,  -5,
+      -7,  10,  23,  29,  29,  23,  10,  -7,
+      -9,   4,  14,  20,  20,  14,   4,  -9,
+     -41, -29, -27, -15, -15, -27, -29, -41 };
 
 
 
-// *** This array is MIRRORED                          ***
-// *** You can enter the scoring data as if you're     ***
-// *** looking at the chess board from white's point   ***
-// *** of perspective. Lower left corner is square a1: ***
-int BISHOPPOS_W[64] = {
-    -10, -10, -10, -10, -10, -10, -10, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10, -10, -20, -10, -10, -20, -10, -10
-};
+// Bishop positional scoring values.
+// 
+// Note: This array is MIRRORED. You can enter the scoring data as if you're
+// looking at the chess board from white's point of perspective. Lower left
+// corner is square a1.
+int BISHOPPOS_W_MG[64] = {
+    -15, -15, -15, -15, -15, -15, -15, -15,
+      0,   4,   4,   4,   4,   4,   4,   0,
+      0,   4,   8,   8,   8,   8,   4,   0,
+      0,   4,   8,  12,  12,   8,   4,   0,
+      0,   4,   8,  12,  12,   8,   4,   0,
+      0,   4,   8,   8,   8,   8,   4,   0,
+      0,   4,   4,   4,   4,   4,   4,   0,
+      0,   0,   0,   0,   0,   0,   0,   0};
+
+int BISHOPPOS_W_EG[64] = {
+    -15, -15, -15, -15, -15, -15, -15, -15,
+      0,   4,   4,   4,   4,   4,   4,   0,
+      0,   4,   8,   8,   8,   8,   4,   0,
+      0,   4,   8,  12,  12,   8,   4,   0,
+      0,   4,   8,  12,  12,   8,   4,   0,
+      0,   4,   8,   8,   8,   8,   4,   0,
+      0,   4,   4,   4,   4,   4,   4,   0,
+      0,   0,   0,   0,   0,   0,   0,   0};
 
 
 
@@ -380,23 +427,32 @@ int ROOKPOS_W[64] = {
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
-int QUEENPOS_W[64] = {
-    -10, -10, -10, -10, -10, -10, -10, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,  10,  10,   5,   0, -10,
-    -10,   0,   5,   5,   5,   5,   0, -10,
-    -10,   0,   0,   0,   0,   0,   0, -10,
-    -10, -10, -20, -10, -10, -20, -10, -10
-};
+int QUEENPOS_W_MG[64] = {
+      0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   4,   4,   4,   4,   0,   0,
+      0,   4,   4,   6,   6,   4,   4,   0,
+      0,   4,   6,   8,   8,   6,   4,   0,
+      0,   4,   6,   8,   8,   6,   4,   0,
+      0,   4,   4,   6,   6,   4,   4,   0,
+      0,   0,   4,   4,   4,   4,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0 };
+
+int QUEENPOS_W_EG[64] = {
+      0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   4,   4,   4,   4,   0,   0,
+      0,   4,   4,   6,   6,   4,   4,   0,
+      0,   4,   6,   8,   8,   6,   4,   0,
+      0,   4,   6,   8,   8,   6,   4,   0,
+      0,   4,   4,   6,   6,   4,   4,   0,
+      0,   0,   4,   4,   4,   4,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0 };
 
 
 // *** This array is MIRRORED                          ***
 // *** You can enter the scoring data as if you're     ***
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
-int KINGPOS_W[64]  = {
+int KINGPOS_W_MG[64]  = {
     -40, -40, -40, -40, -40, -40, -40, -40,
     -40, -40, -40, -40, -40, -40, -40, -40,
     -40, -40, -40, -40, -40, -40, -40, -40,
@@ -408,11 +464,7 @@ int KINGPOS_W[64]  = {
 };
 
 
-// *** This array is MIRRORED                          ***
-// *** You can enter the scoring data as if you're     ***
-// *** looking at the chess board from white's point   ***
-// *** of perspective. Lower left corner is square a1: ***
-int KINGPOS_ENDGAME_W[64] = {
+int KINGPOS_W_EG[64] = {
      0,  10,  20,  30,  30,  20,  10,   0,
     10,  20,  30,  40,  40,  30,  20,  10,
     20,  30,  40,  50,  50,  40,  30,  20,
@@ -424,6 +476,7 @@ int KINGPOS_ENDGAME_W[64] = {
 }; 
 
 
+// TODOCUMENT
 int MIRROR[64] = {
     56,  57,  58,  59,  60,  61,  62,  63,
     48,  49,  50,  51,  52,  53,  54,  55,
@@ -438,12 +491,15 @@ int MIRROR[64] = {
 
 int DISTANCE[64][64];
 int PAWNPOS_B[64];
-int KNIGHTPOS_B[64];
-int BISHOPPOS_B[64];
+int KNIGHTPOS_B_MG[64];
+int KNIGHTPOS_B_EG[64];
+int BISHOPPOS_B_MG[64];
+int BISHOPPOS_B_EG[64];
 int ROOKPOS_B[64];
-int QUEENPOS_B[64];
-int KINGPOS_B[64];
-int KINGPOS_ENDGAME_B[64];
+int QUEENPOS_B_MG[64];
+int QUEENPOS_B_EG[64];
+int KINGPOS_B_MG[64];
+int KINGPOS_B_EG[64];
 
 Bitboard PASSED_WHITE[64];
 Bitboard PASSED_BLACK[64];
