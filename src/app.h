@@ -40,7 +40,7 @@ using namespace std;
 
 
 
-// Application types and definitions.
+// Application types and definition
 #define PLAYER_TYPE_HUMAN    1
 #define PLAYER_TYPE_COMPUTER 2
 
@@ -51,7 +51,7 @@ using namespace std;
 
 
 
-// different types of inputs
+// different types of user inputs
 enum InputType
 {
     INPUT_TYPE_MOVE,
@@ -61,7 +61,7 @@ enum InputType
 
 
 
-// Application methods and variables.
+// application methods and variables
 extern int             appMode;
 extern vector<string>  listOfCommands;
 extern bool            useCache;
@@ -70,7 +70,7 @@ extern EndType         gameEnd;
 
 int startApp(int);
 void prompt(unsigned);
-std::string getInput();
+string getInput();
 void terminateApp();
 void changeSide();
 uint64_t perft(unsigned, ColorType);
@@ -81,7 +81,7 @@ string getGameSequence();
 
 
 
-// Game status variables.
+// game status variables
 extern int playMode;
 extern int wPlayer;
 extern int bPlayer;
@@ -94,7 +94,7 @@ extern Cache cache;
 
 
 
-// Built-in helper functions.
+// built-in helper functions
 inline bool isFile(char c) { return ((c >= 'a' ) && (c <= 'h')); }
 inline bool isRank(char r) { return ((r >= '1' ) && (r <= '8')); }
 

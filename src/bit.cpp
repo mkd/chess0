@@ -35,7 +35,7 @@ using namespace std;
 
 
 
-// bitCnt()
+// bitCnt
 //
 // MIT HAKMEM algorithm to count bits in a Bitboard
 // @see http://graphics.stanford.edu/~seander/bithacks.html
@@ -60,10 +60,12 @@ unsigned int bitCnt(uint64_t bitmap)
 
 
 
-// firstOne()
+// firstOne
 //
-// De Bruijn Multiplication, see http://chessprogramming.wikispaces.com/BitScan
-// don't use this if bitmap = 0
+// Find the first bit on a Bitboard using the De Bruijn Multiplication
+// @see http://chessprogramming.wikispaces.com/BitScan
+//
+// Note: don't use this if bitmap = 0
 unsigned int firstOne(uint64_t bitmap)
 {
     static const int INDEX64[64] = {
@@ -83,11 +85,12 @@ unsigned int firstOne(uint64_t bitmap)
 
 
 
-// lastOne()
+// lastOne
 //
-// This is Eugene Nalimov's bitScanReverse
+// Find the last bit on a Bitboard using Eugene Nalimov's bitScanReverse. Please
 // use firstOne if you can, it is faster than lastOne.
-// don't use this if bitmap = 0
+//
+// Note: don't use this if bitmap = 0
 unsigned int lastOne(uint64_t bitmap)
 {
     int result = 0;
@@ -111,51 +114,55 @@ unsigned int lastOne(uint64_t bitmap)
 
 
 
-// displayBitboard()
+// displayBitboard
 //
 // Display a Bitboard on a chess board.
 void displayBitboard(Bitboard in)
 {
-    int i, rank, file;
+    int  i, rank, file;
     char boardc[64];
 
+
+    // set up all 1s and 0s on a 64-square board
     for (i = 0 ; i < 64 ; i++)
     {
-        if (in & BITSET[i]) boardc[i] = '1';
-        else boardc[i] = '.';
+        if (in & BITSET[i])
+            boardc[i] = '1';
+        else
+            boardc[i] = '.';
     }
 
-    cout << endl << "as binary integer:" << endl;
 
-    for (i = 63 ; i >= 0 ; i--)  cout << boardc[i];
-    cout << endl << "  firstOne = " << firstOne(in) << ", lastOne = " << lastOne(in) << ", bitCnt = " << bitCnt(in) << endl;
+    // display white front
     cout << endl << endl;
-
-    if (board.flipBoard)
+    if (!board.flipBoard)
     {
-        cout << "   hgfedcba" << endl << endl;
-        for (rank = 1 ; rank <= 8; rank++)
+        cout << "    +----+----+----+----+----+----+----+----+" << endl;
+        for (rank = 8; rank >= 1; rank--)
         {
-            cout << "   ";
-            for (file = 8 ; file >= 1; file--)
-            {
-                cout << boardc[BOARDINDEX[file][rank]];
-            }
-            cout << " " << rank << endl;
+            cout << setw(3) << rank <<  " |";
+
+            for (file = 1; file <= 8; file++)
+                cout << "  " << boardc[BOARDINDEX[file][rank]] << " |";
+
+            cout << endl << "    +----+----+----+----+----+----+----+----+" << endl;
         }
+        cout << "      a    b    c    d    e    f    g    h" << endl << endl;
     }
+
+    // display black front
     else
     {
-        for (rank = 8 ; rank >= 1; rank--)
+        cout << "    +----+----+----+----+----+----+----+----+" << endl;
+        for (rank = 1; rank <= 8; rank++)
         {
-            cout << " " << rank << " ";
-            for (file = 1 ; file <= 8; file++)
-            {
-                cout << boardc[BOARDINDEX[file][rank]];
-            }
-            cout << endl;
+            cout << setw(3) << rank << " |";
+
+            for (file = 1; file <= 8; file++)
+                cout << "  " << boardc[BOARDINDEX[file][rank]] << " |";
+
+            cout << endl << "    +----+----+----+----+----+----+----+----+" << endl;
         }
-        cout << endl << "   abcdefgh" << endl;
+        cout << "      h    g    f    e    d    c    b    a" << endl << endl;
     }
-    cout << endl;
 }
