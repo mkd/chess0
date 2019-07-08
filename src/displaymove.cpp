@@ -180,7 +180,7 @@ bool toSan(Move &move, char *sanMove)
     //  construct the SAN string:
     if (!legal) 
     {
-        strcpy(sanMove, "unknown");
+        strcpy(sanMove, "(null)");
         return false;
     }
     else

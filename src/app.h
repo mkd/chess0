@@ -64,8 +64,6 @@ enum InputType
 // Application methods and variables.
 extern int             appMode;
 extern vector<string>  listOfCommands;
-extern string          lastErrorMessage;
-extern vector<string>  history;
 extern bool            useCache;
 extern EndType         gameEnd;
 
@@ -90,7 +88,6 @@ extern int bPlayer;
 extern int curPlayerType;
 extern unsigned numberOfMove;
 extern unsigned cursor;
-extern ColorType gameMate;
 extern bool useBook;
 extern bool usePersonalBook;
 extern Cache cache;

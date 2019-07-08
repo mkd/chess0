@@ -94,7 +94,6 @@ void initListOfCommands()
     listOfCommands.push_back("undo");
     listOfCommands.push_back("v");
     listOfCommands.push_back("ver");
-    listOfCommands.push_back("verbose");
     listOfCommands.push_back("version");
 }
 
@@ -177,9 +176,9 @@ void exec(string input)
 
         // show current use of book
         if (usePersonalBook)
-            cout << "Using personal openings book." << endl;
+            cout << "Using openings book [personal]." << endl;
         else if (useBook)
-            cout << "Opening book is enabled." << endl;
+            cout << "Opening book is enabled [general]." << endl;
         else
             cout << "Opening book is disabled." << endl;
     }
@@ -408,13 +407,11 @@ void exec(string input)
     // test | bench: perform test or benchmark
     else if ((cmd == "test") || (cmd == "bench"))
     {
-        // disable book and verbose
+        // disable book and cache
         bool wasUsingCache   = useCache;
         bool wasUsingBook    = useBook;
-        bool wasUsingVerbose = verbose;
         useCache = false;
         useBook  = false;
-        verbose  = false;
 
 
         // test raw moves (make / unmake)
@@ -511,10 +508,9 @@ void exec(string input)
         }
 
 
-        // re-enable book and verbose
+        // re-enable book and cache
         useCache = wasUsingCache;
         useBook  = wasUsingBook;
-        verbose  = wasUsingVerbose;
     }
 
 
@@ -567,7 +563,7 @@ void exec(string input)
     // post: show analysis (XBoard)
     else if (cmd == "post")
     {
-        verbose = true;
+        // XXX
     }
 
 
@@ -688,31 +684,6 @@ void exec(string input)
 
 
 
-    // verbose: set application verbose mode
-    else if (cmd == "verbose")
-    {
-        if ((arg == "on") || (arg == "true"))
-            verbose = true;
-        else if ((arg == "off") || (arg == "false"))
-            verbose = false;
-
-        if (verbose)
-            cout << "Verbose mode is enabled." << endl;
-        else
-            cout << "Verbose mode is disabled." << endl;
-    }
-
-
-
-    // quiet: set application quiet mode (verbose off)
-    else if (cmd == "quiet")
-    {
-        verbose = false;
-        cout << "Verbose mode is disabled." << endl;
-    }
-
-
-
     // version: show application version number
     else if ((cmd == "version") || (cmd == "ver") || (cmd == "v"))
     {
@@ -742,9 +713,9 @@ void displayHelp(string which)
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "auto  book  cache  depth  edit  eval  flip  game" << endl;
-        cout << "go  help  history  load  manual  new  remove" << endl;
-        cout << "resign  restart  save  sd  show  solve  st" << endl;
-        cout << "test  think  undo  verbose  version  quit" << endl;
+        cout << "go  help  history  load  manual  new  null  pass" << endl;
+        cout << "remove  resign  restart  save  sd  show  solve  st" << endl;
+        cout << "test  think  undo  version  quit" << endl;
         return;
     }
 
@@ -762,11 +733,16 @@ void displayHelp(string which)
         cout << " the match by itself." << endl;
     }
 
+
     // help book
     else if (which == "book")
     {
-        cout << "book [on | off]" << endl;
+        cout << "book [on | general | personal | off]" << endl;
         cout << " Enable or disable the moves from the book for the computer.";
+        cout << endl << endl;
+        cout << " on | general -> use general (wide) opening book" << endl;
+        cout << " personal     -> use selected (narrow) opening book" << endl;
+        cout << " off          -> disable book moves and force search" << endl;
         cout << endl;
     }
 
@@ -807,6 +783,7 @@ void displayHelp(string which)
 
     }
 
+
     // help show
     else if (which == "show")
     {
@@ -819,7 +796,6 @@ void displayHelp(string which)
         cout << endl;
         cout << " with small letters next to an asterisk." << endl;
     }
-
 
 
     // help edit
@@ -851,6 +827,7 @@ void displayHelp(string which)
         cout << endl;
     }
 
+
     // help eval
     else if (which == "eval")
     {
@@ -864,6 +841,7 @@ void displayHelp(string which)
         cout << " heuristic evaluation may differ quite much." << endl;
     }
 
+
     // help go
     else if (which == "go")
     {
@@ -876,12 +854,14 @@ void displayHelp(string which)
         cout  << endl;
     }
 
+
     // help help
     else if (which == "help")
     {
         cout << "help" << endl;
         cout << " Show the general help." << endl;
     }
+
 
     // help history
     else if (which == "history")
@@ -891,7 +871,6 @@ void displayHelp(string which)
         cout << endl;
         cout << " game." << endl;
     }
-
 
 
     // help load
@@ -933,6 +912,16 @@ void displayHelp(string which)
     }
 
 
+
+    // help null/pass
+    else if ((which == "null") || (which == "pass"))
+    {
+        cout << "null | pass" << endl;
+        cout << " Make a null move, which passes the turn to the other side";
+        cout << " without performing any actual move." << endl;
+    }
+
+
     // help resign
     else if (which == "resign")
     {
@@ -961,7 +950,6 @@ void displayHelp(string which)
         cout << " and edit your own board position using the 'edit' command.";
         cout << endl;
     }
-
 
 
     // help solve
@@ -1031,19 +1019,6 @@ void displayHelp(string which)
 
 
 
-    // help verbose
-    else if (which == "verbose")
-    {
-        cout << "verbose [on|off]" << endl;
-        cout << " Set the application into verbose mode, either on or off.";
-        cout << endl;
-        cout << " In verbose mode, the program will show the status of the";
-        cout << endl;
-        cout << " board after each move and some other information.";
-        cout << endl;
-    }
-
-
     // help version
     else if (which == "version")
     {
@@ -1052,12 +1027,7 @@ void displayHelp(string which)
         cout << endl;
     }
 
-    // help quiet
-    else if (which == "quiet")
-    {
-        cout << "quiet" << endl;
-        cout << " Alias of 'verbose off'." << endl;
-    }
+
 
     // help quit
     else if (which == "quit")

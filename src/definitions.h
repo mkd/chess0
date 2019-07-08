@@ -49,16 +49,22 @@
 
 
 
-// Different execution modes of Chess0:
+// Different execution modes of Chess0
+//
 // - XBOARD: the program will be quiet and interact with a graphical user
 //           interface (GUI), by using the Winboard/Xboard protocol.
+//
+// - UCI:    the program will be quiet and interact with a graphical user
+//           interface (GUI), by using the UCI protocol.
 //
 // - CLI:    the program will be verbose and interact with the user through the
 //           command line of the system, using text-based input and commands.
 #define APP_MODE_XBOARD 1
 #define APP_MODE_CLI    2
+#define APP_MODE_UCI    3
 
 
+// Search algorithm configuration
 #define AI_SEARCH_DEPTH           64
 #define SEARCH_WINDOW_SIZE        25
 #define TIME_PER_MOVE              4

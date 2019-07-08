@@ -46,7 +46,7 @@ using namespace std;
 
 
 
-// makeMove()
+// makeMove
 //
 // Apply a move to the current board.
 void makeMove(Move &move)

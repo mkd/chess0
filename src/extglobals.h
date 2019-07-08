@@ -269,9 +269,5 @@ extern int XB_INC;
 extern int XB_OTIM;
 extern int XB_CTIM;
 
-extern bool LMR;
-extern bool verbose;
-
-
 
 #endif // _EXTGLOBALS_H_

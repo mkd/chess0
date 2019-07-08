@@ -17,22 +17,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-### Establish the operating system name
+
+### Figure the operating system name
 UNAME = $(shell uname)
+
 
 ### Executable name
 APP = chess0
 
-### Installation dir definitions
+
+### Defone the path for installation
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
+
 
 ### Object files
 OBJS = app.o bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o fen.o eval.o book.o see.o setup.o timer.o
 
+
 ### Compilation flags
 CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++17 -m64 -mpopcnt -flto -msse -msse2 -msse3 -msse4.1 -msse4.2
 DEPENDFLAGS += -std=c++17
+
 
 ### Build targets
 all: $(APP) .depend

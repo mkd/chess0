@@ -15,6 +15,12 @@ BEFORE NEXT RELEASE
 
 - Implement many useful commands: info (midgame, etc), lmr 1/2/3, etc.
 
+- Evaluation: avoid endless checks, especially in endings where we have lots of
+  material and the opponent only has the king. We should try to find mate by
+  reducing the opponent's king mobility. --> check + lower_mobility should be a
+  big plus for us, to motivate the engine to corner the opponent's king and mate
+  it.
+
 - Evaluation: king under heavy attack is too optimistic
   - chess0-crafty.c0 -> eval should be -5.33, it is -1.5 instead --> penalty for
     check without mobility: e.g., penalty = 100 * (8 - mobility)

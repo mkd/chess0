@@ -22,9 +22,9 @@
 
 // @file app.cpp
 //
-// This file contains the code for creating and starting the actual program
-// (Application). The application interacts with the user to accept input
-// (commands and moves) and perform an action based on the given input.
+// This file contains the code for creating and starting the actual
+// application. The application interacts with the user to accept input
+// (commands and moves), and performs an action based on the given input.
 //
 // The application can run in two different modes: XBOARD and CLI. The XBOARD
 // mode makes the app to work quietly and interact with a graphical user
@@ -32,9 +32,8 @@
 // program run on the system command line and interact with the user by
 // accepting text-based commands and moves.
 //
-// In summary, the application (or app) is responsible for taking the input and
-// performing different actions, based on user (or GUI) commands. Once the app
-// terminates, it returns a symbolic value and the whole program is terminated.
+// Note: currently, there is no support for Universal Chess Interface (UCI). But
+// its development is planned.
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -59,51 +58,148 @@ using namespace std;
 
 
 
-// Initialize the application, game and board status.
+// Initialization
+//
+// Here, there is a number of variables that need to be defined and initialized
+// when the app starts for the first time. These variables include game status,
+// user messages, and editable options such as the use of openings book, search
+// cache, etc.
+
+
+// numberOfMove holds the move number in the current game, which is what is
+// shown to the user on the CLI prompt (e.g., Black (12) means 'Move number 12,
+// black to move'.
 unsigned numberOfMove = 1;
+
+
+// cursor holds the number of ply in the current game. This number is usually
+// double than numberOfMove. For example, cursor = 6 means 'move 3 black to
+// move'.
 unsigned cursor = 0;
-string lastErrorMessage = "";
-ColorType gameMate = COLOR_TYPE_NONE;
+
+
+// playMode, wPlayer and bPlayer define the mode in which the application is
+// working and which color is set to move. The three different game modes are:
+//  - HUMAN_HUMAN  -->  both sides are controlled by human input
+//  - HUMAN_CPU    -->  one side is controlled by human input, the other one is
+//                      run by the computer
+//  - CPU_CPU      -->  both sides are controlled by the computer (note: the
+//                      game is played automatically on both sides by the
+//                      computer, so the game cannot be stopped until its end)
 int playMode = HUMAN_CPU;
 int wPlayer = PLAYER_TYPE_HUMAN;
 int bPlayer = PLAYER_TYPE_COMPUTER;
+
+
+// listOfCommands holds a list of valid commands that can be fed to the computer
+// through the command line. The complete list of commands is defined in the
+// file cmd.cpp. Entering a command that is not listed in listOfCommands will
+// raise an error.
 vector<string> listOfCommands;
-vector<string> history;
+
+
+// useBook is a user-editable option to select whether opening books can be used
+// by the computer or not. If the opening book is not in use, the computer will
+// always search for a move.
+bool useBook = true;
+
+
+// usePersonalBook is a user-editable option to decide which opening book shall
+// be used by the computer. The "personal book" contains only a narrow set of
+// opening lines preferred by the author of this chess engine, whereas the
+// "general book" contains near 3,000 different opening lines taken from Grand
+// Masters' databases.
+//
+// All book opening lines are defined in book.cpp. The personal opening lines
+// are defined within the variable 'po[]', whereas the general opening lines are
+// defined within the variable 'book[]'.
 bool usePersonalBook = false;
+
+
+// sanMove holds a 'SAN' notation of the move selected. Internally, moves use a
+// more efficient representation, i.e., origin-destination. However, SAN will
+// have a more user-friendly version of the move, which can be shown on the user
+// interface. For example Nf3, Bb5+, Qxd4.
 char sanMove[12];
+
+
+// validMoves holds a list of all the valid moves at the current time in the
+// game. This is used to see whether there are no valid moves and finding end
+// situations.
 map<string, string> validMoves;
+
+
+// i, j and number are temporary variables used to iterate over different moves
+// and parts of the game.
 int i, j, number;
-char command[80];
+
+
+// userinput holds the string entered by the user. This string is analyzed by
+// the application to figure out whether it is a valid move or command, and act
+// upon it.
 char userinput[80];
+
+
+// userMove holds a translation of a valid move entered by the user.
 string userMove = "";
 
-bool useBook = true;
+
+// useCache is a user-editable option to select whether the engine will save
+// transpopsition tables for all searched positions. Cache significantly speeds
+// up the search algorithm on positions that have previously appeared.
+//
+// cache is an object that holds all transposition tables and manages their
+// storage, access and all the information related.
+//
+// Note: due to being very unstable at this point, Cache is disabled by default.
 bool useCache = false;
-bool verbose = false;
-bool LMR = true;
 Cache cache;
+
+
+// gameEnd holds the type of ending, when the game comes to an end. If the game
+// end is END_TYPE_NOEND, the application continues asking the user for input
+// and going through the main loop.
 EndType gameEnd = END_TYPE_NOEND;
 
 
 
-// startApp()
+// startApp
 //
-// Start the whole application and main CLI loop.
+// Start the whole application. This includes setting up all variables and
+// entering the main CLI loop.
+//
+// The variable 'mode' specifies whether the application runs in XBOARD or CLI
+// mode to ask the user for the input.
 int startApp(int mode)
 {
-    // Welcome the user with the program name and a prompt, which is ready to
-    // start taking moves (or commands) and play a game.
+    // Prompt the user for input from the command line
     if (mode == APP_MODE_CLI)
         cout << "Welcome to " << PROGRAM_NAME << "!" << endl;
 
-    // XBoard protocol goes here
-    else
+
+    // Start the Xboard protocol
+    else if (mode == APP_MODE_XBOARD)
     {
-        // TODO
+        // TODO: implement XBOARD protocol from chess0-classic
     }
 
 
-    // Reset all variables before starting a new game.
+    // Start the UCI  protocol
+    else if (mode == APP_MODE_UCI)
+    {
+        // TODO: implement UCI protocol from chess0-classic
+    }
+
+
+    // Error: unknown application mode
+    else
+    {
+        cerr << "Error: unknown application mode." << endl;
+        exit(-1);
+    }
+
+
+    // Clear all the variables necessary for starting a new game
     string input = "";
     curPlayerType = wPlayer;
     Move myMove;
@@ -113,53 +209,52 @@ int startApp(int mode)
     string bookSequence = "";
 
 
-    // Initialize the board, the list of commands and the openings book.
+    // Initialize the board, the list of commands and the openings book
     dataInit();
     board.init();
     initListOfCommands();
-    initBook();
+    initBook(usePersonalBook);
 
 
     // Application's main loop:
-    // - Show the prompt and ask for an input (move or command)
+    // - Prompt the user for an input (move or command)
     // - Read the input and check if it is a move or a command
     // - If invalid command or move, show error and return to previous prompt
     // - If valid command, execute and return to previous prompt
-    // - If valid move, perform the move.
+    // - If valid move, perform the move
     //
     // This loop is exited by entering Ctrl+D or the commands "quit" or "exit",
     // which call terminateApp().
     while (1)
     {
-        // Check for game end (e.g., resign).
+        // Check for game end (e.g., resign)
         if (gameEnd)
             dealEnd();
 
 
         // Clear both the input and output buffer, to make sure the new input
-        // isn't altered from something entered during the program's output.
+        // isn't altered from something entered during the program's output
         cout.flush();
         input = "";
 
 
-        // Show the prompt and ask the user for an input (move or command).
+        // Show the prompt and ask the user for an input (move or command)
         prompt(numberOfMove);
 
 
-        // Current player is Human, ask for input
+        // Current player is human, ask for input
         if (curPlayerType == PLAYER_TYPE_HUMAN)
         {
             input = getInput();
         }
+
+        // Current player is the computer, find a move
         else if (curPlayerType == PLAYER_TYPE_COMPUTER)
         {
             // first, we try to get a reply from the openings book.
             moveIsFromBook = "";
-
             if (useBook)
             {
-                // try to get a move from the opening book
-                // Note: the sequence is assumed to be consistent with the game
                 bookSequence = getGameSequence();
                 if (bookSequence == "")
                     bookSequence = "%";
@@ -167,7 +262,7 @@ int startApp(int mode)
             }
 
 
-            // If no move from the book, enter search mode.
+            // no move found from the book, enter search
             if (input.empty())
             {
                 start = clock();
@@ -191,7 +286,7 @@ int startApp(int mode)
         }
 
 
-        // clean-up the input from '+' symbols
+        // handle checks and mates notation for the moves
         string addSymbol = "";
         size_t pos = input.rfind("#");
         if (pos != std::string::npos)
@@ -203,7 +298,7 @@ int startApp(int mode)
         input.erase(std::remove(input.begin(), input.end(), '#'), input.end());
 
 
-        // Check what type of input was entered: move, null move, command, etc.
+        // check what type of input was entered: move, null move, command, etc.
         itype = getInputType(input);
 
 
@@ -219,6 +314,7 @@ int startApp(int mode)
             board.moveBufLen[0] = 0;
             board.moveBufLen[1] = movegen(board.moveBufLen[0]);
             validMoves.clear();
+
             for (auto i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
             {
                 makeMove(board.moveBuffer[i]);
@@ -248,6 +344,22 @@ int startApp(int mode)
 
                     validMoves[moveStr] = tmpStr;
                 }
+            }
+
+
+            // if 'move' is a null move ('pass' or 'null'), simply change the
+            // sides and advance the cursor
+            if ((input == "pass") || (input == "null"))
+            {
+                cout << "Null move baby!" << endl;
+
+                myMove.moveInt = 0;
+                makeMove(myMove);
+                board.endOfGame++;
+                board.endOfSearch = board.endOfGame;
+                board.display();
+                changeSide();
+                continue;
             }
 
 
@@ -354,28 +466,26 @@ int startApp(int mode)
 
 
 
-// prompt()
+// prompt
 //
 // Show the prompt to the user, waiting for an input.
+//
+// nmove holds the current move number in the game.
 void prompt(unsigned nmove)
 {
     ostringstream line(ostringstream::out);
 
     if (board.nextMove)
-    {
         line << "Black (" << nmove << "): ";
-    }
     else
-    {
         line << "White (" << nmove << "): ";
-    }
 
     cout << endl << line.str();
 }
 
 
 
-// getInput()
+// getInput
 //
 // Retrieve an input line from the user.
 string getInput()
@@ -392,7 +502,7 @@ string getInput()
     string input_str(input);
 
 
-    // If Ctrl+D is entered, then terminate the program.
+    // Ctrl+D terminates the program
     if (cin.eof())
         terminateApp();
 
@@ -401,7 +511,7 @@ string getInput()
 
 
 
-// terminateApp()
+// terminateApp
 //
 // Terminate the app in a safe way.
 void terminateApp()
@@ -412,37 +522,36 @@ void terminateApp()
 
 
 
-// getInputType()
+// getInputType
 //
 // Analyze a given input and find out whether it is a move, a command or an
 // invalid input.
 InputType getInputType(string input)
 {
-    // Handle null moves
+    // handle null moves
     if ((input == "pass") || (input == "null"))
         return INPUT_TYPE_MOVE;
 
 
-    // First check if the input matches any of the supported commands.
+    // first check if the input matches any of the supported commands
     int pos = input.find_first_of(' ', 0);
     string cmd = input.substr(0, pos);
     if (find(listOfCommands.begin(), listOfCommands.end(), cmd) != listOfCommands.end())
         return INPUT_TYPE_CMD;
 
 
-    // If it is not a command, it must be a move. Moves must have a length
-    // between 2 and 6 characters.
+    // if it is not a command, it must be a move (length 2-6 chars)
     if ((input.length() < 2) || (input.length() > 7))
         return INPUT_TYPE_INVALID;
 
 
-    // Look for pawn moves => column + row (e.g. e4, d4, f3, b7..)
+    // look for pawn moves => column + row (e.g. e4, d4, f3, b7..)
     else if ((input.length() == 2) && (isFile(input[0])) && (isRank(input[1])))
         return INPUT_TYPE_MOVE;
 
 
-    // Look for simple piece moves => piece + column|row + column|row (e.g. Nd4)
-    // and short castling moves (0-0).
+    // look for simple piece moves => piece + column|row + column|row (e.g. Nd4)
+    // and short castling moves (0-0)
     else if (input.length() == 3)
     {
         if ((input == "0-0") || (input == "O-O"))
@@ -462,7 +571,7 @@ InputType getInputType(string input)
     }
 
 
-    // Look for 4-character moves, including:
+    // look for 4-character moves, including:
     // - move_orig_dest   => column + row + column + row (e.g. d2d4)
     // - capture_simple   => piece|column + 'x' + column + row (e.g. exd4, Nxd4)
     // - promotion_simple => column + row + '=' + piece
@@ -473,11 +582,13 @@ InputType getInputType(string input)
                 isPiece(input[3])  && (input[3] != 'K') && (input[3] != 'k'))
             return INPUT_TYPE_MOVE;
 
+
         // look for algebraic move (xyXY)
         else if ((isFile(input[0])) && (isRank(input[1]))
                 && (isFile(input[2]))
                 && (isRank(input[3])))
             return INPUT_TYPE_MOVE;
+
 
         // look for captures
         else if (isFile(input[0]) && (input[1] == 'x'))
@@ -485,6 +596,7 @@ InputType getInputType(string input)
 
         else if (isPiece(input[0]) && (input[1] == 'x'))
             return INPUT_TYPE_MOVE;
+
 
         // look for long moves
         else if (isPiece(input[0]) && (isFile(input[1]) || isRank(input[1]))
@@ -497,7 +609,7 @@ InputType getInputType(string input)
     }
 
 
-    // Look for 5-character moves, including:
+    // look for 5-character moves, including:
     // - algebraic promotion     => e7e8Q
     // - move_piece_ambiguous    => piece + column|row + column + row
     // - castle_long             => 0-0-0
@@ -510,14 +622,17 @@ InputType getInputType(string input)
                 isPiece(input[4]))
             return INPUT_TYPE_MOVE;
 
+
         // look for promotions
         else if (isFile(input[0]) && (input[1] == 'x') && isFile(input[2]) &&
                 (input[3] == '=')  && (input[4] != 'K') && (input[4] != 'k'))
             return INPUT_TYPE_MOVE;
 
+
         // look for long castling
         else if ((input == "0-0-0") || (input == "O-O-O"))
             return INPUT_TYPE_MOVE;
+
 
         // look for long moves
         else if (isPiece(input[0]) && (isFile(input[1]) || isRank(input[1]))
@@ -525,12 +640,13 @@ InputType getInputType(string input)
                 && isFile(input[3]) && isRank(input[4]))
             return INPUT_TYPE_MOVE;
 
+
         else
             return INPUT_TYPE_INVALID;
     }
 
 
-    // Look for 6-character moves => promotion after capture in SAN notation =>
+    // look for 6-character moves => promotion after capture in SAN notation =>
     // column + 'x' + column + '8' + '=' + piece.
     else if (input.length() == 6)
     {
@@ -550,7 +666,7 @@ InputType getInputType(string input)
 
 
 
-// changeSide()
+// changeSide
 //
 // Change the side playing, including color, type of input (human vs computer),
 // clocks, etc.
@@ -568,12 +684,13 @@ void changeSide()
 
 
 
-// dealEnd()
+// dealEnd
 //
 // Deal with the end of the current match.
 void dealEnd()
 {
     cout << endl;
+
 
     // show result for draw due to insufficient material.
     if (bitCnt(board.whitePieces | board.blackPieces) < 3)
@@ -585,15 +702,7 @@ void dealEnd()
         cout << "1/2-1/2 {Draw by 50-move repetition}" << endl;
 
 
-    // show results for mate.
-    //else if (check == COLOR_TYPE_BLACK)
-    //    cout << "1-0 {White mates}" << endl;
-
-    //else if (check == COLOR_TYPE_WHITE)
-    //    cout << "0-1 {Black mates}" << endl;
-
-
-    // Resign.
+    // resignation
     if (gameEnd == END_TYPE_RESIGN)
     {
         if (board.nextMove)
@@ -603,53 +712,43 @@ void dealEnd()
     }
 
 
-    // Show result for stale mate.
-    //else if (check == COLOR_TYPE_NONE)
-    //    cout << "1/2-1/2 {Stale mate}" << endl;
-
-
     // don't let the computer control the program after a game
     wPlayer = PLAYER_TYPE_HUMAN;
     bPlayer = PLAYER_TYPE_COMPUTER;
     curPlayerType = wPlayer;
     playMode = HUMAN_CPU;
-    cursor = 0;
-    numberOfMove = 1;
-    gameEnd = END_TYPE_NOEND;
 
-    dataInit();
-    board.init();
-
-    // enable book by default
-    useBook = true;
+    cout << "Type 'restart' to start a new game." << endl;
 }
 
 
 
-// displayGame()
+// displayGame
 //
 // Display the list of moves of this game.
 void displayGame()
 {
     if (board.endOfGame)
     {
-        // make a temporary copy of board.gameLine[];
+        // make a temporary copy of board.gameLine[]
         number = board.endOfGame;
         GameLineRecord *tmp = new GameLineRecord[number];
         memcpy(tmp, board.gameLine, number * sizeof(GameLineRecord));
 
-        // unmake all moves:
+
+        // unmake all moves
         for (i = number-1 ; i >= 0 ; i--) 
         { 
             unmakeMove(tmp[i].move);
             board.endOfSearch = --board.endOfGame;
         }
 
-        // redo all moves:
+
+        // redo all moves
         j = board.nextMove;
         for (i = 0 ; i < number; i++)
         {
-            // move numbering:
+            // move numbering
             if (!((i+j+2)%2)) cout << (i+2*j+2)/2 << ". ";
             else if (!i) cout << "1. ... ";
 
@@ -657,28 +756,29 @@ void displayGame()
             toSan(tmp[i].move, sanMove);
             cout << sanMove; 
 
-            // output CRLF, or space:
+            // output new line or space
             if (!((i+j+1)%2)) cout << endl;
             else cout << ", ";
 
-            // make the move:
+            // make the move
             makeMove(tmp[i].move);
             board.endOfSearch = ++board.endOfGame;
         }
         cout << endl;
 
+
         // delete the temporary copy:
         delete[] tmp;
     } 
+
+    // if there are no moves in the game, tell the user
     else
-    {
         cout << "there are no game moves" << endl;        
-    }
 }
 
 
 
-// getGameSequence()
+// getGameSequence
 //
 // Get the whole game history into a linear sequence, encoded in a string.
 string getGameSequence()
@@ -688,10 +788,11 @@ string getGameSequence()
 
     if (board.endOfGame)
     {
-        // make a temporary copy of board.gameLine[];
+        // make a temporary copy of board.gameLine[]
         number = board.endOfGame;
         GameLineRecord *tmp = new GameLineRecord[number];
         memcpy(tmp, board.gameLine, number * sizeof(GameLineRecord));
+
 
         // unmake all moves
         for (i = number-1 ; i >= 0 ; i--) 

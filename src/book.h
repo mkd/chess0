@@ -38,7 +38,7 @@ using namespace std;
 
 
 // Book functionality.
-void initBook();
+void initBook(bool);
 string getReplyTo(string);
 
 
