@@ -22,7 +22,7 @@
 
 // @file see.cpp
 //
-// XXX
+// This file contains the functionality of the Static Exchange Evaluator (SEE).
 #include <iostream>
 #include "definitions.h"
 #include "functions.h"

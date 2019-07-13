@@ -162,7 +162,7 @@ int movegen(int index)
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = ROOKMOVES(from);   // see Macro's
+            tempMove = ROOKMOVES(from);
             while (tempMove)
             {
                 to = firstOne(tempMove);
@@ -174,16 +174,14 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Black Queens
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(BLACK_QUEEN);
         tempPiece = board.blackQueens;
         while (tempPiece)
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = QUEENMOVES(from);   // see Macro's
+            tempMove = QUEENMOVES(from);
             while (tempMove)
             {
                 to = firstOne(tempMove);
@@ -195,9 +193,7 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Black King
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(BLACK_KING);
         tempPiece = board.blackKing;
         while (tempPiece)
@@ -214,60 +210,59 @@ int movegen(int index)
                 tempMove ^= BITSET[to];
             }
 
-            //     Black 0-0 Castling:
+            // Black 0-0 Castling
             if (board.castleBlack & CANCASTLEOO)
             {
                 if (!(maskFG[1] & board.occupiedSquares))
                 {
                     if (!isAttacked(maskEG[BLACK_MOVE], WHITE_MOVE))
                     {
-                        board.moveBuffer[index++].moveInt = BLACK_OO_CASTL;   // predefined unsigned int
+                        board.moveBuffer[index++].moveInt = BLACK_OO_CASTL;
                     }
                 }
             }
-            //     Black 0-0-0 Castling:
+
+            // Black 0-0-0 Castling
             if (board.castleBlack & CANCASTLEOOO)
             {
                 if (!(maskBD[1] & board.occupiedSquares))
                 {
                     if (!isAttacked(maskCE[BLACK_MOVE], WHITE_MOVE))
                     {
-                        board.moveBuffer[index++].moveInt = BLACK_OOO_CASTL; // predefined unsigned int
+                        board.moveBuffer[index++].moveInt = BLACK_OOO_CASTL;
                     }
                 }
             }
+
             tempPiece ^= BITSET[from];
             move.setPromo(EMPTY);
         }
     }
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // White to move
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+    // White to move
     else 
     {
-        targetBitmap = ~board.whitePieces; // we cannot capture one of our own pieces!
+        // we cannot capture one of our own pieces
+        targetBitmap = ~board.whitePieces;
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Pawns
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_PAWN);
         tempPiece = board.whitePawns;
         while (tempPiece)   
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = WHITE_PAWN_MOVES[from] & freeSquares;                // normal moves
+            tempMove = WHITE_PAWN_MOVES[from] & freeSquares;
             if (RANKS[from] == 2 && tempMove)                               
-                tempMove |= (WHITE_PAWN_DOUBLE_MOVES[from] & freeSquares);  // add double moves
-            tempMove |= WHITE_PAWN_ATTACKS[from] & board.blackPieces;       // add captures
+                tempMove |= (WHITE_PAWN_DOUBLE_MOVES[from] & freeSquares);
+            tempMove |= WHITE_PAWN_ATTACKS[from] & board.blackPieces;
             while (tempMove)
             {
                 to = firstOne(tempMove);
                 move.setTosq(to);
                 move.setCapture(board.square[to]);
-                if ((RANKS[to]) == 8)                                       // add promotions
+                if ((RANKS[to]) == 8)
                 {
                     move.setPromo(WHITE_QUEEN);   board.moveBuffer[index++].moveInt = move.moveInt;
                     move.setPromo(WHITE_ROOK);    board.moveBuffer[index++].moveInt = move.moveInt;
@@ -281,12 +276,13 @@ int movegen(int index)
                 }
                 tempMove ^= BITSET[to];
             }
-            // add en-passant captures:
-            if (board.epSquare)   // do a quick check first
+
+            // add en-passant captures
+            if (board.epSquare)
             {
                 if (WHITE_PAWN_ATTACKS[from] & BITSET[board.epSquare])
                 {
-                    if (board.blackPawns & BITSET[board.epSquare - 8])  // final check to protect against same color capture during null move
+                    if (board.blackPawns & BITSET[board.epSquare - 8])
                     {
                         move.setPromo(WHITE_PAWN);
                         move.setCapture(BLACK_PAWN);
@@ -299,9 +295,7 @@ int movegen(int index)
             move.setPromo(EMPTY);
         }                         
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Knights
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_KNIGHT);
         tempPiece = board.whiteKnights;
         while (tempPiece)
@@ -320,16 +314,14 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Bishops
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_BISHOP);
         tempPiece = board.whiteBishops;
         while (tempPiece)
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = BISHOPMOVES(from);   // see Macro's
+            tempMove = BISHOPMOVES(from);
             while (tempMove)
             {
                 to = firstOne(tempMove);
@@ -341,16 +333,14 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Rooks
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_ROOK);
         tempPiece = board.whiteRooks;
         while (tempPiece)
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = ROOKMOVES(from);   // see Macro's
+            tempMove = ROOKMOVES(from);
             while (tempMove)
             {
                 to = firstOne(tempMove);
@@ -362,16 +352,14 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White Queens
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_QUEEN);
         tempPiece = board.whiteQueens;
         while (tempPiece)
         {
             from = firstOne(tempPiece);
             move.setFrom(from);
-            tempMove = QUEENMOVES(from);   // see Macro's
+            tempMove = QUEENMOVES(from);
             while (tempMove)
             {
                 to = firstOne(tempMove);
@@ -383,9 +371,7 @@ int movegen(int index)
             tempPiece ^= BITSET[from];
         }
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // White king
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         move.setPiece(WHITE_KING);
         tempPiece = board.whiteKing;
         while (tempPiece)
@@ -402,26 +388,26 @@ int movegen(int index)
                 tempMove ^= BITSET[to];
             }
 
-            //     White 0-0 Castling:
+            // White 0-0 Castling
             if (board.castleWhite & CANCASTLEOO)
             {
                 if (!(maskFG[0] & board.occupiedSquares))
                 {
                     if (!isAttacked(maskEG[WHITE_MOVE], BLACK_MOVE))
                     {
-                        board.moveBuffer[index++].moveInt = WHITE_OO_CASTL; // predefined unsigned int
+                        board.moveBuffer[index++].moveInt = WHITE_OO_CASTL;
                     }
                 }
             }
 
-            //     White 0-0-0 Castling:
+            // White 0-0-0 Castling
             if (board.castleWhite & CANCASTLEOOO)
             {
                 if (!(maskBD[0] & board.occupiedSquares))
                 {
                     if (!isAttacked(maskCE[WHITE_MOVE], BLACK_MOVE))
                     {
-                        board.moveBuffer[index++].moveInt = WHITE_OOO_CASTL; // predefined unsigned int
+                        board.moveBuffer[index++].moveInt = WHITE_OOO_CASTL;
                     }
                 }
             }
@@ -434,6 +420,8 @@ int movegen(int index)
 
 
 
+// captgen
+//
 // Generate pseudo-legal captures and promotions generator,
 // using magic multiplication instead of rotated bitboards.
 // The first free location in moveBuffer[] is supplied in index,
@@ -890,9 +878,9 @@ bool isAttacked(Bitboard &targetBitmap, const unsigned char &fromSide)
 
 
 
-// addCaptScore()
+// addCaptScore
 //
-// XXX
+// Use the static evaluator to find "better" moves by assigning them a score.
 void Board::addCaptScore(int &ifirst, int &index)
 {
     int i, val;
@@ -911,10 +899,13 @@ void Board::addCaptScore(int &ifirst, int &index)
     // now insert the move into the sorted list at the right location:
     // i = descending because the capture generated should deliver moves be in pretty reasonable order 
     // (captures by pawns are generated first, queens last), so if we're lucky we don't need to sort.
-    i = index - 1;  
-    while (i > ifirst -1 && val > moveBuffer[i+OFFSET].moveInt) i--;  // find the insertion location
+    i = index - 1;
+    while (i > ifirst -1 && val > moveBuffer[i+OFFSET].moveInt)
+        i--;
+
     memmove(&moveBuffer[i+2], &moveBuffer[i+1], (index-i-1)*sizeof(capt));  //  move aside moves
     memmove(&moveBuffer[i+2+OFFSET], &moveBuffer[i+1+OFFSET], (index-i-1)*sizeof(capt));  // move aside scores
+
     moveBuffer[i+1].moveInt = capt.moveInt; // insert the move
     moveBuffer[i+1+OFFSET].moveInt = val;  // insert the score
 }

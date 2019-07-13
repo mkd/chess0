@@ -157,28 +157,17 @@ void exec(string input)
         if (arg == "on")
         {
             useBook = true;
-            usePersonalBook = false;
-        }
-
-        // use personal openings
-        else if (arg == "personal")
-        {
-            useBook = true;
-            usePersonalBook = true;
         }
 
         // turn book off
         else if (arg == "off")
         {
             useBook = false;
-            usePersonalBook = false;
         }
 
         // show current use of book
-        if (usePersonalBook)
-            cout << "Using openings book [personal]." << endl;
         else if (useBook)
-            cout << "Opening book is enabled [general]." << endl;
+            cout << "Opening book is enabled." << endl;
         else
             cout << "Opening book is disabled." << endl;
     }
@@ -737,12 +726,8 @@ void displayHelp(string which)
     // help book
     else if (which == "book")
     {
-        cout << "book [on | general | personal | off]" << endl;
+        cout << "book [on | off]" << endl;
         cout << " Enable or disable the moves from the book for the computer.";
-        cout << endl << endl;
-        cout << " on | general -> use general (wide) opening book" << endl;
-        cout << " personal     -> use selected (narrow) opening book" << endl;
-        cout << " off          -> disable book moves and force search" << endl;
         cout << endl;
     }
 

@@ -25,12 +25,7 @@
 // This file contains the main search methods for finding the best next move.
 //
 // It is based on a simple alpha-beta pruning mechanism runnning on top of a
-// miniMAX, and it includes multiple optimizations, such as:
-// - Principal Variation search (PVS)
-// - null move heuristics
-// - history & killer heuristics
-// - late move reductions (LMR)
-// - quiescence search
+// mini-max, with plenty of optimizations.
 #if defined(_WIN32) || defined(_WIN64)
 #include <conio.h>
 #else
@@ -72,15 +67,18 @@ int latestBeta = 0;
 
 
 
-// Board::think()
+// think
 //
-// This is the entry point for search, it is intended to drive iterative deepening 
-// The search stops if (whatever comes first): 
-// - there is no legal move (checkmate or stalemate)
+// This is the entry point for search, it is intended to drive iterative
+// deepening, calling alphabeta, checking the principal variation (PV), etc. The
+// main search loop does not happen here, this is a wrapper function.
+//
+// The search stops if:
+// - there are no legal moves (checkmate or stalemate)
 // - there is only one legal move (in this case we don't need to search)
-// - time is up 
-// - the search is interrupted by the user, or by winboard
-// - the search depth is reached
+// - time is up (timeout)
+// - the search is interrupted by the user or the user interface
+// - the max. search depth is reached
 Move Board::think()
 {
     int score, legalmoves, currentdepth;
@@ -88,12 +86,12 @@ Move Board::think()
     cacheHit = 0;
 
 
-    //  if the game has ended, don't search
+    //  we are at the end of the game, we can terminate the search
     if (isEndOfgame(legalmoves, singlemove))
         return NOMOVE;
 
 
-    // if only one legal move possible, don't search
+    // there is only one legal move, return the move and terminate the search
     if (legalmoves == 1) 
     {
         cout << endl; 
@@ -172,7 +170,7 @@ Move Board::think()
 
 
         // display search analysis
-        if (currentdepth > 1)
+        if (currentdepth > 3)
             displaySearchStats(2, currentdepth, score);
 
 
@@ -189,10 +187,29 @@ Move Board::think()
 
 
 
-// Board::alphabetapvs()
+// alphabetapvs
 //
 // Main alphabeta algorithm coupled with Principal Variation search. This is the
 // recurrent loop that is called millions of times in every search.
+//
+// The search order is as follows:
+// 
+//  1. if we are at terminal node (depth = 0), return quiescent value
+//  2. if 3-check-repetition, it's a draw
+//  3. set up a Principal Variation (PV) line to follow
+//  4. try a Null Move Reduction to produce a quick cut-off
+//  5. select moves sorted by "priority" (high-gain captures) and historic
+//     heuristic value
+//  6. lookup the move in the cache (transposition tables), avoid entering the
+//     full-depth search if found
+//  7. configure Late Move Reductions (LMR), to search deeper for "better" moves
+//  8. enter deep search
+//  9. if cut-off (good move), save it to history heuristic, for future ordering
+// 10. finally, save a new move and its search to the cache
+//
+// Note: the search never returns a static evaluation number, but rather calls a
+// quiesce search function at the end, to make sure there are no captures,
+// checks nor promotions before applying a static evaluation function.
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
     int i, j, movesfound, pvmovesfound, val, qval;
@@ -217,7 +234,29 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     triangularLength[ply] = ply;
 
 
-    // now try a null move to get an early beta cut-off:
+    // Null-move reductions:
+    // 
+    // We try a null move to see if we can get a quick
+    // cutoff with only a little work.  This operates as       
+    // follows.  Instead of making a legal move, the side on   
+    // move passes and does nothing.  The resulting position   
+    // is searched to a shallower depth than normal (see       
+    // below).  This will result in a cutoff if our position   
+    // is very good, but it produces the cutoff much quicker   
+    // since the search is far shallower than a normal search  
+    // that would also be likely to fail high.                 
+    //
+    // This is skipped for any of the following reasons:       
+    //                                                         
+    // 1. The side on move is in check.  The null move         
+    //    results in an illegal position.                      
+    // 2. No more than one null move can appear in succession  
+    //    as all this does is burn 2x plies of depth.          
+    // 3. The side on move has only pawns left, which makes    
+    //    zugzwang positions more likely.                      
+    // 4. The transposition table probe found an entry that    
+    //    indicates that a null-move search will not fail      
+    //    high, so we avoid the wasted effort.                 
     if (!followpv && allownull)
     {
         if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
@@ -249,20 +288,33 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             }
         }
     }
-    allownull = true;
 
+
+    // prepare to start a full-depth search
+    allownull = true;
     movesfound = 0;
     pvmovesfound = 0;
     moveNo = 0;
+
+
+    // generate a list of moves, sorted by three main criteria:
+    //  1. first  -> static exchange evaluatoin (SEE)
+    //  2. second -> high-gain captures first (MVV/LVA)
+    //  3. third  -> historically "good" moves (those which produce cut-off) 
+    //  4. rest of the moves
     moveBufLen[ply+1] = movegen(moveBufLen[ply]);
 
+
+    // go through every move and search the tree below
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
         // pick the next best move from a sorted list
         selectmove(ply, i, depth, followpv); 
 
+
         // make the move and evaluate the board
         makeMove(moveBuffer[i]);
+
 
         // only search this move if legal --> remember that movegen() returns
         // pseudo-legal moves
@@ -277,11 +329,11 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             movesfound++;
 
 
-            if (!ply && (depth > 1))
+            if (!ply && (depth > 3))
                 displaySearchStats(3, ply, i); 
 
 
-            // 1) Look up the cache
+            // Look up the cache
             cached = false;
 
             if (useCache)
@@ -302,7 +354,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
             if (!cached)
             {
-                // 2) LMR
+                // LMR
                 //
                 // Configure late-move reductions (LMR): assuming that the moves in the
                 // list are ordered from potential best to potential worst, analyzing 
@@ -312,14 +364,14 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 nextPly   = ply + 1;
                 nextDepth = depth - 1;
                 if ((ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromo())
-                        && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START))
+                        && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START) && !pvmovesfound)
                 {
                     nextPly   = ply + 2;
                     nextDepth = depth - 2;
                 }
 
 
-                // 3) Alphabeta with Principal Variation Search (PVS)
+                // Alphabeta with Principal Variation Search (PVS)
                 if (pvmovesfound)
                 {
                     val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
@@ -334,7 +386,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 }
 
 
-                // 4) Store in cache (replacement scheme --> always replace)
+                // Store in cache (replacement scheme --> always replace)
                 if (useCache && (ply > 2))
                 {
                     if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
@@ -346,9 +398,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     }
                 }
             }
-
-
-            // 5) unmake the move
             unmakeMove(moveBuffer[i]);
 
 
@@ -359,7 +408,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
             if (val >= beta)
             {
-                // update the history heuristic
+                // if a move produces a cut-off, update the history heuristic
                 if (nextMove) 
                     blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
                 else 
@@ -403,7 +452,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // show intermediate search results
-                if (!ply && (depth > 1))
+                if (!ply && (depth > 3))
                     displaySearchStats(2, depth, val);
             } 
         }

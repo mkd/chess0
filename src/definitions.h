@@ -67,10 +67,10 @@
 // Search algorithm configuration
 #define AI_SEARCH_DEPTH           64
 #define SEARCH_WINDOW_SIZE        25
-#define TIME_PER_MOVE              4
-#define LMR_PLY_START              3
-#define LMR_MOVE_START             3
-#define LMR_SEARCH_DEPTH           3
+#define TIME_PER_MOVE              5
+#define LMR_PLY_START              2
+#define LMR_MOVE_START             2
+#define LMR_SEARCH_DEPTH           2
 
 
 #define SOLVE_MAX_DEPTH           64

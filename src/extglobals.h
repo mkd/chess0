@@ -183,7 +183,8 @@ extern Bitboard bKingSafeMask_L1;
 extern Bitboard bKingSafeMask_LX;
 
 
-extern int PAWNPOS_W[];
+extern int PAWNPOS_W_MG[];
+extern int PAWNPOS_W_EG[];
 extern int KNIGHTPOS_W_MG[];
 extern int KNIGHTPOS_W_EG[];
 extern int BISHOPPOS_W_MG[];
@@ -195,7 +196,8 @@ extern int KINGPOS_W_MG[];
 extern int KINGPOS_W_EG[];
 extern int MIRROR[];
 extern int DISTANCE[64][64];
-extern int PAWNPOS_B[];
+extern int PAWNPOS_B_MG[];
+extern int PAWNPOS_B_EG[];
 extern int KNIGHTPOS_B_MG[];
 extern int KNIGHTPOS_B_EG[];
 extern int BISHOPPOS_B_MG[];

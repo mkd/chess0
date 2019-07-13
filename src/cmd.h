@@ -38,7 +38,7 @@ using namespace std;
 
 
 
-// Application methods and variables.
+// Application methods
 void initListOfCommands();
 void exec(string);
 uint64_t perft(unsigned, ColorType);

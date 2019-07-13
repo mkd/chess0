@@ -104,18 +104,6 @@ vector<string> listOfCommands;
 bool useBook = true;
 
 
-// usePersonalBook is a user-editable option to decide which opening book shall
-// be used by the computer. The "personal book" contains only a narrow set of
-// opening lines preferred by the author of this chess engine, whereas the
-// "general book" contains near 3,000 different opening lines taken from Grand
-// Masters' databases.
-//
-// All book opening lines are defined in book.cpp. The personal opening lines
-// are defined within the variable 'po[]', whereas the general opening lines are
-// defined within the variable 'book[]'.
-bool usePersonalBook = false;
-
-
 // sanMove holds a 'SAN' notation of the move selected. Internally, moves use a
 // more efficient representation, i.e., origin-destination. However, SAN will
 // have a more user-friendly version of the move, which can be shown on the user
@@ -213,7 +201,7 @@ int startApp(int mode)
     dataInit();
     board.init();
     initListOfCommands();
-    initBook(usePersonalBook);
+    initBook();
 
 
     // Application's main loop:

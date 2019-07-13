@@ -58,6 +58,7 @@
 #include "timer.h"
 
 
+
 using namespace std;
 
 
@@ -77,8 +78,10 @@ struct Board
 
     // additional variables:
     int square[64];                // incrementally updated, this array is usefull if we want to
+
     // probe what kind of piece is on a particular square.
     int Material;                  // incrementally updated, total material balance on board,
+
     // in centipawns, from white’s side of view
     int totalWhitePawns;           // sum of P material value for white (in centipawns)
     int totalBlackPawns;           // sum of P material value for black  (in centipawns)
@@ -87,7 +90,8 @@ struct Board
 
     bool flipBoard;          // only used for displaying the board. TRUE or FALSE.
 
-    // storing moves:
+
+    // storing moves
     Move moveBuffer[MAX_MOV_BUFF]; // all generated moves of the current search tree are stored in this array.
     unsigned int moveBufLen[MAX_PLY];       // this arrays keeps track of which moves belong to which ply
     int endOfGame;                 // index for board.gameLine
@@ -112,18 +116,6 @@ struct Board
     uint64_t maxTime; 
     bool timedout;
     bool ponder;
-
-
-    // DEBUG
-    bool info_endgame = false;
-    int  info_whiteexchangebonus = 0;
-    int  info_blackexchangebonus = 0;
-    int  info_pawns = 0;
-    int  info_knights = 0;
-    int  info_bishops = 0;
-    int  info_rooks = 0;
-    int  info_queens = 0;
-    int  info_kings = 0;
 
 
     void init();

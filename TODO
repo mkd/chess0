@@ -4,41 +4,34 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix cache: corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen appears, or move is Bh3), probably has to do with rememberPV(). Should be able to store the whole PV in TT to reconstruct. Like makeMove() and unmakeMove() are not even when using cache.
-- Implement: cache.h should implement triangularArray, and if (cached), triangularArray should overwrite to the cache, so it can be restored at any time when (cahced) and cacheHit ;-)
+- Evaluation: king under heavy attack is too optimistic
+  - chess0-crafty.c0 -> eval should be -5.33, it is -1.5 instead --> penalty for
+    check without mobility: e.g., penalty = 100 * (8 - mobility)
 
 
 
 BEFORE NEXT RELEASE
 ===================
-- Code refactoring
+- Fix cache: re-implement from scratch (try both hashkey and FEN string)
+  - Test 1: no corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen
+    appears, or move is Bh3). Probably has to do with rememberPV(). Should be
+    able to either store the whole PV in TT to reconstruct or clear the PV after
+    cache hit
+  - Look at crafty search.c to understand where to insert cache routines within
+    the search function
 
-- Implement many useful commands: info (midgame, etc), lmr 1/2/3, etc.
-
-- Evaluation: avoid endless checks, especially in endings where we have lots of
-  material and the opponent only has the king. We should try to find mate by
-  reducing the opponent's king mobility. --> check + lower_mobility should be a
-  big plus for us, to motivate the engine to corner the opponent's king and mate
-  it.
-
-- Evaluation: king under heavy attack is too optimistic
-  - chess0-crafty.c0 -> eval should be -5.33, it is -1.5 instead --> penalty for
-    check without mobility: e.g., penalty = 100 * (8 - mobility)
-
-- Make sure cache is fast enough --> old cache implementation (hashToStr) was
-  3.5x slower than without cache (i.e., kN/s was 3.5 times less when cache ON,
-  and up to 20x slower when cache goes over 1Gb)
-
-- Remove functions.h (include every necessary .h file)
-
-- Move all extglobals into app.h (like in chess0x)
-
-- Move all globals into corresponding .h files (like in chess0x)
+- Endgame: king vs. king + pieces, we should be able to mate or launch pawns.
+  However, it keeps doing endless checks.
 
 
 
 IMPORTANT
 =========
+- Clean-up code:
+  - Remove functions.h (include every necessary .h file)
+  - Move all extglobals into app.h (like in chess0x)
+  - Move all globals into corresponding .h files (like in chess0x)
+
 - Razoring
 
 - Ending tables (syzygy)

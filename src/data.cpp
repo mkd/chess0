@@ -692,7 +692,8 @@ void dataInit()
     // Data is supplied as mirrored for WHITE, so it's ready for BLACK to use
     for (square = 0; square < 64; square++)
     {
-        PAWNPOS_B[square] = PAWNPOS_W[square];
+        PAWNPOS_B_MG[square] = PAWNPOS_W_MG[square];
+        PAWNPOS_B_EG[square] = PAWNPOS_W_EG[square];
         KNIGHTPOS_B_MG[square] = KNIGHTPOS_W_MG[square];
         KNIGHTPOS_B_EG[square] = KNIGHTPOS_W_EG[square];
         BISHOPPOS_B_MG[square] = BISHOPPOS_W_MG[square];
@@ -708,7 +709,8 @@ void dataInit()
     // Complete missing mirrored data
     for (i = 0; i < 64; i++)
     {
-        PAWNPOS_W[i] = PAWNPOS_B[MIRROR[i]];
+        PAWNPOS_W_MG[i] = PAWNPOS_B_MG[MIRROR[i]];
+        PAWNPOS_W_EG[i] = PAWNPOS_B_EG[MIRROR[i]];
         KNIGHTPOS_W_MG[i] = KNIGHTPOS_B_MG[MIRROR[i]];
         KNIGHTPOS_W_EG[i] = KNIGHTPOS_B_EG[MIRROR[i]];
         BISHOPPOS_W_MG[i] = BISHOPPOS_B_MG[MIRROR[i]];
