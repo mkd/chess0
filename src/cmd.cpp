@@ -61,12 +61,14 @@ Timer timer;
 // Initialize the list of commands supported by the application.
 void initListOfCommands()
 {
+    listOfCommands.push_back("analyze");
     listOfCommands.push_back("auto");
     listOfCommands.push_back("back");
     listOfCommands.push_back("bench");
     listOfCommands.push_back("book");
     listOfCommands.push_back("cache");
     listOfCommands.push_back("depth");
+    listOfCommands.push_back("display");
     listOfCommands.push_back("eval");
     listOfCommands.push_back("exit");
     listOfCommands.push_back("flip");
@@ -85,6 +87,8 @@ void initListOfCommands()
     listOfCommands.push_back("restart");
     listOfCommands.push_back("save");
     listOfCommands.push_back("sd");
+    listOfCommands.push_back("set");
+    listOfCommands.push_back("setboard");
     listOfCommands.push_back("show");
     listOfCommands.push_back("solve");
     listOfCommands.push_back("st");
@@ -115,22 +119,26 @@ void exec(string input)
 {
     string cmd;
     string arg;
-    int pos;
-
-    // convert the input to lower case
-    for (unsigned int i = 0; i < input.length(); i++)
-        input[i] = tolower(input[i]);
-
-    // check if there is any argument
-    pos = input.find_first_of(' ', 0);
-    cmd = input.substr(0, pos);
-    if (pos == -1)
-        arg = "";
-    else
-        arg = input.substr(pos + 1, input.size() - pos - 1);
+    vector<string> args;
+    string token;
 
 
-    //
+    // divide the command into arguments
+    istringstream tokenStream(input);
+    while (getline(tokenStream, token, ' '))
+        args.push_back(token);
+
+
+    // for simplicity, name args[0] 'cmd' and args[1] 'arg'
+    cmd = args[0];
+    arg = args[1];
+
+
+    // 'cmd' is case insensitive
+    for (unsigned int i = 0; i < cmd.length(); i++)
+        cmd[i] = tolower(cmd[i]);
+
+
     // Run the command (cmd) through a list of supported commands in an if-else
     // fashion. If the command is found in the list, execute the code associated
     // and use the argument as a parameter, otherwise return without doing
@@ -249,8 +257,6 @@ void exec(string input)
     // load: load position from a file
     else if (cmd == "load")
     {
-        // convert argument (file name) from string to const char *, for
-        // readFen()
         vector<char> char_array(arg.begin(), arg.end());
         char_array.push_back(0);
 
@@ -581,6 +587,26 @@ void exec(string input)
     }
 
 
+    // setboard: load position from a FEN string
+    //else if ((cmd == "set") || (cmd == "setboard"))
+    else if ((cmd == "set") || (cmd == "setboard"))
+    {
+        // loading a position from a file disables book usage, and sets the game
+        // to manual mode
+        wPlayer = PLAYER_TYPE_HUMAN;
+        bPlayer = PLAYER_TYPE_HUMAN;
+        playMode = HUMAN_HUMAN;
+        useBook = false;
+
+        // read the FEN string and update the board
+        vector<char> arg1(args[1].c_str(), args[1].c_str() + args[1].size() + 1);
+        vector<char> arg2(args[2].c_str(), args[2].c_str() + args[2].size() + 1);
+        vector<char> arg3(args[3].c_str(), args[3].c_str() + args[3].size() + 1);
+        vector<char> arg4(args[4].c_str(), args[4].c_str() + args[4].size() + 1);
+        setupFen(arg1.data(), arg2.data(), arg3.data(), arg4.data(), atoi(args[5].c_str()), atoi(args[6].c_str()));
+        board.display();
+    }
+
 
     // show | display: show current board
     else if ((cmd == "show") || (cmd == "display"))
@@ -591,7 +617,7 @@ void exec(string input)
 
 
     // solve: try to find a checkmate for the given position
-    else if (cmd == "solve")
+    else if ((cmd == "analyze") || (cmd == "solve"))
     {
         board.searchDepth = SOLVE_MAX_DEPTH;
         board.maxTime = SOLVE_MAX_TIME * 1000;
@@ -691,7 +717,7 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "auto  book  cache  depth  eval  flip  game  go" << endl;
+        cout << "analyze  auto  book  cache  depth  eval  flip  game  go" << endl;
         cout << "help  history  load  manual  new  null  pass  remove" << endl;
         cout << "resign  restart  save  sd  setboard  show  solve  st" << endl;
         cout << "test  think  undo  version  quit" << endl;
@@ -897,25 +923,30 @@ void displayHelp(string which)
     }
 
 
-    // help solve
-    else if (which == "solve")
+    // help set | setboard
+    else if ((which == "set") || (which == "setboard"))
     {
-        cout << "solve [depth]" << endl;
+        cout << "set|setboard FEN" << endl;
+        cout << " Load a board position from a given FEN string. If the";
+        cout << endl;
+        cout << " position is not valid, the program will not load it";
+        cout << endl;
+        cout << " and return to the previously working board position.";
+        cout << endl;
+    }
+
+
+    // help solve | analyze
+    else if ((which == "analyze") || (which == "solve"))
+    {
+        cout << "analyze | solve" << endl;
         cout << " Start thinking how to solve the current board. This mode";
         cout << endl;
         cout << " puts the computer to play both sides and makes it try to";
         cout << endl;
-        cout << " solve the current situation on the board up to some depth.";
-        cout << endl;
-        cout << " If no depth is given, the computer will search the solution";
-        cout << endl;
-        cout << " forever (unless it finds it). Otherwise, it will try to";
-        cout << endl;
-        cout << " solve the problem and it will give up when it reaches the";
-        cout << endl;
-        cout << " given depth." << endl;
+        cout << " solve the current situation on the board without a depth.";
+        cout << " limit." << endl;
     }
-
 
 
     // help test

@@ -33,7 +33,7 @@
 
 
 
-// readFen()
+// readFen
 //
 // Open a file and read a board position from a FEN string.
 bool readFen(char *filename)
@@ -46,7 +46,7 @@ bool readFen(char *filename)
     int fenhalfmoveclock;
     int fenfullmovenumber;
     bool returnValue;
-    FILE * fp;
+    FILE *fp;
     bool foundFEN = false;
 
     returnValue = false;
@@ -92,9 +92,9 @@ bool readFen(char *filename)
 }
 
 
-// setupFen()
+// setupFen
 //
-// XXX 
+// Setup a board position from a FEN string.
 void setupFen(char *fen, char *fencolor, char *fencastling, char *fenenpassant, int fenhalfmoveclock, int fenfullmovenumber)
 {
     int i, file, rank, counter, piece;
@@ -134,67 +134,67 @@ void setupFen(char *fen, char *fencolor, char *fencastling, char *fenenpassant, 
                             file = 1;
                             break;
 
-                case 'P':  board.square[BOARDINDEX[file][rank]] = WHITE_PAWN;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'P':   board.square[BOARDINDEX[file][rank]] = WHITE_PAWN;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'N':  board.square[BOARDINDEX[file][rank]] = WHITE_KNIGHT;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'N':   board.square[BOARDINDEX[file][rank]] = WHITE_KNIGHT;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'B':  board.square[BOARDINDEX[file][rank]] = WHITE_BISHOP;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'B':   board.square[BOARDINDEX[file][rank]] = WHITE_BISHOP;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'R':  board.square[BOARDINDEX[file][rank]] = WHITE_ROOK;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'R':   board.square[BOARDINDEX[file][rank]] = WHITE_ROOK;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'Q':  board.square[BOARDINDEX[file][rank]] = WHITE_QUEEN;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'Q':   board.square[BOARDINDEX[file][rank]] = WHITE_QUEEN;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'K':  board.square[BOARDINDEX[file][rank]] = WHITE_KING;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'K':   board.square[BOARDINDEX[file][rank]] = WHITE_KING;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'p':  board.square[BOARDINDEX[file][rank]] = BLACK_PAWN;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'p':   board.square[BOARDINDEX[file][rank]] = BLACK_PAWN;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'n':  board.square[BOARDINDEX[file][rank]] = BLACK_KNIGHT;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'n':   board.square[BOARDINDEX[file][rank]] = BLACK_KNIGHT;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'b':  board.square[BOARDINDEX[file][rank]] = BLACK_BISHOP;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'b':   board.square[BOARDINDEX[file][rank]] = BLACK_BISHOP;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'r':  board.square[BOARDINDEX[file][rank]] = BLACK_ROOK;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'r':   board.square[BOARDINDEX[file][rank]] = BLACK_ROOK;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'q':  board.square[BOARDINDEX[file][rank]] = BLACK_QUEEN;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'q':   board.square[BOARDINDEX[file][rank]] = BLACK_QUEEN;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                case 'k':  board.square[BOARDINDEX[file][rank]] = BLACK_KING;
-                           file += 1;
-                           counter += 1;
-                           break;
+                case 'k':   board.square[BOARDINDEX[file][rank]] = BLACK_KING;
+                            file += 1;
+                            counter += 1;
+                            break;
 
-                default:   break;
+                default:    break;
             }
         }
 
@@ -218,6 +218,6 @@ void setupFen(char *fen, char *fencolor, char *fencastling, char *fenenpassant, 
         // translate a square coordinate (as string) to int (eg 'e3' to 20):
         epsq = ((int) fenenpassant[0] - 96) + 8 * ((int) fenenpassant[1] - 48) - 9;
     }
-    board.initFromSquares(board.square, next, fenhalfmoveclock, whiteCastle , blackCastle , epsq);
 
+    board.initFromSquares(board.square, next, fenhalfmoveclock, whiteCastle , blackCastle , epsq);
 }

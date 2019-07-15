@@ -4,16 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Implement "analyze/solve" for infinite search
-
-- Implement "setboard"
-
-
-
-BEFORE NEXT RELEASE
-===================
-- Find mate in 3 from killer.c0
-
 - Fix cache: re-implement from scratch (try both hashkey and FEN string)
   - Test 1: no corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen
     appears, or move is Bh3). Probably has to do with rememberPV(). Should be
@@ -22,6 +12,10 @@ BEFORE NEXT RELEASE
   - Look at crafty search.c to understand where to insert cache routines within
     the search function
 
+
+
+BEFORE NEXT RELEASE
+===================
 - Endgame: king vs. king + pieces, we should be able to mate or launch pawns.
   However, it keeps doing endless checks.
 
