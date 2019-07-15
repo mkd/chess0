@@ -33,7 +33,7 @@
 
 
 
-// Board::eval()
+// Board::eval
 //
 // This is Chess0's evaluation function, including both material and positional
 // evaluation.
@@ -46,7 +46,7 @@ int Board::eval()
     int whitetotalmat, blacktotalmat;
     int whitetotal, blacktotal;
     bool endgame;
-    Bitboard temp, whitepassedpawns, blackpassedpawns;
+    Bitboard temp, whitepassedpawns, blackpassedpawns, allpieces;
 
 
     // Material
@@ -73,6 +73,10 @@ int Board::eval()
     blackqueens = bitCnt(board.blackQueens);
     blacktotalmat = 3 * blackknights + 3 * blackbishops + 5 * blackrooks + 10 * blackqueens;
     blacktotal = blackpawns + blackknights + blackbishops + blackrooks + blackqueens;
+    allpieces = board.whitePawns | board.whiteKnights | board.whiteBishops |
+                board.whiteRooks | board.whiteQueens | board.whiteKing |
+                board.blackPawns | board.blackKnights | board.blackBishops |
+                board.blackRooks | board.blackQueens | board.blackKing;
 
 
     // Check if we are in the endgame
@@ -277,7 +281,11 @@ int Board::eval()
     // Evaluate white rooks
     // - position on the board
     // - distance from opponent king
-    // - on the same file as a passed pawn
+    // - behind a passed pawn
+    // - on semi-open file
+    // - on open file
+    // - on the 7th rank
+    // - two rooks connected on the 7th
     temp = board.whiteRooks;
     while (temp)
     {
@@ -289,6 +297,7 @@ int Board::eval()
             score += ROOK_DISTANCE[DISTANCE[square][blackkingsquare]];
         }
 
+        // rook behind passed pawn
         if (FILEMASK[square] & whitepassedpawns)
             if ((unsigned int) square < lastOne(FILEMASK[square] & whitepassedpawns))
             {
@@ -301,6 +310,43 @@ int Board::eval()
                     score += BONUS_ROOK_BEHIND_PASSED_PAWN_MG;
                 }
             }
+
+
+        // rook on semi-open file
+        if (bitCnt(FILEMASK[square] & (board.whitePawns | board.blackPawns)) == 1)
+        {
+            if (endgame)
+                score += BONUS_ROOK_ON_SEMIOPEN_FILE_EG;
+            else
+                score += BONUS_ROOK_ON_SEMIOPEN_FILE_MG;
+        }
+
+        // rook on open file
+        if (!(FILEMASK[square] & (board.whitePawns | board.blackPawns)))
+        {
+            if (endgame)
+                score += BONUS_ROOK_ON_OPEN_FILE_EG;
+            else
+                score += BONUS_ROOK_ON_OPEN_FILE_MG;
+        }
+
+        // rook on 7th
+        if (RANKS[square] == 7)
+        {
+            if (endgame)
+                score += BONUS_ROOK_ON_SEVENTH_EG;
+            else
+                score += BONUS_ROOK_ON_SEVENTH_MG;
+
+            // two rooks on 7th rank
+            if (bitCnt(RANKMASK[square] & board.whiteRooks) >= 2)
+            {
+                if (endgame)
+                    score += BONUS_TWO_ROOKS_ON_SEVENTH_EG;
+                else
+                    score += BONUS_TWO_ROOKS_ON_SEVENTH_MG;
+            }
+        }
 
         temp ^= BITSET[square];
     }
@@ -350,6 +396,26 @@ int Board::eval()
 
         // weaker pawn shield bonus if the pawns are not so near the king:
         score += BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_W[whitekingsquare] & board.whitePawns);
+    }
+
+    // king on semi-open file
+    if (bitCnt(FILEMASK[whitekingsquare] & (board.whitePawns | board.blackPawns)) == 1)
+    {
+        if ((FILES[whitekingsquare] <= 2) || (FILES[whitekingsquare] >= 7))
+            score -= PENALTY_KING_ON_SEMIOPEN_ABGH;
+        else
+            score -= PENALTY_KING_ON_SEMIOPEN_CDEF;
+    }
+
+    // king on open file
+    if (!(FILEMASK[whitekingsquare] & (board.whitePawns | board.blackPawns)))
+    {
+        if ((FILES[whitekingsquare] == 1) || (FILES[whitekingsquare] == 8))
+            score -= PENALTY_KING_ON_OPEN_FILE_AH;
+        else if ((FILES[whitekingsquare] == 2) || (FILES[whitekingsquare] == 7))
+            score -= PENALTY_KING_ON_OPEN_FILE_BG;
+        else
+            score -= PENALTY_KING_ON_OPEN_FILE_CDEF;
     }
 
 
@@ -502,7 +568,11 @@ int Board::eval()
     // Evaluate black rooks
     // - position on the board
     // - distance from opponent king
-    // - on the same file as a passed pawn
+    // - behind a passed pawn
+    // - on semi-open file
+    // - on open file
+    // - on the 7th rank
+    // - two rooks connected on the 7th
     temp = board.blackRooks;
     while (temp)
     {
@@ -514,7 +584,9 @@ int Board::eval()
             score -= ROOK_DISTANCE[DISTANCE[square][whitekingsquare]];
         }
 
+        // rook behind passed pawn
         if (FILEMASK[square] & blackpassedpawns)
+        {
             if ((unsigned int) square > firstOne(FILEMASK[square] & blackpassedpawns))
             {
                 if (endgame)
@@ -526,6 +598,44 @@ int Board::eval()
                     score -= BONUS_ROOK_BEHIND_PASSED_PAWN_MG;
                 }
             }
+        }
+
+
+        // rook on semi-open file
+        if (bitCnt(FILEMASK[square] & (board.whitePawns | board.blackPawns)) == 1)
+        {
+            if (endgame)
+                score -= BONUS_ROOK_ON_SEMIOPEN_FILE_EG;
+            else
+                score -= BONUS_ROOK_ON_SEMIOPEN_FILE_MG;
+        }
+
+        // rook on open file
+        if (!(FILEMASK[square] & (board.whitePawns | board.blackPawns)))
+        {
+            if (endgame)
+                score -= BONUS_ROOK_ON_OPEN_FILE_EG;
+            else
+                score -= BONUS_ROOK_ON_OPEN_FILE_MG;
+        }
+
+        // rook on 7th
+        if (RANKS[square] == 7)
+        {
+            if (endgame)
+                score -= BONUS_ROOK_ON_SEVENTH_EG;
+            else
+                score -= BONUS_ROOK_ON_SEVENTH_MG;
+
+            // two rooks on 7th rank
+            if (bitCnt(RANKMASK[square] & board.blackRooks) >= 2)
+            {
+                if (endgame)
+                    score -= BONUS_TWO_ROOKS_ON_SEVENTH_EG;
+                else
+                    score -= BONUS_TWO_ROOKS_ON_SEVENTH_MG;
+            }
+        }
 
         temp ^= BITSET[square];
     }
@@ -575,6 +685,26 @@ int Board::eval()
 
         // weaker pawn shield bonus if the pawns are not so near the king:
         score -= BONUS_PAWN_SHIELD_WEAK * bitCnt(KINGSHIELD_WEAK_B[blackkingsquare] & board.blackPawns);
+    }
+
+    // king on semi-open file
+    if (bitCnt(FILEMASK[blackkingsquare] & (board.whitePawns | board.blackPawns)) == 1)
+    {
+        if ((FILES[blackkingsquare] <= 2) || (FILES[blackkingsquare] >= 7))
+            score += PENALTY_KING_ON_SEMIOPEN_ABGH;
+        else
+            score += PENALTY_KING_ON_SEMIOPEN_CDEF;
+    }
+
+    // king on open file
+    if (!(FILEMASK[blackkingsquare] & (board.whitePawns | board.blackPawns)))
+    {
+        if ((FILES[blackkingsquare] == 1) || (FILES[blackkingsquare] == 8))
+            score += PENALTY_KING_ON_OPEN_FILE_AH;
+        else if ((FILES[blackkingsquare] == 2) || (FILES[blackkingsquare] == 7))
+            score += PENALTY_KING_ON_OPEN_FILE_BG;
+        else
+            score += PENALTY_KING_ON_OPEN_FILE_CDEF;
     }
 
 

@@ -4,14 +4,16 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Evaluation: king under heavy attack is too optimistic
-  - chess0-crafty.c0 -> eval should be -5.33, it is -1.5 instead --> penalty for
-    check without mobility: e.g., penalty = 100 * (8 - mobility)
+- Implement "analyze/solve" for infinite search
+
+- Implement "setboard"
 
 
 
 BEFORE NEXT RELEASE
 ===================
+- Find mate in 3 from killer.c0
+
 - Fix cache: re-implement from scratch (try both hashkey and FEN string)
   - Test 1: no corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen
     appears, or move is Bh3). Probably has to do with rememberPV(). Should be

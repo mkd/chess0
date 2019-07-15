@@ -31,7 +31,7 @@
 
 
 
-// perft()
+// perft
 //
 // Raw node count, up to depth, doing a full tree search.
 // perft is very similar to the search algorithm - instead of evaluating the leaves, we count them.

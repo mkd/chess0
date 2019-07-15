@@ -69,7 +69,7 @@
 #define SEARCH_WINDOW_SIZE        25
 #define TIME_PER_MOVE              5
 #define LMR_PLY_START              2
-#define LMR_MOVE_START             2
+#define LMR_MOVE_START             1
 #define LMR_SEARCH_DEPTH           2
 
 

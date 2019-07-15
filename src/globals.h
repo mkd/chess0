@@ -292,6 +292,13 @@ int PENALTY_ISOLATED_PAWN_EG         =  4;
 int PENALTY_BACKWARD_PAWN_MG         = 12;
 int PENALTY_BACKWARD_PAWN_EG         =  3;
 
+int PENALTY_KING_ON_OPEN_FILE_AH     =  6;
+int PENALTY_KING_ON_OPEN_FILE_BG     =  5;
+int PENALTY_KING_ON_OPEN_FILE_CDEF   =  4;
+
+int PENALTY_KING_ON_SEMIOPEN_ABGH    =  4;
+int PENALTY_KING_ON_SEMIOPEN_CDEF    =  3;
+
 int BONUS_PASSED_PAWN                = 16;
 
 int BONUS_BISHOP_PAIR_MG             = 38;
@@ -300,19 +307,27 @@ int BONUS_BISHOP_PAIR_EG             = 56;
 int BONUS_ROOK_BEHIND_PASSED_PAWN_MG = 10;
 int BONUS_ROOK_BEHIND_PASSED_PAWN_EG = 10;
 
+int BONUS_ROOK_ON_SEMIOPEN_FILE_MG   = 10;
+int BONUS_ROOK_ON_SEMIOPEN_FILE_EG   = 10;
+
+int BONUS_ROOK_ON_SEVENTH_MG         = 25;
+int BONUS_ROOK_ON_SEVENTH_EG         = 32;
+
 int BONUS_ROOK_ON_OPEN_FILE_MG       = 35;
 int BONUS_ROOK_ON_OPEN_FILE_EG       = 20;
 
 int BONUS_TWO_ROOKS_ON_OPEN_FILE     = 20;
 
+int BONUS_TWO_ROOKS_ON_SEVENTH_MG    =  6;
+int BONUS_TWO_ROOKS_ON_SEVENTH_EG    = 10;
+
 int BONUS_TEMPO_MIDGAME              =  5;
 int BONUS_TEMPO_ENDGAME              =  8;
-
 
 int BONUS_PAWN_SHIELD_STRONG         =  9;
 int BONUS_PAWN_SHIELD_WEAK           =  4;
 
-int BONUS_KING_IS_CASTLED            = 54;
+int BONUS_KING_IS_CASTLED            = 32;
 
 
 int PAWN_OWN_DISTANCE[8] =           { 0,   8,  4,  2,  0,  0,  0,  0 };
@@ -421,14 +436,14 @@ int BISHOPPOS_W_EG[64] = {
 // *** looking at the chess board from white's point   ***
 // *** of perspective. Lower left corner is square a1: ***
 int ROOKPOS_W[64] = {
-    0,  0,  0,  0,   0,  0,  0,   0,
-   30, 30, 30, 30,  30, 30, 30,  30,
-    0,  0,  0,  0,   0,  0,  0,   0,
-    0,  0,  0,  0,   0,  0,  0,   0,
-    0,  0,  0,  0,   0,  0,  0,   0,
-    0,  0,  0,  0,   0,  0,  0,   0,
-   -5,  0,  0,  0,   0,  0,  0,  -5,
-    0,  0,  0, 10,  10,  0,  0,   0
+    0,  0,  0,  0,   0,  0,  0,  0,
+   20, 20, 20, 20,  20, 20, 20, 20,
+    0,  0,  0,  0,   0,  0,  0,  0,
+    0,  0,  0,  0,   0,  0,  0,  0,
+    0,  0,  0,  0,   0,  0,  0,  0,
+    0,  0,  0,  0,   0,  0,  0,  0,
+    0,  0,  0,  0,   0,  0,  0,  0,
+    0,  0,  0,  5,   5,  0,  0,  0
 };
 
 

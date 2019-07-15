@@ -67,7 +67,6 @@ void initListOfCommands()
     listOfCommands.push_back("book");
     listOfCommands.push_back("cache");
     listOfCommands.push_back("depth");
-    listOfCommands.push_back("edit");
     listOfCommands.push_back("eval");
     listOfCommands.push_back("exit");
     listOfCommands.push_back("flip");
@@ -264,15 +263,6 @@ void exec(string input)
 
         // read the FEN string and update the board
         readFen(&char_array[0]);
-    }
-
-
-
-    // edit: edit a board for setting a position
-    else if (cmd == "edit")
-    {
-        edit();
-        useBook = false;
     }
 
 
@@ -701,9 +691,9 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "auto  book  cache  depth  edit  eval  flip  game" << endl;
-        cout << "go  help  history  load  manual  new  null  pass" << endl;
-        cout << "remove  resign  restart  save  sd  show  solve  st" << endl;
+        cout << "auto  book  cache  depth  eval  flip  game  go" << endl;
+        cout << "help  history  load  manual  new  null  pass  remove" << endl;
+        cout << "resign  restart  save  sd  setboard  show  solve  st" << endl;
         cout << "test  think  undo  version  quit" << endl;
         return;
     }
@@ -780,36 +770,6 @@ void displayHelp(string which)
         cout << " letters, whereas the black pieces are represented";
         cout << endl;
         cout << " with small letters next to an asterisk." << endl;
-    }
-
-
-    // help edit
-    else if (which == "edit")
-    {
-        cout << "edit" << endl;
-        cout << " Enter in position editing mode." << endl << endl;
-        cout << " The program will first wipe all the pieces from the";
-        cout << endl;
-        cout << " board and ask you for entering the white pieces. These";
-        cout << endl;
-        cout << " pieces are entered one by one (separeted by pressing Enter)";
-        cout << endl;
-        cout << " and according to the format PIECE+COLUMN+ROW (e.g. Ke2).";
-        cout << endl;
-        cout << " When the white pieces are done, then enter '.' (dot) and";
-        cout << endl;
-        cout << " press Enter, so the black pieces are asked to be entered.";
-        cout << endl;
-        cout << " When the black pieces are entered, then enter '#' (hash)";
-        cout << endl;
-        cout << " and press Enter to exit from the position editing mode.";
-        cout << endl << endl;
-        cout << " Please note that, if the position is invalid (such as two";
-        cout << endl;
-        cout << " kings, or double check), the program will complain and the";
-        cout << endl;
-        cout << " previous original board will be restored.";
-        cout << endl;
     }
 
 
