@@ -620,7 +620,7 @@ int Board::eval()
         }
 
         // rook on 7th
-        if (RANKS[square] == 7)
+        if (RANKS[square] == 2)
         {
             if (endgame)
                 score -= BONUS_ROOK_ON_SEVENTH_EG;

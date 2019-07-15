@@ -198,7 +198,30 @@ void initBook()
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. 0-0 a6 5. Bxc6 dxc6"] = "Nxe5";
 
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 g6"] = "c3";
+
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5"] = "Nc3";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 fxe4"] = "Nxe4";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 Nf6"] = "exf5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 Nd4"] = "Nxe5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 Bb4"] = "exf5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6"] = "d4";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Ne7"] = "exf5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Ne7 6. exf5 Nxf5"] = "d5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Ne7 6. exf5 Nxf5 7. d5 a6"] = "Ba4";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Ne7 6. exf5 Nxf5 7. d5 a6 8. Ba4 b5"] = "Nxb5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Ne7 6. exf5 Bxf5"] = "0-0";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Be7"] = "dxe5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Be7 6. dxe5 dxe5"] = "Qxd8+";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Be7 6. dxe5 dxe5 7. Qxd8+ Bxd8"] = "Nxe5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Be7 6. dxe5 dxe5 7. Qxd8+ Kxd8"] = "Bxc6";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Be7 6. dxe5 dxe5 7. Qxd8+ Kxd8 8. Bxc6 bxc6"] = "Nxe5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 Bd7"] = "exf5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 a6"] = "Nxd4";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 exd4"] = "Bxc6+";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 exd4 6. Bxc6+ bxc6"] = "dxe5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 exd4 6. Bxc6+ bxc6 7. dxe5 dxe5"] = "Qxd8+";
+        book["1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 d6 5. d4 exd4 6. Bxc6+ bxc6 7. dxe5 dxe5 8. Qxd8+ Kxd8"] = "Nxe5";
+
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nge7"] = "Nc3";
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5"] = "c3";
         book["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4"] = "Nxd4";
@@ -502,7 +525,16 @@ void initBook()
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6"] = "bxc6";
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. e5"] = "Qe7";
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Nc3"] = "Bb4";
+
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3"] = "d5";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. exd5"] = "cxd5";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. e5"] = "Ng4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. Nc3"] = "Bb4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. Qe2"] = "dxe4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. Qe2 dxe4 8. Nc3"] = "Bb4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. Qe2 dxe4 8. Bxe4"] = "Nxe4";
+        book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3 d5 7. Qe2 dxe4 8. Bxe4 Nxe4 9. Qxe4+"] = "Qe7";
+
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3"] = "Bb4";
         book["1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Bb4 6. Bd3"] = "0-0";
 
