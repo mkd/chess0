@@ -118,20 +118,12 @@ void initListOfCommands()
 void exec(string input)
 {
     string cmd;
-    string arg;
-    vector<string> args;
-    string token;
+    string arg, arg2, arg3, arg4, arg5 = "0", arg6 = "1";
 
 
     // divide the command into arguments
-    istringstream tokenStream(input);
-    while (getline(tokenStream, token, ' '))
-        args.push_back(token);
-
-
-    // for simplicity, name args[0] 'cmd' and args[1] 'arg'
-    cmd = args[0];
-    arg = args[1];
+    istringstream ss(input);
+    ss >> cmd >> arg >> arg2 >> arg3 >> arg4 >> arg5 >> arg6;
 
 
     // 'cmd' is case insensitive
@@ -257,8 +249,12 @@ void exec(string input)
     // load: load position from a file
     else if (cmd == "load")
     {
-        vector<char> char_array(arg.begin(), arg.end());
-        char_array.push_back(0);
+        // force the user to provide a file
+        if (arg.empty())
+        {
+            cerr << "Cannot load file!" << endl;
+            return;
+        }
 
         // loading a position from a file disables book usage, and sets the game
         // to manual mode
@@ -268,6 +264,8 @@ void exec(string input)
         useBook = false;
 
         // read the FEN string and update the board
+        vector<char> char_array(arg.begin(), arg.end());
+        char_array.push_back(0);
         readFen(&char_array[0]);
     }
 
@@ -598,12 +596,22 @@ void exec(string input)
         playMode = HUMAN_HUMAN;
         useBook = false;
 
+
+        // check that the FEN string has all 6 components
+        if (arg.empty() || arg2.empty() || arg3.empty() ||
+            arg4.empty() || arg5.empty() || arg6.empty())
+        {
+            cerr << "Cannot load position: invalid FEN string!" << endl;
+            return;
+        }
+
+
         // read the FEN string and update the board
-        vector<char> arg1(args[1].c_str(), args[1].c_str() + args[1].size() + 1);
-        vector<char> arg2(args[2].c_str(), args[2].c_str() + args[2].size() + 1);
-        vector<char> arg3(args[3].c_str(), args[3].c_str() + args[3].size() + 1);
-        vector<char> arg4(args[4].c_str(), args[4].c_str() + args[4].size() + 1);
-        setupFen(arg1.data(), arg2.data(), arg3.data(), arg4.data(), atoi(args[5].c_str()), atoi(args[6].c_str()));
+        vector<char> args1(arg.c_str(), arg.c_str() + arg.size() + 1);
+        vector<char> args2(arg2.c_str(), arg2.c_str() + arg2.size() + 1);
+        vector<char> args3(arg3.c_str(), arg3.c_str() + arg3.size() + 1);
+        vector<char> args4(arg4.c_str(), arg4.c_str() + arg4.size() + 1);
+        setupFen(args1.data(), args2.data(), args3.data(), args4.data(), atoi(arg5.c_str()), atoi(arg6.c_str()));
         board.display();
     }
 

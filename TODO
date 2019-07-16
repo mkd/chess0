@@ -4,8 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-- Fix malloc seg fault --> probably due to args[] and char *
-
 - Fix cache: re-implement from scratch (try both hashkey and FEN string)
   - Test 1: no corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen
     appears, or move is Bh3). Probably has to do with rememberPV(). Should be
