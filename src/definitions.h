@@ -82,8 +82,9 @@
 #define PERFT_DEPTH_LIMIT          6
 
 
+#define TT_EMPTY_VALUE          9999
 #define CACHE_HIT_LEVEL          0.6
-#define BOARD_SERIAL_SIZE         16
+#define BOARD_SERIAL_SIZE         84
 
 
 

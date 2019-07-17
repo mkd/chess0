@@ -43,17 +43,19 @@ ttEntry Cache::find(uint64_t key, int depth)
     auto search = cacheData.find(key);
 
     if (search != cacheData.end())
+    {
         tt = search->second;
 
-    if ((tt.key == key) && (tt.depth >= depth))
-        return tt;
+        if ((tt.key == key) && (tt.depth >= depth))
+            return tt;
+    }
 
     return ttfalse;
 }
 
 
 
-// add()
+// add
 //
 // Insert a new ttEntry in the cache.
 void Cache::add(uint64_t key, ttEntry *tt)

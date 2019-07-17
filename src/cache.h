@@ -40,7 +40,7 @@ struct ttEntry
 {
     uint64_t key   =  0;
     int      score =  0;
-    int      depth = -9;
+    int      depth =  TT_EMPTY_VALUE;
 };
 
 

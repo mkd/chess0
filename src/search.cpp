@@ -36,12 +36,12 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
 #include <iomanip>
-#include <unordered_map>
 #include <cinttypes>
 #include "definitions.h" 
 #include "extglobals.h" 
@@ -61,8 +61,6 @@ unsigned short nextDepth = 0;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
-int latestAlpha = -INT_MAX;
-int latestBeta  = +INT_MAX;
 int score       = -INT_MAX;
 
 
@@ -173,7 +171,7 @@ Move Board::think()
         // stop searching if the current depth leads to a forced mate
         if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
-            rememberPV();
+            //rememberPV();
             currentdepth = searchDepth + 1;
         }
     }
@@ -212,6 +210,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     bool cached = false;
 
 
+    // prepare structure to store the principal variation (PV)
+    triangularLength[ply] = ply;
+
+
     // if at leaf node, return qval
     if (depth <= 0) 
     {
@@ -224,10 +226,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     // repetition check:
     if (repetitionCount() >= 3)
         return DRAWSCORE;
-
-
-    // prepare structure to store the principal variation (PV)
-    triangularLength[ply] = ply;
 
 
     // Null-move reductions:
@@ -278,7 +276,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
                 if (val >= beta)
                 {
-                    latestBeta = beta;
                     return val;
                 }
             }
@@ -329,25 +326,21 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 displaySearchStats(3, ply, i); 
 
 
-            // Look up the cache
+            // try to find the current position in the cache
             cached = false;
-
             if (useCache)
             {
                 tt = cache.find(board.hashkey, ply);
-
-                if (tt.depth > ply)
+                if (tt.depth != TT_EMPTY_VALUE)
                 {
                     cacheHit++;
                     val = tt.score;
                     cached = true;
-                   
-                    // reconstruct PV after loading from the cache
-					rememberPV();
                 }
             }
 
 
+            // if not found, then perform the search and store the result
             if (!cached)
             {
                 // LMR
@@ -358,10 +351,14 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // using LMR we analyze the first 2 moves in full-depth, but cut down
                 // the analysis depth for the rest of moves.
                 nextDepth = depth - 1;
-                if ((ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromo())
-                        && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START) && !pvmovesfound)
+                if ((ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH)
+                                          && !((moveBuffer[i]).isCapture())
+                                          && !((moveBuffer[i]).isPromo())
+                                          && !(isOwnKingAttacked())
+                                          && !(isOtherKingAttacked())
+                                          && (moveNo > LMR_MOVE_START) && !pvmovesfound)
                 {
-                    nextDepth = depth - 3;
+                    nextDepth = depth - 2;
                 }
 
 
@@ -381,7 +378,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // Store in cache (replacement scheme --> always replace)
-                if (useCache && (ply > 2))
+                if (useCache && (ply >= 9))
                 {
                     if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
                     {
@@ -408,7 +405,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 else 
                     whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
 
-                latestBeta = beta;
                 return beta;
             }
 
@@ -417,7 +413,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             if (val > alpha)
             {
                 // update bounds
-                latestAlpha = alpha = val;
+                alpha = val;
                 pvmovesfound++;
 
 
@@ -426,23 +422,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // if nothing in the cache, append the latest best PV from deeper plies
-                if (!cached)
-                {
-                    for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                        triangularArray[ply][j] = triangularArray[ply+1][j];
-                    triangularLength[ply] = triangularLength[ply+1];
-
-                	if (useCache && (ply > 2) && ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE)))
-                	{
-                    	cache.add(board.hashkey, &tt);
-					}
-                }
-
-                // if cached, restore the PV from the ttEntry
-				else
-				{
-					rememberPV();
-				}
+                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+                    triangularArray[ply][j] = triangularArray[ply+1][j];
+                triangularLength[ply] = triangularLength[ply+1];
 
 
                 // show intermediate search results
@@ -479,8 +461,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             return (STALEMATESCORE);
     }
 
-
-    latestAlpha = alpha;
     return alpha;
 }
 
@@ -829,13 +809,10 @@ int Board::qsearch(int ply, int alpha, int beta)
 
     val = board.eval();
     if (val >= beta)
-    {
-        latestBeta = beta;
         return val;
-    }
 
     if (val > alpha)
-        latestAlpha = alpha = val;
+        alpha = val;
 
 
     // generate captures & promotions:
@@ -856,14 +833,11 @@ int Board::qsearch(int ply, int alpha, int beta)
             unmakeMove(moveBuffer[i]);
 
             if (val >= beta)
-            {
-                latestBeta = beta;
                 return val;
-            }
 
             if (val > alpha)
             {
-                latestAlpha = alpha = val;
+                alpha = val;
                 triangularArray[ply][ply] = moveBuffer[i];
                 for (j = ply + 1; j < triangularLength[ply+1]; j++) 
                 {
@@ -876,7 +850,6 @@ int Board::qsearch(int ply, int alpha, int beta)
 
     }
 
-    latestAlpha = alpha;
     return alpha;
 }
 
