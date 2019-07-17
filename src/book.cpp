@@ -882,6 +882,14 @@ void initBook()
 
         // C46 Four knights game -- BLACK
         book["1. e4 e5 2. Nf3 Nc6 3. Nc3"] = "Nf6";
+
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3"] = "d5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3 d5 5. exd5"] = "Nxd5";
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3 d5 5. exd5 Nxd5 6. Bb5"] = "Nxc3";
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3 d5 5. exd5 Nxd5 6. Bb5 Nxc3 7. bxc3"] = "Bd6";
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3 d5 5. exd5 Nxd5 6. Bb5 Nxc3 7. dxc3"] = "Qxd1+";
+        book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. a3 d5 5. exd5 Nxd5 6. Bb5 Nxc3 7. dxc3 Qxd1+ 8. Kxd1"] = "Bd7";
+
         book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4"] = "Nxe4";
         book["1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb4"] = "Nd4";
 
@@ -1193,6 +1201,11 @@ void initBook()
         book["1. g4 d5 2. Bg2 Bxg4 3. c4"] = "c6";
         book["1. g4 d5 2. h3"] = "e5";
         book["1. g4 d5 2. e3"] = "e5";
+
+        book["1. e4 g6"] = "d4";
+        book["1. e4 g6 2. d4 d6"] = "Nf3";
+        book["1. e4 g6 2. d4 d6 3. Nf3 Bg7"] = "c4";
+        book["1. e4 g6 2. d4 Bg7"] = "Nf3";
 
         book["1. e4 e5 2. g3"] = "d5";
         book["1. e4 e5 2. g3 d5 3. Bg2"] = "dxe4";

@@ -71,6 +71,7 @@ void initListOfCommands()
     listOfCommands.push_back("display");
     listOfCommands.push_back("eval");
     listOfCommands.push_back("exit");
+    listOfCommands.push_back("fen");
     listOfCommands.push_back("flip");
     listOfCommands.push_back("game");
     listOfCommands.push_back("go");
@@ -267,6 +268,15 @@ void exec(string input)
         vector<char> char_array(arg.begin(), arg.end());
         char_array.push_back(0);
         readFen(&char_array[0]);
+    }
+
+
+
+    // fen: prints the current board's FEN string
+    else if (cmd == "fen")
+    {
+        board.display();
+        cout << board.toFEN() << endl;
     }
 
 
@@ -725,10 +735,10 @@ void displayHelp(string which)
     if (which == "")
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
-        cout << "analyze  auto  book  cache  depth  eval  flip  game  go" << endl;
-        cout << "help  history  load  manual  new  null  pass  remove" << endl;
-        cout << "resign  restart  save  sd  setboard  show  solve  st" << endl;
-        cout << "test  think  undo  version  quit" << endl;
+        cout << "analyze  auto  book  cache  depth  eval  fen  flip" << endl;
+        cout << "game  go  help  history  load  manual  new  null" << endl;
+        cout << "pass  remove  resign  restart  save  sd  setboard" << endl;
+        cout << "show  solve  st  test  think  undo  version  quit" << endl;
         return;
     }
 
@@ -780,6 +790,16 @@ void displayHelp(string which)
         cout << " long time for obtaining a move from the computer." << endl;
         cout << " If no depth is given, then the application tells" << endl;
         cout << " what is the current search depth." << endl;
+    }
+
+
+    // help fen
+    else if (which == "fen")
+    {
+        cout << "fen" << endl;
+        cout << " Print out the current board's FEN string representing" << endl;
+        cout << " the game position." << endl;
+
     }
 
 

@@ -16,7 +16,7 @@
 
    You should have received a copy of the GNU General Public License
    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-   */
+*/
 
 
 
@@ -58,12 +58,12 @@ using namespace std;
 
 
 unsigned short nextDepth = 0;
-unsigned short nextPly = 0;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
-int latestAlpha = 0;
-int latestBeta = 0;
+int latestAlpha = -INT_MAX;
+int latestBeta  = +INT_MAX;
+int score       = -INT_MAX;
 
 
 
@@ -81,7 +81,7 @@ int latestBeta = 0;
 // - the max. search depth is reached
 Move Board::think()
 {
-    int score, legalmoves, currentdepth;
+    int legalmoves, currentdepth;
     Move singlemove;
     cacheHit = 0;
 
@@ -138,15 +138,11 @@ Move Board::think()
         allownull = true;
 
 
-        // enter actual search using aspiration window
-        if ((score <= latestAlpha) || (score >= latestBeta))
-        {
-            score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
-        }
-        else
-        {
-            score = alphabetapvs(0, currentdepth, score + SEARCH_WINDOW_SIZE, score - SEARCH_WINDOW_SIZE);
-        }
+        // enter actual search
+        //
+        // TODO: re-implement aspiration window properly, using full-width
+        //       search for now
+        score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
 
 
         // now check if time is up and decide whether to start a new iteration
@@ -174,7 +170,7 @@ Move Board::think()
             displaySearchStats(2, currentdepth, score);
 
 
-        // stop searching if the current depth leads to a forced mate:
+        // stop searching if the current depth leads to a forced mate
         if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
             rememberPV();
@@ -361,20 +357,18 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // the first moves is more critical than the last ones. Therefore, 
                 // using LMR we analyze the first 2 moves in full-depth, but cut down
                 // the analysis depth for the rest of moves.
-                nextPly   = ply + 1;
                 nextDepth = depth - 1;
                 if ((ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH) && !((moveBuffer[i]).isCapture()) && !((moveBuffer[i]).isPromo())
                         && !(isOwnKingAttacked()) && !(isOtherKingAttacked()) && (moveNo > LMR_MOVE_START) && !pvmovesfound)
                 {
-                    nextPly   = ply + 2;
-                    nextDepth = depth - 2;
+                    nextDepth = depth - 3;
                 }
 
 
                 // Alphabeta with Principal Variation Search (PVS)
                 if (pvmovesfound)
                 {
-                    val = -alphabetapvs(nextPly, nextDepth, -alpha-1, -alpha); 
+                    val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
 
                     // in case of failure, proceed with normal alphabeta
                     if ((val > alpha) && (val < beta))
@@ -406,9 +400,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 return 0;
 
 
+            // if a move produces a cut-off, update the history heuristic
             if (val >= beta)
             {
-                // if a move produces a cut-off, update the history heuristic
                 if (nextMove) 
                     blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
                 else 
