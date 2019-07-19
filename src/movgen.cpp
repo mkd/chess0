@@ -45,7 +45,7 @@
 
 
 
-// movegen()
+// movegen
 //
 // This is winglet's pseudo-legal bitboard move generator,
 // using magic multiplication instead of rotated bitboards.

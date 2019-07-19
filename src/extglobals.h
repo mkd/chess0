@@ -237,6 +237,7 @@ extern Bitboard BLACK_SQUARES;
 extern int LARGE_NUMBER;
 extern int CHECKMATESCORE;
 extern int STALEMATESCORE;
+extern int MATEIN01SCORE;
 extern int DRAWSCORE;
 extern Move NOMOVE;
 extern HashKeys KEY;

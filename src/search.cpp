@@ -171,7 +171,7 @@ Move Board::think()
         // stop searching if the current depth leads to a forced mate
         if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
-            //rememberPV();
+            rememberPV();
             currentdepth = searchDepth + 1;
         }
     }
@@ -210,10 +210,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     bool cached = false;
 
 
-    // prepare structure to store the principal variation (PV)
-    triangularLength[ply] = ply;
-
-
     // if at leaf node, return qval
     if (depth <= 0) 
     {
@@ -223,9 +219,13 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     }
 
 
-    // repetition check:
+    // repetition check
     if (repetitionCount() >= 3)
         return DRAWSCORE;
+
+
+    // prepare structure to store the principal variation (PV)
+    triangularLength[ply] = ply;
 
 
     // Null-move reductions:

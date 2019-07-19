@@ -16,7 +16,7 @@
 
    You should have received a copy of the GNU General Public License
    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-   */
+*/
 
 
 
@@ -547,6 +547,7 @@ Bitboard BLACK_SQUARES;
 int LARGE_NUMBER = KING_VALUE + 1;
 int CHECKMATESCORE = KING_VALUE;
 int STALEMATESCORE = 0;
+int MATEIN01SCORE = 0;
 int DRAWSCORE = 0;
 Move NOMOVE;
 HashKeys KEY;
