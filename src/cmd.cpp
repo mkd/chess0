@@ -84,6 +84,7 @@ void initListOfCommands()
     listOfCommands.push_back("q");
     listOfCommands.push_back("quit");
     listOfCommands.push_back("remove");
+    listOfCommands.push_back("recall");
     listOfCommands.push_back("resign");
     listOfCommands.push_back("restart");
     listOfCommands.push_back("save");
@@ -382,6 +383,29 @@ void exec(string input)
         dataInit();
         board.init();
         cache.clear();
+        learned.clear();
+        ML.clear();
+
+
+        // Load learned positions from the past
+        cout << endl << "Initializing machine learning...";
+        string fenStr, moveStr, scoreStr;
+        ifstream learnFile("learn.db");
+        while (true)
+        {
+            getline(learnFile, fenStr);
+            getline(learnFile, moveStr);
+            getline(learnFile, scoreStr);
+
+            if (fenStr == "")
+                break;
+
+            tuple<string, string, float> winingMove(fenStr, moveStr, atof(scoreStr.c_str()));
+            ML.push_back(winingMove);
+        }
+        learnFile.close();
+        cout << endl << endl;
+
 
         // enable book by default
         useBook = true;
@@ -557,6 +581,40 @@ void exec(string input)
     else if (cmd == "post")
     {
         // XXX
+    }
+
+
+
+    // recall: list all learned moves for the current position
+    else if (cmd == "recall")
+    {
+        vector<tuple<string, string, float>> v;
+
+        board.display();
+
+        for (tuple<string, string, float> &tup : ML)
+        {
+            if (get<0>(tup) == board.toFEN())
+            {
+                v.push_back(make_tuple(board.toFEN(), get<1>(tup), get<2>(tup)));
+            }
+        }
+        sort(v.begin(), v.end(), sortByScore);
+
+        // try to recall the current position, for memorized moves
+        cout << "List of memorized moves:" << endl;
+        if (v.size() <= 0)
+        {
+            cout << "No moves found!" << endl;
+        }
+        else
+        {
+            for (auto it = v.begin(); it != v.end(); ++it)
+            {
+                int index = distance(v.begin(), it);
+                cout << get<1>(v[index]) << "  " << get<2>(v[index]) << endl;
+            }
+        }
     }
 
 
@@ -737,8 +795,8 @@ void displayHelp(string which)
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "analyze  auto  book  cache  depth  eval  fen  flip" << endl;
         cout << "game  go  help  history  load  manual  new  null" << endl;
-        cout << "pass  remove  resign  restart  save  sd  setboard" << endl;
-        cout << "show  solve  st  test  think  undo  version  quit" << endl;
+        cout << "pass  recall  remove  resign  restart  save  sd  set" << endl;
+        cout << "setboard  show  solve  st  test  think  undo  version  quit" << endl;
         return;
     }
 
@@ -918,6 +976,16 @@ void displayHelp(string which)
         cout << "null | pass" << endl;
         cout << " Make a null move, which passes the turn to the other side";
         cout << " without performing any actual move." << endl;
+    }
+
+
+    // help recall
+    else if (which == "recall")
+    {
+        cout << "recall" << endl;
+        cout << " Try to recall the game's current position and all";
+        cout << endl;
+        cout << " memorized moves with scores." << endl;
     }
 
 

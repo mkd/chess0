@@ -45,6 +45,8 @@ int CMD_BUFF_COUNT = 0;
 
 
 Board board;
+vector<tuple<string, string, float>> ML;
+vector<tuple<string, string, float>> learned;
 
 
 
@@ -547,7 +549,6 @@ Bitboard BLACK_SQUARES;
 int LARGE_NUMBER = KING_VALUE + 1;
 int CHECKMATESCORE = KING_VALUE;
 int STALEMATESCORE = 0;
-int MATEIN01SCORE = 0;
 int DRAWSCORE = 0;
 Move NOMOVE;
 HashKeys KEY;
@@ -591,6 +592,11 @@ double STOPFRAC = 0.6;
 
 // keep track of stdout (writing to a file or to the console):
 int TO_CONSOLE;
+
+
+// tracks ML weight for learning purposes: +1 if white wins, -1 if black wins
+float winingDelta = 0;
+
 
 // Winboard constants & variables:
 bool XB_MODE;

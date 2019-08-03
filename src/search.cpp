@@ -591,8 +591,17 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
     // are we checkmating the other side?
     if (isOtherKingAttacked()) 
     {
-        if (nextMove) cout << "1-0 {Black mates}" << endl;
-        else cout << "1-0 {White mates}" << endl;
+        if (nextMove)
+        {
+            cout << "0-1 {Black mates}" << endl;
+            winingDelta = -1;
+        }
+        else
+        {
+            cout << "1-0 {White mates}" << endl;
+            winingDelta = +1;
+        }
+
         return true;
     }
 
@@ -616,8 +625,16 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
     {
         if (isOwnKingAttacked()) 
         {
-            if (nextMove) cout << "1-0 {White mates}" << endl;
-            else cout << "1-0 {Black mates}" << endl;
+            if (nextMove)
+            {
+                cout << "1-0 {White mates}" << endl;
+                winingDelta = 1;
+            }
+            else
+            {
+                cout << "0-1 {Black mates}" << endl;
+                winingDelta = -1;
+            }
         }
         else cout << "1/2-1/2 {stalemate}" << endl;
         return true;

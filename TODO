@@ -4,16 +4,6 @@ TODO
 
 WORK IN PROGRESS
 ================
-
-
-
-BEFORE NEXT RELEASE
-===================
-
-
-
-IMPORTANT
-=========
 - Fix cache: re-implement from scratch (try both hashkey and FEN string)
   - Test 1: no corrupted board (e.g., 1. e4 d5 2. exd5 Qxd5 and another queen
     appears, or move is Bh3). Probably has to do with rememberPV(). Should be
@@ -22,21 +12,25 @@ IMPORTANT
   - Look at crafty search.c to understand where to insert cache routines within
     the search function
 
+
+
+BEFORE NEXT RELEASE
+===================
 - Clean-up code:
   - Remove functions.h (include every necessary .h file)
   - Move all extglobals into app.h (like in chess0x)
   - Move all globals into corresponding .h files (like in chess0x)
 
-- Razoring
+
+
+SOME DAY
+========
+- Proper razoring
 
 - Ending tables (syzygy)
 
 - Lazy SMP
 
-
-
-WISH LIST
-=========
 - Read/write PGN files.
 
 - Ponder support (test that works once Cache is enabled)

@@ -35,6 +35,7 @@
 // Note: currently, there is no support for Universal Chess Interface (UCI). But
 // its development is planned.
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <map>
@@ -195,6 +196,7 @@ int startApp(int mode)
     clock_t start, end;
     InputType itype;
     string bookSequence = "";
+    string prevFEN = "";
 
 
     // Initialize the board, the list of commands and the openings book
@@ -202,6 +204,32 @@ int startApp(int mode)
     board.init();
     initListOfCommands();
     initBook();
+    learned.clear();
+    ML.clear();
+
+
+    // Load learned positions from the past
+    string fenStr, moveStr, scoreStr;
+    ifstream learnFile("learn.db");
+    float MLentries = 0;
+    while (true)
+    {
+        getline(learnFile, fenStr);
+        getline(learnFile, moveStr);
+        getline(learnFile, scoreStr);
+
+        if (fenStr == "")
+            break;
+
+        tuple<string, string, float> winingMove(fenStr, moveStr, atof(scoreStr.c_str()));
+        ML.push_back(winingMove);
+
+        MLentries++;
+    }
+    learnFile.close();
+
+    if (MLentries > 0)
+        cout << endl << "Learning from " << MLentries << " saved positions..  done." << endl << endl;
 
 
     // Application's main loop:
@@ -239,7 +267,7 @@ int startApp(int mode)
         // Current player is the computer, find a move
         else if (curPlayerType == PLAYER_TYPE_COMPUTER)
         {
-            // first, we try to get a reply from the openings book.
+            // first, we try to get a reply from the openings book
             moveIsFromBook = "";
             if (useBook)
             {
@@ -250,7 +278,17 @@ int startApp(int mode)
             }
 
 
-            // no move found from the book, enter search
+            // second, we try to get a reply using machine learning (ML)
+            if (input.empty())
+            {
+                input = getMLreply();
+
+                if (!input.empty())
+                    moveIsFromBook = " [learned] ";
+            }
+
+
+            // no move found from the book nor from learned positions, enter search
             if (input.empty())
             {
                 start = clock();
@@ -269,7 +307,8 @@ int startApp(int mode)
             // if the move was form the book, show it with a (%) symbol
             else if (useBook)
             {
-                moveIsFromBook = " [book] ";
+                if (moveIsFromBook != " [learned] ")
+                    moveIsFromBook = " [book] ";
             }
         }
 
@@ -363,8 +402,11 @@ int startApp(int mode)
                 board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 
                 // check to see if the user move is also found in the pseudo-legal move list
+                prevFEN = "";
                 if (isValidTextMove(userinput, myMove))
                 {
+                    prevFEN = board.toFEN();
+
                     makeMove(myMove);
 
                     // post-move check to see if we are leaving our king in check
@@ -372,6 +414,7 @@ int startApp(int mode)
                     {
                         unmakeMove(myMove);
                         cout << "    invalid move, leaving king in check: " << userinput << endl;
+                        prevFEN = "";
                     }
                     else
                     {
@@ -412,12 +455,17 @@ int startApp(int mode)
                 // show if the move is from the book
                 cout << moveIsFromBook;
 
+
                 // show how much time was used to think
                 cout.fill('0');
                 cout << "\033[0m (time: ";
                 cout << setprecision(2) << timeUsed / 1000.00f << "s)";
 
                 cout.fill(' ');
+
+                // add move to ML, if it doesn't exist, so it can be learned
+                // after the game is completed
+                learned.push_back(make_tuple(prevFEN, input, 0));
             }
 
 
@@ -694,9 +742,15 @@ void dealEnd()
     if (gameEnd == END_TYPE_RESIGN)
     {
         if (board.nextMove)
+        {
             cout << "1-0 {Black resigns}" << endl;
+            winingDelta = 1;
+        }
         else
+        {
             cout << "0-1 {White resigns}" << endl;
+            winingDelta = -1;
+        }
     }
 
 
@@ -706,6 +760,54 @@ void dealEnd()
     curPlayerType = wPlayer;
     playMode = HUMAN_CPU;
 
+
+    // update ML database
+    bool learnedFound;
+    int noLearned = 0;
+    for (tuple<string, string, float> &tup : learned)
+    {
+        learnedFound = false; 
+
+        for (tuple<string, string, float> &tupML : ML)
+        {
+            if ((get<0>(tup) == get<0>(tupML)) && (get<1>(tup) == get<1>(tupML)))
+            {
+                get<2>(tupML) += winingDelta;
+                learnedFound = true;
+                noLearned++;
+            }
+        }
+
+        // if we updated a record, we can move to the next one
+        // if we didn't update a record, we need to insert as new
+        if (!learnedFound)
+        {
+            ML.push_back(make_tuple(get<0>(tup), get<1>(tup), winingDelta));
+            noLearned++;
+        }
+    }
+
+    if (noLearned > 0)
+        cout << endl << "Learning " << noLearned << " new positions.. ";
+
+
+    // save ML database to file
+    ofstream outputFile("learn.db");
+    if (outputFile.is_open())
+    {
+        for (tuple<string, string, float> &tup : ML)
+        {
+            outputFile << get<0>(tup) << endl << get<1>(tup) << endl << get<2>(tup) << endl;
+        }
+    }
+    else
+        cerr<<"Unable to save to learn.db!";
+    outputFile.close();
+    if (noLearned > 0)
+        cout << "done." << endl << endl;
+
+    
+    // prompt the user again
     cout << "Type 'restart' to start a new game." << endl;
 }
 
@@ -819,4 +921,53 @@ string getGameSequence()
     }
 
     return sequence; 
+}
+
+
+
+// getMLreply
+//
+// Try to find a good move from past games.
+string getMLreply()
+{
+    vector<tuple<string, string, float>> v;
+
+    // go through learned moves and pick those with wining scores
+    for (tuple<string, string, float> &tup : ML)
+    {
+        if (get<0>(tup) == board.toFEN())
+        {
+            // black choose a move that has negative score (e.g., -2.00)
+            if (board.nextMove)
+            {
+                if (get<2>(tup) <= 0)
+                    v.push_back(make_tuple(board.toFEN(), get<1>(tup), get<2>(tup)));
+            }
+
+            // white choose a move that has positive socre (e.g., +3.00)
+            else
+            {
+                if (get<2>(tup) >= 0)
+                    v.push_back(make_tuple(board.toFEN(), get<1>(tup), get<2>(tup)));
+            }
+        }
+    }
+
+    sort(v.begin(), v.end(), sortByScore);
+
+    if (!v.empty())
+        return get<1>(v[0]);
+    else
+        return "";
+}
+
+
+
+// sortByScore
+bool sortByScore(const tuple<string, string, float>& a, const tuple<string, string, float>& b)
+{
+    if (board.nextMove)
+        return (get<2>(a) < get<2>(b));
+    else
+        return (get<2>(a) > get<2>(b));
 }

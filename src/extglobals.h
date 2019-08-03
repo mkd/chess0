@@ -42,6 +42,8 @@ extern char CMD_BUFF[];
 extern int CMD_BUFF_COUNT;
 
 extern Board board;
+extern vector<tuple<string, string, float>> ML;
+extern vector<tuple<string, string, float>> learned;
 
 extern const int A8; extern const int B8; extern const int C8; extern const int D8;
 extern const int E8; extern const int F8; extern const int G8; extern const int H8;
@@ -237,7 +239,6 @@ extern Bitboard BLACK_SQUARES;
 extern int LARGE_NUMBER;
 extern int CHECKMATESCORE;
 extern int STALEMATESCORE;
-extern int MATEIN01SCORE;
 extern int DRAWSCORE;
 extern Move NOMOVE;
 extern HashKeys KEY;
@@ -268,6 +269,8 @@ extern int UPDATEINTERVAL;
 extern double STOPFRAC;
 
 extern int TO_CONSOLE;
+
+extern float winingDelta;
 
 extern bool XB_MODE;
 extern bool XB_PONDER;

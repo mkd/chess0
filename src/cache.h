@@ -22,7 +22,8 @@
 
 // @file cache.h
 //
-// XXX
+// This file describes the data structures to store transposition tables (a.k.a.
+// chess board posititions cache memory).
 #ifndef _CACHE_H_
 #define _CACHE_H_
 

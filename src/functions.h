@@ -73,6 +73,8 @@ string          getInput();
 void            terminateApp();
 bool            isValidTextMove(char *, Move &);
 string          getBoardSerial(string, int, int, int);
+string          getMLreply();
+bool            sortByScore(const tuple<string, string, float>&, const tuple<string, string, float>&);
 
 
 
