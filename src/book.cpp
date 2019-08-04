@@ -1812,6 +1812,12 @@ void initBook()
         book["1. g4 d5 2. h3"] = "e5";
         book["1. g4 d5 2. e3"] = "e5";
 
+        book["1. e4 e5 2. Qf3"] = "Nf6";
+        book["1. e4 e5 2. Qf3 Nf6 3. Bc4"] = "c6";
+        book["1. e4 e5 2. Qf3 Nf6 3. Bc4 c6 4. Ne2"] = "d5";
+        book["1. e4 e5 2. Qf3 Nf6 3. Bc4 c6 4. Nc3"] = "b5";
+        book["1. e4 e5 2. Qf3 Nf6 3. Bc4 c6 4. Nc3 b5 5. Bb3"] = "a5";
+
         book["1. e4 e5 2. Bb5"] = "c6";
         book["1. e4 e5 2. Bb5 c6 3. Ba4"] = "d5";
         book["1. e4 e5 2. Bb5 c6 3. Ba4 d5 4. exd5"] = "Qxd5";

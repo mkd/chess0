@@ -82,9 +82,9 @@
 #define PERFT_DEPTH_LIMIT          6
 
 
-#define TT_EMPTY_VALUE          9999
+#define TT_EMPTY_VALUE             0
 #define CACHE_HIT_LEVEL          0.6
-#define BOARD_SERIAL_SIZE         84
+#define BOARD_SERIAL_SIZE         16
 
 
 
@@ -92,9 +92,9 @@
 enum ColorType
 {
     COLOR_TYPE_BLACK = -1,
-    COLOR_TYPE_WHITE = 1,
-    COLOR_TYPE_NONE  = 0,
-    COLOR_TYPE_BOTH  = 2,
+    COLOR_TYPE_WHITE =  1,
+    COLOR_TYPE_NONE  =  0,
+    COLOR_TYPE_BOTH  =  2,
 };
 
 

@@ -40,8 +40,8 @@ using namespace std;
 struct ttEntry
 {
     uint64_t key   =  0;
-    int      score =  0;
     int      depth =  TT_EMPTY_VALUE;
+    int      score =  0;
 };
 
 

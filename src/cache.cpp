@@ -22,7 +22,8 @@
 
 // @file cache.cpp
 //
-// XXX
+// This file contains the functions to manipulate the cache data structure and
+// transposition tables.
 #include <iostream>
 #include "definitions.h"
 #include "cache.h"
@@ -33,7 +34,7 @@ using namespace std;
 
 
 
-// find()
+// find
 //
 // Look for a ttEntry in the cache.
 ttEntry Cache::find(uint64_t key, int depth)
@@ -65,7 +66,7 @@ void Cache::add(uint64_t key, ttEntry *tt)
 
 
 
-// remove()
+// remove
 //
 // Remove a ttEntry from the cache.
 void Cache::remove(uint64_t key)
@@ -77,7 +78,7 @@ void Cache::remove(uint64_t key)
 
 // clear
 //
-// XXX
+// Empty the entire cache structure.
 void Cache::clear()
 {
     cacheData.clear();
@@ -87,7 +88,7 @@ void Cache::clear()
 
 // positions
 //
-// XXX
+// Return the number of entries stored in the cache.
 uint64_t Cache::positions()
 {
     return cacheData.size();
@@ -97,7 +98,8 @@ uint64_t Cache::positions()
 
 // size
 //
-// XXX
+// Return the total memory size (in bytes) occupied by the cache data
+// structures.
 uint64_t Cache::size()
 {
     return cacheData.size() * BOARD_SERIAL_SIZE;
@@ -106,7 +108,7 @@ uint64_t Cache::size()
 
 // dump
 // 
-// XXX
+// Print out the entire cache memory structure.
 void Cache::dump()
 {
     for (auto i : cacheData)

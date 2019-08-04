@@ -61,7 +61,7 @@ unsigned short nextDepth = 0;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
-int score       = -INT_MAX;
+int score       = 0;
 
 
 
@@ -137,9 +137,6 @@ Move Board::think()
 
 
         // enter actual search
-        //
-        // TODO: re-implement aspiration window properly, using full-width
-        //       search for now
         score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
 
 
@@ -330,8 +327,8 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             cached = false;
             if (useCache)
             {
-                tt = cache.find(board.hashkey, ply);
-                if (tt.depth != TT_EMPTY_VALUE)
+                tt = cache.find(board.hashkey, depth);
+                if ((tt.key != 0) && (tt.depth != TT_EMPTY_VALUE))
                 {
                     cacheHit++;
                     val = tt.score;
@@ -378,13 +375,13 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // Store in cache (replacement scheme --> always replace)
-                if (useCache && (ply >= 9))
+                if (useCache)
                 {
                     if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
                     {
                         tt.key   = board.hashkey;
                         tt.score = val;
-                        tt.depth = ply;
+                        tt.depth = depth;
                         cache.add(board.hashkey, &tt);
                     }
                 }
@@ -421,7 +418,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 triangularArray[ply][ply] = moveBuffer[i];
 
 
-                // if nothing in the cache, append the latest best PV from deeper plies
+                // append the latest best PV from deeper plies
                 for (j = ply + 1; j < triangularLength[ply+1]; j++) 
                     triangularArray[ply][j] = triangularArray[ply+1][j];
                 triangularLength[ply] = triangularLength[ply+1];
