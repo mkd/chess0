@@ -1,7 +1,7 @@
 From v0.7 to v1.0
 =================
 - New C++ code based on Winglet Chess (by Stef Luijten) and Crafty evaluation
-- Proper LMR optimizations, check extensions
+- Proper check extensions
 - Proper Zobrist cache implementation
 - Improved evaluation function (especially king safety and phase detection)
 - Simple Machine Learning (SML): Chess0 now learns from previous games

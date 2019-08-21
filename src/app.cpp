@@ -440,6 +440,9 @@ int startApp(int mode)
             {
                 // measure how long it takes to think the move
                 float timeUsed = (end - start) / (CLOCKS_PER_SEC / 1000);
+                if (timeUsed > THINK_MAX_TIME)
+                    timeUsed = 0;
+
 
                 // display the move chosen by the computer and other info
                 cout << endl << endl << "\a\033[1mMy move: ";

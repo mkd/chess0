@@ -57,7 +57,7 @@ using namespace std;
 
 
 
-unsigned short nextDepth = 0;
+unsigned short nextDepth = 1;
 ttEntry tt;
 float cacheHit;
 unsigned moveNo = 0;
@@ -168,8 +168,8 @@ Move Board::think()
         // stop searching if the current depth leads to a forced mate
         if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
-            rememberPV();
-            currentdepth = searchDepth + 1;
+            //rememberPV();
+            currentdepth = searchDepth;
         }
     }
 
@@ -203,28 +203,26 @@ Move Board::think()
 // checks nor promotions before applying a static evaluation function.
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
-    int i, j, movesfound, pvmovesfound, val, qval;
-    bool cached = false;
-
-
-    // if at leaf node, return qval
-    if (depth <= 0) 
-    {
-        followpv = false;
-        qval = qsearch(ply, alpha, beta);
-        return qval;
-    }
-
-
-    // repetition check
-    if (repetitionCount() >= 3)
-        return DRAWSCORE;
+	int i, j, movesfound, pvmovesfound, val;
 
 
     // prepare structure to store the principal variation (PV)
-    triangularLength[ply] = ply;
+	triangularLength[ply] = ply;
 
 
+    // if at leaf node, return qiesce value
+    if (depth <= 0) 
+	{
+		followpv = false;
+		return qsearch(ply, alpha, beta);
+	}
+
+
+	// repetition check
+	if (repetitionCount() >= 3)
+        return DRAWSCORE;
+
+	
     // Null-move reductions:
     // 
     // We try a null move to see if we can get a quick
@@ -248,43 +246,40 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     // 4. The transposition table probe found an entry that    
     //    indicates that a null-move search will not fail      
     //    high, so we avoid the wasted effort.                 
-    if (!followpv && allownull)
-    {
-        if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
-        {
-            if (!isOwnKingAttacked())
-            {
-                allownull = false;
-                inodes++;
+	if (!followpv && allownull)
+	{
+		if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
+		{
+			if (!isOwnKingAttacked())
+			{
+				allownull = false;
+				inodes++;
 
-                if (--countdown <=0)
+				if (--countdown <=0)
                     readClockAndInput();
 
-                nextMove = !nextMove;
-                hashkey ^= KEY.side; 
-                val = -alphabetapvs(ply, depth - NULLMOVE_REDUCTION, -beta, -beta+1);
-                nextMove = !nextMove;
-                hashkey ^= KEY.side;
+				nextMove = !nextMove;
+				hashkey ^= KEY.side; 
+				val = -alphabetapvs(ply, depth - NULLMOVE_REDUCTION, -beta, -beta+1);
+				nextMove = !nextMove;
+				hashkey ^= KEY.side;
 
-                if (timedout)
+				if (timedout)
                     return 0;
 
-                allownull = true;
+				allownull = true;
 
-                if (val >= beta)
-                {
+				if (val >= beta)
                     return val;
-                }
-            }
-        }
-    }
+			}
+		}
+	}
 
 
     // prepare to start a full-depth search
-    allownull = true;
-    movesfound = 0;
-    pvmovesfound = 0;
-    moveNo = 0;
+	allownull = true;
+	movesfound = 0;
+	pvmovesfound = 0;
 
 
     // generate a list of moves, sorted by three main criteria:
@@ -292,178 +287,129 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     //  2. second -> high-gain captures first (MVV/LVA)
     //  3. third  -> historically "good" moves (those which produce cut-off) 
     //  4. rest of the moves
-    moveBufLen[ply+1] = movegen(moveBufLen[ply]);
+	moveBufLen[ply+1] = movegen(moveBufLen[ply]);
+
 
 
     // go through every move and search the tree below
-    for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
-    {
+	for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
+	{
         // pick the next best move from a sorted list
-        selectmove(ply, i, depth, followpv); 
+		selectmove(ply, i, depth, followpv); 
 
 
-        // make the move and evaluate the board
-        makeMove(moveBuffer[i]);
+        // make th emove and evaluate the board
+		makeMove(moveBuffer[i]);
+		{
+
+            // only search this move if legal --> remember that movegen() returns
+            // pseudo-legal moves
+			if (!isOtherKingAttacked()) 
+			{
+				inodes++;
+
+				if (--countdown <=0)
+                    readClockAndInput();
+
+				movesfound++;
 
 
-        // only search this move if legal --> remember that movegen() returns
-        // pseudo-legal moves
-        if (!isOtherKingAttacked()) 
-        {
-            inodes++;
-            moveNo++;
-
-            if (--countdown <=0)
-                readClockAndInput();
-
-            movesfound++;
-
-
-            if (!ply && (depth > 3))
-                displaySearchStats(3, ply, i); 
-
-
-            // try to find the current position in the cache
-            cached = false;
-            if (useCache)
-            {
-                tt = cache.find(board.hashkey, depth);
-                if ((tt.key != 0) && (tt.depth != TT_EMPTY_VALUE))
-                {
-                    cacheHit++;
-                    val = tt.score;
-                    cached = true;
-                }
-            }
-
-
-            // if not found, then perform the search and store the result
-            if (!cached)
-            {
-                // LMR
-                //
-                // Configure late-move reductions (LMR): assuming that the moves in the
-                // list are ordered from potential best to potential worst, analyzing 
-                // the first moves is more critical than the last ones. Therefore, 
-                // using LMR we analyze the first 2 moves in full-depth, but cut down
-                // the analysis depth for the rest of moves.
-                nextDepth = depth - 1;
-                if ((ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH)
-                                          && !((moveBuffer[i]).isCapture())
-                                          && !((moveBuffer[i]).isPromo())
-                                          && !(isOwnKingAttacked())
-                                          && !(isOtherKingAttacked())
-                                          && (moveNo > LMR_MOVE_START) && !pvmovesfound)
-                {
-                    nextDepth = depth - 2;
-                }
+				if (!ply && (depth > 1))
+                    displaySearchStats(3, ply, i); 
 
 
                 // Alphabeta with Principal Variation Search (PVS)
-                if (pvmovesfound)
+				if (pvmovesfound)
+				{
+					val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+
+					// in case of failure, proceed with normal alphabeta
+		            if ((val > alpha) && (val < beta))
+					{
+						val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);  		        
+					}
+				} 
+				// normal alphabeta
+	 			else
                 {
-                    val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
-
-                    // in case of failure, proceed with normal alphabeta
-                    if ((val > alpha) && (val < beta))
-                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);               
+                    val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
                 }
-                else
-                {
-                    val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);     
-                }
+				unmakeMove(moveBuffer[i]);
 
 
-                // Store in cache (replacement scheme --> always replace)
-                if (useCache)
-                {
-                    if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
-                    {
-                        tt.key   = board.hashkey;
-                        tt.score = val;
-                        tt.depth = depth;
-                        cache.add(board.hashkey, &tt);
-                    }
-                }
-            }
-            unmakeMove(moveBuffer[i]);
+                // if time is up, then return
+				if (timedout)
+                    return 0;
 
 
-            // if time is up, then return
-            if (timedout)
-                return 0;
+                // if a move produces a cut-off, update the history heuristic
+				if (val >= beta)
+				{
+					if (nextMove) 
+						blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+					else 
+						whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+					return beta;
+				}
 
 
-            // if a move produces a cut-off, update the history heuristic
-            if (val >= beta)
-            {
-                if (nextMove) 
-                    blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
-                else 
-                    whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
-
-                return beta;
-            }
+                // both sides want to maximize from *their* perspective
+				if (val > alpha)
+				{
+                    // update bounds
+					alpha = val;
+					pvmovesfound++;
 
 
-            // both sides want to maximize from *their* perspective
-            if (val > alpha)
-            {
-                // update bounds
-                alpha = val;
-                pvmovesfound++;
+                    // save this move
+					triangularArray[ply][ply] = moveBuffer[i];
 
 
-                // save this move
-                triangularArray[ply][ply] = moveBuffer[i];
+                    // append the latest best PV from deeper plies
+					for (j = ply + 1; j < triangularLength[ply+1]; j++) 
+						triangularArray[ply][j] = triangularArray[ply+1][j];
+					triangularLength[ply] = triangularLength[ply+1];
 
 
-                // append the latest best PV from deeper plies
-                for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                    triangularArray[ply][j] = triangularArray[ply+1][j];
-                triangularLength[ply] = triangularLength[ply+1];
+                    // show intermediate search results
+					if (!ply && (depth > 1)) displaySearchStats(2, depth, val);
+				}
+			}
+			else unmakeMove(moveBuffer[i]);
+		}
+	}
 
 
-                // show intermediate search results
-                if (!ply && (depth > 3))
-                    displaySearchStats(2, depth, val);
-            } 
-        }
-        else unmakeMove(moveBuffer[i]);
-    }
+	// update the history heuristic
+	if (pvmovesfound)
+	{
+		if (nextMove) 
+			blackHeuristics[triangularArray[ply][ply].getFrom()][triangularArray[ply][ply].getTosq()] += depth*depth;
+		else
+			whiteHeuristics[triangularArray[ply][ply].getFrom()][triangularArray[ply][ply].getTosq()] += depth*depth;
+	}
 
 
-    // update the history heuristic
-    if (pvmovesfound)
-    {
-        if (nextMove) 
-            blackHeuristics[triangularArray[ply][ply].getFrom()][triangularArray[ply][ply].getTosq()] += depth*depth;
-        else
-            whiteHeuristics[triangularArray[ply][ply].getFrom()][triangularArray[ply][ply].getTosq()] += depth*depth;
-    }
+	//	50-move rule:
+	if (fiftyMove >= 100) return DRAWSCORE;
 
 
-    //  50-move rule:
-    if (fiftyMove > 99)
-        return DRAWSCORE;
-
-
-    //  Checkmate/stalemate detection:
-    if (!movesfound)
-    {
-        if (isOwnKingAttacked())
+	//	Checkmate/stalemate detection
+	if (!movesfound)
+	{
+		if (isOwnKingAttacked())
             return (-CHECKMATESCORE+ply-1);
-
-        else
+		else
             return (STALEMATESCORE);
-    }
+	}
 
-    return alpha;
+
+	return alpha;
 }
 
 
 
-// displaySearchStats()
+// displaySearchStats
 //
 // Display analysis statistics about the calculation of a move.
 void Board::displaySearchStats(int mode, int depth, int score)

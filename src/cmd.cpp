@@ -232,7 +232,7 @@ void exec(string input)
     {
         int d;
         d = atoi(arg.c_str());
-        if ((d > 3) && (d < SOLVE_MAX_DEPTH))
+        if ((d > 3) &&  (d < SOLVE_MAX_DEPTH))
             board.searchDepth = d;
 
         cout << "Search depth: " << board.searchDepth << endl;
@@ -388,9 +388,9 @@ void exec(string input)
 
 
         // Load learned positions from the past
-        cout << endl << "Initializing machine learning...";
         string fenStr, moveStr, scoreStr;
         ifstream learnFile("learn.db");
+        float MLentries = 0;
         while (true)
         {
             getline(learnFile, fenStr);
@@ -402,9 +402,12 @@ void exec(string input)
 
             tuple<string, string, float> winingMove(fenStr, moveStr, atof(scoreStr.c_str()));
             ML.push_back(winingMove);
+
+            MLentries++;
         }
         learnFile.close();
-        cout << endl << endl;
+        if (MLentries > 0)
+            cout << endl << "Learning from " << MLentries << " saved positions..  done." << endl << endl;
 
 
         // enable book by default

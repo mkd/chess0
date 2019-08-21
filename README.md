@@ -54,12 +54,12 @@ Chess0's implementation is currently based on
 - **Trasnposition tables** 
   https://en.wikipedia.org/wiki/Transposition_table
 
-- **Late Move Reductions** 
-  https://en.wikipedia.org/wiki/Late_Move_Reductions
-
 - **Winboard/XBoard support:** Chess0 supports the XBoard protocol version 2, which means
   that you can play against Chess0 using a graphical user interface (GUI) board.
 
+- **Simple Machine Learning:** Chess0 can learn from won games on moves that
+  actually work, and play them again if similar situations are found.
+
 - **Opening book:** Chess0 comes with a built-in openings book (currently about
-  700 learned theory lines). The book is always in use by default, however you
+  2700 learned theory lines). The book is always in use by default, however you
   can disable it with the command 'book off'.

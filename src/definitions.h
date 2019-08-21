@@ -75,6 +75,7 @@
 
 #define SOLVE_MAX_DEPTH           32
 #define SOLVE_MAX_TIME          1800
+#define THINK_MAX_TIME         99999
 #define NODES_TEST_DEPTH          64
 #define NODES_TEST_TIME            4
 #define MOVES_TEST_TIMES      250000
