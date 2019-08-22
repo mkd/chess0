@@ -168,7 +168,7 @@ Move Board::think()
         // stop searching if the current depth leads to a forced mate
         if ((score > (CHECKMATESCORE-currentdepth)) || (score < -(CHECKMATESCORE-currentdepth))) 
         {
-            //rememberPV();
+            rememberPV();
             currentdepth = searchDepth;
         }
     }
