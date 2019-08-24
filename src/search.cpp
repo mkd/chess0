@@ -204,6 +204,7 @@ Move Board::think()
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
 	int i, j, movesfound, pvmovesfound, val;
+    bool cached = false;
 
 
     // prepare structure to store the principal variation (PV)
@@ -301,6 +302,19 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
         // make th emove and evaluate the board
 		makeMove(moveBuffer[i]);
 		{
+            // try to find the current position in the cache
+            cached = false;
+            if (useCache)
+            {
+                tt = cache.find(board.hashkey, depth);
+                if ((tt.key != 0) && (tt.depth != TT_EMPTY_VALUE))
+                {
+                    cacheHit++;
+                    val = tt.score;
+                    cached = true;
+                    rememberPV();
+                }
+            }
 
             // only search this move if legal --> remember that movegen() returns
             // pseudo-legal moves
@@ -319,20 +333,23 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
                 // Alphabeta with Principal Variation Search (PVS)
-				if (pvmovesfound)
-				{
-					val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
-
-					// in case of failure, proceed with normal alphabeta
-		            if ((val > alpha) && (val < beta))
-					{
-						val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);  		        
-					}
-				} 
-				// normal alphabeta
-	 			else
+                if (!cached)
                 {
-                    val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+                    if (pvmovesfound)
+                    {
+                        val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+
+                        // in case of failure, proceed with normal alphabeta
+                        if ((val > alpha) && (val < beta))
+                        {
+                            val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);  		        
+                        }
+                    } 
+                    // normal alphabeta
+                    else
+                    {
+                        val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+                    }
                 }
 				unmakeMove(moveBuffer[i]);
 
@@ -377,6 +394,19 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 			}
 			else unmakeMove(moveBuffer[i]);
 		}
+
+        
+        // Store in cache (replacement scheme --> always replace)
+        if (useCache && !cached)
+        {
+            if ((val > -CHECKMATESCORE) && (val < CHECKMATESCORE))
+            {
+                tt.key   = board.hashkey;
+                tt.score = val;
+                tt.depth = depth;
+                cache.add(board.hashkey, &tt);
+            }
+        }
 	}
 
 
