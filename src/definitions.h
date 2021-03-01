@@ -35,7 +35,7 @@
 
 
 #define PROGRAM_NAME    "Chess0"
-#define PROGRAM_VERSION "1.0"
+#define PROGRAM_VERSION "1.1-beta"
 #define PROGRAM_AUTHOR  "Claudio M. Camacho <claudiomkd@gmail.com>"
 #define PROGRAM_WEB     "http://github.com/mkd/chess0"
 
@@ -74,12 +74,12 @@
 
 
 #define SOLVE_MAX_DEPTH           32
-#define SOLVE_MAX_TIME          1800
-#define THINK_MAX_TIME         99999
+#define SOLVE_MAX_TIME         18000
+#define THINK_MAX_TIME        999999
 #define NODES_TEST_DEPTH          64
-#define NODES_TEST_TIME            4
+#define NODES_TEST_TIME           20
 #define MOVES_TEST_TIMES      250000
-#define MOVES_TEST_ITER     50000000
+#define MOVES_TEST_ITER    100000000
 #define PERFT_DEPTH_LIMIT          6
 
 

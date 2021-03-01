@@ -1,8 +1,7 @@
 # Chess0
 Chess0 is a computer chess program developed in C++ and based on Winglet chess
 by Stef Luijten. Chess0 is just an example of chess programming and it's
-approximate ELO rating is around 1730, based on the BT2630 online ELO score test
-(http://www.schachcomputer.at/bt2630.htm).
+approximate ELO rating is around ~2200, based on the Elometer test (http://www.elometer.net).
 
 Two main features are still missing or partially implemented:
 - Proper cache (using transposition tables)
@@ -13,7 +12,7 @@ Two main features are still missing or partially implemented:
 Binaries are available for Chess0. By downloading the ZIP files below, you get
 the binary version of the program, which can be run on 64-bit computers with Mac
 OSX, GNU/Linux or Windows. The latest version is 1.0-alpha:
-- [Chess0 v1.0-alpha OS X 64-bit](https://www.dropbox.com/s/u8gxnlc2h4o0ekv/chess0-osx-1.0-alpha?dl=0)
+- [Chess0 v1.1-beta OS X 64-bit](https://www.dropbox.com/s/261zuw5bmot6lzl/chess0-osx-1.1-beta?dl=0)
 
 - [Chess0 v0.6 GNU/Linux 64-bit](https://www.dropbox.com/s/229ibt50f4dhklr/chess0-linux-0.6?dl=0)
 - [Chess0 v0.6 Windows 64-bit](https://www.dropbox.com/s/aqs86mr71hn6krd/chess0-win64-0.6.exe?dl=0)

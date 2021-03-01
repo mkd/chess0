@@ -470,7 +470,7 @@ void exec(string input)
             cout << "Ply\t  Moves\t     Time\t Moves/s" << endl;
             cout << flush;
 
-            for (int z = 0; z < PERFT_DEPTH_LIMIT; z++)
+            for (int z = 0; z <= PERFT_DEPTH_LIMIT; z++)
             {
                 board.moveBufLen[0] = 0;
 
@@ -483,11 +483,11 @@ void exec(string input)
 
                 // PRINT: Depth, Moves, Time, Moves/s
                 cout.fill(' ');
-                cout << setw(3) << z << "\t" << setw(7) << perftMoves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
+                cout << setw(3) << z << "   " << setw(9) << perftMoves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
                 if (isinf(speed))
                     cout << "  -" << endl;
                 else
-                    cout << fixed << setw(4) << setprecision(0) << moves/sec << "K" << endl;
+                    cout << fixed << setw(4) << setprecision(0) << speed << "K/s" << endl;
                 cout << flush;
             }
 
@@ -1131,6 +1131,14 @@ void displayEval()
         evaluationValue = -board.eval() / 100.00f;
     else
         evaluationValue = board.eval() / 100.00f;
+
+    // is it endgame: use proper piece values
+    int whitetotalmat = 3 * bitCnt(board.whiteKnights) + 3 * bitCnt(board.whiteBishops) + 5 * bitCnt(board.whiteRooks) + 10 * bitCnt(board.whiteQueens);
+    int blacktotalmat = 3 * bitCnt(board.blackKnights) + 3 * bitCnt(board.blackBishops) + 5 * bitCnt(board.blackRooks) + 10 * bitCnt(board.blackQueens);
+    if (whitetotalmat < 15 || blacktotalmat < 15)
+        cout << "Phase: Endgame" << endl;
+    else
+        cout << "Phase: Opening & Middlegame" << endl;
 
     cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << (board.Material / 100.00f) << ")" << endl;
     cout << noshowpos;
