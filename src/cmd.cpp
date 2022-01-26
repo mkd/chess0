@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,6 +83,7 @@ void initListOfCommands()
     listOfCommands.push_back("moves");
     listOfCommands.push_back("new");
     listOfCommands.push_back("q");
+    listOfCommands.push_back("quiet");
     listOfCommands.push_back("quit");
     listOfCommands.push_back("remove");
     listOfCommands.push_back("recall");
@@ -97,6 +98,7 @@ void initListOfCommands()
     listOfCommands.push_back("st");
     listOfCommands.push_back("test");
     listOfCommands.push_back("think");
+    listOfCommands.push_back("uci");
     listOfCommands.push_back("undo");
     listOfCommands.push_back("v");
     listOfCommands.push_back("ver");
@@ -434,22 +436,16 @@ void exec(string input)
 
 
 
-    // xboard: Xboard mode (protovol ver 1)
-    else if (cmd == "xboard")
-    {
-        // TODO: xboard
-    }
-
-
-
     // test | bench: perform test or benchmark
     else if ((cmd == "test") || (cmd == "bench"))
     {
-        // disable book and cache
+        // disable book, cache and verbosity
         bool wasUsingCache   = useCache;
         bool wasUsingBook    = useBook;
+        bool wasQuiet        = beQuiet;
         useCache = false;
         useBook  = false;
+        beQuiet  = true;
 
 
         // test raw moves (make / unmake)
@@ -499,7 +495,7 @@ void exec(string input)
                 float sec = (end - start) / (CLOCKS_PER_SEC / 1000);
                 float speed = perftMoves / sec;
 
-                // PRINT: Depth, Moves, Time, Moves/s
+                // display test depth, moves, time and moves per second
                 cout.fill(' ');
                 cout << setw(3) << z << "   " << setw(9) << perftMoves << "\t   " << setw(5) << fixed << setprecision(2) << sec / 1000 << "s\t";
                 if (isinf(speed))
@@ -516,7 +512,7 @@ void exec(string input)
         {
             cout << "Testing node search speed: " << endl << endl << flush;
 
-            // store current AI settings to restore them after the test
+            // store current settings to restore them after the test
             int cur_depth = board.searchDepth;
             uint64_t prevTPM = board.maxTime;
 
@@ -540,15 +536,16 @@ void exec(string input)
             cout << "(" << fixed << setprecision(2) << (board.inodes / ms);
             cout << " kN/s)." << endl << flush;
 
-            // restore the depth and time settings after the test
+            // restore settings after the test
             board.maxTime = prevTPM;
             board.searchDepth = cur_depth;
         }
 
 
-        // re-enable book and cache
+        // re-enable book, cache and verbosity
         useCache = wasUsingCache;
         useBook  = wasUsingBook;
+        beQuiet  = wasQuiet;
     }
 
 
@@ -566,42 +563,9 @@ void exec(string input)
                 t = 0;
 
             board.maxTime = t * 1000;
-
-            // XXX
-            if (XB_MODE)
-            {
-                XB_CTIM = t * 10;
-                board.maxTime = t * 10;
-            }
         }
 
-        if (!XB_MODE)
-            cout << "Max. time per move: " << (board.maxTime / 1000) << "s" << endl;
-    }
-
-
-
-    // playother: move the turn to the other player and make computer play (XBoard)
-    else if (cmd == "playother")
-    {
-        // TODO: playother
-    }
-
-
-
-    // ping: reply to ping command (XBoard)
-    else if (cmd == "ping")
-    {
-        cout << "pong " << arg << endl;
-        cout << flush;
-    }
-
-
-
-    // post: show analysis (XBoard)
-    else if (cmd == "post")
-    {
-        // XXX
+        cout << "Max. time per move: " << (board.maxTime / 1000) << "s" << endl;
     }
 
 
@@ -716,6 +680,9 @@ void exec(string input)
     // solve: try to find a checkmate for the given position
     else if ((cmd == "analyze") || (cmd == "solve"))
     {
+        // disable book moves for infinite analysis
+        useBook = false;
+
         board.searchDepth = SOLVE_MAX_DEPTH;
         board.maxTime = SOLVE_MAX_TIME * 1000;
 
@@ -734,6 +701,7 @@ void exec(string input)
             curPlayerType = wPlayer;
             playMode = HUMAN_CPU;
         }
+
     }
 
 
@@ -753,14 +721,17 @@ void exec(string input)
             cursor--;
             numberOfMove = (cursor / 2) + 1;
         }
-        else if (!XB_MODE) cout << "already at start of game" << endl;
+        else
+        {
+            cout << "Can't undo move. Already at the start of the game!" << endl;
+        }
 
-        if (!XB_MODE) board.display();
+        board.display();
     }
 
 
 
-    // remove: go back two moves (XBoard --> "remove" feature)
+    // remove: go back two moves 
     else if (cmd == "remove")
     {
         if (board.endOfGame)
@@ -770,7 +741,8 @@ void exec(string input)
             cursor--;
             numberOfMove = (cursor / 2) + 1;
         }
-        else if (!XB_MODE) cout << "already at start of game" << endl;
+        else
+            cout << "Can't remove last moves. Already at the start of the game!" << endl;
 
         if (board.endOfGame)
         {
@@ -779,9 +751,10 @@ void exec(string input)
             cursor--;
             numberOfMove = (cursor / 2) + 1;
         }
-        else if (!XB_MODE) cout << "already at start of game" << endl;
+        else
+            cout << "Can't remove last moves. Already at the start of the game!" << endl;
 
-        if (!XB_MODE) board.display();
+        board.display();
     }
 
 
@@ -792,6 +765,40 @@ void exec(string input)
         cout << PROGRAM_NAME << " (version " << PROGRAM_VERSION << ")" << endl;
         cout << PROGRAM_AUTHOR << endl;
         cout << PROGRAM_WEB << endl;
+    }
+
+
+
+    // silent | quiet: turn dispalying analysis on or off
+    else if ((cmd == "quiet") || (cmd == "silent"))
+    {
+        if ((arg == "on") || (arg == "true"))
+            beQuiet = true;
+
+        else if ((arg == "off") || (arg == "false"))
+            beQuiet = false;
+
+        else if (beQuiet)
+            cout << "Quiet mode is enabled." << endl;
+        else
+            cout << "Quiet mode is disabled." << endl;
+    }
+
+
+
+    // verbose: turn dispalying analysis on or off
+    else if (cmd == "verbose")
+    {
+        if ((arg == "on") || (arg == "true"))
+            beQuiet = false;
+
+        else if ((arg == "off") || (arg == "false"))
+            beQuiet = true;
+
+        else if (beQuiet)
+            cout << "Quiet mode is enabled." << endl;
+        else
+            cout << "Quiet mode is disabled." << endl;
     }
 
 
@@ -815,9 +822,10 @@ void displayHelp(string which)
     {
         cout << "List of commands: (help COMMAND to get more help)" << endl;
         cout << "analyze  auto  book  cache  depth  eval  fen  flip" << endl;
-        cout << "game  go  help  history  load  manual  new  null" << endl;
-        cout << "pass  recall  remove  resign  restart  save  sd  set" << endl;
-        cout << "setboard  show  solve  st  test  think  undo  version  quit" << endl;
+        cout << "game  go  help  history  lmr  load  manual  new  null" << endl;
+        cout << "pass  quiet  quit  recall  remove  resign  restart" << endl;
+        cout << "save  sd  set  setboard  show  silent  solve  st  test" << endl;
+        cout << "think  uci  verbose  undo  version" << endl;
         return;
     }
 
@@ -1103,6 +1111,14 @@ void displayHelp(string which)
 
 
 
+    // help uci
+    else if (which == "uci")
+    {
+        cout << "uci" << endl;
+        cout << " Start UCI engine." << endl;
+    }
+
+
     // help undo
     else if ((which == "undo") || (which == "back"))
     {
@@ -1128,6 +1144,26 @@ void displayHelp(string which)
         cout << "quit | exit" << endl;
         cout << " Quit the application." << endl;
     }
+
+
+
+    // help quiet | silent
+    else if ((which == "quiet") || (which == "silent"))
+    {
+        cout << "quiet | silent [on | off]" << endl;
+        cout << " Turn off displaying the analysis while the computer" << endl;
+        cout << " is thinking." << endl;
+    }
+
+
+    // help verbose
+    else if (which == "verbose")
+    {
+        cout << "verbose [on | off]" << endl;
+        cout << " Turn on displaying the analysis while the computer" << endl;
+        cout << " is thinking." << endl;
+    }
+
 
     // help unknown
     else

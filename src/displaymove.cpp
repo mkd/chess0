@@ -22,7 +22,8 @@
 
 // @file displaymove.cpp
 //
-// XXX
+// This is the implementation of showing moves in Simplified Algebraic
+// Notation (SAN) format.
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -71,7 +72,7 @@ void displayMove(Move &move)
 
 // displayPV()
 //
-// XXX
+// Display the list of moves in the Principal Variation.
 void displayPV()
 {
     int i;
@@ -87,7 +88,10 @@ void displayPV()
     {
         unmakeMove(board.triangularArray[0][i]);
     }
-    if ((!XB_MODE) && (i < 3)) cout << "     ";   // make sure to overwrite any remaining output of mode 3
+
+    // make sure to overwrite any remaining output of mode 3
+    if (i < 3)
+        cout << "     ";
     cout << endl;
     cout.flush();
 }

@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 
    You should have received a copy of the GNU General Public License
    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-   */
+*/
 
 
 
@@ -830,13 +830,4 @@ void dataInit()
     // required for running test suites, to prevent 
     // writing escape characters to a file
     TO_CONSOLE = 1;
-
-    // Winboard parameters:
-    XB_NONE = 2;  // not 0 or 1
-    XB_ANALYZE = 3;   // not 0, 1, or 2
-    XB_MODE = false;
-    XB_POST = true;
-    XB_PONDER = false;
-    XB_DO_PENDING = false;
-    XB_NO_TIME_LIMIT = false;
 }

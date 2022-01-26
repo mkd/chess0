@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 
 
 #define PROGRAM_NAME    "Chess0"
-#define PROGRAM_VERSION "1.1-beta"
+#define PROGRAM_VERSION "1.1"
 #define PROGRAM_AUTHOR  "Claudio M. Camacho <claudiomkd@gmail.com>"
 #define PROGRAM_WEB     "http://github.com/mkd/chess0"
 
@@ -51,23 +51,19 @@
 
 // Different execution modes of Chess0
 //
-// - XBOARD: the program will be quiet and interact with a graphical user
-//           interface (GUI), by using the Winboard/Xboard protocol.
-//
 // - UCI:    the program will be quiet and interact with a graphical user
 //           interface (GUI), by using the UCI protocol.
 //
 // - CLI:    the program will be verbose and interact with the user through the
 //           command line of the system, using text-based input and commands.
-#define APP_MODE_XBOARD 1
-#define APP_MODE_CLI    2
-#define APP_MODE_UCI    3
+#define APP_MODE_CLI    1
+#define APP_MODE_UCI    2
 
 
 // Search algorithm configuration
 #define AI_SEARCH_DEPTH           64
 #define SEARCH_WINDOW_SIZE        16
-#define TIME_PER_MOVE            999
+#define TIME_PER_MOVE              5
 #define LMR_PLY_START              3
 #define LMR_MOVE_START             3
 #define LMR_SEARCH_DEPTH           3

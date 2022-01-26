@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ void Board::readClockAndInput()
     // reset countdown
     countdown = UPDATEINTERVAL;
 
-    if ((!XB_NO_TIME_LIMIT && ((timer.getms() - msStart) > maxTime)) || (!XB_MODE && _kbhit()))
+    if (((timer.getms() - msStart) > maxTime) || _kbhit())
     {
         timedout = true;
         return;
@@ -110,9 +110,9 @@ noPonder:
 
 
 #if defined(_WIN32) || defined(_WIN64)
-    if ((XB_MODE) && (PeekNamedPipe(GetStdHandle(STD_INPUT_HANDLE), NULL, 0, NULL, &nchar, NULL)))
+    if ((false) && (PeekNamedPipe(GetStdHandle(STD_INPUT_HANDLE), NULL, 0, NULL, &nchar, NULL)))
 #else
-        if ((XB_MODE) && Bioskey())
+        if ((false) && Bioskey())
 #endif
         {
 
@@ -136,35 +136,29 @@ noPonder:
                     if (!strcmp(command, "bk")) return;
                     if (!strcmp(command, "easy")) 
                     {
-                        XB_PONDER = false;
                         return;
                     }
                     if (!strcmp(command, "hint")) return; 
                     if (!strcmp(command, "nopost"))
                     {
-                        XB_POST = false;
                         return;
                     }   
                     if (!strcmp(command, "otim")) 
                     {
-                        sscanf(CMD_BUFF, "otim %d", &XB_OTIM);
-                        XB_OTIM *= 10;  // convert centiseconds to miliseconds;
+                        //sscanf(CMD_BUFF, "otim %d", &XB_OTIM);
                         goto noPonder;
                     }   
                     if (!strcmp(command, "post")) 
                     {
-                        XB_POST = true;
                         return;
                     }   
                     if (!strcmp(command, "time")) 
                     {
-                        sscanf(CMD_BUFF,"time %d",&XB_CTIM);
-                        XB_CTIM *= 10; // convert centiseconds to milliseconds
+                        //sscanf(CMD_BUFF,"time %d",&XB_CTIM);
                         goto noPonder;
                     }
                     timedout = true;
                     CMD_BUFF_COUNT = (int)strlen(CMD_BUFF);
-                    XB_DO_PENDING = true;
                     return;
                 }
             }

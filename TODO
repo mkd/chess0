@@ -6,6 +6,8 @@ TODO
   - Move all extglobals into app.h (like in chess0x)
   - Move all globals into corresponding .h files (like in chess0x)
 - UCI protocol
+- Simple time management (e.g., <10min = 9s; <2min = 1s) 
+  - remember to leverage timeControl() implementation in search.cpp
 
 
 

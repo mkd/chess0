@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
 
 // @file extglobals.h
 //
-// XXX
+// This file includes external global variables to give direct access to
+// them from anywhere in the program. This quirk is used to speed-up the
+// search in most cases.
 #ifndef _EXTGLOBALS_H_
 #define _EXTGLOBALS_H_
 
@@ -267,21 +269,6 @@ extern double STOPFRAC;
 extern int TO_CONSOLE;
 
 extern float winingDelta;
-
-extern bool XB_MODE;
-extern bool XB_PONDER;
-extern bool XB_POST;
-extern bool XB_DO_PENDING;
-extern bool XB_NO_TIME_LIMIT;
-extern unsigned char XB_NONE;
-extern unsigned char XB_ANALYZE;
-extern unsigned char XB_COMPUTER_SIDE;
-extern int XB_MIN;
-extern int XB_SEC;
-extern int XB_MPS;
-extern int XB_INC;
-extern int XB_OTIM;
-extern int XB_CTIM;
 
 extern bool LMR;
 

@@ -1,3 +1,8 @@
+From v1.0 to v1.1
+=================
+- New LMR optimizations with ~50 ELO gain
+
+
 From v0.7 to v1.0
 =================
 - New C++ code based on Winglet Chess (by Stef Luijten) and Crafty evaluation

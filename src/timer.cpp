@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 
 
 // @file timer.cpp
-//
-// XXX
 #include <sys/timeb.h>
 #include <stdio.h>
 #include "timer.h"
@@ -37,6 +35,8 @@ Timer::Timer()
     stopTimeDelta = 0;
 }
 
+
+
 void Timer::init()
 {
     if (!running)
@@ -47,6 +47,8 @@ void Timer::init()
     }
     return;
 }
+
+
 
 void Timer::stop()
 {
@@ -59,6 +61,8 @@ void Timer::stop()
     }
     return;
 }
+
+
 
 void Timer::reset()
 {
@@ -75,6 +79,8 @@ void Timer::reset()
     return;
 }
 
+
+
 void Timer::display()
 {
     if (running)
@@ -87,6 +93,8 @@ void Timer::display()
         printf("%6.2f", (stopTime - startTime)/1000.0);
     return;
 }
+
+
 
 void Timer::displayhms()
 {
@@ -110,6 +118,8 @@ void Timer::displayhms()
     return;
 }
 
+
+
 uint64_t Timer::getms()
 {
     if (running)
@@ -121,6 +131,8 @@ uint64_t Timer::getms()
     else
         return (stopTime - startTime);
 }
+
+
 
 uint64_t Timer::getsysms()
 {

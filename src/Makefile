@@ -32,11 +32,11 @@ BINDIR = $(PREFIX)/bin
 
 
 ### Object files
-OBJS = app.o bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o fen.o eval.o book.o see.o timer.o
+OBJS = bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o fen.o eval.o book.o see.o timer.o
 
 
 ### Compilation flags
-CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -fno-exceptions -fno-rtti -std=c++17 -m64 -mpopcnt -flto -msse -msse2 -msse3 -msse4.1 -msse4.2
+CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -std=c++17 -march=icelake-client -fno-exceptions -fno-rtti -m64 -mpopcnt -flto
 DEPENDFLAGS += -std=c++17
 
 

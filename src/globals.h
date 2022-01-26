@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -595,22 +595,6 @@ int TO_CONSOLE;
 // tracks ML weight for learning purposes: +1 if white wins, -1 if black wins
 float winingDelta = 0;
 
-
-// Winboard constants & variables:
-bool XB_MODE;
-bool XB_PONDER;
-bool XB_POST;
-bool XB_DO_PENDING;
-bool XB_NO_TIME_LIMIT;
-unsigned char XB_NONE = 2;
-unsigned char XB_ANALYZE = 3;
-unsigned char XB_COMPUTER_SIDE;
-int XB_MIN;
-int XB_SEC;
-int XB_MPS;
-int XB_INC;
-int XB_OTIM;
-int XB_CTIM;
 
 
 #endif // _GLOBALS_H_

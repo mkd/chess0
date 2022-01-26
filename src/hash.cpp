@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2021 Claudio M. Camacho
+   Copyright (C) 2022 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 // @file hash.cpp
 //
-// XXX
+// This file contains the implementation for the Zobrist Hash implementation.
 #include <ctime>
 #include <iostream>
 #include <stdlib.h>
