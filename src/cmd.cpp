@@ -20,7 +20,7 @@
 
 
 
-// @file board.cpp
+// @file cmd.cpp
 //
 // This file contains the functionality to execute all commands from the CLI
 // interface of Chess0.
@@ -35,6 +35,7 @@
 #include <cmath>
 #include "definitions.h"
 #include "app.h"
+#include "uci.h"
 #include "functions.h"
 #include "board.h"
 #include "timer.h"
@@ -727,6 +728,15 @@ void exec(string input)
         }
 
         board.display();
+    }
+
+
+
+    // uci: enter UCI mode
+    else if (cmd == "uci")
+    {
+        beQuiet = true;
+        uciLoop();
     }
 
 

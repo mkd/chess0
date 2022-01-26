@@ -32,7 +32,7 @@ BINDIR = $(PREFIX)/bin
 
 
 ### Object files
-OBJS = bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o fen.o eval.o book.o see.o timer.o
+OBJS = bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o movgen.o peek.o perft.o main.o search.o fen.o eval.o book.o see.o timer.o uci.o
 
 
 ### Compilation flags

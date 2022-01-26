@@ -270,6 +270,8 @@ extern int TO_CONSOLE;
 
 extern float winingDelta;
 
+extern string STARTPOS;
+
 extern bool LMR;
 
 

@@ -596,5 +596,9 @@ int TO_CONSOLE;
 float winingDelta = 0;
 
 
+// starting position in FEN
+string STARTPOS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+
 
 #endif // _GLOBALS_H_
