@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,10 +67,10 @@
 // Search algorithm configuration
 #define AI_SEARCH_DEPTH           64
 #define SEARCH_WINDOW_SIZE        16
-#define TIME_PER_MOVE              5
-#define LMR_PLY_START              2
-#define LMR_MOVE_START             1
-#define LMR_SEARCH_DEPTH           2
+#define TIME_PER_MOVE            999
+#define LMR_PLY_START              3
+#define LMR_MOVE_START             3
+#define LMR_SEARCH_DEPTH           3
 
 
 #define SOLVE_MAX_DEPTH           32

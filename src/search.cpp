@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,10 +57,10 @@ using namespace std;
 
 
 
-unsigned short nextDepth = 1;
+//unsigned short nextDepth = 1;
+unsigned short nextDepth = 0;
 ttEntry tt;
 float cacheHit;
-unsigned moveNo = 0;
 int score       = 0;
 
 
@@ -278,9 +278,10 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
     // prepare to start a full-depth search
-	allownull = true;
-	movesfound = 0;
-	pvmovesfound = 0;
+	allownull       = true;
+	movesfound      = 0;
+	pvmovesfound    = 0;
+    unsigned moveNo = 0;
 
 
     // generate a list of moves, sorted by three main criteria:
@@ -321,6 +322,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 			if (!isOtherKingAttacked()) 
 			{
 				inodes++;
+                moveNo++;
 
 				if (--countdown <=0)
                     readClockAndInput();
@@ -335,20 +337,41 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                 // Alphabeta with Principal Variation Search (PVS)
                 if (!cached)
                 {
+                    // LMR
+                    //
+                    // Configure late-move reductions (LMR): assuming that the moves in the
+                    // list are ordered from potential best to potential worst, analyzing 
+                    // the first moves is more critical than the last ones. Therefore, 
+                    // using LMR we analyze the first 2 moves in full-depth, but cut down
+                    // the analysis depth for the rest of moves.
+                    nextDepth = depth - 1;
+                    if (LMR && (ply > LMR_PLY_START) && (depth > LMR_SEARCH_DEPTH)
+                                              && !((moveBuffer[i]).isCapture())
+                                              && !((moveBuffer[i]).isPromo())
+                                              && !(isOwnKingAttacked())
+                                              && !(isOtherKingAttacked())
+                                              && (moveNo > LMR_MOVE_START) && !pvmovesfound)
+                    {
+                        nextDepth = depth - 2;
+                    }
+
                     if (pvmovesfound)
                     {
                         val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
+                        //val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
 
                         // in case of failure, proceed with normal alphabeta
                         if ((val > alpha) && (val < beta))
                         {
                             val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);  		        
+                            //val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);  		        
                         }
                     } 
                     // normal alphabeta
                     else
                     {
-                        val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+                        //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
+                        val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);
                     }
                 }
 				unmakeMove(moveBuffer[i]);

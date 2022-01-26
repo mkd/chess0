@@ -53,8 +53,8 @@ Chess0's implementation is currently based on
 - **Trasnposition tables** 
   https://en.wikipedia.org/wiki/Transposition_table
 
-- **Winboard/XBoard support:** Chess0 supports the XBoard protocol version 2, which means
-  that you can play against Chess0 using a graphical user interface (GUI) board.
+- **Late Move Reductions (LMR)** 
+  https://www.chessprogramming.org/Late_Move_Reductions
 
 - **Simple Machine Learning:** Chess0 can learn from won games on moves that
   actually work, and play them again if similar situations are found.

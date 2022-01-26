@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ void initListOfCommands()
     listOfCommands.push_back("go");
     listOfCommands.push_back("help");
     listOfCommands.push_back("history");
+    listOfCommands.push_back("lmr");
     listOfCommands.push_back("load");
     listOfCommands.push_back("manual");
     listOfCommands.push_back("moves");
@@ -244,6 +245,23 @@ void exec(string input)
     else if (cmd == "eval")
     {
         displayEval();
+    }
+
+
+    // lmr
+    //
+    // Enable/disable late-move reductions (LMR) optimization
+    else if (cmd == "lmr")
+    {
+        if ((arg == "on") || (arg == "true"))
+            LMR = true;
+        else if ((arg == "off") || (arg == "false"))
+            LMR = false;
+
+        if (LMR)
+            cout << "LMR optimizations are enabled." << endl;
+        else
+            cout << "LMR optimizations are disabled." << endl;
     }
 
 

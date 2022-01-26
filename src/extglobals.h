@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -169,10 +169,6 @@ extern int BONUS_ROOK_ON_OPEN_FILE_MG;
 extern int BONUS_ROOK_ON_OPEN_FILE_EG;
 extern int BONUS_ROOK_ON_SEMIOPEN_FILE_MG;
 extern int BONUS_ROOK_ON_SEMIOPEN_FILE_EG;
-extern int BONUS_ROOK_ON_SEVENTH_MG;
-extern int BONUS_ROOK_ON_SEVENTH_EG;
-extern int BONUS_TWO_ROOKS_ON_SEVENTH_MG;
-extern int BONUS_TWO_ROOKS_ON_SEVENTH_EG;
 extern int BONUS_PAWN_SHIELD_STRONG;
 extern int BONUS_PAWN_SHIELD_WEAK;
 extern int BONUS_TEMPO_MIDGAME;
@@ -286,6 +282,8 @@ extern int XB_MPS;
 extern int XB_INC;
 extern int XB_OTIM;
 extern int XB_CTIM;
+
+extern bool LMR;
 
 
 #endif // _EXTGLOBALS_H_

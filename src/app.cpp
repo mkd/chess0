@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,10 +145,20 @@ bool useCache = false;
 Cache cache;
 
 
+// LMR
+bool LMR = true;
+
+
 // gameEnd holds the type of ending, when the game comes to an end. If the game
 // end is END_TYPE_NOEND, the application continues asking the user for input
 // and going through the main loop.
 EndType gameEnd = END_TYPE_NOEND;
+
+
+
+// XXX
+unsigned int MLhit = 0;
+
 
 
 
@@ -284,7 +294,10 @@ int startApp(int mode)
                 input = getMLreply();
 
                 if (!input.empty())
+                {
+                    MLhit++;
                     moveIsFromBook = " [learned] ";
+                }
             }
 
 
@@ -757,6 +770,11 @@ void dealEnd()
     }
 
 
+    // display how much ML was used during the game
+    float MLpercent = ((MLhit * 1.0f) / (cursor * 1.0f)) * 100.0f;
+    cout << setprecision(2) << "ML hit ratio = " << MLpercent << " %      (" << MLhit << "/" << cursor << ")" << endl << endl;
+
+
     // don't let the computer control the program after a game
     wPlayer = PLAYER_TYPE_HUMAN;
     bPlayer = PLAYER_TYPE_COMPUTER;
@@ -943,14 +961,14 @@ string getMLreply()
             // black choose a move that has negative score (e.g., -2.00)
             if (board.nextMove)
             {
-                if (get<2>(tup) <= 0)
+                if (get<2>(tup) < 0)
                     v.push_back(make_tuple(board.toFEN(), get<1>(tup), get<2>(tup)));
             }
 
             // white choose a move that has positive socre (e.g., +3.00)
             else
             {
-                if (get<2>(tup) >= 0)
+                if (get<2>(tup) > 0)
                     v.push_back(make_tuple(board.toFEN(), get<1>(tup), get<2>(tup)));
             }
         }

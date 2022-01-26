@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,10 +141,10 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
 // Value of material, in centipawns:
 extern const int PAWN_VALUE     =  100;
-extern const int KNIGHT_VALUE   =  305;
-extern const int BISHOP_VALUE   =  305;
-extern const int ROOK_VALUE     =  490;
-extern const int QUEEN_VALUE    = 1000;
+extern const int KNIGHT_VALUE   =  325;
+extern const int BISHOP_VALUE   =  325;
+extern const int ROOK_VALUE     =  500;
+extern const int QUEEN_VALUE    =  975;
 extern const int KING_VALUE     = 9999;
 extern const int CHECK_MATE     = KING_VALUE;
 
@@ -288,7 +288,7 @@ int ICHECK;
 int PENALTY_DOUBLED_PAWN_MG          =  9;
 int PENALTY_DOUBLED_PAWN_EG          = 19;
 
-int PENALTY_ISOLATED_PAWN_MG         =  8;
+int PENALTY_ISOLATED_PAWN_MG         = 10;
 int PENALTY_ISOLATED_PAWN_EG         =  4;
 
 int PENALTY_BACKWARD_PAWN_MG         = 12;
@@ -303,31 +303,29 @@ int PENALTY_KING_ON_SEMIOPEN_CDEF    =  3;
 
 int BONUS_PASSED_PAWN                = 16;
 
-int BONUS_BISHOP_PAIR_MG             = 38;
-int BONUS_BISHOP_PAIR_EG             = 56;
+int BONUS_BISHOP_PAIR_MG             = 50;
+int BONUS_BISHOP_PAIR_EG             = 74;
 
-int BONUS_ROOK_BEHIND_PASSED_PAWN_MG = 10;
-int BONUS_ROOK_BEHIND_PASSED_PAWN_EG = 10;
+//int BONUS_ROOK_BEHIND_PASSED_PAWN_MG =  5;
+int BONUS_ROOK_BEHIND_PASSED_PAWN_MG =  3;
+int BONUS_ROOK_BEHIND_PASSED_PAWN_EG =  8;
 
-int BONUS_ROOK_ON_SEMIOPEN_FILE_MG   = 10;
-int BONUS_ROOK_ON_SEMIOPEN_FILE_EG   = 10;
-
-int BONUS_ROOK_ON_SEVENTH_MG         = 25;
-int BONUS_ROOK_ON_SEVENTH_EG         = 32;
+int BONUS_ROOK_ON_SEMIOPEN_FILE_MG   =  5;
+int BONUS_ROOK_ON_SEMIOPEN_FILE_EG   =  5;
 
 int BONUS_ROOK_ON_OPEN_FILE_MG       = 35;
-int BONUS_ROOK_ON_OPEN_FILE_EG       = 20;
+//int BONUS_ROOK_ON_OPEN_FILE_EG       = 20;
+int BONUS_ROOK_ON_OPEN_FILE_EG       = 18;
 
-int BONUS_TWO_ROOKS_ON_OPEN_FILE     = 20;
-
-int BONUS_TWO_ROOKS_ON_SEVENTH_MG    =  6;
-int BONUS_TWO_ROOKS_ON_SEVENTH_EG    = 10;
+int BONUS_TWO_ROOKS_ON_OPEN_FILE     = 25;
 
 int BONUS_TEMPO_MIDGAME              =  5;
 int BONUS_TEMPO_ENDGAME              =  8;
 
-int BONUS_PAWN_SHIELD_STRONG         =  9;
-int BONUS_PAWN_SHIELD_WEAK           =  4;
+//int BONUS_PAWN_SHIELD_STRONG         =  9;
+int BONUS_PAWN_SHIELD_STRONG         = 11;
+//int BONUS_PAWN_SHIELD_WEAK           =  4;
+int BONUS_PAWN_SHIELD_WEAK           =  6;
 
 int BONUS_KING_IS_CASTLED            = 32;
 
@@ -487,7 +485,7 @@ int KINGPOS_W_MG[64]  = {
     -40, -40, -40, -40, -40, -40, -40, -40,
     -40, -40, -40, -40, -40, -40, -40, -40,
     -20, -20, -20, -20, -20, -20, -20, -20,
-      0,  20,  25, -20,   0, -20,  25,  20
+      0,   8,  30, -20,   0, -20,  30,   5
 };
 
 

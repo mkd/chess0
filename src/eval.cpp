@@ -2,7 +2,7 @@
    This file is part of Chess0, a computer chess program based on Winglet chess
    by Stef Luijten.
 
-   Copyright (C) 2019 Claudio M. Camacho
+   Copyright (C) 2021 Claudio M. Camacho
 
    Chess0 is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -330,24 +330,6 @@ int Board::eval()
                 score += BONUS_ROOK_ON_OPEN_FILE_MG;
         }
 
-        // rook on 7th
-        if (RANKS[square] == 7)
-        {
-            if (endgame)
-                score += BONUS_ROOK_ON_SEVENTH_EG;
-            else
-                score += BONUS_ROOK_ON_SEVENTH_MG;
-
-            // two rooks on 7th rank
-            if (bitCnt(RANKMASK[square] & board.whiteRooks) >= 2)
-            {
-                if (endgame)
-                    score += BONUS_TWO_ROOKS_ON_SEVENTH_EG;
-                else
-                    score += BONUS_TWO_ROOKS_ON_SEVENTH_MG;
-            }
-        }
-
         temp ^= BITSET[square];
     }
 
@@ -617,24 +599,6 @@ int Board::eval()
                 score -= BONUS_ROOK_ON_OPEN_FILE_EG;
             else
                 score -= BONUS_ROOK_ON_OPEN_FILE_MG;
-        }
-
-        // rook on 7th
-        if (RANKS[square] == 2)
-        {
-            if (endgame)
-                score -= BONUS_ROOK_ON_SEVENTH_EG;
-            else
-                score -= BONUS_ROOK_ON_SEVENTH_MG;
-
-            // two rooks on 7th rank
-            if (bitCnt(RANKMASK[square] & board.blackRooks) >= 2)
-            {
-                if (endgame)
-                    score -= BONUS_TWO_ROOKS_ON_SEVENTH_EG;
-                else
-                    score -= BONUS_TWO_ROOKS_ON_SEVENTH_MG;
-            }
         }
 
         temp ^= BITSET[square];
