@@ -438,8 +438,9 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	}
 
 
-	//	50-move rule:
-	if (fiftyMove >= 100) return DRAWSCORE;
+	//	75-move rule:
+	if (fiftyMove > 149)
+        return DRAWSCORE;
 
 
 	//	Checkmate/stalemate detection
@@ -564,7 +565,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 // isEndOfgame()
 //
 // Checks if the current position is end-of-game due to:
-// checkmate, stalemate, 50-move rule, or insufficient material.
+// checkmate, stalemate, 75-move rule, or insufficient material.
 bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 {
     int whiteknights, whitebishops, whiterooks, whitequeens, whitetotalmat;
@@ -643,6 +644,8 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
             return true;
         }
 
+        cout << "Checking for insuficient material..." << endl;
+
         // king and knight versus king:
         if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
                 ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
@@ -675,10 +678,10 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 
     }
 
-    // draw due to 50 move rule:
-    if (fiftyMove > 99) 
+    // draw due to 75-move rule:
+    if (fiftyMove > 149) 
     {
-        cout << "1/2-1/2 {50-move rule}" << endl;
+        cout << "1/2-1/2 {75-move rule}" << endl;
         return true;
     }
 
