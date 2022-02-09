@@ -1,22 +1,20 @@
-/* 
-   This file is part of Chess0, a computer chess program based on Winglet chess
-   by Stef Luijten.
-
-   Copyright (C) 2022 Claudio M. Camacho
-
-   Chess0 is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   Chess0 is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+// This file is part of Chess0, a computer chess program based on Winglet chess
+// by Stef Luijten.
+//
+// Copyright (C) 2022 Claudio M. Camacho
+//
+// Chess0 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -49,16 +47,17 @@ int Board::eval()
     Bitboard temp, whitepassedpawns, blackpassedpawns, allpieces;
 
 
-    // Material
+    // 1. count material
     score = board.Material;
 
 
-    // Remember where the kings are
+    // 2. check where kings and pieces are
+    // 2.1 Kings
     whitekingsquare = firstOne(board.whiteKing);
     blackkingsquare = firstOne(board.blackKing);
 
 
-    // Piece counts
+    // 2.2 Pieces
     whitepawns = bitCnt(board.whitePawns);
     whiteknights = bitCnt(board.whiteKnights);
     whitebishops = bitCnt(board.whiteBishops);
@@ -79,50 +78,72 @@ int Board::eval()
                 board.blackRooks | board.blackQueens | board.blackKing;
 
 
-    // Check if we are in the endgame
-    // Anything less than a queen (=10) + rook (=5), excluding pawns, is considered endgame
+    // 3. check if we are at the endgame: anything less than a
+    //                                    queen + rook (=15), excluding pawns,
+    //                                    is considered endgame
     endgame = (whitetotalmat < 15 || blacktotalmat < 15);
    
 
-    // Evaluate for draws due to insufficient material:
+    // 4. draw evaluation due to insufficient material
     if (!whitepawns && !blackpawns)
     {
-        // king versus king:
+        // 4.1 K-K
         if ((whitetotalmat == 0) && (blacktotalmat == 0)) 
         {
-            if (board.nextMove) return -DRAWSCORE;
-            else return DRAWSCORE;
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
         }
 
-        // king and knight versus king:
+
+        // 4.2 KN-K
         if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
                 ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
         {
-            if (board.nextMove) return -DRAWSCORE;
-            else return DRAWSCORE;
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
         }
 
-        // 2 knights vs king:
+
+        // 4.3 KNN-K (not forced mate)
         if (((whitetotalmat == 6) && (whiteknights == 2) && (blacktotalmat == 0)) ||
                 ((blacktotalmat == 6) && (blackknights == 2) && (whitetotalmat == 0))) 
         {
-            if (board.nextMove) return -DRAWSCORE;
-            else return DRAWSCORE;
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
         }
 
-        // 2 kings with one or more bishops, and all bishops on the same colour:
+
+        // 4.4 KB-KB (all bishops on the same color squares)
         if ((whitebishops + blackbishops) > 0)
         {
             if ((whiteknights == 0) && (whiterooks == 0) && (whitequeens == 0) &&
-                    (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
+                (blackknights == 0) && (blackrooks == 0) && (blackqueens == 0))
             {
                 if (!((board.whiteBishops | board.blackBishops) & WHITE_SQUARES) ||
                         !((board.whiteBishops | board.blackBishops) & BLACK_SQUARES))
                 {
-                    if (board.nextMove) return -DRAWSCORE;
-                    else return DRAWSCORE;
+                    if (board.nextMove)
+                        return -DRAWSCORE;
+                    else
+                        return DRAWSCORE;
                 }
             }
+        }
+
+
+        // 4.5 K(B||N)-K(B||N)
+        if ((whitetotalmat == 3) && (blacktotalmat == 3))
+        {
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
         }
     }
 

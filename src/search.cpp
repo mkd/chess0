@@ -666,6 +666,13 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
                 }
             }
         }
+
+        // 4.5 K(B||N)-K(B||N)
+        if ((whitetotalmat == 3) && (blacktotalmat == 3))
+        {
+            cout << "1/2-1/2 {material}" << endl;
+            return true;
+        }
     }
 
     // draw due to repetition:

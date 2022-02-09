@@ -1,11 +1,26 @@
 TODO
 ====
-- Fix cache: chooses bad moves and creates search instability.
+- Add better endgame draw heuristics:
+-- The Weaker Side has a Minor Piece against two Knights
+-- Two Bishops draw against a Bishop
+-- Two Minor Pieces against one draw, except when the Stronger Side has a Bishop Pair
+Link: https://www.chessprogramming.org/Draw_Evaluation
+
+
+- Fix cache with PV
+Link: https://www.stmintz.com/ccc/index.php?id=142057
+
+
 - Clean-up code:
+  - Same endgame draw code from eval.cpp to search.cpp isEndOfGame
   - Remove functions.h (include every necessary .h file)
   - Move all extglobals into app.h (like in chess0x)
   - Move all globals into corresponding .h files (like in chess0x)
+
+
 - UCI protocol
+
+
 - Simple time management (e.g., <10min = 9s; <2min = 1s) 
   - remember to leverage timeControl() implementation in search.cpp
 
