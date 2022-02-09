@@ -102,6 +102,14 @@ int Board::eval()
             else return DRAWSCORE;
         }
 
+        // 2 knights vs king:
+        if (((whitetotalmat == 6) && (whiteknights == 2) && (blacktotalmat == 0)) ||
+                ((blacktotalmat == 6) && (blackknights == 2) && (whitetotalmat == 0))) 
+        {
+            if (board.nextMove) return -DRAWSCORE;
+            else return DRAWSCORE;
+        }
+
         // 2 kings with one or more bishops, and all bishops on the same colour:
         if ((whitebishops + blackbishops) > 0)
         {

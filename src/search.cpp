@@ -644,8 +644,6 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
             return true;
         }
 
-        cout << "Checking for insuficient material..." << endl;
-
         // king and knight versus king:
         if (((whitetotalmat == 3) && (whiteknights == 1) && (blacktotalmat == 0)) ||
                 ((blacktotalmat == 3) && (blackknights == 1) && (whitetotalmat == 0))) 
