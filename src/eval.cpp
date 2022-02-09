@@ -137,7 +137,7 @@ int Board::eval()
         }
 
 
-        // 4.5 K(B||N)-K(B||N)
+        // 4.5 Kminor-Kminor
         if ((whitetotalmat == 3) && (blacktotalmat == 3))
         {
             if (board.nextMove)
@@ -145,27 +145,60 @@ int Board::eval()
             else
                 return DRAWSCORE;
         }
+
+
+        // 4.6 KNN-Kminor
+        if (((whitetotalmat == 6) && (whiteknights == 2) && (blacktotalmat == 3)) ||
+            ((blacktotalmat == 6) && (blackknights == 2) && (whitetotalmat == 3)))
+        {
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
+        }
+
+
+        // 4.7 KBB-KB
+        if (((whitetotalmat == 6) && (whitebishops == 2) && (blacktotalmat == 3)) ||
+            ((blacktotalmat == 6) && (blackbishops == 2) && (whitetotalmat == 3)))
+        {
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
+        }
+
+
+        // 4.8 KBN-Kminor
+        if (((whitetotalmat == 6) && (whitebishops == 1) && (blacktotalmat == 3)) ||
+            ((blacktotalmat == 6) && (blackbishops == 1) && (whitetotalmat == 3)))
+        {
+            if (board.nextMove)
+                return -DRAWSCORE;
+            else
+                return DRAWSCORE;
+        }
+
     }
 
 
-    // Evaluate MATERIAL
+    // 5. evaluate material heuristics
 
-    // Have the winning side prefer to exchange pieces
-    // Every exchange with unequal material adds 6 centipawns to the score
-    // Loosing a piece (from balanced material) becomes more severe in the endgame
+    // 5.1 the winning side prefers to exchange pieces
+    // (every exchange with unequal material adds 8 centipawns to the score)
     if (whitetotalmat + whitepawns > blacktotalmat + blackpawns)
-        score +=  45 + 3 * whitetotal - 6 * blacktotal;
+        score +=  45 + 3 * whitetotal - 8 * blacktotal;
     else if (whitetotalmat + whitepawns < blacktotalmat + blackpawns)
-        score += -45 - 3 * blacktotal + 6 * whitetotal;
+        score += -45 - 3 * blacktotal + 8 * whitetotal;
 
 
-    // Evaluate WHITE PIECES
+    // 5.2 evaluate White pieces
 
-    // Evaluate white pawns
-    // - position on the board
-    // - distance from opponent king
-    // - distance from own king
-    // - passed, doubled, isolated or backward pawns
+    // 5.2.1 white pawns, including:
+    //       - position on the board
+    //       - distance from opponent king
+    //       - distance from own king
+    //       - passed, doubled, isolated or backward pawns
     whitepassedpawns = 0;
     temp = board.whitePawns;
     while (temp)
@@ -193,7 +226,7 @@ int Board::eval()
         {
             score += BONUS_PASSED_PAWN;
 
-            // remember its location, we need it later when evaluating the white rooks:
+            // remember its location, we need it later when evaluating the white rooks
             whitepassedpawns ^= BITSET[square];
         }
 
@@ -222,7 +255,7 @@ int Board::eval()
         }
 
 
-        // If it is not isolated, then it might be backward. Two conditions must be true:
+        // if inot isolated, then it might be backward. Two conditions must be true:
         //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS Bitboards to check this
         //  2) if there are no pawns left that could defend this pawn
         else
@@ -245,9 +278,9 @@ int Board::eval()
     }
 
 
-    // Evaluate white knights
-    // - position on the board
-    // - distance from opponent king
+    // 5.2.2 white knights
+    //       - position on the board
+    //       - distance from opponent king
     temp = board.whiteKnights;
     while (temp)
     {
@@ -269,10 +302,10 @@ int Board::eval()
     }
 
 
-    // Evaluate white bishops
-    // - having the pair
-    // - position on the board
-    // - distance from opponent king
+    // 5.2.3 white bishops
+    //       - having the pair
+    //       - position on the board
+    //       - distance from opponent king
     if (board.whiteBishops)
         if ((board.whiteBishops & WHITE_SQUARES) && (board.whiteBishops & BLACK_SQUARES))
         {
@@ -307,14 +340,14 @@ int Board::eval()
     }
 
 
-    // Evaluate white rooks
-    // - position on the board
-    // - distance from opponent king
-    // - behind a passed pawn
-    // - on semi-open file
-    // - on open file
-    // - on the 7th rank
-    // - two rooks connected on the 7th
+    // 5.2.4 white rooks
+    //       - position on the board
+    //       - distance from opponent king
+    //       - behind a passed pawn
+    //       - on semi-open file
+    //       - on open file
+    //       - on the 7th rank
+    //       - two rooks connected on the 7th
     temp = board.whiteRooks;
     while (temp)
     {
@@ -363,9 +396,9 @@ int Board::eval()
     }
 
 
-    // Evaluate white queens
-    // - position on the board
-    // - distance from opponent king
+    // 5.2.5 white queens
+    //       - position on the board
+    //       - distance from opponent king
     temp = board.whiteQueens;
     while (temp)
     {
@@ -386,10 +419,10 @@ int Board::eval()
     }
 
 
-    // Evaluate the white king
-    // - position on the board
-    // - proximity to the pawns
-    // - pawn shield (not in the endgame)
+    // 5.2.6 white king
+    //       - position on the board
+    //       - proximity to the pawns
+    //       - pawn shield (not in the endgame)
     if (endgame)
     {
         score += KINGPOS_W_EG[whitekingsquare];
@@ -431,13 +464,13 @@ int Board::eval()
 
 
 
-    // Evaluate BLACK PIECES
+    // 5.3 evaluate black pieces
 
-    // Evaluate black pawns
-    // - position on the board
-    // - distance from opponent king
-    // - distance from own king
-    // - passed, doubled, isolated or backward pawns
+    // 5.3.1 black pawns
+    //       - position on the board
+    //       - distance from opponent king
+    //       - distance from own king
+    //       - passed, doubled, isolated or backward pawns
     blackpassedpawns = 0;
     temp = board.blackPawns;
     while (temp)
@@ -493,7 +526,7 @@ int Board::eval()
         }
 
 
-        // If it is not isolated, then it might be backward. Two conditions must be true:
+        // if not isolated, then it might be backward. Two conditions must be true:
         //  1) if the next square is controlled by an enemy pawn - we use the PAWN_ATTACKS Bitboards to check this
         //  2) if there are no pawns left that could defend this pawn
         else
@@ -516,9 +549,9 @@ int Board::eval()
     }
 
 
-    // Evaluate black knights
-    // - position on the board
-    // - distance from opponent king
+    // 5.3.2 black knights
+    //       - position on the board
+    //       - distance from opponent king
     temp = board.blackKnights;
     while (temp)
     {
@@ -539,10 +572,10 @@ int Board::eval()
     }
 
 
-    // Evaluate black bishops
-    // - having the pair
-    // - position on the board
-    // - distance from opponent king
+    // 5.3.3 black bishops
+    //       - having the pair
+    //       - position on the board
+    //       - distance from opponent king
     if (board.blackBishops)
         if ((board.blackBishops & WHITE_SQUARES) && (board.blackBishops & BLACK_SQUARES))
         {
@@ -576,14 +609,14 @@ int Board::eval()
     }
 
 
-    // Evaluate black rooks
-    // - position on the board
-    // - distance from opponent king
-    // - behind a passed pawn
-    // - on semi-open file
-    // - on open file
-    // - on the 7th rank
-    // - two rooks connected on the 7th
+    // 5.3.4 black rooks
+    //       - position on the board
+    //       - distance from opponent king
+    //       - behind a passed pawn
+    //       - on semi-open file
+    //       - on open file
+    //       - on the 7th rank
+    //       - two rooks connected on the 7th
     temp = board.blackRooks;
     while (temp)
     {
@@ -634,9 +667,9 @@ int Board::eval()
     }
 
 
-    // Evaluate black queens
-    // - position on the board
-    // - distance from opponent king
+    // 5.3.5 black queens
+    //       - position on the board
+    //       - distance from opponent king
     temp = board.blackQueens;
     while (temp)
     {
@@ -657,10 +690,10 @@ int Board::eval()
     }
 
 
-    // Evaluate the black king
-    // - position on the board
-    // - proximity to the pawns
-    // - pawn shield (not in the endgame)
+    // 5.3.6 black king
+    //       - position on the board
+    //       - proximity to the pawns
+    //       - pawn shield (not in the endgame)
     if (endgame)
     {
         score -= KINGPOS_B_EG[blackkingsquare];
@@ -701,7 +734,7 @@ int Board::eval()
     }
 
 
-    // Bonus for tempo
+    // 6. bonus for tempo
     int tempoBonus = 0;
     if (endgame)
         tempoBonus = BONUS_TEMPO_ENDGAME;
@@ -713,7 +746,7 @@ int Board::eval()
         score += tempoBonus;
 
 
-    // Return the score
+    // return the score
     if (board.nextMove)
         return -score;
     else

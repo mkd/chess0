@@ -4336,6 +4336,19 @@ void initBook()
     book["1. Nf3 g6 2. g3 Bg7 3. d4 d6"] = "Bg2";
 
 
+    // A04 Zukertort Opening: Kingside Fianchetto -- BLACK
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2"] = "0-0 | c6 | d5";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. c4"] = "c6 | 0-0";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. c3"] = "Nbd7 | 0-0 | Nc6";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. Nbd2"] = "c5";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0"] = "0-0 | c6";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. c4"] = "c5 | dxc4 | c6";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. c3"] = "a5 | c6 | Nbd7";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. Nbd2"] = "c5 | a5 | Na6";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. Bf4"] = "c5";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. Bf4 c5 7. c3"] = "cxd4";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. Bf4 c5 7. c3 cxd4 8. cxd4"] = "Qb6";
+    book["1. Nf3 g6 2. g3 Bg7 3. d4 Nf6 4. Bg2 d5 5. 0-0 0-0 6. Bf4 c5 7. dxc5"] = "Nbd7";
 
 
     book["1. Nf3 g6 2. e4"] = "Bg7 | c5 | d6";
