@@ -1,22 +1,20 @@
-/* 
-   This file is part of Chess0, a computer chess program based on Winglet chess
-   by Stef Luijten.
-
-   Copyright (C) 2022 Claudio M. Camacho
-
-   Chess0 is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   Chess0 is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-   */
+// This file is part of Chess0, a computer chess program based on Winglet chess
+// by Stef Luijten.
+//
+// Copyright (C) 2022 Claudio M. Camacho
+//
+// Chess0 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -27,6 +25,9 @@
 
 
 
+// Timer::Timer
+//
+// Initialize a Timer class with start and stop time = 0.
 Timer::Timer()
 {
     running       = false;
@@ -37,6 +38,9 @@ Timer::Timer()
 
 
 
+// Timer::init
+//
+// Start a timer.
 void Timer::init()
 {
     if (!running)
@@ -50,6 +54,9 @@ void Timer::init()
 
 
 
+// Timer::stop
+//
+// Stop a timer.
 void Timer::stop()
 {
     if (running)
@@ -64,6 +71,9 @@ void Timer::stop()
 
 
 
+// Timer::reset
+//
+// Reset a timer. Don't stop it if it was running.
 void Timer::reset()
 {
     if (running)
@@ -81,6 +91,9 @@ void Timer::reset()
 
 
 
+// Timer::display
+//
+// Show current timer count in milliseconds.
 void Timer::display()
 {
     if (running)
@@ -96,6 +109,9 @@ void Timer::display()
 
 
 
+// Timer::displayhms
+//
+// Show current timer count in hours, minutes and seconds.
 void Timer::displayhms()
 {
     int hh, mm, ss;
@@ -120,6 +136,9 @@ void Timer::displayhms()
 
 
 
+// Timer::getms
+//
+// Get the number of milliseconds elapsed.
 uint64_t Timer::getms()
 {
     if (running)
@@ -134,6 +153,9 @@ uint64_t Timer::getms()
 
 
 
+// Timer::getsysms
+//
+// Get the number of milliseconds counted by the system, not the elapsed time.
 uint64_t Timer::getsysms()
 {
     ftime(&currentBuffer);

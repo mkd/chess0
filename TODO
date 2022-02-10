@@ -1,12 +1,5 @@
 TODO
 ====
-- Add better endgame draw heuristics:
--- The Weaker Side has a Minor Piece against two Knights
--- Two Bishops draw against a Bishop
--- Two Minor Pieces against one draw, except when the Stronger Side has a Bishop Pair
-Link: https://www.chessprogramming.org/Draw_Evaluation
-
-
 - Fix cache with PV
 Link: https://www.stmintz.com/ccc/index.php?id=142057
 

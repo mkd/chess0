@@ -1,22 +1,20 @@
-/* 
-   This file is part of Chess0, a computer chess program based on Winglet chess
-   by Stef Luijten.
-
-   Copyright (C) 2022 Claudio M. Camacho
-
-   Chess0 is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   Chess0 is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-   */
+// This file is part of Chess0, a computer chess program based on Winglet chess
+// by Stef Luijten.
+//
+// Copyright (C) 2022 Claudio M. Camacho
+//
+// Chess0 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -64,7 +62,7 @@ int score       = 0;
 
 
 
-// think
+// Board::think
 //
 // This is the entry point for search, it is intended to drive iterative
 // deepening, calling alphabeta, checking the principal variation (PV), etc. The
@@ -83,16 +81,15 @@ Move Board::think()
     cacheHit = 0;
 
 
-    //  we are at the end of the game, we can terminate the search
+    // if at the end of the game, terminate the search
     if (isEndOfgame(legalmoves, singlemove))
         return NOMOVE;
 
 
-    // there is only one legal move, return the move and terminate the search
+    // if one legal move, return the move and terminate the search
     if (legalmoves == 1) 
     {
         cout << endl; 
-
         return singlemove;
     }
 
@@ -306,6 +303,11 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     cacheHit++;
                     val = tt.score;
                     cached = true;
+
+                    // XXX TT XXX
+					triangularArray[ply][ply] = moveBuffer[i];
+                    //lastPV[i] = board.triangularArray[0][i];
+                    //lastPVLength = board.triangularLength[0];
                     rememberPV();
                 }
             }
@@ -352,19 +354,16 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     if (pvmovesfound)
                     {
                         val = -alphabetapvs(ply+1, depth-1, -alpha-1, -alpha); 
-                        //val = -alphabetapvs(ply+1, nextDepth, -alpha-1, -alpha); 
 
                         // in case of failure, proceed with normal alphabeta
                         if ((val > alpha) && (val < beta))
                         {
                             val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);  		        
-                            //val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);  		        
                         }
                     } 
                     // normal alphabeta
                     else
                     {
-                        //val = -alphabetapvs(ply+1, depth-1, -beta, -alpha);	    
                         val = -alphabetapvs(ply+1, nextDepth, -beta, -alpha);
                     }
                 }

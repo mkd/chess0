@@ -1,22 +1,20 @@
-/* 
-    This file is part of Chess0, a computer chess program based on Winglet chess
-    by Stef Luijten.
-    
-    Copyright (C) 2022 Claudio M. Camacho
-                                                                           
-    Chess0 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Chess0 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar. If not, see <http://www.gnu.org/licenses/>.
-*/
+// This file is part of Chess0, a computer chess program based on Winglet chess
+// by Stef Luijten.
+//
+// Copyright (C) 2022 Claudio M. Camacho
+//
+// Chess0 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -5095,6 +5093,19 @@ void initBook()
 
 
 
+    // A82 Dutch Defense: Staunton Gambit -- BLACK
+    book["1. d4 f6 2. e4"] = "fxe4";
+    book["1. d4 f6 2. e4 fxe4 3. Nc3"] = "Nf6";
+    book["1. d4 f6 2. e4 fxe4 3. Bg5"] = "d5 | g6 | Nc6";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. Nc3"] = "d5 | exf3";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. Bg5"] = "d5 | Nc6";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. fxe4"] = "Nxe4";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. fxe4 Nxe4 5. Nc3"] = "Nf6";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. fxe4 Nxe4 5. Nf3"] = "d5";
+    book["1. d4 f6 2. e4 fxe4 3. f3 Nf6 4. fxe4 Nxe4 5. Bd3"] = "d5";
+
+
+
     // Rare openings
     book["1. Nc3"] = "Nf6 | d5";
     book["1. Nc3 Nf6 2. e4"] = "e5";
@@ -5135,6 +5146,8 @@ void initBook()
     book["1. e4 d6 2. d4 Nf6 3. Nc3 e5 4. dxe5 dxe5 5. Qxd8+ Kxd8 6. Bc4 Ke8"] = "Bd2";
     book["1. e4 d6 2. d4 Nf6 3. Nc3 e5 4. dxe5 dxe5 5. Qxd8+ Kxd8 6. Bc4 Bb4"] = "Bd2";
     book["1. e4 d6 2. d4 Nf6 3. Nc3 e5 4. dxe5 dxe5 5. Qxd8+ Kxd8 6. Bc4 Bb4 7. Bd2 Ke7"] = "a3";
+
+
 
 
     book["1. e4 d6 2. d4 Nf6 3. Nc3 c6"] = "Nf3";

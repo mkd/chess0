@@ -1,6 +1,7 @@
 From v1.0 to v1.1
 =================
-- New LMR optimizations with ~50 ELO gain
+- New LMR optimizations (~50 ELO)
+- Improved endgame draw heuristics
 
 
 From v0.7 to v1.0

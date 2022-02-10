@@ -178,7 +178,6 @@ int Board::eval()
             else
                 return DRAWSCORE;
         }
-
     }
 
 
