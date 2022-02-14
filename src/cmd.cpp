@@ -700,7 +700,6 @@ void exec(string input)
             curPlayerType = wPlayer;
             playMode = HUMAN_CPU;
         }
-
     }
 
 

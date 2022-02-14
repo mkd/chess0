@@ -83,7 +83,9 @@ Move Board::think()
 
     // if at the end of the game, terminate the search
     if (isEndOfgame(legalmoves, singlemove))
+    {
         return NOMOVE;
+    }
 
 
     // if one legal move, return the move and terminate the search
@@ -105,9 +107,8 @@ Move Board::think()
 
 
     // if in UCI mode, check the clock
-    /*if (UCI)
+    if (UCI)
         timeControl();
-        */
 
 
     // display console header
@@ -140,12 +141,15 @@ Move Board::think()
         if (timedout || stopEngine) 
         {
             cout << endl;
+            rememberPV();
             return (lastPV[0]);
         }
         else
         {
             msStop = timer.getms();
-            if ((msStop - msStart) > (STOPFRAC * maxTime)) 
+            rememberPV();
+
+            if ((msStop - msStart) > maxTime)
             {
                 if (!beQuiet)
                     cout << "    ok" << endl;
@@ -157,8 +161,18 @@ Move Board::think()
 
         // display search analysis
         if (currentdepth > 3)
-            if (!beQuiet)
+        {
+            if (UCI)
+            {
+                cout << "info score cp " << score << " depth " << currentdepth << " nodes " << inodes << " time " << timer.getms();
+                cout << " pv ";
+                displayUCIPV();
+            }
+            else if (!beQuiet)
+            {
                 displaySearchStats(2, currentdepth, score);
+            }
+        }
 
 
         // stop searching if the current depth leads to a forced mate
@@ -169,6 +183,7 @@ Move Board::think()
         }
     }
 
+    cout << "egromenawer" << endl;
     return lastPV[0];
 }
 
@@ -897,20 +912,21 @@ void Board::selectmove(int &ply, int &i, int &depth, bool &isFollowPV)
 
 
 
-//  This routine is used to calculate maxTime, the maximum time for this move 
-//  in millisceonds. Based on:
+//  timeControl()
+//
+//  Check the time control and estimate when to move.
+//
 //  comptime  = computer's time, milliseconds
 //  otime     = opponents' time, millseconds
 //  inc       = time increment, milliseconds
 //  starttime = UCI start time holder
 //  stoptime  = UCI stop time holder
-/*
 void timeControl()
 {
-    int mycomptime = 0, starttime = 0, stoptime = 0, inc = 0, otime = 0;
+    int mycomptime = 0;
     int movesLeft;
 
-    // First build in a safety buffer of 2000 milliseconds
+    // build in a safety buffer of 2000 milliseconds
     mycomptime = comptime - 2000;
     if (mycomptime < 1) comptime = 1;
 
@@ -920,19 +936,17 @@ void timeControl()
     if (movesLeft < 20) movesLeft = 20;
 
     //  Use up part of the thinking time advantage that we may have:
-    if ((otime + timeInc) < comptime)
-        board.maxTime = (comptime / movesLeft) + timeInc + (int)(0.80*(comptime - otime - timeInc)); 
+    if ((otime + inc) < comptime)
+        board.maxTime = (comptime / movesLeft) + inc + (int)(0.80*(comptime - otime - inc)); 
     else
         board.maxTime = (comptime / movesLeft);
 
 
     //  If an _INC is defined, then there is no reason to run out of time
-    if ((timeInc) && (comptime < timeInc)) board.maxTime = comptime;
+    if ((inc) && (comptime < inc)) board.maxTime = comptime;
 
 
     //  Final checks, all moves should be > something:
     if (board.maxTime > comptime) board.maxTime = (int)(0.8 * comptime);
     if (board.maxTime < 1) board.maxTime = 1;
-
-    return;
-}*/
+}

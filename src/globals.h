@@ -580,9 +580,6 @@ int NULLMOVE_LIMIT = KNIGHT_VALUE - 1;
 // peek interval in searched node units
 int UPDATEINTERVAL = 100000; 
 
-// don't start a new iteration if STOPFRAC fraction of our max search time has passed:
-double STOPFRAC = 0.6;
-
 // keep track of stdout (writing to a file or to the console):
 int TO_CONSOLE;
 
@@ -593,10 +590,6 @@ float winingDelta = 0;
 
 // starting position in FEN
 string STARTPOS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-
-
-
 
 
 

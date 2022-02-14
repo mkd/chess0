@@ -96,6 +96,33 @@ void displayPV()
 
 
 
+// displayUCIPV()
+//
+// Display the list of moves in the Principal Variation, in UCI format
+// (i.e., "e2e4")
+void displayUCIPV()
+{
+    int i;
+
+    for (i = 0; i < board.triangularLength[0]; i++) 
+    {
+        cout << moveToUCI(board.triangularArray[0][i]) << " ";
+        makeMove(board.triangularArray[0][i]);
+    }
+    for (i = board.triangularLength[0]-1; i >= 0; i--) 
+    {
+        unmakeMove(board.triangularArray[0][i]);
+    }
+
+    // make sure to overwrite any remaining output of mode 3
+    if (i < 3)
+        cout << "     ";
+    cout << endl;
+    cout.flush();
+}
+
+
+
 // toSan()
 //
 //  toSan will convert a move into non-ambiguous SAN-notation, returned in char sanMove[].
@@ -232,4 +259,30 @@ bool toSan(Move &move, char *sanMove)
         }
         return true;
     }
+}
+
+
+
+
+// moveToUCI
+//
+// Convert a Move object into a UCI move string (i.e, "e2e4").
+string moveToUCI(Move mv)
+{
+    string UCImove;
+    string s1, s2, tmpStr;
+
+    s1 = SQUARENAME[mv.getFrom()];
+    s2 = SQUARENAME[mv.getTosq()];
+    tmpStr = s1 + s2;
+
+    // if promo, append promo piece
+    if (mv.isPromo())
+    {
+        string tc(PIECECHARS[mv.getPromo()]);
+        tmpStr += tc;
+        transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
+    }
+
+    return tmpStr;
 }

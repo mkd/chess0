@@ -1,3 +1,8 @@
+From v1.0 to v1.2 (not released yet)
+=================
+- Initial UCI protocol support
+
+
 From v1.0 to v1.1
 =================
 - New LMR optimizations (~50 ELO)

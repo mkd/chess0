@@ -278,4 +278,16 @@ extern bool UCI;
 extern bool stopEngine;
 
 
+
+// UCI time controls
+extern int movestogo;
+extern int movetime;
+extern int comptime;
+extern int otime;
+extern int inc;
+extern int starttime;
+extern int stoptime;
+extern bool timeset;
+extern int stopped;
+
 #endif // _EXTGLOBALS_H_

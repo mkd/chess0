@@ -49,7 +49,6 @@ void Timer::init()
         ftime(&startBuffer);
         startTime = startBuffer.time * 1000 + startBuffer.millitm + stopTimeDelta;
     }
-    return;
 }
 
 

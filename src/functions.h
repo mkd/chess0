@@ -43,6 +43,7 @@ void            dataInit();
 void            displayBitboard(Bitboard);
 void            displayMove(Move &);
 void            displayPV();
+void            displayUCIPV();
 void            commands();
 unsigned int    firstOne(Bitboard);
 bool            isAttacked(Bitboard &, const unsigned char &);
@@ -71,6 +72,8 @@ bool            isValidTextMove(string, Move &);
 string          getBoardSerial(string, int, int, int);
 string          getMLreply();
 bool            sortByScore(const tuple<string, string, float>&, const tuple<string, string, float>&);
+void            resetTimeControl();
+string          moveToUCI(Move);
 
 
 // isPiece()

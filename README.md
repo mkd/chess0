@@ -80,6 +80,9 @@ go ahead!
 - **Simple Machine Learning:** Chess0 can learn from won games on moves that
   actually work, and play them again if similar situations are found.
 
+- **UCI protocol:**
+  http://wbec-ridderkerk.nl/html/UCIProtocol.html
+
 - **Opening book:** Chess0 comes with a built-in openings book (3500+
   positions). The book is always in use by default, however you can disable
   it with the command 'book off'.

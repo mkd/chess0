@@ -21,11 +21,14 @@
 // @file uci.cpp
 //
 // This file contains implementation of the UCI protocol.
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <map>
 
+#include "board.h"
 #include "extglobals.h"
 #include "definitions.h"
 #include "functions.h"
@@ -34,6 +37,19 @@
 
 
 using namespace std;
+
+
+
+// UCI time controls
+int movestogo = 30;
+int movetime = 1;
+int comptime = 1;
+int otime = 1;
+int inc = 0;
+int starttime = 0;
+int stoptime = 0;
+bool timeset = true;
+int stopped = 0;
 
 
 
@@ -94,7 +110,120 @@ int uciLoop(void)
         // go
         else if (cmd.find("go") != string::npos)
         {
-            // XXX
+            // reset time control
+            resetTimeControl();
+            
+            // init parameters
+            int depth = -1;
+
+            string arg = cmd.substr(3);
+
+            // infinite search
+            if (arg == "infinite")
+            {
+                // think indefinitely (analyze)
+            }
+
+            // match UCI "binc" command
+            if ((arg.find("binc") != string::npos) && !board.nextMove)
+            {
+                istringstream(arg.substr(5)) >> inc;
+            }
+
+            // match UCI "winc" command
+            if ((arg.find("winc") != string::npos) && board.nextMove)
+            {
+                istringstream(arg.substr(5)) >> inc;
+            }
+
+            // match UCI "wtime" command
+            if (arg.find("wtime") != string::npos)
+            {
+                if (board.nextMove)
+                    comptime = stoi(arg.substr(6));
+                else
+                    otime = stoi(arg.substr(6));
+
+                cout << "wtime ='" << arg.substr(6) << "'" << endl;
+                cout << "comptime = " << comptime << endl;
+            }
+
+            // match UCI "btime" command
+            if (arg.find("btime") != string::npos)
+            {
+                if (!board.nextMove)
+                    istringstream(arg.substr(6)) >> comptime;
+                else
+                    istringstream(arg.substr(6)) >> otime;
+            }
+
+            // match UCI "movestogo" command
+            if (arg.find("movestogo") != string::npos)
+            {
+                istringstream(arg.substr(10)) >> movestogo;
+            }
+
+            // match UCI "movetime" command
+            if (arg.find("movetime") != string::npos)
+            {
+                board.maxTime = movetime = stoi(arg.substr(9));
+            }
+
+            // match UCI "depth" command
+            if (arg.find("depth") != string::npos)
+            {
+                istringstream(arg.substr(6)) >> depth;
+            }
+
+            // if move time is not available
+            if (movetime != -1)
+            {
+                // set time equal to move time
+                comptime = movetime;
+
+                // set moves to go to 1
+                movestogo = 1;
+            }
+
+            // init start time
+            board.timer.reset();
+            starttime = board.timer.getms();
+
+            // init search depth
+            //depth = depth;
+
+            // if time control is available
+            if(comptime != -1)
+            {
+                // flag we're playing with time control
+                timeset = true;
+
+                // set up timing
+                comptime /= movestogo;
+                
+                // disable time buffer when time is almost up
+                if (comptime > 1500) comptime -= 50;
+                
+                // init stoptime
+                stoptime = starttime + comptime + inc;
+                
+                // treat increment as seconds per move when time is almost up
+                if (comptime < 1500 && inc && depth == 64) stoptime = starttime + inc - 50;
+            }
+
+            // if depth is not available
+            if (depth == -1)
+                depth = SOLVE_MAX_DEPTH;
+
+            // print debug info
+            cout << "time: " << comptime << "  start: " << starttime << "  stop: " << stoptime;
+            cout << "  depth: " << depth << "  timeset: " << timeset << endl;
+
+            // search position
+            Move m = board.think();
+
+            // print best move
+            cout << "bestmove " << moveToUCI(m) << endl;
         }
 
 
@@ -290,4 +419,20 @@ int uciLoop(void)
     }
 
     return 0;
+}
+
+
+
+
+// resetTimeControl
+void resetTimeControl()
+{
+    movestogo = 30;
+    movetime = -1;
+    comptime = -1;
+    inc = 0;
+    starttime = 0;
+    stoptime = 0;
+    timeset = 0;
+    stopped = 0;
 }
