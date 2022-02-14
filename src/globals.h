@@ -316,7 +316,8 @@ int BONUS_ROOK_ON_OPEN_FILE_EG       = 18;
 int BONUS_TWO_ROOKS_ON_OPEN_FILE     = 25;
 
 int BONUS_TEMPO_MIDGAME              =  5;
-int BONUS_TEMPO_ENDGAME              =  8;
+//int BONUS_TEMPO_ENDGAME              =  8;
+int BONUS_TEMPO_ENDGAME              =  0;
 
 int BONUS_PAWN_SHIELD_STRONG         = 12;
 int BONUS_PAWN_SHIELD_WEAK           =  6;
@@ -592,6 +593,10 @@ float winingDelta = 0;
 
 // starting position in FEN
 string STARTPOS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+
+
+
 
 
 

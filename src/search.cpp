@@ -104,6 +104,12 @@ Move Board::think()
     timedout = false;
 
 
+    // if in UCI mode, check the clock
+    /*if (UCI)
+        timeControl();
+        */
+
+
     // display console header
     if (!beQuiet)
         displaySearchStats(1, 0, 0);  
@@ -130,8 +136,8 @@ Move Board::think()
         score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
 
 
-        // now check if time is up and decide whether to start a new iteration
-        if (timedout) 
+        // check if time is up or if UCI asked to stop the search
+        if (timedout || stopEngine) 
         {
             cout << endl;
             return (lastPV[0]);
@@ -893,37 +899,40 @@ void Board::selectmove(int &ply, int &i, int &depth, bool &isFollowPV)
 
 //  This routine is used to calculate maxTime, the maximum time for this move 
 //  in millisceonds. Based on:
-//  _CTIM = computer's time, milliseconds
-//  _OTIM = opponents' time, millseconds
-//  _INC = time increment, milliseconds
+//  comptime  = computer's time, milliseconds
+//  otime     = opponents' time, millseconds
+//  inc       = time increment, milliseconds
+//  starttime = UCI start time holder
+//  stoptime  = UCI stop time holder
 /*
 void timeControl()
 {
-    int xb_ctim, movesLeft;
+    int mycomptime = 0, starttime = 0, stoptime = 0, inc = 0, otime = 0;
+    int movesLeft;
 
-    //  First build in a safety buffer of 2000 milliseconds:
-    xb_ctim = _CTIM - 2000;
-    if (xb_ctim < 1) xb_ctim = 1;
+    // First build in a safety buffer of 2000 milliseconds
+    mycomptime = comptime - 2000;
+    if (mycomptime < 1) comptime = 1;
 
-    //  Estimate the number of moves per side that are left. Assume 80 half moves 
-    //  per game with a minimum of 10 half moves left to play, no matter how many moves are played:
+    // Estimate the number of moves per side that are left. Assume 80 half moves 
+    // per game with a minimum of 10 half moves left to play, no matter how many moves are played.
     movesLeft = 80 - board.endOfSearch;
     if (movesLeft < 20) movesLeft = 20;
 
     //  Use up part of the thinking time advantage that we may have:
-    if ((_OTIM + _INC) < xb_ctim)
-        board.maxTime = (xb_ctim / movesLeft) + _INC + (int)(0.80*(xb_ctim - _OTIM - _INC)); 
+    if ((otime + timeInc) < comptime)
+        board.maxTime = (comptime / movesLeft) + timeInc + (int)(0.80*(comptime - otime - timeInc)); 
     else
-        board.maxTime = (xb_ctim / movesLeft);
+        board.maxTime = (comptime / movesLeft);
 
 
-    //  If an _INC is defined, then there is no reason to run out of time:
-    if ((_INC) && (xb_ctim < _INC)) board.maxTime = xb_ctim;
+    //  If an _INC is defined, then there is no reason to run out of time
+    if ((timeInc) && (comptime < timeInc)) board.maxTime = comptime;
+
 
     //  Final checks, all moves should be > something:
-    if (board.maxTime > xb_ctim) board.maxTime = (int)(0.8 * xb_ctim);
+    if (board.maxTime > comptime) board.maxTime = (int)(0.8 * comptime);
     if (board.maxTime < 1) board.maxTime = 1;
 
     return;
-}
-*/
+}*/

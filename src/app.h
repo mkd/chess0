@@ -60,11 +60,9 @@ enum InputType
 
 
 // application methods and variables
-extern int             appMode;
 extern vector<string>  listOfCommands;
 extern bool            useCache;
 extern EndType         gameEnd;
-extern bool            beQuiet;
 
 
 int startApp();
@@ -77,6 +75,7 @@ void dealEnd();
 InputType getInputType(string);
 void displayGame();
 string getGameSequence();
+map<string, string> getValidMoves();
 
 
 

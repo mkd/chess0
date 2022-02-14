@@ -1019,9 +1019,12 @@ bool isOtherKingAttacked()
 // isValidTextMove()
 //
 // Checks if userMove is valid by comparing it with moves from the move generator.
-// If found valid, the move is returned.
-bool isValidTextMove(char *userMove, Move &move)
+// If found valid, the move is returned in the &move variable.
+bool isValidTextMove(string userInputMove, Move &move)
 {
+    char userMove[userInputMove.length() + 1];
+    strcpy(userMove, userInputMove.c_str());
+
     unsigned char userFrom, userTo, userPromote;
     bool moveFound;
     int i;

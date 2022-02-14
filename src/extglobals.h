@@ -272,5 +272,10 @@ extern string STARTPOS;
 
 extern bool LMR;
 
+extern bool beQuiet;
+
+extern bool UCI;
+extern bool stopEngine;
+
 
 #endif // _EXTGLOBALS_H_

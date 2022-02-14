@@ -158,6 +158,11 @@ EndType gameEnd = END_TYPE_NOEND;
 unsigned int MLhit = 0;
 
 
+// UCI settings
+bool UCI = false;
+bool stopEngine = false;
+
+
 
 
 // main
@@ -321,42 +326,7 @@ int main(void)
         if (itype == INPUT_TYPE_MOVE)
         {
             // make a list of current valid moves
-            string tmpStr = "";
-            string s1 = "", s2 = "";
-            board.moveBufLen[0] = 0;
-            board.moveBufLen[1] = movegen(board.moveBufLen[0]);
-            validMoves.clear();
-
-            for (auto i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
-            {
-                makeMove(board.moveBuffer[i]);
-                if (isOtherKingAttacked())
-                {
-                    unmakeMove(board.moveBuffer[i]);
-                }
-                else
-                {
-                    unmakeMove(board.moveBuffer[i]);
-                    toSan(board.moveBuffer[i], sanMove);
-
-                    string moveStr(sanMove);
-                    s1 = SQUARENAME[(board.moveBuffer[i]).getFrom()];
-                    s2 = SQUARENAME[(board.moveBuffer[i]).getTosq()];
-                    tmpStr = s1 + s2;
-                    moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '+'), moveStr.end());
-                    moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '#'), moveStr.end());
-
-                    // if promo, append promo piece
-                    if ((board.moveBuffer[i]).isPromo())
-                    {
-                        string tc(PIECECHARS[(board.moveBuffer[i]).getPromo()]);
-                        tmpStr += tc;
-                        transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
-                    }
-
-                    validMoves[moveStr] = tmpStr;
-                }
-            }
+            validMoves = getValidMoves();
 
 
             // if 'move' is a null move ('pass' or 'null'), simply change the
@@ -388,7 +358,8 @@ int main(void)
 
                 // check to see if the user move is also found in the pseudo-legal move list
                 prevFEN = "";
-                if (isValidTextMove(userinput, myMove))
+                string userinput_str(userinput);
+                if (isValidTextMove(userinput_str, myMove))
                 {
                     prevFEN = board.toFEN();
 
@@ -962,4 +933,52 @@ bool sortByScore(const tuple<string, string, float>& a, const tuple<string, stri
         return (get<2>(a) < get<2>(b));
     else
         return (get<2>(a) > get<2>(b));
+}
+
+
+
+
+// getValidMoves
+map<string, string> getValidMoves(void)
+{
+    map<string, string> listOfValidMoves;
+    string tmpStr = "";
+    string s1 = "", s2 = "";
+    board.moveBufLen[0] = 0;
+    board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+
+    for (auto i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
+    {
+        makeMove(board.moveBuffer[i]);
+        if (isOtherKingAttacked())
+        {
+            unmakeMove(board.moveBuffer[i]);
+        }
+        else
+        {
+            unmakeMove(board.moveBuffer[i]);
+            toSan(board.moveBuffer[i], sanMove);
+
+            string moveStr(sanMove);
+            s1 = SQUARENAME[(board.moveBuffer[i]).getFrom()];
+            s2 = SQUARENAME[(board.moveBuffer[i]).getTosq()];
+            tmpStr = s1 + s2;
+            moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '+'), moveStr.end());
+            moveStr.erase(std::remove(moveStr.begin(), moveStr.end(), '#'), moveStr.end());
+
+            // if promo, append promo piece
+            if ((board.moveBuffer[i]).isPromo())
+            {
+                string tc(PIECECHARS[(board.moveBuffer[i]).getPromo()]);
+                tmpStr += tc;
+                transform(tmpStr.begin(), tmpStr.end(), tmpStr.begin(), ::tolower);
+            }
+
+            listOfValidMoves[moveStr] = tmpStr;
+        }
+    }
+
+    return listOfValidMoves;
+
+
 }

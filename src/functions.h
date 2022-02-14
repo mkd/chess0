@@ -57,8 +57,6 @@ int             movegen(int);
 void            mstostring(uint64_t dt, char *);
 uint64_t        perft(int, int);
 bool            readFen(char *);
-void            readIniFile();
-void            edit();
 void            setupFen(char *, char *, char *, char *, int , int );
 void            test(char *);
 void            timeControl();
@@ -69,11 +67,10 @@ void            unmakeMove(Move &);
 void            unmakeWhitePromotion(unsigned int, unsigned int &);
 string          getInput();
 void            terminateApp();
-bool            isValidTextMove(char *, Move &);
+bool            isValidTextMove(string, Move &);
 string          getBoardSerial(string, int, int, int);
 string          getMLreply();
 bool            sortByScore(const tuple<string, string, float>&, const tuple<string, string, float>&);
-
 
 
 // isPiece()

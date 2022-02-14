@@ -41,7 +41,8 @@ DEPENDFLAGS += -std=c++17
 
 
 ### Build targets
-all: $(APP) .depend
+#all: $(APP) .depend
+all: $(APP)
 
 install:
 	-mkdir -p -m 755 $(BINDIR)
@@ -54,7 +55,7 @@ clean:
 $(APP): $(OBJS)
 	$(CXX) -o $@ $(OBJS)
 
-.depend:
-	-@$(CXX) $(DEPENDFLAGS) -MM $(OBJS:.o=.cpp) > $@ 2> /dev/null
+#.depend:
+#	-@$(CXX) $(DEPENDFLAGS) -MM $(OBJS:.o=.cpp) > $@ 2> /dev/null
 
--include .depend
+#-include .depend

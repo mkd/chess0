@@ -45,9 +45,11 @@
 
 // movegen
 //
-// This is winglet's pseudo-legal bitboard move generator,
+// This is Chess0 pseudo-legal bitboard move generator,
 // using magic multiplication instead of rotated bitboards.
-// There is no check if a move leaves the king in check
+//
+// There is no check if a move leaves the king in check.
+//
 // The first free location in moveBuffer[] is supplied in index,
 // and the new first free location is returned
 int movegen(int index)
