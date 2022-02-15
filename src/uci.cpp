@@ -27,6 +27,8 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <iterator>
+#include <algorithm>
 
 #include "board.h"
 #include "extglobals.h"
