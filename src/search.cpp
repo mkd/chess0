@@ -923,30 +923,47 @@ void Board::selectmove(int &ply, int &i, int &depth, bool &isFollowPV)
 //  stoptime  = UCI stop time holder
 void timeControl()
 {
-    int mycomptime = 0;
     int movesLeft;
 
     // build in a safety buffer of 2000 milliseconds
-    mycomptime = comptime - 2000;
-    if (mycomptime < 1) comptime = 1;
+    if ((comptime - 2000) < 1)
+        comptime = 1;
+    cout << "timeControl() -- comptime = " << comptime << endl;
 
     // Estimate the number of moves per side that are left. Assume 80 half moves 
     // per game with a minimum of 10 half moves left to play, no matter how many moves are played.
     movesLeft = 80 - board.endOfSearch;
-    if (movesLeft < 20) movesLeft = 20;
+    if (movesLeft < 20)
+        movesLeft = 20;
+    cout << "timeControl() -- movesLeft = " << movesLeft << endl;
 
     //  Use up part of the thinking time advantage that we may have:
     if ((otime + inc) < comptime)
         board.maxTime = (comptime / movesLeft) + inc + (int)(0.80*(comptime - otime - inc)); 
     else
         board.maxTime = (comptime / movesLeft);
+    cout << "timeControl() -- board.maxTime = " << board.maxTime << endl;
 
 
-    //  If an _INC is defined, then there is no reason to run out of time
-    if ((inc) && (comptime < inc)) board.maxTime = comptime;
+    //  If an inc is defined, then there is no reason to run out of time
+    if ((inc) && (comptime < inc))
+    {
+        board.maxTime = comptime;
+        cout << "timeControl() -- inc = " << inc << endl;
+        cout << "timeControl() -- board.maxTime = " << board.maxTime << endl;
+    }
 
 
     //  Final checks, all moves should be > something:
-    if (board.maxTime > comptime) board.maxTime = (int)(0.8 * comptime);
-    if (board.maxTime < 1) board.maxTime = 1;
+    if (board.maxTime > comptime)
+    {
+        board.maxTime = (int)(0.80 * comptime);
+        cout << "timeControl() -- board.maxTime > comptime (rounding to) = " << board.maxTime << endl;
+    }
+
+    if (board.maxTime < 1)
+    {
+        board.maxTime = 1;
+        cout << "timeControl() -- board.maxTime < 1 (rounding to) = 1" << endl;
+    }
 }

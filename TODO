@@ -1,26 +1,36 @@
 TODO
 ====
-- Fix cache with PV
-Link: https://www.stmintz.com/ccc/index.php?id=142057
+- fix UCI time control using wtime btime winc binc
+- documentation:
+    - add instructions (and screenshots?) on how to use CLI and why (research, learn & analysis purposes)
+    - add instructions (and screenshots?) on how to use UCI with Scid, and from the command line
+- Evaluation:
+    - Try NNUE
+    - if impossible, review all score tweaks (pieces values, positions values, penalties, etc; in cp)
+- Review entire search algorithm
+- Review quiesce
+- Review LMR
+- Add killer heuristic
+- Add aspiration window
+- Review MVV/LVA
+- Review move ordering (debug by printing list of ordered moves in BBC and Chess0)
+- Re-write caché
+- Win64 compilation
+- Try copyBoard() instead of unmake. See performance impact
+- Review iterative deepening (search_position ~= think)
+- Check is it useful to implement mate_score and mate_value as separate values
 
 
+
+INFINITY WARS
+=============
+- Automate generation of opening positions from Stockfish multipv=5 (if score diff under 25cp)
+- Add more intelligence to timeControl
 - Clean-up code:
   - Same endgame draw code from eval.cpp to search.cpp isEndOfGame
   - Remove functions.h (include every necessary .h file)
   - Move all extglobals into app.h (like in chess0x)
   - Move all globals into corresponding .h files (like in chess0x)
-
-
-- UCI protocol
-
-
-- Simple time management (e.g., <10min = 9s; <2min = 1s) 
-  - remember to leverage timeControl() implementation in search.cpp
-
-
-
-SOME DAY
-========
 - Ending tables (syzygy)
 - Lazy SMP
 - Read/write PGN files.

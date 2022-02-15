@@ -43,13 +43,14 @@ using namespace std;
 // UCI time controls
 int movestogo = 30;
 int movetime = 1;
-int comptime = 1;
+int comptime = -1;
 int otime = 1;
 int inc = 0;
 int starttime = 0;
 int stoptime = 0;
-bool timeset = true;
 int stopped = 0;
+bool timeset = true;
+bool infsearch = false;
 
 
 
@@ -82,6 +83,9 @@ int uciLoop(void)
     // - If valid command, execute and return to previous prompt
     while (1)
     {
+        infsearch = false;
+
+
         // Clear both the input and output buffer, to make sure the new input
         // isn't altered from something entered during the program's output
         cmd.clear();
@@ -121,46 +125,61 @@ int uciLoop(void)
             // infinite search
             if (arg == "infinite")
             {
-                // think indefinitely (analyze)
+                infsearch = true;
+                board.searchDepth = SOLVE_MAX_DEPTH;
+
+                timeset = true;
+                comptime = SOLVE_MAX_TIME * 1000;
+                stoptime = starttime + comptime + inc;
             }
 
+
+            // sample command: go wtime 199870 btime 147734 winc 5 binc 5
+
+            else if (arg.find("wtime"
+
             // match UCI "binc" command
-            if ((arg.find("binc") != string::npos) && !board.nextMove)
+            if ((arg.find("binc") != string::npos) && board.nextMove)
             {
-                istringstream(arg.substr(5)) >> inc;
+                inc = stoi(arg.substr(5));
             }
 
             // match UCI "winc" command
-            if ((arg.find("winc") != string::npos) && board.nextMove)
+            if ((arg.find("winc") != string::npos) && !board.nextMove)
             {
-                istringstream(arg.substr(5)) >> inc;
+                inc = stoi(arg.substr(5));
             }
 
             // match UCI "wtime" command
             if (arg.find("wtime") != string::npos)
             {
-                if (board.nextMove)
+                if (!board.nextMove)
+                {
                     comptime = stoi(arg.substr(6));
+                }
                 else
+                {
                     otime = stoi(arg.substr(6));
-
-                cout << "wtime ='" << arg.substr(6) << "'" << endl;
-                cout << "comptime = " << comptime << endl;
+                }
             }
 
             // match UCI "btime" command
             if (arg.find("btime") != string::npos)
             {
-                if (!board.nextMove)
-                    istringstream(arg.substr(6)) >> comptime;
+                if (board.nextMove)
+                {
+                    comptime = stoi(arg.substr(6));
+                }
                 else
-                    istringstream(arg.substr(6)) >> otime;
+                {
+                    otime = stoi(arg.substr(6));
+                }
             }
 
             // match UCI "movestogo" command
             if (arg.find("movestogo") != string::npos)
             {
-                istringstream(arg.substr(10)) >> movestogo;
+                movestogo = stoi(arg.substr(10));
             }
 
             // match UCI "movetime" command
@@ -172,7 +191,7 @@ int uciLoop(void)
             // match UCI "depth" command
             if (arg.find("depth") != string::npos)
             {
-                istringstream(arg.substr(6)) >> depth;
+                depth = stoi(arg.substr(6));
             }
 
             // if move time is not available
@@ -189,11 +208,8 @@ int uciLoop(void)
             board.timer.reset();
             starttime = board.timer.getms();
 
-            // init search depth
-            //depth = depth;
-
             // if time control is available
-            if(comptime != -1)
+            if((comptime != -1) && !infsearch)
             {
                 // flag we're playing with time control
                 timeset = true;
