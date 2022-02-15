@@ -28,6 +28,7 @@
 #include "functions.h"
 #include "extglobals.h"
 #include "board.h"
+#include "nnue.h"
 
 
 
