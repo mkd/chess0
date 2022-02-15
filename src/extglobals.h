@@ -275,7 +275,6 @@ extern bool LMR;
 extern bool beQuiet;
 
 extern bool UCI;
-extern bool stopEngine;
 
 
 
@@ -287,8 +286,6 @@ extern int otime;
 extern int inc;
 extern int starttime;
 extern int stoptime;
-extern int stopped;
-extern bool timeset;
 extern bool infsearch;
 
 #endif // _EXTGLOBALS_H_

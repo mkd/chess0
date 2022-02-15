@@ -1,9 +1,9 @@
 TODO
 ====
-- fix UCI time control using wtime btime winc binc
 - documentation:
     - add instructions (and screenshots?) on how to use CLI and why (research, learn & analysis purposes)
     - add instructions (and screenshots?) on how to use UCI with Scid, and from the command line
+    - how it's pronounced
 - Evaluation:
     - Try NNUE
     - if impossible, review all score tweaks (pieces values, positions values, penalties, etc; in cp)
@@ -19,6 +19,7 @@ TODO
 - Try copyBoard() instead of unmake. See performance impact
 - Review iterative deepening (search_position ~= think)
 - Check is it useful to implement mate_score and mate_value as separate values
+- add book/learn to UCI
 
 
 

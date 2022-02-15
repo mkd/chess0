@@ -18,9 +18,10 @@
 
 
 
-// @file peek.cpp
+// @file io.cpp
 //
-// This file must be destroyed sooner than later!
+// This file contains the functionality to read the input and check the
+// clock, for any interruption of the search.
 #include <stdio.h>
 #include <string.h>
 
@@ -86,7 +87,9 @@ static int _kbhit(void)
 
 
 
-// check if we need to stop, because time is up, or because the user has hit the keyboard.
+// Board::readClockAndInput
+//
+// Check if we need to stop, because time is up, or because the user has hit the keyboard.
 // UPDATEINTERVAL defines how often this check is done in terms of nodes searched.
 // For example, if the search speed is 1000 knods per second, then a value of UPDATEINTERVAL = 100000 
 // will result in 10 checks per second (or 0.1s time intervals)

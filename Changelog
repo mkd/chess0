@@ -1,7 +1,8 @@
-From v1.0 to v1.2 (not released yet)
+From v1.0 to v1.2
 =================
-- Add UCI protocol 
+- Add basic UCI protocol 
 - Enable time controls for UCI games
+- Better documentation
 
 
 From v1.0 to v1.1

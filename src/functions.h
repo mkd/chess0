@@ -60,7 +60,6 @@ uint64_t        perft(int, int);
 bool            readFen(char *);
 void            setupFen(char *, char *, char *, char *, int , int );
 void            test(char *);
-void            timeControl();
 bool            toSan(Move &, char *);
 void            unmakeBlackPromotion(unsigned int, unsigned int &);
 void            unmakeCapture(unsigned int &, unsigned int &);

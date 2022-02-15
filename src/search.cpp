@@ -106,11 +106,6 @@ Move Board::think()
     timedout = false;
 
 
-    // if in UCI mode, check the clock
-    if (UCI)
-        timeControl();
-
-
     // display console header
     if (!beQuiet)
         displaySearchStats(1, 0, 0);  
@@ -138,7 +133,7 @@ Move Board::think()
 
 
         // check if time is up or if UCI asked to stop the search
-        if (timedout || stopEngine) 
+        if (timedout)
         {
             cout << endl;
             rememberPV();
@@ -183,7 +178,6 @@ Move Board::think()
         }
     }
 
-    cout << "egromenawer" << endl;
     return lastPV[0];
 }
 
@@ -267,6 +261,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 				allownull = false;
 				inodes++;
 
+                // check the clock and the input status
 				if (--countdown <=0)
                     readClockAndInput();
 
@@ -340,6 +335,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 				inodes++;
                 moveNo++;
 
+                // check the clock and the input status
 				if (--countdown <=0)
                     readClockAndInput();
 
@@ -816,6 +812,7 @@ int Board::qsearch(int ply, int alpha, int beta)
         {
             inodes++;
 
+            // check the clock and the input status
             if (--countdown <=0)
                 readClockAndInput();
 
@@ -906,64 +903,5 @@ void Board::selectmove(int &ply, int &i, int &depth, bool &isFollowPV)
             moveBuffer[j].moveInt = moveBuffer[i].moveInt;
             moveBuffer[i].moveInt = temp.moveInt;
         }
-    }
-}
-
-
-
-
-//  timeControl()
-//
-//  Check the time control and estimate when to move.
-//
-//  comptime  = computer's time, milliseconds
-//  otime     = opponents' time, millseconds
-//  inc       = time increment, milliseconds
-//  starttime = UCI start time holder
-//  stoptime  = UCI stop time holder
-void timeControl()
-{
-    int movesLeft;
-
-    // build in a safety buffer of 2000 milliseconds
-    if ((comptime - 2000) < 1)
-        comptime = 1;
-    cout << "timeControl() -- comptime = " << comptime << endl;
-
-    // Estimate the number of moves per side that are left. Assume 80 half moves 
-    // per game with a minimum of 10 half moves left to play, no matter how many moves are played.
-    movesLeft = 80 - board.endOfSearch;
-    if (movesLeft < 20)
-        movesLeft = 20;
-    cout << "timeControl() -- movesLeft = " << movesLeft << endl;
-
-    //  Use up part of the thinking time advantage that we may have:
-    if ((otime + inc) < comptime)
-        board.maxTime = (comptime / movesLeft) + inc + (int)(0.80*(comptime - otime - inc)); 
-    else
-        board.maxTime = (comptime / movesLeft);
-    cout << "timeControl() -- board.maxTime = " << board.maxTime << endl;
-
-
-    //  If an inc is defined, then there is no reason to run out of time
-    if ((inc) && (comptime < inc))
-    {
-        board.maxTime = comptime;
-        cout << "timeControl() -- inc = " << inc << endl;
-        cout << "timeControl() -- board.maxTime = " << board.maxTime << endl;
-    }
-
-
-    //  Final checks, all moves should be > something:
-    if (board.maxTime > comptime)
-    {
-        board.maxTime = (int)(0.80 * comptime);
-        cout << "timeControl() -- board.maxTime > comptime (rounding to) = " << board.maxTime << endl;
-    }
-
-    if (board.maxTime < 1)
-    {
-        board.maxTime = 1;
-        cout << "timeControl() -- board.maxTime < 1 (rounding to) = 1" << endl;
     }
 }

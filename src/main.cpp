@@ -139,7 +139,7 @@ Cache cache;
 
 
 // LMR
-bool LMR = true;
+bool LMR = false;
 
 
 // beQuiet tells whether the engine should show its analysis or not,
@@ -160,7 +160,6 @@ unsigned int MLhit = 0;
 
 // UCI settings
 bool UCI = false;
-bool stopEngine = false;
 
 
 

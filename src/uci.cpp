@@ -41,15 +41,13 @@ using namespace std;
 
 
 // UCI time controls
-int movestogo = 30;
-int movetime = 1;
+int movestogo = 40;
+int movetime = -1;
 int comptime = -1;
 int otime = 1;
 int inc = 0;
 int starttime = 0;
 int stoptime = 0;
-int stopped = 0;
-bool timeset = true;
 bool infsearch = false;
 
 
@@ -111,7 +109,7 @@ int uciLoop(void)
         }
 
 
-        // go
+        // go + parameters
         else if (cmd.find("go") != string::npos)
         {
             // reset time control
@@ -120,85 +118,93 @@ int uciLoop(void)
             // init parameters
             int depth = -1;
 
-            string arg = cmd.substr(3);
+            string arg;
+            if (cmd.length() > 2)
+                arg = cmd.substr(3);
+            else
+                arg = "";
 
             // infinite search
-            if (arg == "infinite")
+            if ((arg == "") || (arg == "infinite"))
             {
                 infsearch = true;
                 board.searchDepth = SOLVE_MAX_DEPTH;
 
-                timeset = true;
                 comptime = SOLVE_MAX_TIME * 1000;
                 stoptime = starttime + comptime + inc;
             }
 
 
+            // parse the entire "go" argument
             // sample command: go wtime 199870 btime 147734 winc 5 binc 5
+            size_t pos;
 
-            else if (arg.find("wtime"
-
-            // match UCI "binc" command
-            if ((arg.find("binc") != string::npos) && board.nextMove)
-            {
-                inc = stoi(arg.substr(5));
-            }
-
-            // match UCI "winc" command
-            if ((arg.find("winc") != string::npos) && !board.nextMove)
-            {
-                inc = stoi(arg.substr(5));
-            }
-
-            // match UCI "wtime" command
-            if (arg.find("wtime") != string::npos)
+            // match UCI "wtime" parameter
+            pos = arg.find("wtime");
+            if (pos != string::npos)
             {
                 if (!board.nextMove)
-                {
-                    comptime = stoi(arg.substr(6));
-                }
+                    comptime = stoi(arg.substr(pos + 6));
                 else
-                {
-                    otime = stoi(arg.substr(6));
-                }
+                    otime = stoi(arg.substr(pos + 6));
             }
 
-            // match UCI "btime" command
-            if (arg.find("btime") != string::npos)
+            // match UCI "btime" parameter
+            pos = arg.find("btime");
+            if (pos != string::npos)
             {
                 if (board.nextMove)
-                {
-                    comptime = stoi(arg.substr(6));
-                }
+                    comptime = stoi(arg.substr(pos + 6));
                 else
-                {
-                    otime = stoi(arg.substr(6));
-                }
+                    otime = stoi(arg.substr(pos + 6));
             }
 
-            // match UCI "movestogo" command
-            if (arg.find("movestogo") != string::npos)
+            // match UCI "winc" parameter
+            pos = arg.find("winc");
+            if ((pos != string::npos) && !board.nextMove)
             {
-                movestogo = stoi(arg.substr(10));
+                inc = stoi(arg.substr(pos + 5));
             }
 
-            // match UCI "movetime" command
-            if (arg.find("movetime") != string::npos)
+            // match UCI "binc" parameter
+            pos = arg.find("binc");
+            if ((pos != string::npos) && board.nextMove)
             {
-                board.maxTime = movetime = stoi(arg.substr(9));
+                inc = stoi(arg.substr(pos + 5));
             }
 
-            // match UCI "depth" command
-            if (arg.find("depth") != string::npos)
+            // match UCI "movestogo" parameter
+            pos = arg.find("movestogo");
+            if (pos != string::npos)
             {
-                depth = stoi(arg.substr(6));
+                movestogo = stoi(arg.substr(pos + 10));
+            }
+
+            // match UCI "movetime" parameter
+            pos = arg.find("movetime");
+            if (pos != string::npos)
+            {
+                board.maxTime = movetime = stoi(arg.substr(pos + 9));
+            }
+
+            // match UCI "depth" parameter
+            pos = arg.find("depth");
+            if (pos != string::npos)
+            {
+                // make time "infinite" and let depth stop the search
+                infsearch = false;
+                board.maxTime = stoptime = comptime = SOLVE_MAX_TIME * 1000;
+
+                depth = board.searchDepth = stoi(arg.substr(pos + 6));
+                if (stoi(arg.substr(pos + 6)) < 4)
+                    depth = board.searchDepth = 4;
             }
 
             // if move time is not available
             if (movetime != -1)
             {
                 // set time equal to move time
-                comptime = movetime;
+                board.maxTime = comptime = movetime;
 
                 // set moves to go to 1
                 movestogo = 1;
@@ -211,9 +217,6 @@ int uciLoop(void)
             // if time control is available
             if((comptime != -1) && !infsearch)
             {
-                // flag we're playing with time control
-                timeset = true;
-
                 // set up timing
                 comptime /= movestogo;
                 
@@ -221,19 +224,20 @@ int uciLoop(void)
                 if (comptime > 1500) comptime -= 50;
                 
                 // init stoptime
-                stoptime = starttime + comptime + inc;
+                board.maxTime = stoptime = starttime + comptime + inc;
                 
                 // treat increment as seconds per move when time is almost up
-                if (comptime < 1500 && inc && depth == 64) stoptime = starttime + inc - 50;
+                if (comptime < 1500 && inc && depth == SOLVE_MAX_DEPTH)
+                    board.maxTime = stoptime = starttime + inc - 50;
             }
 
             // if depth is not available
             if (depth == -1)
-                depth = SOLVE_MAX_DEPTH;
+                board.searchDepth = depth = SOLVE_MAX_DEPTH;
 
             // print debug info
             cout << "time: " << comptime << "  start: " << starttime << "  stop: " << stoptime;
-            cout << "  depth: " << depth << "  timeset: " << timeset << endl;
+            cout << "  depth: " << depth << endl;
 
             // search position
             Move m = board.think();
@@ -404,7 +408,7 @@ int uciLoop(void)
         else if (cmd == "stop")
         {
             // stop engine from thinking
-            stopEngine = true;
+            board.timedout = true;
         }
 
         
@@ -443,12 +447,11 @@ int uciLoop(void)
 // resetTimeControl
 void resetTimeControl()
 {
-    movestogo = 30;
+    movestogo = 40;
     movetime = -1;
     comptime = -1;
     inc = 0;
     starttime = 0;
     stoptime = 0;
-    timeset = 0;
-    stopped = 0;
+    infsearch = false;
 }
