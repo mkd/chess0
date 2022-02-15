@@ -27,6 +27,7 @@
 #define _EXTGLOBALS_H_
 
 #include <iostream>
+#include <vector>
 #include <unordered_map>
 #include <vector>
 #include "definitions.h"

@@ -31,6 +31,7 @@
 #include <string>
 #include <cstring>
 #include <cmath>
+#include <algorithm>
 #include "definitions.h"
 #include "app.h"
 #include "uci.h"

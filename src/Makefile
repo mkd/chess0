@@ -36,7 +36,7 @@ OBJS = bit.o board.o cache.o cmd.o data.o displaymove.o hash.o make.o move.o mov
 
 
 ### Compilation flags
-CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -std=c++17 -march=icelake-client -fno-exceptions -fno-rtti -m64 -mpopcnt -flto
+CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -std=c++17 -fno-exceptions -fno-rtti -m64 -mpopcnt -flto
 DEPENDFLAGS += -std=c++17
 
 
