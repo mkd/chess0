@@ -46,6 +46,8 @@
 #include "globals.h"
 #include "cmd.h"
 
+#include "nnue.h"
+
 
 
 using namespace std;
@@ -170,6 +172,11 @@ bool UCI = false;
 // entering the main CLI loop.
 int main(void)
 {
+    // test NNUE
+    nnue_init("nn-ac07bd334b62.nnue");
+    cout << "Score = " << nnue_evaluate_fen(STARTPOS.c_str()) << endl;
+
+
     // Prompt the user for input from the command line
     cout << "Welcome to " << PROGRAM_NAME << "!" << endl;
 
