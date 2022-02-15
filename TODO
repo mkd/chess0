@@ -1,9 +1,5 @@
 TODO
 ====
-- documentation:
-    - add instructions (and screenshots?) on how to use CLI and why (research, learn & analysis purposes)
-    - add instructions (and screenshots?) on how to use UCI with Scid, and from the command line
-    - how it's pronounced
 - Evaluation:
     - Try NNUE
     - if impossible, review all score tweaks (pieces values, positions values, penalties, etc; in cp)
