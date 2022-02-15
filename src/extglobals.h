@@ -28,6 +28,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 #include "definitions.h"
 #include "board.h"
 #include "hash.h"
