@@ -287,7 +287,6 @@ extern int comptime;
 extern int otime;
 extern int inc;
 extern int starttime;
-extern int stoptime;
 extern bool infsearch;
 
 #endif // _EXTGLOBALS_H_

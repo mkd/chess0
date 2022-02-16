@@ -49,7 +49,6 @@ int comptime = -1;
 int otime = 1;
 int inc = 0;
 int starttime = 0;
-int stoptime = 0;
 bool infsearch = false;
 
 
@@ -133,7 +132,7 @@ int uciLoop(void)
                 board.searchDepth = SOLVE_MAX_DEPTH;
 
                 comptime = SOLVE_MAX_TIME * 1000;
-                stoptime = starttime + comptime + inc;
+                board.maxTime = starttime + comptime + inc;
             }
 
 
@@ -195,7 +194,7 @@ int uciLoop(void)
             {
                 // make time "infinite" and let depth stop the search
                 infsearch = false;
-                board.maxTime = stoptime = comptime = SOLVE_MAX_TIME * 1000;
+                board.maxTime = comptime = SOLVE_MAX_TIME * 1000;
 
                 depth = board.searchDepth = stoi(arg.substr(pos + 6));
                 if (stoi(arg.substr(pos + 6)) < 4)
@@ -225,12 +224,12 @@ int uciLoop(void)
                 // disable time buffer when time is almost up
                 if (comptime > 1500) comptime -= 50;
                 
-                // init stoptime
-                board.maxTime = stoptime = starttime + comptime + inc;
+                // init max. stop time
+                board.maxTime = starttime + comptime + inc;
                 
                 // treat increment as seconds per move when time is almost up
                 if (comptime < 1500 && inc && depth == SOLVE_MAX_DEPTH)
-                    board.maxTime = stoptime = starttime + inc - 50;
+                    board.maxTime = starttime + inc - 50;
             }
 
             // if depth is not available
@@ -238,7 +237,7 @@ int uciLoop(void)
                 board.searchDepth = depth = SOLVE_MAX_DEPTH;
 
             // print debug info
-            cout << "time: " << comptime << "  start: " << starttime << "  stop: " << stoptime;
+            cout << "time: " << comptime << "  start: " << starttime << "  stop: " << board.maxTime;
             cout << "  depth: " << depth << endl;
 
             // search position
@@ -454,6 +453,5 @@ void resetTimeControl()
     comptime = -1;
     inc = 0;
     starttime = 0;
-    stoptime = 0;
     infsearch = false;
 }
