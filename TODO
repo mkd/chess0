@@ -1,8 +1,7 @@
 TODO
 ====
-- Evaluation:
-    - Try NNUE
-    - if impossible, review all score tweaks (pieces values, positions values, penalties, etc; in cp)
+- test NNUE with LMR without LMR
+- clean up old eval()
 - Review entire search algorithm
 - Review quiesce
 - Review LMR

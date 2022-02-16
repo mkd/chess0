@@ -1,13 +1,14 @@
 # Overview
 Chess0 [pronounced ***chess-ou***] is a computer chess program developed in C++
-and based on [Winglet](https://www.chessprogramming.org/Winglet), by Stef
-Luijten. Chess0 was developed as a final year project for my Computer
-Science degree and, therefore, it is not the most competitive chess entity.
+and loosely based on [Winglet](https://www.chessprogramming.org/Winglet), by
+Stef Luijten. Chess0 was developed as a final year project for my Computer
+Science degree and, therefore, it is not the most competitive chess engine you
+can find.
 
 If you need a modern engine with proper chess skills, you should check out
 [Stockfish](https://github.com/official-stockfish/Stockfish).
 
-Chess0's current approximate ELO rating is around ~2100, based on the Elometer
+Chess0's current approximate ELO rating is around ~2750, based on the Elometer
 test (http://www.elometer.net), various tournaments against other rated chess
 engines, and a series of games played on the
 [Free Internet Chess Server (FICS)](https://www.freechess.org/).
@@ -22,15 +23,20 @@ This distribution of Chess0 consists of the following files:
 - [Changelog](https://github.com/mkd/chess0/blob/master/Changelog), a readable list of changes introduced in every version.
 - [book_count.sh](https://github.com/mkd/chess0/blob/master/book_count.sh), a script to count the number of opening entries in the book.
 - [lines.sh](https://github.com/mkd/chess0/blob/master/lines.sh), a script to count the number of lines in the source code.
-- [src](https://github.com/mkd/chess0/blob/master/src), a subdirectory containing the full source code, including a Makefile that can be used to compile Chess0 on Unix-like systems.
+- [src](https://github.com/mkd/chess0/blob/master/src), a subdirectory containing the full source code, including a Makefile that can be
+  used to compile Chess0 on Unix-like systems.
+- [src/nn-eba324f53044.nnue](https://github.com/mkd/chess0/blob/master/src/nn-eba324f53044.nnue), a neural network from Stockfish used
+  for heuristic evaluation purposes.
 
 
 
 # Building Chess0
-The default [Makefile](https://github.com/mkd/chess0/blob/master/src/Makefile) in [src](https://github.com/mkd/chess0/blob/master/src)
-contains heavy optimizations for Intel-based 64-bit CPUs.
+The default [Makefile](https://github.com/mkd/chess0/blob/master/src/Makefile)
+in [src](https://github.com/mkd/chess0/blob/master/src) contains the instructions
+to build Chess0 in Unix systems, and it has been tested both on Linux and MacOS.
 
-In order to build Chess0 for your own specific CPU, just change the **-march=** setting to your specific CPU type.
+Cross-compilation to Windows 64-bit should be possible using e.g., mingw32;
+however, I haven't taken the time to add that in the Makefile yet.
 
 
 
@@ -180,6 +186,13 @@ bottleneck as the search tree grew. So finally, I decided to optimize core
 objects and functionalities using C-like structures whenever the execution
 speed would increase exponentially.
 
+Starting from version 1.3, Chess0 relies on Stockfish' neural networks (NNUE)
+to find the evaluation of a given position. In order to ensure a proper
+behavior, you need to make sure the neural network file (i.e., 
+nn-eba324f53044.nnue) is in the current directory of execution. This also
+mean you must configure the path to Chess0 in your GUI, so that it can find
+the neural network file. Otherwise, the engine will play random moves.
+
 
 
 # Contributing to Chess0
@@ -220,6 +233,10 @@ improve the current source code in any way, please go ahead!
 
 - **Universal Chess Interface (UCI) protocol:**
   http://wbec-ridderkerk.nl/html/UCIProtocol.html
+
+- **NNUE evaulation function:** an evaluation function based on a neural
+  network trained with milliones of games played by Stockfish 11 at a
+  moderate depth. More here: https://www.chessprogramming.org/NNUE
 
 - **Opening book:** Chess0 comes with a built-in openings book (3500+
   positions). The book is always in use by default, however you can disable

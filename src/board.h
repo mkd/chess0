@@ -111,6 +111,7 @@ struct Board
 
     void init();
     int eval();
+    int evalNNUE();
     Move think();
     int minimax(int ply, int depth);
     int alphabeta(int ply, int depth, int alpha, int beta);

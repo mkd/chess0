@@ -1189,10 +1189,17 @@ void displayHelp(string which)
 void displayEval()
 {
     float evaluationValue = 0;
+    float NNUEscore = 0;
+
     if (board.nextMove)
+    {
         evaluationValue = -board.eval() / 100.00f;
+    }
     else
+    {
         evaluationValue = board.eval() / 100.00f;
+    }
+    NNUEscore = board.evalNNUE() / 100.00f;
 
     // is it endgame: use proper piece values
     int whitetotalmat = 3 * bitCnt(board.whiteKnights) + 3 * bitCnt(board.whiteBishops) + 5 * bitCnt(board.whiteRooks) + 10 * bitCnt(board.whiteQueens);
@@ -1204,4 +1211,6 @@ void displayEval()
 
     cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << (board.Material / 100.00f) << ")" << endl;
     cout << noshowpos;
+
+    cout << "NNUE Evaluation: " << NNUEscore << endl;
 }

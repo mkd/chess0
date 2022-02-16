@@ -141,7 +141,7 @@ Cache cache;
 
 
 // LMR
-bool LMR = false;
+bool LMR = true;
 
 
 // beQuiet tells whether the engine should show its analysis or not,

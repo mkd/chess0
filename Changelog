@@ -1,4 +1,9 @@
-From v1.0 to v1.2
+From v1.2 to v1.3
+=================
+- Switch over to NNUE evaluation (~600 ELO)
+
+
+From v1.1 to v1.2
 =================
 - Add basic UCI protocol 
 - Enable time controls for UCI games

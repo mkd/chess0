@@ -455,7 +455,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 
 
 	//	75-move rule:
-	if (fiftyMove > 149)
+	if (fiftyMove > 99)
         return DRAWSCORE;
 
 
@@ -699,8 +699,8 @@ bool Board::isEndOfgame(int &legalmoves, Move &singlemove)
 
     }
 
-    // draw due to 75-move rule:
-    if (fiftyMove > 149) 
+    // draw due to 50-move rule:
+    if (fiftyMove > 99) 
     {
         cout << "1/2-1/2 {75-move rule}" << endl;
         return true;
@@ -793,7 +793,8 @@ int Board::qsearch(int ply, int alpha, int beta)
     if (isOwnKingAttacked())
         return alphabetapvs(ply, 1, alpha, beta);
 
-    val = board.eval();
+    //val = board.eval();
+    val = board.evalNNUE();
     if (val >= beta)
         return val;
 
