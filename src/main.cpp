@@ -172,11 +172,6 @@ bool UCI = false;
 // entering the main CLI loop.
 int main(void)
 {
-    // test NNUE
-    nnue_init("nn-ac07bd334b62.nnue");
-    cout << "Score = " << nnue_evaluate_fen(STARTPOS.c_str()) << endl;
-
-
     // Prompt the user for input from the command line
     cout << "Welcome to " << PROGRAM_NAME << "!" << endl;
 
@@ -199,6 +194,10 @@ int main(void)
     initBook();
     learned.clear();
     ML.clear();
+
+
+    // Initialize the neural network weights
+    nnue_init("nn-eba324f53044.nnue");
 
 
     // Load learned positions from the past

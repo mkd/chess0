@@ -37,6 +37,7 @@
 // evaluation.
 int Board::eval()
 {
+
     int score, square;
     int whitepawns, whiteknights, whitebishops, whiterooks, whitequeens;
     int blackpawns, blackknights, blackbishops, blackrooks, blackqueens;
@@ -751,3 +752,106 @@ int Board::eval()
     else
         return score;
 }
+
+
+
+// convert BBC piece code to Stockfish piece codes
+int nnue_pieces[12] = { 6, 5, 4, 3, 2, 1, 12, 11, 10, 9, 8, 7 };
+
+// convert BBC square indices to Stockfish indices
+int nnue_squares[64] = {
+    A1, B1, C1, D1, E1, F1, G1, H1,
+	A2, B2, C2, D2, E2, F2, G2, H2,
+	A3, B3, C3, D3, E3, F3, G3, H3,
+	A4, B4, C4, D4, E4, F4, G4, H4,
+	A5, B5, C5, D5, E5, F5, G5, H5,
+	A6, B6, C6, D6, E6, F6, G6, H6,
+	A7, B7, C7, D7, E7, F7, G7, H7,
+	A8, B8, C8, D8, E8, F8, G8, H8
+};
+
+
+
+
+/*
+int Board::evalNNUE()
+{    
+    // current pieces bitboard copy
+    Bitboard bb;
+    
+    // init piece & square
+    int piece, square;
+    
+    // array of piece codes converted to Stockfish piece codes
+    int pieces[33];
+    
+    // array of square indices converted to Stockfish square indices
+    int squares[33];
+    
+    // pieces and squares current index to write next piece square pair at
+    int index = 2;
+    
+    // loop over piece bitboards
+    for (int bb_piece = P; bb_piece <= k; bb_piece++)
+    {
+        // init piece bitboard copy
+        bb = bitboards[bb_piece];
+        
+        // loop over pieces within a bitboard
+        while (bitboard)
+        {
+            // init piece
+            piece = bb_piece;
+            
+            // init square
+            square = get_ls1b_index(bitboard);
+            
+            // Code to initialize pieces and squares arrays to serve the purpose of direct probing of NNUE
+            
+            // case white king
+            if (piece == K)
+            {
+                // convert white king piece code to stockfish piece code and store it at the first index of pieces array
+                pieces[0] = nnue_pieces[piece];
+                
+                // convert white king square index to stockfish square index and store it at the first index of pieces array
+                squares[0] = nnue_squares[square];
+            }
+            
+            // case black king
+            else if (piece == k)
+            {
+                // convert black king piece code to stockfish piece code and store it at the second index of pieces array
+                pieces[1] = nnue_pieces[piece];
+                
+                // convert black king square index to stockfish square index and store it at the second index of pieces array
+                squares[1] = nnue_squares[square];
+            }
+            
+            // all the rest pieces
+            else
+            {
+                // convert all the rest of piece code with corresponding square codes to stockfish piece codes and square indices respectively
+                pieces[index] = nnue_pieces[piece];
+                squares[index] = nnue_squares[square];
+                index++;    
+            }
+
+            // pop ls1b
+            pop_bit(bitboard, square);
+        }
+    }
+    
+    // set zero terminating characters at the end of pieces & squares arrays
+    pieces[index] = 0;
+    squares[index] = 0;
+    
+    //
+    //    We need to make sure that fifty rule move counter gives a penalty
+    //    to the evaluation, otherwise it won't be capable of mating in
+    //    simple endgames like KQK or KRK! This expression is used:
+    //                    nnue_score * (100 - fifty) / 100
+    
+    // get NNUE score (final score! No need to adjust by the side!)
+    return (evaluate_nnue(side, pieces, squares) * (100 - fifty) / 100);
+}*/

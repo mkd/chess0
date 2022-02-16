@@ -1257,7 +1257,10 @@ static bool load_eval_file(const char *evalFile)
 
   bool success = verify_net(evalData, size);
   if (success)
+  {
     init_weights(evalData);
+    printf("\nUsing neural network: %s\n", evalFile);
+  }
   if (mapping) unmap_file(evalData, mapping);
   return success;
 }
@@ -1267,16 +1270,13 @@ Interfaces
 */
 DLLExport void _CDECL nnue_init(const char* evalFile)
 {
-  printf("Loading NNUE : %s\n", evalFile);
   fflush(stdout);
 
   if (load_eval_file(evalFile)) {
-    printf("NNUE loaded !\n");
     fflush(stdout);
     return;
   }
 
-  printf("NNUE file not found!\n");
   fflush(stdout);
 }
 

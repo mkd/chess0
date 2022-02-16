@@ -22,13 +22,6 @@
 //
 // Board specification and behavior.
 //
-// Initially, the board was designed with a 12x12 architecture, but this
-// resulted in a problem when (un)mapping BitBoards. Therefore, a fresh idea was
-// taken from Crafty, representing the board with a direct mapping to the
-// BitBoard, which makes the program much simpler and faster.
-//
-// Please refer to the following boards, taken from main.c in Crafty.
-//
 //  A7 B7 C7 D7 E7 F7 G7 H7
 //  A6 B6 C6 D6 E6 F6 G6 H6
 //  A5 B5 C5 D5 E5 F5 G5 H5

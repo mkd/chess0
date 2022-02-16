@@ -29,6 +29,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 #include "definitions.h"
 #include "board.h"
 #include "hash.h"
@@ -38,7 +39,7 @@
 char INIFILE[80];
 char PATHNAME[80];
 char CMD_BUFF[MAX_CMD_BUFF];
-int CMD_BUFF_COUNT = 0;
+int  CMD_BUFF_COUNT = 0;
 
 
 
@@ -133,6 +134,9 @@ const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ", "  ","P*"
 const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," ","B","R","Q"};
 
 
+// NNUE 
+
+
 Bitboard BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
@@ -140,14 +144,14 @@ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 // Value of material, in centipawns:
 extern const int PAWN_VALUE     =  100;
 extern const int KNIGHT_VALUE   =  325;
-extern const int BISHOP_VALUE   =  325;
+extern const int BISHOP_VALUE   =  350;
 extern const int ROOK_VALUE     =  500;
-extern const int QUEEN_VALUE    =  975;
+extern const int QUEEN_VALUE    = 1000;
 extern const int KING_VALUE     = 9999;
 extern const int CHECK_MATE     = KING_VALUE;
 
 
-// used for MVV/LVA and SEE:
+// used for MVV/LVA and SEE
 int PIECEVALUES[16];
 
 
