@@ -68,13 +68,6 @@ int score = 0;
 // This is the iterative deepening framework to use alphabeta search. It starts
 // with depth=1 and searches the best move. After that, moves are sorted and
 // the best move is then searched at depth=2, then depth=3, etc.
-//
-// The search stops if:
-// - there are no legal moves (checkmate or stalemate)
-// - there is only one legal move (in this case we don't need to search)
-// - time is up (timeout)
-// - the search is interrupted by the user or the user interface
-// - the max. search depth is reached
 Move Board::think()
 {
     int legalmoves, currentdepth;
@@ -84,17 +77,12 @@ Move Board::think()
 
     // if at the end of the game, terminate the search
     if (isEndOfgame(legalmoves, singlemove))
-    {
         return NOMOVE;
-    }
 
 
     // if one legal move, return the move and terminate the search
     if (legalmoves == 1) 
-    {
-        cout << endl; 
         return singlemove;
-    }
 
 
     // initialize search with PV
@@ -117,6 +105,11 @@ Move Board::think()
     msStart = timer.getms();
 
 
+    // define the bounds for alpha and beta
+    int alpha = -LARGE_NUMBER;
+    int beta  =  LARGE_NUMBER;
+
+
     //  iterative deepening:
     for (currentdepth = 1; currentdepth <= board.searchDepth; currentdepth++)
     {
@@ -130,13 +123,27 @@ Move Board::think()
 
 
         // enter actual search
-        score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
+        score = alphabetapvs(0, currentdepth, alpha, beta);
+
+
+        // if the score falls outside the window, do a full search
+        if ((score <= alpha) || (score >= beta))
+        {
+            alpha = -LARGE_NUMBER;
+            beta  =  LARGE_NUMBER;
+            currentdepth--;
+            continue;
+        }
+ 
+ 
+        // set up window for the next search
+        alpha = score - 50;
+        beta  = score + 50;
 
 
         // check if time is up or if UCI asked to stop the search
         if (timedout)
         {
-            cout << endl;
             rememberPV();
             return (lastPV[0]);
         }
@@ -156,18 +163,15 @@ Move Board::think()
 
 
         // display search analysis
-        if (currentdepth > 3)
+        if (UCI)
         {
-            if (UCI)
-            {
-                cout << "info score cp " << score << " depth " << currentdepth << " nodes " << nodes << " time " << timer.getms();
-                cout << " pv ";
-                displayUCIPV();
-            }
-            else if (!beQuiet)
-            {
-                displaySearchStats(2, currentdepth, score);
-            }
+            cout << "info score cp " << score << " depth " << currentdepth << " nodes " << nodes << " time " << timer.getms();
+            cout << " pv ";
+            displayUCIPV();
+        }
+        else if (!beQuiet)
+        {
+            displaySearchStats(2, currentdepth, score);
         }
 
 
@@ -186,27 +190,16 @@ Move Board::think()
 
 // alphabetapvs
 //
-// Main alphabeta algorithm coupled with Principal Variation search. This is the
-// recurrent loop that is called millions of times in every search.
+// Main alphabeta algorithm (Negamax) which relies on a Principal Variation
+// search. This algorithm uses the following steps:
 //
-// The search order is as follows:
-// 
-//  1. if we are at terminal node (depth = 0), return quiescent value
-//  2. if 3-check-repetition, it's a draw
-//  3. set up a Principal Variation (PV) line to follow
-//  4. try a Null Move Reduction to produce a quick cut-off
-//  5. select moves sorted by "priority" (high-gain captures) and historic
-//     heuristic value
-//  6. lookup the move in the cache (transposition tables), avoid entering the
-//     full-depth search if found
-//  7. configure Late Move Reductions (LMR), to search deeper for "better" moves
-//  8. enter deep search
-//  9. if cut-off (good move), save it to history heuristic, for future ordering
-// 10. finally, save a new move and its search to the cache
+//  1. null move pruning
+//  2. sort moves (score based on historic appearance, capture gain, etc)
+//  3. look up move hash (from previous searches)
+//  4. late move reductions (LMR)
+//  8. start full search
 //
-// Note: the search never returns a static evaluation number, but rather calls a
-// quiesce search function at the end, to make sure there are no captures,
-// checks nor promotions before applying a static evaluation function.
+// The score returned by the algorithm is always from calling qsearch().
 int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 {
 	int i, j, movesfound, pvmovesfound, val;
@@ -217,7 +210,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	triangularLength[ply] = ply;
 
 
-    // if at leaf node, return qiesce value
+    // if at leaf node, return qiescent value
     if (depth <= 0) 
 	{
 		followPV = false;
@@ -229,38 +222,38 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	if (repetitionCount() >= 3)
         return DRAWSCORE;
 
+
+    // figure out if we are on PV node or not
+    bool pvNode = (beta - alpha) > 1;
+
+
+
+
+    // in case ply gets too deep, avoid overflow and return
+    if (ply > SOLVE_MAX_DEPTH)
+        return qsearch(ply, alpha, beta);
+
+
+    // increment nodes count
+    nodes++;
+
+
+
 	
-    // Null-move reductions:
+    // 1. Null move pruning
     // 
-    // We try a null move to see if we can get a quick
-    // cutoff with only a little work.  This operates as       
-    // follows.  Instead of making a legal move, the side on   
-    // move passes and does nothing.  The resulting position   
-    // is searched to a shallower depth than normal (see       
-    // below).  This will result in a cutoff if our position   
-    // is very good, but it produces the cutoff much quicker   
-    // since the search is far shallower than a normal search  
-    // that would also be likely to fail high.                 
-    //
-    // This is skipped for any of the following reasons:       
-    //                                                         
-    // 1. The side on move is in check.  The null move         
-    //    results in an illegal position.                      
-    // 2. No more than one null move can appear in succession  
-    //    as all this does is burn 2x plies of depth.          
-    // 3. The side on move has only pawns left, which makes    
-    //    zugzwang positions more likely.                      
-    // 4. The transposition table probe found an entry that    
-    //    indicates that a null-move search will not fail      
-    //    high, so we avoid the wasted effort.                 
+    // Not allowed if:
+    //  - side on move is in check (illegal position)
+    //  - coming from another null move (burn 2 plies uselessly)
+    //  - side on move has only pawns left (avoid zugzwang regressions)
 	if (!followPV && allownull)
 	{
 		if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
 		{
 			if (!isOwnKingAttacked())
 			{
+                // don't allow two consecutive null moves
 				allownull = false;
-				nodes++;
 
                 // check the clock and the input status
 				if (--countdown <=0)
@@ -272,11 +265,14 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 				nextMove = !nextMove;
 				hashkey ^= KEY.side;
 
+                // if time's up, stop searching
 				if (timedout)
                     return 0;
 
+                // end of null move pruning
 				allownull = true;
 
+                // if fail high, return beta bound
 				if (val >= beta)
                     return beta;
 			}
@@ -333,7 +329,6 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             // pseudo-legal moves
 			if (!isOtherKingAttacked()) 
 			{
-				nodes++;
                 moveNo++;
 
                 // check the clock and the input status
@@ -737,10 +732,9 @@ int Board::repetitionCount()
 // they usually contain good moves to try.
 void Board::rememberPV()
 {
-    int i;
     lastPVLength = board.triangularLength[0];
 
-    for (i = 0; i < board.triangularLength[0]; i++)
+    for (int i = 0; i < board.triangularLength[0]; i++)
     {
         lastPV[i] = board.triangularArray[0][i];
     }
@@ -797,6 +791,11 @@ int Board::qsearch(int ply, int alpha, int beta)
         return 0;
 
 
+    // increment nodes count
+    nodes++;
+
+
+    // XXX
     triangularLength[ply] = ply;
 
 
@@ -823,8 +822,6 @@ int Board::qsearch(int ply, int alpha, int beta)
 
         if (!isOtherKingAttacked()) 
         {
-            nodes++;
-
             val = -qsearch(ply+1, -beta, -alpha);
             unmakeMove(moveBuffer[i]);
 
