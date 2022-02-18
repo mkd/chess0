@@ -148,7 +148,7 @@ extern const int BISHOP_VALUE   =  350;
 extern const int ROOK_VALUE     =  500;
 extern const int QUEEN_VALUE    = 1000;
 extern const int KING_VALUE     = 9999;
-extern const int CHECK_MATE     = KING_VALUE;
+
 
 
 // used for MVV/LVA and SEE
@@ -540,9 +540,8 @@ Bitboard WHITE_SQUARES;
 Bitboard BLACK_SQUARES;
 
 
-//
-// Search parameters start here:
-//
+// These are the score bounds for the range of the mating scores
+//   [-LARGE_NUMBER, -CHECKMATESCORE, ... score ... CHECKMATESCORE ... , +LARGE_NUMBER]
 int LARGE_NUMBER = KING_VALUE + 1;
 int CHECKMATESCORE = KING_VALUE;
 int STALEMATESCORE = 0;

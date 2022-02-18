@@ -1,6 +1,7 @@
 From v1.2 to v1.3
 =================
-- Switch over to NNUE evaluation (~600 ELO)
+- Switch over to NNUE evaluation (~500 ELO)
+- Important bug fixes and stability improvements in search
 
 
 From v1.1 to v1.2

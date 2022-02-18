@@ -532,8 +532,8 @@ void exec(string input)
 
             // estimate nodes per second
             double ms = (end - start) / (CLOCKS_PER_SEC / 1000);
-            cout << endl << board.inodes << " nodes evaluated in " << fixed << setprecision(2) <<  (ms / 1000) << "s ";
-            cout << "(" << fixed << setprecision(2) << (board.inodes / ms);
+            cout << endl << board.nodes << " nodes evaluated in " << fixed << setprecision(2) <<  (ms / 1000) << "s ";
+            cout << "(" << fixed << setprecision(2) << (board.nodes / ms);
             cout << " kN/s)." << endl << flush;
 
             // restore settings after the test
@@ -1189,28 +1189,8 @@ void displayHelp(string which)
 void displayEval()
 {
     float evaluationValue = 0;
-    float NNUEscore = 0;
-
-    if (board.nextMove)
-    {
-        evaluationValue = -board.eval() / 100.00f;
-    }
-    else
-    {
-        evaluationValue = board.eval() / 100.00f;
-    }
-    NNUEscore = board.evalNNUE() / 100.00f;
-
-    // is it endgame: use proper piece values
-    int whitetotalmat = 3 * bitCnt(board.whiteKnights) + 3 * bitCnt(board.whiteBishops) + 5 * bitCnt(board.whiteRooks) + 10 * bitCnt(board.whiteQueens);
-    int blacktotalmat = 3 * bitCnt(board.blackKnights) + 3 * bitCnt(board.blackBishops) + 5 * bitCnt(board.blackRooks) + 10 * bitCnt(board.blackQueens);
-    if (whitetotalmat < 15 || blacktotalmat < 15)
-        cout << "Phase: Endgame" << endl;
-    else
-        cout << "Phase: Opening & Middlegame" << endl;
+    evaluationValue = board.evalNNUE() / 100.00f;
 
     cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << (board.Material / 100.00f) << ")" << endl;
     cout << noshowpos;
-
-    cout << "NNUE Evaluation: " << NNUEscore << endl;
 }

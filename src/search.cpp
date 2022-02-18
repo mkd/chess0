@@ -55,18 +55,19 @@ using namespace std;
 
 
 
+// initialize basic variables for the iterative-deepening search
 unsigned short nextDepth = 0;
 ttEntry tt;
 float cacheHit;
-int score       = 0;
+int score = 0;
 
 
 
 // Board::think
 //
-// This is the entry point for search, it is intended to drive iterative
-// deepening, calling alphabeta, checking the principal variation (PV), etc. The
-// main search loop does not happen here, this is a wrapper function.
+// This is the iterative deepening framework to use alphabeta search. It starts
+// with depth=1 and searches the best move. After that, moves are sorted and
+// the best move is then searched at depth=2, then depth=3, etc.
 //
 // The search stops if:
 // - there are no legal moves (checkmate or stalemate)
@@ -101,7 +102,7 @@ Move Board::think()
     memset(lastPV, 0 , sizeof(lastPV));
     memset(whiteHeuristics, 0, sizeof(whiteHeuristics));
     memset(blackHeuristics, 0, sizeof(blackHeuristics));
-    inodes = 0;
+    nodes = 0;
     countdown = UPDATEINTERVAL;
     timedout = false;
 
@@ -124,7 +125,7 @@ Move Board::think()
         memset(moveBuffer, 0, sizeof(moveBuffer));
         memset(triangularLength, 0, sizeof(triangularLength));
         memset(triangularArray, 0, sizeof(triangularArray));
-        followpv = true;
+        followPV = true;
         allownull = true;
 
 
@@ -159,7 +160,7 @@ Move Board::think()
         {
             if (UCI)
             {
-                cout << "info score cp " << score << " depth " << currentdepth << " nodes " << inodes << " time " << timer.getms();
+                cout << "info score cp " << score << " depth " << currentdepth << " nodes " << nodes << " time " << timer.getms();
                 cout << " pv ";
                 displayUCIPV();
             }
@@ -219,7 +220,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     // if at leaf node, return qiesce value
     if (depth <= 0) 
 	{
-		followpv = false;
+		followPV = false;
 		return qsearch(ply, alpha, beta);
 	}
 
@@ -252,14 +253,14 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     // 4. The transposition table probe found an entry that    
     //    indicates that a null-move search will not fail      
     //    high, so we avoid the wasted effort.                 
-	if (!followpv && allownull)
+	if (!followPV && allownull)
 	{
 		if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
 		{
 			if (!isOwnKingAttacked())
 			{
 				allownull = false;
-				inodes++;
+				nodes++;
 
                 // check the clock and the input status
 				if (--countdown <=0)
@@ -277,7 +278,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 				allownull = true;
 
 				if (val >= beta)
-                    return val;
+                    return beta;
 			}
 		}
 	}
@@ -303,7 +304,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
 	{
         // pick the next best move from a sorted list
-		selectmove(ply, i, depth, followpv); 
+		selectmove(ply, i, depth, followPV); 
 
 
         // make th emove and evaluate the board
@@ -332,7 +333,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
             // pseudo-legal moves
 			if (!isOtherKingAttacked()) 
 			{
-				inodes++;
+				nodes++;
                 moveNo++;
 
                 // check the clock and the input status
@@ -392,18 +393,19 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
                     return 0;
 
 
-                // if a move produces a cut-off, update the history heuristic
+                // fail high (beta cutoff): return beta and update history heuristics
 				if (val >= beta)
 				{
 					if (nextMove) 
 						blackHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
 					else 
 						whiteHeuristics[moveBuffer[i].getFrom()][moveBuffer[i].getTosq()] += depth*depth;
+
 					return beta;
 				}
 
 
-                // both sides want to maximize from *their* perspective
+                // found a better move (PV candidate)
 				if (val > alpha)
 				{
                     // update bounds
@@ -411,7 +413,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 					pvmovesfound++;
 
 
-                    // save this move
+                    // save this move in Principal Variation
 					triangularArray[ply][ply] = moveBuffer[i];
 
 
@@ -454,7 +456,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	}
 
 
-	//	75-move rule:
+	//	50-move rule:
 	if (fiftyMove > 99)
         return DRAWSCORE;
 
@@ -469,6 +471,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 	}
 
 
+    // return the best possible score that fails low
 	return alpha;
 }
 
@@ -517,7 +520,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
             cout << noshowpos;
 
             // display the amount of nodes searched
-            float cacheHitRatio = cacheHit / inodes;
+            float cacheHitRatio = cacheHit / nodes;
             cout.fill(' ');
             if (cacheHitRatio > CACHE_HIT_LEVEL)
             {
@@ -526,12 +529,12 @@ void Board::displaySearchStats(int mode, int depth, int score)
             else
             {
                 cout << " ";
-                if (inodes > 1000000)
-                    cout << setw(7) << setprecision(1) << float(inodes/1000000.0) << "M";
-                else if (inodes > 1000)
-                    cout << setw(7) << setprecision(1) << float(inodes/1000.0) << "K";
+                if (nodes > 1000000)
+                    cout << setw(7) << setprecision(1) << float(nodes/1000000.0) << "M";
+                else if (nodes > 1000)
+                    cout << setw(7) << setprecision(1) << float(nodes/1000.0) << "K";
                 else
-                    cout << setw(8) << setprecision(0) << inodes;
+                    cout << setw(8) << setprecision(0) << nodes;
             }
             cout.fill(' ');
 
@@ -541,7 +544,7 @@ void Board::displaySearchStats(int mode, int depth, int score)
 
 
             // search speed
-            float knps = (inodes / (dt * 1000)) / 1.0;
+            float knps = (nodes / (dt * 1000)) / 1.0;
             if (dt > 0)
                 cout << fixed << setprecision(1) << setw(7) << knps << " kN/s  ";
             else
@@ -773,7 +776,7 @@ void mstostring(uint64_t dt, char *timestring)
 
 
 
-// qsearch()
+// qsearch
 //
 // Perform a search indefinitely until all the following conditions happen:
 // a) no more possible captures
@@ -783,27 +786,36 @@ int Board::qsearch(int ply, int alpha, int beta)
 {
     int i, j, val;
 
+
+    // check the clock and the input status
+    if (--countdown <=0)
+        readClockAndInput();
+
+
     // if interrupted, return immediately
     if (timedout)
         return 0;
 
+
     triangularLength[ply] = ply;
+
 
     // in-check extension (search one more ply when in check)
     if (isOwnKingAttacked())
         return alphabetapvs(ply, 1, alpha, beta);
 
-    //val = board.eval();
+   
+    // calculate standing pat as a baseline for the quiescent search
     val = board.evalNNUE();
+
     if (val >= beta)
-        return val;
+        return beta;
 
     if (val > alpha)
         alpha = val;
 
 
-    // generate captures & promotions:
-    // captgen returns a sorted move list
+    // generate captures & promotions: captgen returns a sorted move list
     moveBufLen[ply+1] = captgen(moveBufLen[ply]);
     for (i = moveBufLen[ply]; i < moveBufLen[ply+1]; i++)
     {
@@ -811,26 +823,20 @@ int Board::qsearch(int ply, int alpha, int beta)
 
         if (!isOtherKingAttacked()) 
         {
-            inodes++;
-
-            // check the clock and the input status
-            if (--countdown <=0)
-                readClockAndInput();
+            nodes++;
 
             val = -qsearch(ply+1, -beta, -alpha);
             unmakeMove(moveBuffer[i]);
 
             if (val >= beta)
-                return val;
+                return beta;
 
             if (val > alpha)
             {
                 alpha = val;
                 triangularArray[ply][ply] = moveBuffer[i];
                 for (j = ply + 1; j < triangularLength[ply+1]; j++) 
-                {
                     triangularArray[ply][j] = triangularArray[ply+1][j];
-                }
                 triangularLength[ply] = triangularLength[ply+1];
             }
         }

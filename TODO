@@ -1,14 +1,10 @@
 TODO
 ====
-- test NNUE with LMR without LMR
-- clean up old eval()
-- Review entire search algorithm
-- Review quiesce
+- Review move ordering (debug by printing list of ordered moves in BBC and Chess0)
 - Review LMR
 - Add killer heuristic
 - Add aspiration window
 - Review MVV/LVA
-- Review move ordering (debug by printing list of ordered moves in BBC and Chess0)
 - Re-write caché
 - Win64 compilation
 - Try copyBoard() instead of unmake. See performance impact

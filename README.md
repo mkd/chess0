@@ -8,7 +8,7 @@ can find.
 If you need a modern engine with proper chess skills, you should check out
 [Stockfish](https://github.com/official-stockfish/Stockfish).
 
-Chess0's current approximate ELO rating is around ~2750, based on the Elometer
+Chess0's current approximate ELO rating is around ~2640, based on the Elometer
 test (http://www.elometer.net), various tournaments against other rated chess
 engines, and a series of games played on the
 [Free Internet Chess Server (FICS)](https://www.freechess.org/).

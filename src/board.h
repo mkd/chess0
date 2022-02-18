@@ -83,8 +83,8 @@ struct Board
 
 
     // storing moves
-    Move moveBuffer[MAX_MOV_BUFF]; // all generated moves of the current search tree are stored in this array.
-    unsigned int moveBufLen[MAX_PLY];       // this arrays keeps track of which moves belong to which ply
+    Move moveBuffer[MAX_MOV_BUFF];      // all generated moves of the current search
+    unsigned int moveBufLen[MAX_PLY];   // this arrays keeps track of which moves belong to which ply
     int endOfGame;                 // index for board.gameLine
     int endOfSearch;               // index for board.gameLine
     GameLineRecord gameLine[MAX_GAME_LINE];
@@ -100,9 +100,10 @@ struct Board
     Move lastPV[MAX_PLY];
     unsigned int whiteHeuristics[64][64];
     unsigned int blackHeuristics[64][64];
-    bool followpv;
+    bool followPV;
+    bool scorePV;
     bool allownull;
-    uint64_t inodes;
+    uint64_t nodes;
     uint64_t countdown;
     uint64_t maxTime; 
     bool timedout;

@@ -1,4 +1,4 @@
-// This file is part of Chess0, a computer chess program based on Winglet chess
+// This file is part of Chess-1, a computer chess program based on Winglet chess
 // by Stef Luijten.
 //
 // Copyright (C) 2022 Claudio M. Camacho
@@ -222,7 +222,7 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
         moveBufLen[i] = 0;
         triangularLength[i] = 0;
     }
-    inodes = 0;
+    nodes = 0;
 }
 
 
@@ -407,3 +407,6 @@ string Board::toFEN()
     // append the depth as well
     return serial;
 }
+
+
+

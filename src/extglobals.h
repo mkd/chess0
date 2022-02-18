@@ -98,7 +98,6 @@ extern const int BISHOP_VALUE;
 extern const int ROOK_VALUE;
 extern const int QUEEN_VALUE;
 extern const int KING_VALUE;
-extern const int CHECK_MATE;
 extern int PIECEVALUES[];
 
 extern int MS1BTABLE[];

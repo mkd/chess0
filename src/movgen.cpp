@@ -415,6 +415,7 @@ int movegen(int index)
             move.setPromo(EMPTY);
         }
     }     
+
     return index;
 }
 
