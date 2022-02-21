@@ -26,33 +26,12 @@ UNAME = $(shell uname)
 APP = chess0
 
 
-### Defone the path for installation
-PREFIX = /usr/local
-BINDIR = $(PREFIX)/bin
-
-
-############################
-# SIMD flags
-#--------------
-# Disable/Add flags as needed
-############################
-DEFINES =
-DEFINES += -DIS_64BIT
-ifeq ($(COMP),$(filter $(COMP),gcc clang win icpc))
-  DEFINES += -DUSE_AVX2 -mavx2
-  DEFINES += -DUSE_SSE41 -msse4.1
-  DEFINES += -DUSE_SSE3 -msse3
-  DEFINES += -DUSE_SSE2 -msse2
-  DEFINES += -DUSE_SSE -msse
-endif
-
-
 ### Object files
-OBJS = bit.o board.o book.o cache.o cmd.o data.o displaymove.o eval.o fen.o hash.o io.o main.o make.o move.o movgen.o nnue.o nnue_misc.o perft.o search.o see.o timer.o uci.o 
+OBJS = bit.o board.o book.o cache.o cmd.o data.o displaymove.o eval.o fen.o hash.o io.o main.o make.o move.o movgen.o perft.o search.o see.o timer.o uci.o 
 
 
 ### Compilation flags
-CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -std=c++17 -fno-exceptions -fno-rtti -m64 -mpopcnt -flto $(DEFINES)
+CXXFLAGS += -O3 -Ofast -Wall -Wcast-qual -std=c++17 -fno-exceptions -fno-rtti -m64 -mpopcnt -flto
 DEPENDFLAGS += -std=c++17
 
 

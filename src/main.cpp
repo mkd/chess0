@@ -46,8 +46,6 @@
 #include "globals.h"
 #include "cmd.h"
 
-#include "nnue.h"
-
 
 
 using namespace std;
@@ -194,10 +192,6 @@ int main(void)
     initBook();
     learned.clear();
     ML.clear();
-
-
-    // Initialize the neural network weights
-    nnue_init("nn-eba324f53044.nnue");
 
 
     // Load learned positions from the past

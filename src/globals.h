@@ -134,9 +134,6 @@ const char* PIECENAMES[16] = {"  ","P ","K ","N ","  ","B ","R ","Q ", "  ","P*"
 const char* PIECECHARS[16] = {" "," ","K","N"," ","B","R","Q"," "," ","K","N"," ","B","R","Q"};
 
 
-// NNUE 
-
-
 Bitboard BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 

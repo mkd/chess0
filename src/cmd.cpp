@@ -1189,7 +1189,7 @@ void displayHelp(string which)
 void displayEval()
 {
     float evaluationValue = 0;
-    evaluationValue = board.evalNNUE() / 100.00f;
+    evaluationValue = board.eval() / 100.00f;
 
     cout << "Evaluation: " << showpos << setw(4) << fixed << setprecision(2) << evaluationValue << endl << "(m: " << (board.Material / 100.00f) << ")" << endl;
     cout << noshowpos;
