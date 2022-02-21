@@ -1,6 +1,7 @@
 From v1.2 to v1.3
 =================
 - Switch over to NNUE evaluation (~500 ELO)
+- Implement optimizations: aspiration window, static pruning, razoring (~50 ELO)
 - Important bug fixes and stability improvements in search
 
 

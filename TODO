@@ -1,16 +1,27 @@
 TODO
 ====
-- Review move ordering (debug by printing list of ordered moves in BBC and Chess0)
-- Review LMR
-- Add killer heuristic
-- Add aspiration window
-- Review MVV/LVA
-- Re-write caché
-- Win64 compilation
-- Try copyBoard() instead of unmake. See performance impact
-- Review iterative deepening (search_position ~= think)
-- Check is it useful to implement mate_score and mate_value as separate values
-- add book/learn to UCI
+- review search algorithm based on BBC-1.4 algorithm
+  - aspiration window
+  - static null pruning
+  - null pruning
+  - razoring
+  - LMR: needs to be done from scratch --> full search after fail
+- Re-implement move ordering and scoring, including MVV/LVA
+  - can Move be encoded in Int? (for speed)
+  - inspiration from BBC Move implementation
+- Move search logic from board.h to its own search.h 
+- Clean-up --> make UCI the main application
+  - remove stateful game logic, move to completely stateless
+  - remove save/load (.c0), GameLine, INPUT_TYPE*, PLAYER_TYPE, etc.
+- Implement old Chess0 CLI in additional python script (continue from ssc.py)
+- UCI options (LMR, cache, etc). Leverage the existing code in cmd.cpp
+- isAttacked(), isOwnKingAttacked(), etc.. are TOO SLOW functions. Can this be done with simple bitwise?
+- Add killer heuristic, for move scoring/ordering together with History and MVV/LVA
+- Implement caché, get inspiration from BBC
+- Win64 cross-compilation
+- new book format (fen --> best N replies), learn from Stockfish 14+ multi-PV=5 (cp delta < 25cp)
+- review search.cpp (use Blunder algorithm as a skeleton to compare to)
+  > blunder/search.go at main · algerbrex/blunder
 
 
 
@@ -25,5 +36,4 @@ INFINITY WARS
   - Move all globals into corresponding .h files (like in chess0x)
 - Ending tables (syzygy)
 - Lazy SMP
-- Read/write PGN files.
 - Ponder support (test that works once Cache is enabled)

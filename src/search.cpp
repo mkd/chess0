@@ -124,6 +124,7 @@ Move Board::think()
 
         // enter actual search
         score = alphabetapvs(0, currentdepth, alpha, beta);
+        //score = alphabetapvs(0, currentdepth, -LARGE_NUMBER, LARGE_NUMBER);
 
 
         // if the score falls outside the window, do a full search
@@ -137,8 +138,8 @@ Move Board::think()
  
  
         // set up window for the next search
-        alpha = score - 50;
-        beta  = score + 50;
+        alpha = score - 130;
+        beta  = score + 130;
 
 
         // check if time is up or if UCI asked to stop the search
@@ -193,7 +194,9 @@ Move Board::think()
 // Main alphabeta algorithm (Negamax) which relies on a Principal Variation
 // search. This algorithm uses the following steps:
 //
-//  1. null move pruning
+//  1. static null move pruning
+//  2. null move pruning
+//  3. razoring
 //  2. sort moves (score based on historic appearance, capture gain, etc)
 //  3. look up move hash (from previous searches)
 //  4. late move reductions (LMR)
@@ -227,10 +230,18 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     bool pvNode = (beta - alpha) > 1;
 
 
+    // TODO
+    // read hash entry if we're not in a root ply and hash entry is available
+    // and current node is not a PV node
+    /*if (ply && (score = read_hash_entry(alpha, beta, &best_move, depth)) != no_hash_entry && pv_node == 0)
+        // if the move has already been searched (hence has a value)
+        // we just return the score for this move without searching it
+        return score;
+     */
 
 
     // in case ply gets too deep, avoid overflow and return
-    if (ply > SOLVE_MAX_DEPTH)
+    if (ply > (SOLVE_MAX_DEPTH - 1))
         return qsearch(ply, alpha, beta);
 
 
@@ -238,9 +249,20 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     nodes++;
 
 
+    // 1. Static evaluation prunning / static null move pruning
+    int staticEval = evalNNUE();
+    //if ((depth > 3) && !pvNode && !isOwnKingAttacked() && (abs(beta - 1) > -LARGE_NUMBER + 100))
+    if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
+    {
+        // define evaluation margin
+        int evalMargin = 120 * depth;
+
+        if ((staticEval - evalMargin) >= beta)
+            return (staticEval - evalMargin);
+    }
 
 	
-    // 1. Null move pruning
+    // 2. Null move pruning
     // 
     // Not allowed if:
     //  - side on move is in check (illegal position)
@@ -248,7 +270,7 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
     //  - side on move has only pawns left (avoid zugzwang regressions)
 	if (!followPV && allownull)
 	{
-		if ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT)))
+		if ((depth > 3) && ((nextMove && (board.totalBlackPieces > NULLMOVE_LIMIT)) || (!nextMove && (board.totalWhitePieces > NULLMOVE_LIMIT))))
 		{
 			if (!isOwnKingAttacked())
 			{
@@ -279,6 +301,47 @@ int Board::alphabetapvs(int ply, int depth, int alpha, int beta)
 		}
 	}
 
+    // 3. razoring
+    if (!pvNode && !isOwnKingAttacked() && (depth < 4))
+    {
+        // get static eval and add first bonus
+        val = staticEval + 125;
+
+        // define new score
+        int new_score;
+
+        // static evaluation indicates a fail-low node
+        if (val < beta)
+        {
+            // on depth 1
+            if (depth == 1)
+            {
+                // get quiscence score
+                new_score = qsearch(ply, alpha, beta);
+
+                // return quiescence score if it's greater then static evaluation score
+                return (new_score > val) ? new_score : val;
+            }
+
+            // add second bonus to static evaluation
+            val += 175;
+
+            // static evaluation indicates a fail-low node
+            if ((val < beta) && (depth < 3))
+            {
+                // get quiscence score
+                new_score = qsearch(ply, alpha, beta);
+
+                // quiescence score indicates fail-low node
+                if (new_score < beta)
+                    // return quiescence score if it's greater then static evaluation score
+                    return (new_score > val) ? new_score : val;
+            }
+        }
+    }
+
+
+    // 4. full search
 
     // prepare to start a full-depth search
 	allownull       = true;
@@ -806,6 +869,7 @@ int Board::qsearch(int ply, int alpha, int beta)
    
     // calculate standing pat as a baseline for the quiescent search
     val = board.evalNNUE();
+    //val = board.eval();
 
     if (val >= beta)
         return beta;
