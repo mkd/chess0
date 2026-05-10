@@ -4,15 +4,6 @@
 Chess0 is a simple computer chess program developed in C++ for programming learning purposes.
 
 
-## Download
-Binaries are available for Chess0. By downloading the ZIP files below, you get
-the binary version of the program, which can be run on 64-bit computers with Mac
-OSX, GNU/Linux or Windows. The latest version is 0.6:
-- [Chess0 v0.6 OS X 64-bit](https://db.tt/oDCSFVlg)
-- [Chess0 v0.6 GNU/Linux 64-bit](https://db.tt/PySyL47x)
-- [Chess0 v0.6 Windows 64-bit](https://db.tt/KohKED52)
-
-
 ## Purpose
 Chess0 is a computer chess program, which aims at providing a simple chess
 engine with a fully understandable source code and offering the basic tools for
