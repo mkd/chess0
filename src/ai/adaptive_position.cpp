@@ -217,7 +217,7 @@ float Adaptive::evalPosition()
             }
             else if (r->getColor() == COLOR_TYPE_BLACK)
             {
-                if (r->isMoved() & !board->blackKingPiece->hasCastled())
+                if (r->isMoved() && !board->blackKingPiece->hasCastled())
                     est += 10;
             }
         }

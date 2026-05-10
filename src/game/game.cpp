@@ -166,7 +166,7 @@ Error Game::perform(Move m)
 
     // IMPORTANT: check if mate or stalemate after a move is performed
     ColorType opponent = (ColorType) -getPlayer();
-    board->getAllValidMoves(opponent).size();
+    (void)board->getAllValidMoves(opponent).size();
 
     // add move to the history
     addToHistory(m);

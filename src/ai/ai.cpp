@@ -89,7 +89,7 @@ float AI::evalMaterial()
 
     // estimate the material balance
     // * remember that black pieces have a negative value ;-)
-    for (int i = 0; i < pieces.size(); i++)
+    for (size_t i = 0; i < pieces.size(); i++)
     {
         est += pieces[i]->getValue();
     }

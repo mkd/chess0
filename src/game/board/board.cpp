@@ -212,44 +212,6 @@ void Board::init()
     // piece updates must be performed once the board is full, since they must
     // check the squares looking for free places where to move
     updatePieces();
-
-    // give each square its own value, depending on its concrete position
-    for (int i = 0; i < 64; i++)
-    {
-        int val = 1;
-
-        switch (posToColumnInt(i))
-        {
-            case 1:
-            case 6:
-                        val++;
-                        break;
-            case 2:
-            case 5:
-                        val += 2;
-                        break;
-            case 3:
-            case 4:
-                        val += 3;
-                        break;
-        }
-
-        switch (posToRowInt(i))
-        {
-            case 1:
-            case 6:
-                        val++;
-                        break;
-            case 2:
-            case 5:
-                        val += 2;
-                        break;
-            case 3:
-            case 4:
-                        val += 3;
-                        break;
-        }
-    }
 }
 
 

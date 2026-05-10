@@ -22,7 +22,7 @@ else
 I := -I$(SRC)
 endif
 
-CFLAGS  := $(I) -Wall -Ofast -pipe -fomit-frame-pointer -std=c++11
+CFLAGS  := $(I) -Wall -O3 -ffast-math -pipe -fomit-frame-pointer -std=c++11
 DFLAGS  := $(I) -Wall -O0 -g -DDEBUG
 
 
