@@ -1,0 +1,64 @@
+// Copyright: 2008-20book["1.  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-130book["1. USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/application/book
+ */
+#ifndef _BOOK_
+#define _BOOK_
+
+
+
+// Necessary libraries
+#include <unordered_map>
+#include <string>
+#include "definitions"
+#include "game/move"
+
+using namespace std;
+
+
+
+/*!
+ * class Book
+ *
+ * Manage the book of openings.
+ *
+ * For better portability, I decided to move all the openings from an external
+ * file into this class. The protected member 'book' is a map which holds an
+ * opening sequence as the key (e.g., book["1. e4 e5) and a string with multiple
+ * replies to the opening sequence, where each possible reply is separated from
+ * the other one by the delimiter '|'. The splitting and random selection of the
+ * reply is programmed in book.cpp.
+ */
+class Book
+{
+    public:
+                     string       getReplyTo(string);
+                                  Book();
+    protected:
+        // dictionary containing the database with the openings
+        unordered_map<string, string> book;
+};
+
+
+
+#endif // _BOOK_

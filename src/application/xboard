@@ -1,0 +1,71 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/application/xboard
+ */
+#ifndef _XBOARD_
+#define _XBOARD_
+
+
+
+// Necessary libraries
+#include <iostream>
+#include "definitions"
+#include "application/manager"
+#include "application/cmdparser"
+#include "application/command"
+#include "application/prompt"
+#include "application/book"
+#include "game/manager"
+#include "game/moveparser"
+#include "ai/ai"
+#include "ai/adaptive"
+
+using namespace std;
+
+
+
+/*!
+ * class XBoard
+ *
+ * Manage the application functionality when connected to an xboard's
+ * protocol-compatible application.
+ *
+ * @see CmdParser
+ */
+class XBoard : public ApplicationManager
+{
+    public:
+                                  XBoard(GameManager *);
+                     int          launch();
+                     ActionType   execute(Command);
+        inline       void         useBook(bool ub) { using_book = ub; }
+        inline       bool         usingBook() { return using_book; }
+
+    protected:
+        Book        *book;
+        bool         using_book;
+};
+
+
+
+#endif // _XBOARD_

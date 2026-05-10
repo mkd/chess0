@@ -1,0 +1,88 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/manager
+ */
+#ifndef _GAME_MANAGER_
+#define _GAME_MANAGER_
+
+
+
+// Necessary libraries
+#include <iostream>
+#include <vector>
+#include "definitions"
+#include "game/move"
+#include "game/moveparser"
+#include "game/game"
+
+using namespace std;
+
+
+
+/*!
+ * class GameManager
+ * Manage the game functionality and the game behavior.
+ *
+ * This class is in charge of managing all the movements and match-related
+ * events that the user may introduce into the program, always checking the
+ * ongoing current game and the current position of the board (through the class
+ * Game).
+ *
+ */
+class GameManager
+{
+    public:
+                                GameManager();
+        inline      PlayerType  getWhite() { return white; }
+        inline      void        setWhite(PlayerType pt) { white = pt; }
+        inline      PlayerType  getBlack() { return black; }
+        inline      void        setBlack(PlayerType pt) { black = pt; }
+        inline      Game*       getGame() { return &game; }
+        inline      void        setGame(Game g) { game = g; }
+        inline      MoveParser *getMoveParser() { return &movp; }
+        inline      void        setMoveParser(MoveParser mp) { movp = mp; }
+                    void        displayBoard();
+                    Error       perform(Move);
+                    ColorType   getPlayer();
+                    int         getTurn();
+                    void        displayHistory();
+                    Move        toMove(string, MoveType);
+                    void        takeBack();
+                    void        restart();
+                    void        resign();
+                    void        end();
+        inline      bool        isEnd() { return game.isEnd(); }
+        inline      EndType     getEnd() { return game.getEnd(); }
+        inline      void        setEnd(EndType e) { game.setEnd(e); }
+        inline      void        editBoard() { game.editBoard(); }
+
+    private:
+        PlayerType  white;
+        PlayerType  black;
+        MoveParser  movp;
+        Game        game;
+};
+
+
+
+#endif // _GAME_MANAGER_

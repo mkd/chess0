@@ -1,0 +1,100 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/game
+ */
+#ifndef _GAME_
+#define _GAME_
+
+
+
+// Necessary libraries
+#include <vector>
+#include <stack>
+#include "definitions"
+#include "game/move"
+#include "game/board/board"
+#include "game/board/piece"
+class Piece;
+
+
+
+/*!
+ * class Game
+ * Manage the game's functionality and the game behavior. Please notice that, by
+ * using GameManager, one can create multiple games (Game) and manage them
+ * through the manager class.
+ * @see GameManager
+ *
+ * This class is in charge of managing all the movements and conditions related
+ * to one game.
+ */
+class Game
+{
+    public:
+                                     Game();
+                                    ~Game();
+        inline          Board       *getBoard() { return board; }
+        inline          void         setBoard(Board *b) { board = b; }
+                        void         displayBoard();
+        inline          ColorType    getPlayer() { return player; }
+        inline          void         setPlayer(ColorType ct) { player = ct; }
+        inline          int          getTurn() { return turn; }
+        inline          void         setTurn(int t) { turn = t; }
+        inline          int          getCursor() { return cursor; }
+        inline          void         setCursor(int c) { cursor = c; }
+        inline          int          getMinCursor() { return min_cursor; }
+        inline          void         setMinCursor(int c) { min_cursor = c; }
+                        void         emptySquare(int);
+                        void         setPiece(Piece *, int);
+        inline          vector<Move> getHistory() { return history; }
+                        string       getHistorySequence();
+                        void         addToHistory(Move);
+                        void         removeFromHistory(int n = 1);
+                        Error        displayHistory();
+                        Error        perform(Move);
+                        Error        undo();
+                        void         restart();
+        inline          void         setEnd(EndType e) { board->setEnd(e); }
+        inline          bool         isBegin()
+                                     {
+                                         if (cursor)
+                                             return false;
+                                         else
+                                             return true;
+                                     }
+        inline          bool         isEnd() { return board->isEnd(); }
+        inline          EndType      getEnd() { return board->getEnd(); }
+        inline          void         editBoard() { board->edit(); }
+
+    private:
+        Board          *board;
+        ColorType       player;
+        int             turn;
+        vector<Move>    history;
+        int             cursor;      /*!< history cursor, to navigate */
+        int             min_cursor;  /*!< special cursor, for board editing */
+};
+
+
+
+#endif // _GAME_

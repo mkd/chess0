@@ -1,0 +1,113 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/move
+ */
+#ifndef _MOVE_
+#define _MOVE_
+
+
+
+// Necessary libraries
+#include "definitions"
+#include "utils"
+
+
+
+/*!
+ * class Move
+ * Represent a movement representation in internal format: int_orig - int_dest.
+ *
+ * This class provides an abstract way of creating, manipulating and utilizing a
+ * move.
+ */
+class Move
+{
+    public:
+                            Move();
+                void        reset();
+                void        fill(Move);
+        inline  string      getAlgebraic() { return algebraic; }
+        inline  void        setAlgebraic(string s) { algebraic = s; }
+        inline  string      getHuman() { return human; }
+        inline  void        setHuman(string h) { human = h; }
+        inline  int         getTurn() { return turn; }
+        inline  void        setTurn(int t) { turn = t; }
+        inline  int         getOrigin() { return orig; }
+        inline  void        setOrigin(int o) { orig = o; }
+        inline  int         getDestination() { return dest; }
+        inline  void        setDestination(int d) { dest = d; }
+        inline  MoveType    getType() { return type; }
+                void        setType(MoveType);
+        inline  PieceType   getPiece() { return piece; }
+        inline  void        setPiece(PieceType pt) { piece = pt; }
+        inline  ColorType   getColor() { return color; }
+        inline  void        setColor(ColorType ct) { color = ct; }
+        inline  bool        isValid() { return valid; }
+                void        setValid(bool);
+                string      toStringInternal();
+                string      getTypeString();
+        inline  bool        isAmbiguous() { return ambiguous; }
+        inline  void        setAmbiguous(bool a) { ambiguous = a; }
+        inline  bool        isCapture() { return capture; }
+        inline  void        setCapture(bool c) { capture = c; }
+        inline  bool        isEmpassant() { return empassant; }
+        inline  void        setEmpassant(bool e) { empassant = e; }
+        inline  bool        isCastle() { return castle; }
+        inline  void        setCastle(bool c) { castle = c; }
+        inline  bool        isPromotion() { return promotion; }
+        inline  void        setPromotion(bool p) { promotion = p; }
+        inline  bool        isEnd() { return end; }
+        inline  void        setEnd(bool e) { end = e; }
+        inline  float       getScore() { return score; }
+        inline  void        setScore(float s) { score = s; }
+        inline  bool        isLearned() { return learned; }
+        inline  void        setLearned(bool l) { learned = l; }
+        inline  int         getOrder() { return order; }
+        inline  void        setOrder(int o) { order = o; }
+                string      toString();
+                bool        equals(Move);
+
+    private:
+        string      algebraic;
+        string      human;
+        int         turn;
+        PieceType   piece;
+        int         orig;
+        int         dest;
+        MoveType    type;
+        ColorType   color;
+        bool        valid;
+        bool        ambiguous;
+        bool        capture;
+        bool        empassant;
+        bool        castle;
+        bool        promotion;
+        bool        end;
+        float       score;
+        bool        learned;
+        int         order;
+};
+
+
+
+#endif // _MOVE_

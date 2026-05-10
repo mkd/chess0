@@ -1,0 +1,68 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/application/command
+ */
+#ifndef _COMMAND_
+#define _COMMAND_
+
+
+
+// Necessary libraries
+#include <iostream>
+#include <vector>
+#include "definitions"
+
+
+
+/*!
+ * class Command
+ * Represent an application command, containing the argument list and other
+ * underlaying functionalities.
+ *
+ * This class provides an abstract way of creating, manipulating and executing
+ * an application command.
+ */
+class Command
+{
+    public:
+        inline          string          getName() { return name; }
+        inline          void            setName(string n) { name = n; }
+        inline          CmdType         getType() { return type; }
+        inline          void            setType(CmdType ct) { type = ct; }
+        inline          vector<string>  getArgs() { return args; }
+        inline          void            setArgs(vector<string> a) { args = a; }
+        inline          string          getArgument() { return args.back(); }
+        inline          void            addArgument(string a)
+                                        {
+                                            args.push_back(a);
+                                        }
+
+    private:
+        string          name;
+        CmdType         type;
+        vector<string>  args;
+};
+
+
+
+#endif // _COMMAND_

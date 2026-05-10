@@ -1,0 +1,70 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/board/square
+ */
+#ifndef _SQUARE_
+#define _SQUARE_
+
+
+
+// Necessary libraries
+#include <iostream>
+#include "definitions"
+#include "game/board/piece"
+
+
+using namespace std;
+
+
+
+/*!
+ * class Square
+ * Square specification.
+ *
+ * This class contains certain data relative to a square, such as the current
+ * piece on it (or empty), the color and the position of the square (both in
+ * algebraic and internal representations).
+ *
+ * @see Board
+ */
+class Square
+{
+    public:
+                            Square();
+        inline  ColorType   getColor() { return color; }
+        inline  void        setColor(ColorType c) { color = c; }
+        inline  int         getPosition() { return position; }
+        inline  void        setPosition(int p) { position = p; }
+        inline  Piece      *getPiece() { return piece; }
+        inline  void        setPiece(Piece *p) { piece = p; }
+                string      toString();
+
+    private:
+        ColorType   color;      // color of the square
+        int         position;   // internal integer representation of the square
+        Piece      *piece;      // association with the piece on the square
+};
+
+
+
+#endif // _SQUARE_

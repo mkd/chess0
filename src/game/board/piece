@@ -1,0 +1,104 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/board/piece
+ */
+#ifndef _PIECE_
+#define _PIECE_
+
+
+
+// Necessary libraries
+#include "definitions"
+#include "utils"
+#include "game/move"
+class Square;
+class Board;
+
+
+
+/*!
+ * Abstract class for defining how a piece should be made and behave.
+ *
+ * Every piece has to be associated with a square. That is, a piece does not
+ * exist if it is not set on the board, thus not having a corresponding square.
+ *
+ * @see Square
+ */
+class Piece
+{
+    public:
+        inline  ColorType        getColor() { return color; }
+        inline  void             setColor(ColorType ct) { color = ct; }
+        inline  PieceType        getType() { return type; }
+        inline  void             setType(PieceType pt) { type = pt; }
+        inline  BitBoard         getBB() { return bb; }
+        inline  int              getPosition() { return position; }
+        inline  void             setPosition(int p)
+                                 {
+                                     position = p;
+                                     bb = BitboardFromPosition(p);
+                                 }
+        inline  char             getColumn() { return ((position % 8) + 'a'); }
+        inline  int              getRow() { return ((position / 8) + 1); }
+        inline  Square          *getSquare() { return square; }
+        inline  void             setSquare(Square *s) { square = s; }
+        inline  BitBoard         getMoves() { return moves; }
+        inline  void             setMoves(BitBoard bb) { moves = bb; }
+        inline  BitBoard         getAttacks() { return attacks; }
+        inline  void             setAttacks(BitBoard b) { attacks = b; }
+        inline  int              getMoved() { return nmoves; }
+        inline  bool             isMoved() { return (nmoves); }
+        inline  int              getNMoves() { return npossible; }
+        inline  float            getValue() { return value; }
+        inline  void             setValue(float v) { value = v; }
+                void             update(Board *);
+        inline  void             increaseMoves() { nmoves++; }
+        inline  void             decreaseMoves() { nmoves--; }
+        inline  bool             isEnabled() { return enabled; }
+        inline  void             enable() { enabled = true; }
+        inline  void             disable() { enabled = false; }
+        virtual void             recalculateMoves(Board *) = 0;
+        virtual void             recalculateAttacks(Board *) = 0;
+        virtual vector<Move>     getAllMoves() = 0;
+        inline  string           getName() { return pieceName(type); }
+                string           toString();
+
+    protected:
+        ColorType        color;
+        PieceType        type;
+        BitBoard         bb;
+        int              position;
+        Square          *square;
+        BitBoard         moves;
+        int              nmoves;
+        int              npossible;
+        BitBoard         attacks;
+        float            value;
+        bool             enabled;
+
+    private:
+        string           state();             // for debug purposes
+};
+
+
+
+#endif // _PIECE_

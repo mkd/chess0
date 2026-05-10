@@ -1,0 +1,602 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/utils
+ *
+ * Non-object functionalities widely used across the whole program.
+ */
+#ifndef _UTILS_
+#define _UTILS_
+
+
+
+// Necessary libraries
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include "definitions"
+
+
+
+// DEBUG infrastructure
+#define warning(...) print(__FILE__, __LINE__, 1, __VA_ARGS__)
+#define error(...) print(__FILE__, __LINE__, 2, __VA_ARGS__)
+#define quit(...) print(__FILE__, __LINE__, 3, __VA_ARGS__)
+#define fatal(...) print(__FILE__, __LINE__, 4, __VA_ARGS__)
+#ifdef DEBUG
+# define debug(...) print(__FILE__, __LINE__, 0, __VA_ARGS__)
+# define ensure(cond) if (!(cond)) print(__FILE__, __LINE__, 3, \
+                            "Condition '" #cond "' is false")
+#else
+# define debug(...)
+# define ensure(cond)
+#endif
+
+/*!
+ * Bitwise operations and board maths.
+ *
+ * Note: these defines have been borrowed from Crafty (chess.h).
+ */
+#define Rank(x)        ((x)>>3)
+#define File(x)        ((x)&7)
+#define Flip(x)        ((x)^1)
+#define Abs(a)    (((a) > 0) ? (a) : -(a))
+#define Max(a,b)  (((a) > (b)) ? (a) : (b))
+#define Min(a,b)  (((a) < (b)) ? (a) : (b))
+#define Sign(a)   ((a) < 0 ? -1 : +1)
+#define FileDistance(a,b) abs(File(a) - File(b))
+#define RankDistance(a,b) abs(Rank(a) - Rank(b))
+#define Distance(a,b) Max(FileDistance(a,b), RankDistance(a,b))
+
+
+
+vector<int>     positionsFromBitboard(BitBoard);
+BitBoard        BitboardFromPositions(vector<int>);
+void            displayBitboard(BitBoard);
+unsigned short  calculateTPM(unsigned short, unsigned short, unsigned short);
+bool            testBoardFile(string);
+
+
+
+// Inline functions
+/*!
+ * Set a certain bit in a given BitBoard.
+ *
+ * @param bb Pointer to the BitBoard where the bit must be set.
+ * @param b  Bit number to be set.
+ */
+inline void setBit(BitBoard *bb, int b)
+{
+    if ((b < 0) || (b > 63))
+        return;
+
+    BitBoard test = 1;
+    test <<= b;
+
+    (*bb) |= test;
+}
+
+
+/*!
+ * Reset a certain bit in a given BitBoard.
+ *
+ * @param bb Pointer to the BitBoard where the bit must be set.
+ * @param b  Bit number to be set.
+ */
+inline void resetBit(BitBoard *bb, int b)
+{
+    if ((b < 0) || (b > 63))
+        return;
+
+    BitBoard test = 1;
+    test <<= b;
+    test ^= 0xFFFFFFFFFFFFFFFFULL;
+
+    (*bb) &= test;
+}
+
+
+/*!
+ * Translate from a BitBoard position (where all squares are 0s and only one
+ * bit is set) where the piece is placed on the board, to an integer,
+ * corresponding with the integer position of a square.
+ *
+ * @return an integer, telling where the bit is set in the BitBoard.
+ */
+inline int positionFromBitboard(BitBoard bb)
+{
+    if (bb == 0)
+        return -1;
+
+    BitBoard test = 1;
+
+    for (int i = 0; i < 64; i++)
+    {
+        if (test & bb)
+            return i;
+
+        test <<= 1;
+    }
+
+    return -1;
+}
+
+
+/*!
+ * Create a BitBoard with a single bit set where the given square indicates and
+ * the rest of squares set off (0).
+ *
+ * @param pos Integer which represents the integer ID of a square in the board.
+ *
+ * @return a BitBoard containing only one bit set, corresponding with the given
+ *         square.
+ */
+inline BitBoard BitboardFromPosition(int pos)
+{
+    if ((pos < 0) || (pos > 63))
+        return 0;
+
+    BitBoard bb = 1;
+
+    bb <<= pos;
+
+    return bb;
+}
+
+
+/*!
+ * Check if a given char corresponds with a piece or not.
+ *
+ * @param p Piece representation character.
+ *
+ * @return true if the character corresponds with a piece in the algebraic
+ *         representation, false otherwise.
+ */
+inline bool isPiece(char p)
+{
+    return ((p == 'N') || (p == 'B') || (p == 'R') || (p == 'Q') || (p == 'K')
+         || (p == 'n') || (p == 'b') || (p == 'r') || (p == 'q') || (p == 'k'));
+}
+
+
+/*!
+ * Check if a given char corresponds with a column or not.
+ *
+ * @param c Column representation character.
+ *
+ * @return true if the character corresponds with a column in the algebraic
+ *         representation, false otherwise.
+ */
+inline bool isColumn(char c)
+{
+    return ((c >= 'a' ) && (c <= 'h'));
+}
+
+
+/*!
+ * Check if a given char corresponds with a row or not.
+ *
+ * @param r Row representation character.
+ *
+ * @return true if the character corresponds with a row in the algebraic
+ *         representation, false otherwise.
+ */
+inline bool isRow(char r)
+{
+    return ((r >= '1' ) && (r <= '8'));
+}
+
+
+/*!
+ * Lookup the name of a piece by its given type.
+ *
+ * @param pt Piece type for which the name has to be looked up.
+ *
+ * @return a string containing the name of the given piece.
+ */
+inline string pieceName(PieceType pt)
+{
+    switch (pt)
+    {
+        case PIECE_TYPE_PAWN_BLACK:
+            return "black-pawn";
+            break;
+        case PIECE_TYPE_KNIGHT_BLACK:
+            return "black-knight";
+            break;
+        case PIECE_TYPE_BISHOP_BLACK:
+            return "black-bishop";
+            break;
+        case PIECE_TYPE_ROOK_BLACK:
+            return "black-rook";
+            break;
+        case PIECE_TYPE_QUEEN_BLACK:
+            return "black-queen";
+            break;
+        case PIECE_TYPE_KING_BLACK:
+            return "black-king";
+            break;
+        case PIECE_TYPE_PAWN_WHITE:
+            return "white-pawn";
+            break;
+        case PIECE_TYPE_KNIGHT_WHITE:
+            return "white-knight";
+            break;
+        case PIECE_TYPE_BISHOP_WHITE:
+            return "white-bishop";
+            break;
+        case PIECE_TYPE_ROOK_WHITE:
+            return "white-rook";
+            break;
+        case PIECE_TYPE_QUEEN_WHITE:
+            return "white-queen";
+            break;
+        case PIECE_TYPE_KING_WHITE:
+            return "white-king";
+            break;
+        case PIECE_TYPE_EMPTY:
+            return "blank";
+            break;
+        default:
+            return "boundary";
+    }
+}
+
+
+/*!
+ * Convert a column letter character into the corresponding integer index (from
+ * 0 to 7).
+ *
+ * @param c Char designating the column.
+ *
+ * @return an integer from 0 to 7 (0 for a, 7 for h).
+ */
+inline int columnToInt(char c)
+{
+    return (c - 'a');
+}
+
+
+/*!
+ * Convert a row number character into the corresponding integer index (from 0
+ * to 7).
+ *
+ * @param r Row character containing a digit for designating the row.
+ *
+ * @return an integer from 0 to 7 (0 for 1, 7 for 8).
+ */
+inline int rowToInt(char r)
+{
+    return (r - '1');
+}
+
+
+/*!
+ * Extract the letter of column from a position.
+ *
+ * @param pos position integer (from 0 to 63).
+ *
+ * @return an integer from 0..7 (column number).
+ */
+inline int posToColumnInt(int pos)
+{
+    return (pos % 8);
+}
+
+
+/*!
+ * Extract the number of row from a position.
+ *
+ * @param pos position integer (from 0 to 63).
+ *
+ * @return an integer from 0..7 (row number).
+ */
+inline int posToRowInt(int pos)
+{
+    return (pos / 8);
+}
+
+
+/*!
+ * Count the number of bits set in a BitBoard.
+ *
+ * @param bb BitBoard containing none to 64 bit sets.
+ *
+ * @return the number of bits set in the BitBoard.
+ */
+inline int countBits(BitBoard bb)
+{
+    int count = 0;
+
+    while (bb)
+    {
+        bb &= (bb - 1);
+        count++;
+    }
+
+    return count;
+}
+
+
+/*!
+ * Check if in a BitBoard there is more than one bit set.
+ *
+ * @param bb BitBoard containing one or more bit sets (this is assumed).
+ *
+ * @return true if the BitBoard has more than one bit set, false otherwise.
+ */
+inline bool isAmbiguous(BitBoard bb)
+{
+    bb &= bb - 1;
+
+    return (bb != 0);
+}
+
+
+/*!
+ * Display a message on the screen.
+ *
+ * @param file file in which the print out takes place.
+ * @param line line in the file, where the print out takes place.
+ * @param sev  severity of the message.
+ * @param msg  message itself.
+ * @param ...  list of variable arguments (according to C99 VA_ARGS)
+ *
+ * @author Isaac Jurado
+ */
+inline void print(const char *file, int line, int sev, const char *msg, ...)
+{
+    va_list args;
+    string label;
+    char errmsg[72];
+   
+    errmsg[0] = '\0';
+    switch (sev)
+    {
+        case 0: label = "DEBUG"; break;
+        case 1: label = "WARNING"; break;
+        case 3: label = "ABORT"; break;
+        case 2:
+                label = "ERROR";
+                strerror(errno);
+                break;
+        case 4:
+                label = "FATAL";
+                strerror(errno);
+                break;
+        default:
+                label = "???";
+    }
+       
+    fprintf(stderr, "%s at %s:%d - ", label.c_str(), file, line);
+    va_start(args, msg);
+    vfprintf(stderr, msg, args);
+    va_end(args);
+   
+    if (errmsg[0] != '\0')
+        fprintf(stderr, ": %s", errmsg);
+    fputs(".\n", stderr);
+   
+    if (sev > 2)
+        exit(EXIT_FAILURE);
+}
+
+
+/*!
+ * Check the error type and print the appropiate message.
+ *
+ * @param e Error code.
+ */
+inline void reportIfError(Error e)
+{
+    switch (e)
+    {
+        case ERROR_NO_GAME:
+             cerr << "Game not started!" << endl;
+             break;
+        case ERROR_BACK_BEGIN:
+             cerr << "Already at the beginning of the game history!" << endl;
+             break;
+        case ERROR_UNKNOWN:
+             cerr << "Unknown error!" << endl;
+             break;
+        default: break;
+    }
+}
+
+
+/*!
+ * Generate an internal-representation integer value for an algebraic square.
+ *
+ * @param square String representing the algebraic name (coordinates) of the
+ *        square.
+ *
+ * @return an integer identifying the square.
+ */
+inline int bmap(string square)
+{
+    return ((square[0] - 'a') + ((square[1] - '1') * 8));
+}
+
+
+/*!
+ * Generate an algebraic row+column square from a given internal integer value.
+ *
+ * @param pos Integer representing the square in the internal format.
+ *
+ * @return a string (column+row).
+ */
+inline string bunmap(int pos)
+{
+    ostringstream square(ostringstream::out);
+
+    square << static_cast<char>((pos % 8) + 'a');
+    square << static_cast<char>((pos / 8) + '1');
+    
+    return square.str();
+}
+
+
+/*!
+ * Check for the opponent's color.
+ *
+ * @param ct ColorType of a given side.
+ *
+ * @return a ColorType with the opponent's color.
+ */
+inline ColorType oppose(ColorType ct)
+{
+    if (ct == COLOR_TYPE_WHITE)
+        return COLOR_TYPE_BLACK;
+    else if (ct == COLOR_TYPE_BLACK)
+        return COLOR_TYPE_WHITE;
+    else
+        return COLOR_TYPE_NONE;
+}
+
+
+/*!
+ * Retrieve the type of piece without caring about the color.
+ *
+ * @param pt PieceType which includes the color of the piece.
+ *
+ * @return a SimplePieceType which does not include the color.
+ */
+inline SimplePieceType simplePiece(PieceType pt)
+{
+    switch (pt)
+    {
+        case PIECE_TYPE_PAWN_WHITE:
+        case PIECE_TYPE_PAWN_BLACK:
+            return PIECE_TYPE_PAWN;
+
+        case PIECE_TYPE_KNIGHT_WHITE:
+        case PIECE_TYPE_KNIGHT_BLACK:
+            return PIECE_TYPE_KNIGHT;
+
+        case PIECE_TYPE_BISHOP_WHITE:
+        case PIECE_TYPE_BISHOP_BLACK:
+            return PIECE_TYPE_BISHOP;
+
+        case PIECE_TYPE_ROOK_WHITE:
+        case PIECE_TYPE_ROOK_BLACK:
+            return PIECE_TYPE_ROOK;
+
+        case PIECE_TYPE_QUEEN_WHITE:
+        case PIECE_TYPE_QUEEN_BLACK:
+            return PIECE_TYPE_QUEEN;
+
+        case PIECE_TYPE_KING_WHITE:
+        case PIECE_TYPE_KING_BLACK:
+            return PIECE_TYPE_KING;
+
+        default:
+            return PIECE_TYPE_SIMPLE_X;
+    }
+}
+
+
+/*!
+ * Convert a piece character into a SimplePieceType.
+ *
+ * @param c Piece character to be converted.
+ *
+ * @return a SimplePieceType constant according to its character.
+ */
+inline SimplePieceType charToSimplePiece(char c)
+{
+    switch (c)
+    {
+        case 'p':
+        case 'P':
+            return PIECE_TYPE_PAWN;
+
+        case 'n':
+        case 'N':
+            return PIECE_TYPE_KNIGHT;
+
+        case 'b':
+        case 'B':
+            return PIECE_TYPE_BISHOP;
+
+        case 'r':
+        case 'R':
+            return PIECE_TYPE_ROOK;
+
+        case 'q':
+        case 'Q':
+            return PIECE_TYPE_QUEEN;
+
+        case 'k':
+        case 'K':
+            return PIECE_TYPE_KING;
+
+        default:
+            return PIECE_TYPE_SIMPLE_X;
+    }
+}
+
+
+/*!
+ * Convert a SimplePieceType into its corresponding char.
+ *
+ * @param p Piece to be converted.
+ *
+ * @return a char representing the piece type.
+ */
+inline char pieceToChar(SimplePieceType p)
+{
+    switch (p)
+    {
+        case PIECE_TYPE_PAWN:   return 'P';
+        case PIECE_TYPE_KNIGHT: return 'N';
+        case PIECE_TYPE_BISHOP: return 'B';
+        case PIECE_TYPE_ROOK:   return 'R';
+        case PIECE_TYPE_QUEEN:  return 'Q';
+        case PIECE_TYPE_KING:   return 'K';
+        default:                return '\0';
+    }
+}
+
+
+/*!
+ * Translate a ColorType to a char, namely 'w' (white) and 'b' (black).
+ *
+ * @param color ColorType variable to convert to char.
+ *
+ * @return 'w' for white, 'b' for black, or 'x' for unknown.
+ */
+inline char c2c(ColorType color)
+{
+    if (color == COLOR_TYPE_WHITE)
+        return 'w';
+    else if (color == COLOR_TYPE_BLACK)
+        return 'b';
+    else
+        return 'x';
+}
+
+#endif // _UTILS_

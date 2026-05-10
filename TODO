@@ -1,0 +1,47 @@
+TODO
+====
+
+
+WORK IN PROGRESS
+================
+- Extensively document and clean up code, to make it more readable (remove all
+  unnecessary code)
+
+- Make code a lot more compact (e.g., edit.cpp::edit and ::load are identical).
+
+
+
+BEFORE NEXT RELEASE
+===================
+- Document how to create your own AI and plug it into Chess0 (command 'ai',
+  class, example of how to use it, etc)
+
+- Try if null-move pruning helps speed up
+
+- Bitboards: implement bishop moves/attacks
+- Bitboards: implement rook moves/attacks
+- Bitboards: implement queen moves/attacks
+
+- Beat chess0-0.6
+
+
+
+IMPORTANT
+=========
+- evaluation: move code to bitboards as much as possible (for speed)
+
+- Implement proper time controls
+
+- Support for cutechess / better support for XBoard
+
+
+
+WISH LIST
+=========
+- Read/write PGN files.
+
+- Full BitBoard-based move generation and search.
+
+- Multi-thread engine (i.e., top N moves, each goes to one thread)
+
+- Think during opponent's time (dependency: transposition tables)

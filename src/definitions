@@ -1,0 +1,456 @@
+
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/definitions
+ */
+#ifndef _DEFINITIONS_
+#define _DEFINITIONS_
+
+
+
+// necessary libraries
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+
+// Global definitions
+#define PROGRAM_NAME    "Chess0"    
+#define PROGRAM_VERSION "0.7dev"
+#define PROGRAM_AUTHOR  "Claudio M. Camacho <claudiomkd@gmail.com>"
+#define PROGRAM_WEB     "http://github.com/mkd/chess0"
+
+
+
+/*!
+ * Bitboards (chess board bitmaps)
+ */
+typedef uint64_t BitBoard;
+
+
+
+/*!
+ * Global definitions and constants
+ */
+#define MAX_INPUT_SIZE 256
+#define DEFAULT_BOOK_FILE "book.c0b"
+
+
+
+/*!
+ * Possible input types
+ */
+enum InputType
+{
+    INPUT_TYPE_CMD,
+    INPUT_TYPE_MOVE,
+    INPUT_TYPE_ERROR,
+    INPUT_TYPE_INVALID_MOVE,
+};
+
+
+
+/*!
+ * Possible command types
+ */
+enum CmdType
+{
+    CMD_TYPE_ANALYZE,
+    CMD_TYPE_AUTO,
+    CMD_TYPE_BOOK,
+    CMD_TYPE_CACHE,
+    CMD_TYPE_DEPTH,
+    CMD_TYPE_DISPLAY_MATERIAL,
+    CMD_TYPE_DISPLAY_EVAL,
+    CMD_TYPE_DRAW,
+    CMD_TYPE_EDIT,
+    CMD_TYPE_FLIP,
+    CMD_TYPE_GO,
+    CMD_TYPE_HELP,  
+    CMD_TYPE_HISTORY,
+    CMD_TYPE_INFO,
+    CMD_TYPE_LOAD,
+    CMD_TYPE_LOG,
+    CMD_TYPE_MANUAL,
+    CMD_TYPE_NEW,
+    CMD_TYPE_NOPOST,
+    CMD_TYPE_PASS,
+    CMD_TYPE_PING,
+    CMD_TYPE_PLAYOTHER,
+    CMD_TYPE_POST,
+    CMD_TYPE_REMOVE,
+    CMD_TYPE_RESIGN,
+    CMD_TYPE_SAVE,
+    CMD_TYPE_SHOW,
+    CMD_TYPE_SOLVE,
+    CMD_TYPE_TEST,
+    CMD_TYPE_TIME,
+    CMD_TYPE_TPM,
+    CMD_TYPE_UNDO,
+    CMD_TYPE_VERBOSE,
+    CMD_TYPE_VERSION,
+    CMD_TYPE_XBOARD,
+    CMD_TYPE_QUIET,
+    CMD_TYPE_QUIT,
+    CMD_TYPE_UNKNOWN,
+};
+
+
+
+/*!
+ * Possible moves
+ */
+enum MoveType
+{
+    MOVE_TYPE_VALID,
+    MOVE_TYPE_NOGAME,
+    MOVE_TYPE_INVALID,
+    MOVE_TYPE_WRONG_MOVE,
+    MOVE_TYPE_PAWN,
+    MOVE_TYPE_SIMPLE,
+    MOVE_TYPE_CASTLE_SHORT,
+    MOVE_TYPE_XY,
+    MOVE_TYPE_CAPTURE_PAWN,
+    MOVE_TYPE_CAPTURE_PAWN_SHORT,
+    MOVE_TYPE_CAPTURE_SIMPLE,
+    MOVE_TYPE_CAPTURE_SIMPLE_SHORT,
+    MOVE_TYPE_AMBIGUOUS,
+    MOVE_TYPE_CASTLE_LONG,
+    MOVE_TYPE_CAPTURE_LONG,
+    MOVE_TYPE_PROMOTION_SIMPLE,
+    MOVE_TYPE_PROMOTION_CAPTURE,
+    MOVE_TYPE_PROMOTION_CAPTURE_SHORT,
+    MOVE_TYPE_NULL,
+};
+
+
+
+/*!
+ * Possible reactions
+ */
+enum ActionType
+{
+    ACTION_TYPE_NONE,
+    ACTION_TYPE_PROMPT,
+    ACTION_TYPE_CONTINUE,
+    ACTION_TYPE_EXIT,
+    ACTION_TYPE_RESIGN,
+    ACTION_TYPE_OTHER,
+};
+
+
+/*!
+ * Game types
+ */
+enum PlayerType
+{
+    PLAYER_TYPE_UNKNOWN,
+    PLAYER_TYPE_HUMAN,
+    PLAYER_TYPE_COMPUTER,
+    PLAYER_TYPE_OTHER,
+};
+
+
+/*!
+ * Type of pieces (no matter which color)
+ */
+enum SimplePieceType
+{
+    PIECE_TYPE_SIMPLE_X,
+    PIECE_TYPE_PAWN,
+    PIECE_TYPE_KNIGHT,
+    PIECE_TYPE_BISHOP,
+    PIECE_TYPE_ROOK,
+    PIECE_TYPE_QUEEN,
+    PIECE_TYPE_KING,
+};
+
+
+/*!
+ * Type of pieces (including color)
+ */
+enum PieceType
+{
+    PIECE_TYPE_X,
+    PIECE_TYPE_PAWN_BLACK,
+    PIECE_TYPE_KNIGHT_BLACK,
+    PIECE_TYPE_BISHOP_BLACK,
+    PIECE_TYPE_ROOK_BLACK,
+    PIECE_TYPE_QUEEN_BLACK,
+    PIECE_TYPE_KING_BLACK,
+    PIECE_TYPE_EMPTY,
+    PIECE_TYPE_PAWN_WHITE,
+    PIECE_TYPE_KNIGHT_WHITE,
+    PIECE_TYPE_BISHOP_WHITE,
+    PIECE_TYPE_ROOK_WHITE,
+    PIECE_TYPE_QUEEN_WHITE,
+    PIECE_TYPE_KING_WHITE,
+};
+
+
+
+/*!
+ * Possible color types
+ */
+enum ColorType
+{
+    COLOR_TYPE_BLACK = -1,
+    COLOR_TYPE_WHITE = 1,
+    COLOR_TYPE_EMPTY,
+    COLOR_TYPE_OUTSIDE,
+    COLOR_TYPE_NONE,
+    COLOR_TYPE_BOTH,
+};
+
+
+/*!
+ * Error codes
+ */
+enum Error
+{
+    ERROR_NONE,
+    ERROR_NONE_END,
+    ERROR_BACK_BEGIN,
+    ERROR_NEXT_END,
+    ERROR_NO_GAME,
+    ERROR_DIFCOLOR,
+    ERROR_UNKNOWN,
+};
+
+
+/*!
+ * End types
+ */
+enum EndType
+{
+    END_TYPE_UNKNOWN,
+    END_TYPE_NOEND,
+    END_TYPE_ABORT,
+    END_TYPE_RESIGN,
+    END_TYPE_MATE,
+    END_TYPE_DRAW,
+    END_TYPE_DRAW_50RULE,
+    END_TYPE_DRAW_3RULE,
+    END_TYPE_DRAW_PIECES,
+    END_TYPE_DRAW_AGREE,
+    END_TYPE_DRAW_STALE,
+    END_TYPE_SOLVE,
+};
+
+
+/*!
+ * Phases of the game
+ */
+enum PhaseType
+{
+    PHASE_TYPE_OPENING,
+    PHASE_TYPE_MIDDLE,
+    PHASE_TYPE_END,
+    PHASE_TYPE_UNKNOWN,
+};
+
+
+/*!
+ * Piece values
+ */
+#define VALUE_PAWN               100
+#define VALUE_KNIGHT             320
+#define VALUE_BISHOP             330
+#define VALUE_ROOK               500
+#define VALUE_QUEEN              920
+#define VALUE_KING               20000
+
+
+/*!
+ * AI settings
+ */
+#define PIECE_POINT_COUNT_END   2000
+#define HEURISTIC_FACTOR         100
+
+#define AI_SEARCH_DEPTH           32
+#define AI_DEPTH_QUIESCE_LIMIT     6
+#define RANDOMIZATION_THRESHOLD    0.10
+#define TIME_PER_MOVE              3
+
+#define SOLVE_MAX_DEPTH           64
+#define NODES_TEST_DEPTH          64
+#define NODES_TEST_TIME            2
+#define MOVES_TEST_TIMES      250000
+#define PERFT_DEPTH_LIMIT          3
+
+
+
+/*!
+ * Positional values
+ */
+// Square values for White Pawns
+static int quanta_WP[64] = {   0,   0,   0,   0,   0,   0,   0,   0,
+                               5,  10,  10, -20, -20,  10,  10,   5,
+                               5,  -5, -10,   0,   0, -10,  -5,   5,
+                               0,   0,   0,  20,  20,   0,   0,   0,
+                               5,   5,  10,  25,  25,  10,   5,   5,
+                              10,  10,  20,  30,  30,  20,  10,  10,
+                              50,  50,  50,  50,  50,  50,  50,  50,
+                               0,   0,   0,   0,   0,   0,   0,   0 };
+
+// Square values for Black Pawns
+static int quanta_BP[64] = {   0,   0,   0,   0,   0,   0,   0,   0,
+                             -50, -50, -50, -50, -50, -50, -50, -50,
+                             -10, -10, -20, -30, -30, -20, -10, -10,
+                              -5,  -5, -10, -25, -25, -10,  -5,  -5,
+                               0,   0,   0, -20, -20,   0,   0,   0,
+                              -5,   5,  10,   0,   0,  10,   5,  -5,
+                              -5, -10, -10,  20,  20, -10, -10,  -5,
+                               0,   0,   0,   0,   0,   0,   0,   0 };
+
+// Square values for White Knight
+static int quanta_WN[64] = { -50, -40, -30, -30, -30, -30, -40, -50,
+                             -40, -20,   0,   5,   5,   0, -20, -40,
+                             -30,   5,  10,  15,  15,  10,   5, -30,
+                             -30,   0,  15,  20,  20,  15,   0, -30,
+                             -30,   5,  15,  20,  20,  15,   5, -30,
+                             -30,   0,  10,  15,  15,  10,   0, -30,
+                             -40, -20,   0,   0,   0,   0, -20, -40,
+                             -50, -40, -30, -30, -30, -30, -40, -50 };
+
+// Square values for Black Knight
+static int quanta_BN[64] = { 50,   40,  30,  30,  30,  30,  40,  50,
+                             40,   20,   0,  -5,  -5,   0,  20,  40,
+                             30,   -5, -10, -15, -15, -10,  -5,  30,
+                             30,    0, -15, -20, -20, -15,   0,  30,
+                             30,   -5, -15, -20, -20, -15,  -5,  30,
+                             30,    0, -10, -15, -15, -10,   0,  30,
+                             40,   20,   0,   0,   0,   0,  20,  40,
+                             50,   40,  30,  30,  30,  30,  40,  50 };
+
+// Square values for White Bishop
+static int quanta_WB[64] = {-20, -10, -10, -10, -10, -10, -10, -20,
+                            -10,   5,   0,   0,   0,   0,   5, -10,
+                            -10,  10,  10,  10,  10,  10,  10, -10,
+                            -10,   0,  10,  10,  10,  10,   0, -10,
+                            -10,   5,   5,  10,  10,   5,   5, -10,
+                            -10,   0,   5,  10,  10,   5,   0, -10,
+                            -10,   0,   0,   0,   0,   0,   0, -10,
+                            -20, -10, -40, -10, -10, -40, -10, -20 };
+
+// Square values for White Bishop
+static int quanta_BB[64] = { 20,  10,  40,  10,  10,  40,  10,  20,
+                             10,   0,   0,   0,   0,   0,   0,  10,
+                             10,   0,  -5, -10, -10,  -5,   0,  10,
+                             10,  -5,  -5, -10, -10,  -5,  -5,  10,
+                             10,   0, -10, -10, -10, -10,   0,  10,
+                             10, -10, -10, -10, -10, -10, -10,  10,
+                             10,  -5,   0,   0,   0,   0,  -5,  10,
+                             20,  10,  10,  10,  10,  10,  10,  20 };
+
+// Square values for White Rook
+static int quanta_WR[64] = {  0,   0,   0,   5,   5,   0,   0,   0,
+                             -5,   0,   0,   0,   0,   0,   0,  -5,
+                             -5,   0,   0,   0,   0,   0,   0,  -5,
+                             -5,   0,   0,   0,   0,   0,   0,  -5,
+                             -5,   0,   0,   0,   0,   0,   0,  -5,
+                             -5,   0,   0,   0,   0,   0,   0,  -5,
+                              5,  10,  10,  10,  10,  10,  10,   5,
+                              0,   0,   0,   0,   0,   0,   0,   0 };
+
+// Square values for Black Rook
+static int quanta_BR[64] = {  0,   0,   0,   0,   0,   0,   0,   0,
+                             -5, -10, -10, -10, -10, -10, -10,  -5,
+                              5,   0,   0,   0,   0,   0,   0,   5,
+                              5,   0,   0,   0,   0,   0,   0,   5,
+                              5,   0,   0,   0,   0,   0,   0,   5,
+                              5,   0,   0,   0,   0,   0,   0,   5,
+                              5,   0,   0,   0,   0,   0,   0,   5,
+                              0,   0,   0,  -5,  -5,   0,   0,   0 };
+
+// Square values for White Queen
+static int quanta_WQ[64] = {-20, -10, -10,  -5,  -5, -10, -10, -20,
+                            -10,   0,   5,   0,   0,   0,   0, -10,
+                            -10,   5,   5,   5,   5,   5,   0, -10,
+                              0,   0,   5,   5,   5,   5,   0,  -5,
+                             -5,   0,   5,   5,   5,   5,   0,  -5,
+                            -10,   0,   5,   5,   5,   5,   0, -10,
+                            -10,   0,   0,   0,   0,   0,   0, -10,
+                            -20, -10, -10,  -5,  -5, -10, -10, -20 };
+
+// Square values for Black Queen
+static int quanta_BQ[64] = { 20,  10,  10,   5,   5,  10,  10,  20,
+                             10,   0,   0,   0,   0,   0,   0,  10,
+                             10,   0,  -5,  -5,  -5,  -5,   0,  10,
+                              5,   0,  -5,  -5,  -5,  -5,   0,   5,
+                              0,   0,  -5,  -5,  -5,  -5,   0,   5,
+                             10,  -5,  -5,  -5,  -5,  -5,   0,  10,
+                             10,   0,  -5,   0,   0,   0,   0,  10,
+                             20,  10,  10,   5,   5,  10,  10,  20 };
+
+// Square values for White King (before endgame)
+static int quanta_WK[64] = { 20,  30,  10,   0,   0,  10,  30,  20,
+                             20,  20,   0,   0,   0,   0,  20,  20,
+                            -10, -20, -20, -20, -20, -20, -20, -10,
+                            -20, -30, -30, -40, -40, -30, -30, -20,
+                            -30, -40, -40, -50, -50, -40, -40, -30,
+                            -30, -40, -40, -50, -50, -40, -40, -30,
+                            -30, -40, -40, -50, -50, -40, -40, -30,
+                            -30, -40, -40, -50, -50, -40, -40, -30 };
+
+// Square values for Black King (before endgame)
+static int quanta_BK[64] = { 30,  40,  40,  50,  50,  40,  40,  30,
+                             30,  40,  40,  50,  50,  40,  40,  30,
+                             30,  40,  40,  50,  50,  40,  40,  30,
+                             30,  40,  40,  50,  50,  40,  40,  30,
+                             20,  30,  30,  40,  40,  30,  30,  20,
+                             10,  20,  20,  20,  20,  20,  20,  10,
+                            -20, -20,   0,   0,   0,   0, -20, -20,
+                            -20, -30, -10,   0,   0, -10, -30, -20 };
+
+// Square values for White King (at endgame)
+static int quanta_WZ[64] = {-50, -30, -30, -30, -30, -30, -30, -50,
+                            -30, -30,   0,   0,   0,   0, -30, -30,
+                            -30, -10,  20,  30,  30,  20, -10, -30,
+                            -30, -10,  30,  40,  40,  30, -10, -30,
+                            -30, -10,  30,  40,  40,  30, -10, -30,
+                            -30, -10,  20,  30,  30,  20, -10, -30,
+                            -30, -20, -10,   0,   0, -10, -20, -30,
+                            -50, -40, -30, -20, -20, -30, -40, -50 };
+
+// Square values for White King (at endgame)
+static int quanta_BZ[64] = { 50,  40,  30,  20,  20,  30,  40,  50,
+                             30,  20,  10,   0,   0,  10,  20,  30,
+                             30,  10, -20, -30, -30, -20,  10,  30,
+                             30,  10, -30, -40, -40, -30,  10,  30,
+                             30,  10, -30, -40, -40, -30,  10,  30,
+                             30,  10, -20, -30, -30, -20,  10,  30,
+                             30,  30,   0,   0,   0,   0,  30,  30,
+                             50,  30,  30,  30,  30,  30,  30,  50 };
+
+
+
+/*!
+ * Other settings
+ */
+#define CACHE_HIT_LEVEL          0.4
+#define BOARD_SERIAL_SIZE         96
+
+
+
+#endif // _DEFINITIONS_

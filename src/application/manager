@@ -1,0 +1,104 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/application/manager
+ */
+#ifndef _APPLICATION_MANAGER_
+#define _APPLICATION_MANAGER_
+
+
+
+// Necessary libraries
+#include <iostream>
+#include "definitions"
+#include "application/cmdparser"
+#include "application/command"
+#include "application/prompt"
+#include "application/book"
+#include "game/manager"
+#include "game/moveparser"
+#include "ai/ai"
+#include "ai/adaptive"
+
+using namespace std;
+
+
+
+/*!
+ * class ApplicationManager
+ *
+ * Manage the application functionality and the overall behavior.
+ *
+ * This class is in charge of managing all the commands that the user may
+ * introduce into the program, working together with the settings manager or
+ * configuring matters related to the game.
+ *
+ * @see CmdParser
+ */
+class ApplicationManager
+{
+    public:
+                                  ApplicationManager();
+                                  ApplicationManager(GameManager *);
+        virtual      int          launch();
+        virtual      ActionType   execute(Command);
+                     void         displayHelp(string);
+                     string       getInput();
+                     InputType    getInputType(string, MoveType *);
+                     Command      toCmd(string);
+                     void         displayMaterial();
+                     void         displayEval();
+        inline       void         useBook(bool ub) { using_book = ub; }
+        inline       bool         usingBook() { return using_book; }
+        inline       bool         isVerbose() { return verbose; }
+        inline       void         setVerbose(bool v) { verbose = v; }
+        inline       void         setXBoard(bool x) { xboard = x; }
+        inline       bool         isXBoard() { return xboard; }
+        inline       void         setComputerTime(unsigned int t) { computerTime = t; elapsedTime = 0; }
+        inline       unsigned short getComputerTime() { return computerTime; }
+        inline       void         setElapsedTime(unsigned int t) { elapsedTime = t; }
+        inline       unsigned short getElapsedTime() { return elapsedTime; }
+
+        // benchmarks module
+                     void         testNodesPerSecond();
+                     void         testMovesPerSecond();
+                     void         testPerft();
+                     uint64_t     Perft(unsigned, ColorType);
+
+    protected:
+                     void         dealEnd();
+        Prompt       prompt;
+        CmdParser    cmdp;
+        GameManager *gman;
+        Board       *board;
+        AI          *ai;
+        bool         verbose;
+        bool         xboard;
+        Book        *book;
+        bool         using_book;
+        unsigned short computerTime;
+        unsigned short elapsedTime;
+};
+
+
+
+#endif // _APPLICATION_MANAGER_

@@ -1,0 +1,65 @@
+// Copyright: 2008-2016  Claudio M. Camacho                                       
+                                                                           
+// This file is part of Chess0.                                              
+                                                                            
+// Chess0 is free software; you can redistribute it and/or modify            
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+
+// Chess0 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with Chess0; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+// vim:et:ts=4:sw=4
+
+/*!
+ * @file src/game/board/king
+ */
+#ifndef _KING_
+#define _KING_
+
+
+
+// Necessary libraries
+#include "definitions"
+#include "game/board/square"
+
+
+
+/*!
+ * Class for defining how a king behaves.
+ *
+ * @see Piece
+ */
+class King : public Piece
+{
+    public:
+                                    King(PieceType);
+        inline      bool            isChecked() { return checked; }
+        inline      void            setChecked(bool c) { checked = c; }
+        inline      bool            isStaled() { return staled; }
+        inline      void            setStaled(bool s) { staled = s; }
+        inline      bool            isMated() { return mated; }
+        inline      void            setMated(bool m) { mated = m; }
+        inline      bool            hasCastled() { return castled; }
+        inline      void            setCastled(bool c) { castled = c; }
+        virtual     void            recalculateMoves(Board *);
+        virtual     void            recalculateAttacks(Board *);
+        virtual     vector<Move>    getAllMoves();
+
+    private:
+        bool        checked;
+        bool        staled;
+        bool        mated;
+        bool        castled;
+};
+
+
+
+#endif // _KING_
